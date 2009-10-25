@@ -1,0 +1,35 @@
+#!/usr/bin/php
+<?php
+
+include_once('cli/Cli.php');
+include_once('Wsdl2PhpGenerator.php');
+
+$cli = new Cli('wsdl2php', '[-h] [-s] -i wsdlfile -o directory [-n namespace]', '0.1');
+$cli->addFlag('-e', 'If all classes should be guarded with if(!class_exists) statements', true, false);
+$cli->addFlag('-s', 'If the output should be a single file', true, false);
+$cli->addFlag('-i', 'The input wsdl file', false, true);
+$cli->addFlag('-o', 'The output directory', false, true);
+$cli->addFlag('-n', 'Use namespace with the name', false, false);
+$cli->addFlag('-h', 'Show this help', true, false);
+
+$cli->addAlias('-e', '--classExists');
+$cli->addAlias('-e', '--exists');
+$cli->addAlias('-s', '--singleFile');
+$cli->addAlias('-i', '--input');
+$cli->addAlias('-o', '--output');
+$cli->addAlias('-n', '--namespace');
+$cli->addAlias('-h', '--help');
+$cli->addAlias('-h', '--h');
+
+$cli->validate($argv);
+
+$classExists = $cli->getValue('-e');
+$singleFile = $cli->getValue('-s');
+$inputFile = $cli->getValue('-i');
+$outputDir = $cli->getValue('-o');
+$namespaceName = $cli->getValue('-n');
+
+$config = new Wsdl2PhpConfig($inputFile, $outputDir, $singleFile, $classExists, $namespaceName);
+
+$generator = new Wsdl2PhpGenerator();
+$generator->generate($config);
