@@ -140,8 +140,8 @@ class Generator
   }
   
   parent::__construct($wsdl, $options);'.PHP_EOL;
-    
-    $function = new \phpSource\PhpFunction('public', '__construct', '$wsdl = \''.$this->config->getInputFile().'\', $options = array()', $source, $comment);
+
+    $function = new \phpSource\PhpFunction('public', '__construct', '$wsdl = \''.$this->config->getInputFile().'\', $options = '.$this->generateServiceOptions($this->config).'', $source, $comment);
 
     $this->service->addFunction($function);
 
@@ -200,7 +200,10 @@ class Generator
         {
           $source .= $val[1].', ';
         }
-        $comment->addParam(\phpSource\PhpDocElementFactory::getParam($val[0], $val[1], ''));
+        if (strlen(@$val[1]) > 0)
+        {
+          $comment->addParam(\phpSource\PhpDocElementFactory::getParam($val[0], $val[1], ''));
+        }
       }
       // Remove last comma
       $source = substr($source, 0, -2);
@@ -213,6 +216,55 @@ class Generator
         $this->service->addFunction($function);
       }
     }
+  }
+
+  /**
+   *
+   * @param Config $config The config containing the values to use
+   *
+   * @return string Returns the string for the options array
+   */
+  private function generateServiceOptions(Config $config)
+  {
+    $ret = 'array(';
+
+    if (count($config->getOptionFeatures()) > 0)
+    {
+      $i = 0;
+      $ret .= "'features' => ";
+      foreach ($config->getOptionFeatures() as $option)
+      {
+        if ($i++ > 0)
+        {
+          // Use | instead?
+          $ret .= ' + ';
+        }
+
+        $ret .= $option;
+      }
+    }
+
+    if (strlen($config->getWsdlCache()) > 0)
+    {
+      if (count($config->getOptionFeatures()) > 0)
+      {
+        $ret .= ', ';
+      }
+      $ret .= "'wsdl_cache' => ".$config->getWsdlCache();
+    }
+
+    if (strlen($this->config->getCompression()) > 0)
+    {
+      if (count($config->getOptionFeatures()) > 0 || strlen($this->config->getWsdlCache()) > 0)
+      {
+        $ret .= ', ';
+      }
+      $ret .= "'compression' => ".$config->getCompression();
+    }
+
+    $ret .= ')';
+
+    return $ret;
   }
 
   /**
@@ -376,7 +428,7 @@ class Generator
         $file->save($outputDirectory);
 
         // Add the filename as dependency for the service
-        $this->service->addDependency($class->getIdentifier());
+        $this->service->addDependency($class->getIdentifier().'.php');
       }
 
 	  // Generate file and save the service class

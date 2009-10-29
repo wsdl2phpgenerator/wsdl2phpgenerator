@@ -47,6 +47,25 @@ class Config
   private $inputFile;
 
   /**
+   * The array should contain the strings for the options to enable
+   *
+   * @var array containing all features in the options for the client
+   */
+  private $optionFeatures;
+
+  /**
+   *
+   * @var string The wsdl cache to use if any. Possible values WSDL_CACHE_NONE, WSDL_CACHE_DISK, WSDL_CACHE_MEMORY or WSDL_CACHE_BOTH
+   */
+  private $wsdlCache;
+
+  /**
+   *
+   * @var string The compression string to use
+   */
+  private $compression;
+
+  /**
    * Sets all variables
    *
    * @param string $inputFile
@@ -54,8 +73,11 @@ class Config
    * @param bool $oneFile
    * @param bool $classExists
    * @param string $namespaceName
+   * @param array $optionsFeatures
+   * @param string $wsdlCache
+   * @param string $compression
    */
-  public function __construct($inputFile, $outputDir, $oneFile, $classExists, $namespaceName = '')
+  public function __construct($inputFile, $outputDir, $oneFile, $classExists, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '')
   {
     $this->namespaceName = $namespaceName;
     $this->oneFile = $oneFile;
@@ -66,6 +88,13 @@ class Config
       $this->outputDir .= '/';
     }
     $this->inputFile = $inputFile;
+    $this->optionFeatures = $optionsFeatures;
+    $this->wsdlCache = '';
+    if (in_array($wsdlCache, array('WSDL_CACHE_NONE', 'WSDL_CACHE_DISK', 'WSDL_CACHE_MEMORY', 'WSDL_CACHE_BOTH')))
+    {
+      $this->wsdlCache = $wsdlCache;
+    }
+    $this->compression = $compression;
   }
 
   /**
@@ -111,5 +140,32 @@ class Config
   public function getInputFile()
   {
     return $this->inputFile;
+  }
+
+  /**
+   *
+   * @return array An array of strings of all the features to enable
+   */
+  public function getOptionFeatures()
+  {
+    return $this->optionFeatures;
+  }
+
+  /**
+   *
+   * @return string Returns the string with the constant to use for wsdl cache
+   */
+  public function getWsdlCache()
+  {
+    return $this->wsdlCache;
+  }
+
+  /**
+   *
+   * @return string The compression value to use for the client
+   */
+  public function getCompression()
+  {
+    return $this->compression;
   }
 }
