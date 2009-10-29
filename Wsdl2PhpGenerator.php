@@ -101,7 +101,7 @@ class Wsdl2PhpGenerator
     try
     {
       $this->client = new SoapClient($wsdl);
-    } 
+    }
     catch(SoapFault $e)
     {
       throw new Exception('Error connectiong to to the wsdl. Error: '.$e->getMessage());
@@ -138,8 +138,8 @@ class Wsdl2PhpGenerator
   }
   
   parent::__construct($wsdl, $options);'.PHP_EOL;
-    
-    $function = new PhpFunction('public', '__construct', '$wsdl = \''.$this->config->getInputFile().'\', $options = array()', $source, $comment);
+
+    $function = new PhpFunction('public', '__construct', '$wsdl = \''.$this->config->getInputFile().'\', $options = '.$this->generateServiceOptions($this->config).'', $source, $comment);
 
     $this->service->addFunction($function);
 
@@ -147,7 +147,7 @@ class Wsdl2PhpGenerator
     $comment = new PhpDocComment();
     $comment->setAccess(PhpDocElementFactory::getPrivateAccess());
     $comment->setVar(PhpDocElementFactory::getVar('array', $name, 'The defined classes'));
-    
+
     $init = 'array('.PHP_EOL;
     foreach ($this->types as $type)
     {
@@ -198,7 +198,10 @@ class Wsdl2PhpGenerator
         {
           $source .= $val[1].', ';
         }
-        $comment->addParam(PhpDocElementFactory::getParam($val[0], $val[1], ''));
+        if (strlen(@$val[1]) > 0)
+        {
+          $comment->addParam(PhpDocElementFactory::getParam($val[0], $val[1], ''));
+        }
       }
       // Remove last comma
       $source = substr($source, 0, -2);
@@ -211,6 +214,55 @@ class Wsdl2PhpGenerator
         $this->service->addFunction($function);
       }
     }
+  }
+
+  /**
+   *
+   * @param Wsdl2PhpConfig $config The config containing the values to use
+   *
+   * @return string Returns the string for the options array
+   */
+  private function generateServiceOptions(Wsdl2PhpConfig $config)
+  {
+    $ret = 'array(';
+
+    if (count($config->getOptionFeatures()) > 0)
+    {
+      $i = 0;
+      $ret .= "'features' => ";
+      foreach ($config->getOptionFeatures() as $option)
+      {
+        if ($i++ > 0)
+        {
+          // Use | instead?
+          $ret .= ' + ';
+        }
+
+        $ret .= $option;
+      }
+    }
+
+    if (strlen($config->getWsdlCache()) > 0)
+    {
+      if (count($config->getOptionFeatures()) > 0)
+      {
+        $ret .= ', ';
+      }
+      $ret .= "'wsdl_cache' => ".$config->getWsdlCache();
+    }
+
+    if (strlen($this->config->getCompression()) > 0)
+    {
+      if (count($config->getOptionFeatures()) > 0 || strlen($this->config->getWsdlCache()) > 0)
+      {
+        $ret .= ', ';
+      }
+      $ret .= "'compression' => ".$config->getCompression();
+    }
+
+    $ret .= ')';
+
+    return $ret;
   }
 
   /**
@@ -326,7 +378,7 @@ class Wsdl2PhpGenerator
     {
       throw new Wsdl2PhpException('No service loaded');
     }
-    
+
     $useNamespace = (strlen($this->config->getNamespaceName()) > 0);
 
     //Try to create output dir if non existing
@@ -374,7 +426,7 @@ class Wsdl2PhpGenerator
         $file->save($outputDirectory);
 
         // Add the filename as dependency for the service
-        $this->service->addDependency($class->getIdentifier());
+        $this->service->addDependency($class->getIdentifier().'.php');
       }
 
       // Generate file and save the service class

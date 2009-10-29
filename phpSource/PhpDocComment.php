@@ -188,7 +188,7 @@ class PhpDocComment
    *
    * @param PhpDocElement $param Adds a new param
    */
-  public function addParam( $param)
+  public function addParam(PhpDocElement $param)
   {
     $this->params[] = $param;
   }

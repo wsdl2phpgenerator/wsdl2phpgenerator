@@ -21,6 +21,11 @@ class PhpDocElementFactory
    */
   public static function getParam($dataType, $name, $description)
   {
+    if ($name[0] == '$')
+    {
+      $name = substr($name, 1);
+    }
+    
     return new PhpDocElement('param', $dataType, $name, $description);
   }
 
