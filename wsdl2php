@@ -12,7 +12,7 @@ $cli->addFlag('-o', 'The output directory', false, true);
 $cli->addFlag('-n', 'Use namespace with the name', false, false);
 $cli->addFlag('--singleElementArrays', 'Adds the option to use single element arrays to the client', true, false);
 $cli->addFlag('--xsiArrayType', 'Adds the option to use xsi arrays to the client', true, false);
-$cli->addFlag('--waitOneCalls', 'Adds the option to use wait one calls to the client', true, false);
+$cli->addFlag('--waitOneWayCalls', 'Adds the option to use wait one way calls to the client', true, false);
 $cli->addFlag('--cacheNone', 'Adds the option to not cache the wsdl to the client', true, false);
 $cli->addFlag('--cacheDisk', 'Adds the option to cache the wsdl on disk to the client', true, false);
 $cli->addFlag('--cacheMemory', 'Adds the option to cache the wsdl in memory to the client', true, false);
@@ -45,7 +45,7 @@ if ($cli->getValue('--xsiArrayType'))
 {
   $optionsArray[] = 'SOAP_USE_XSI_ARRAY_TYPE';
 }
-if ($cli->getValue('--waitOneCalls'))
+if ($cli->getValue('--waitOneWayCalls'))
 {
   $optionsArray[] = 'SOAP_WAIT_ONE_WAY_CALLS';
 }
