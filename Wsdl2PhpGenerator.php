@@ -136,10 +136,10 @@ class Wsdl2PhpGenerator
       $options[\'classmap\'][$key] = $value;
     }
   }
-  
+  '.$this->generateServiceOptions($this->config).'
   parent::__construct($wsdl, $options);'.PHP_EOL;
 
-    $function = new PhpFunction('public', '__construct', '$wsdl = \''.$this->config->getInputFile().'\', $options = '.$this->generateServiceOptions($this->config).'', $source, $comment);
+    $function = new PhpFunction('public', '__construct', '$wsdl = \''.$this->config->getInputFile().'\', $options = array()', $source, $comment);
 
     $this->service->addFunction($function);
 
@@ -224,43 +224,48 @@ class Wsdl2PhpGenerator
    */
   private function generateServiceOptions(Wsdl2PhpConfig $config)
   {
-    $ret = 'array(';
+    $ret = '';
 
     if (count($config->getOptionFeatures()) > 0)
     {
       $i = 0;
-      $ret .= "'features' => ";
+      $ret .= "
+  if (isset(\$options['features']) == false)
+  {
+    \$options['features'] = ";
       foreach ($config->getOptionFeatures() as $option)
       {
         if ($i++ > 0)
         {
-          // Use | instead?
-          $ret .= ' + ';
+          $ret .= ' | ';
         }
 
         $ret .= $option;
       }
+
+      $ret .= ";
+  }".PHP_EOL;
     }
 
     if (strlen($config->getWsdlCache()) > 0)
     {
-      if (count($config->getOptionFeatures()) > 0)
-      {
-        $ret .= ', ';
-      }
-      $ret .= "'wsdl_cache' => ".$config->getWsdlCache();
+      $ret .= "
+  if (isset(\$options['wsdl_cache']) == false)
+  {
+    \$options['wsdl_cache'] = ".$config->getWsdlCache();
+      $ret .= ";
+  }".PHP_EOL;
     }
 
     if (strlen($this->config->getCompression()) > 0)
     {
-      if (count($config->getOptionFeatures()) > 0 || strlen($this->config->getWsdlCache()) > 0)
-      {
-        $ret .= ', ';
-      }
-      $ret .= "'compression' => ".$config->getCompression();
+      $ret .= "
+  if (isset(\$options['compression']) == false)
+  {
+    \$options['compression'] = ".$config->getCompression();
+       $ret .= ";
+  }".PHP_EOL;
     }
-
-    $ret .= ')';
 
     return $ret;
   }
@@ -351,10 +356,12 @@ class Wsdl2PhpGenerator
       $class = new PhpClass($className, $this->config->getClassExists());
       foreach ($members as $varArr)
       {
+        $type = $this->validator->validateType($varArr['type']);
+        $name = $this->validator->validateNamingConvention($varArr['member']);
         $comment = new PhpDocComment();
-        $comment->setVar(PhpDocElementFactory::getVar($varArr['type'], $varArr['member'], ''));
+        $comment->setVar(PhpDocElementFactory::getVar($type, $name, ''));
         $comment->setAccess(PhpDocElementFactory::getPublicAccess());
-        $var = new PhpVariable('public', $varArr['member'], '', $comment);
+        $var = new PhpVariable('public', $name, '', $comment);
         $class->addVariable($var);
       }
 
