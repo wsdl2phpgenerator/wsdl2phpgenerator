@@ -4,8 +4,9 @@
 include_once('cli/Cli.php');
 include_once('Wsdl2PhpGenerator.php');
 
-$cli = new Cli('wsdl2php', '[-h] [-s] -i wsdlfile -o directory [-n namespace]', '0.1');
+$cli = new Cli('wsdl2php', '[-h] [-s] -i wsdlfile -o directory [-n namespace]', '1.0');
 $cli->addFlag('-e', 'If all classes should be guarded with if(!class_exists) statements', true, false);
+$cli->addFlag('-t', 'If no type constructor should be generated', true, false);
 $cli->addFlag('-s', 'If the output should be a single file', true, false);
 $cli->addFlag('-i', 'The input wsdl file', false, true);
 $cli->addFlag('-o', 'The output directory', false, true);
@@ -22,6 +23,7 @@ $cli->addFlag('-h', 'Show this help', true, false);
 
 $cli->addAlias('-e', '--classExists');
 $cli->addAlias('-e', '--exists');
+$cli->addAlias('-t', '--noTypeConstructor');
 $cli->addAlias('-s', '--singleFile');
 $cli->addAlias('-i', '--input');
 $cli->addAlias('-o', '--output');
@@ -32,6 +34,7 @@ $cli->addAlias('-h', '--h');
 $cli->validate($argv);
 
 $classExists = $cli->getValue('-e');
+$noTypeConstructor = $cli->getValue('-t');
 $singleFile = $cli->getValue('-s');
 $inputFile = $cli->getValue('-i');
 $outputDir = $cli->getValue('-o');
@@ -72,7 +75,7 @@ if ($cli->getValue('--gzip'))
   $gzip = 'SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP';
 }
 
-$config = new Wsdl2PhpConfig($inputFile, $outputDir, $singleFile, $classExists, $namespaceName, $optionsArray, $wsdlCache, $gzip);
+$config = new Wsdl2PhpConfig($inputFile, $outputDir, $singleFile, $classExists, $noTypeConstructor, $namespaceName, $optionsArray, $wsdlCache, $gzip);
 
 $generator = new Wsdl2PhpGenerator();
 $generator->generate($config);
