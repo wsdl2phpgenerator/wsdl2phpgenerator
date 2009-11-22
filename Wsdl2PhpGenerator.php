@@ -12,8 +12,6 @@ include_once('phpSource/PhpVariable.php');
 include_once('phpSource/PhpDocComment.php');
 include_once('phpSource/PhpDocElementFactory.php');
 
-// TODO: This is just a basic working version, alot of things need to be fixed and perfected
-
 /**
  * Class that contains functionality for generating classes from a wsdl file
  *
@@ -356,6 +354,12 @@ class Generator
       }
 
       $class = new \phpSource\PhpClass($className, $this->config->getClassExists());
+
+      $constructorComment = new \phpSource\PhpDocComment();
+      $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());
+      $constructorSource = '';
+      $constructorParameters = '';
+
       foreach ($members as $varArr)
       {
 		$type = $this->validator->validateType($varArr['type']);
@@ -365,6 +369,20 @@ class Generator
         $comment->setAccess(\phpSource\PhpDocElementFactory::getPublicAccess());
         $var = new \phpSource\PhpVariable('public', $name, '', $comment);
         $class->addVariable($var);
+
+        $constructorSource .= '  $this->'.$name.' = $'.$name.';'.PHP_EOL;
+        $constructorComment->addParam(\phpSource\PhpDocElementFactory::getParam($type, $name, ''));
+        $constructorComment->setAccess(\phpSource\PhpDocElementFactory::getPublicAccess());
+        $constructorParameters .= ', $'.$name;
+      }
+
+      $constructorParameters = substr($constructorParameters, 2); // Remove first comma
+      $function = new \phpSource\PhpFunction('public', '__construct', $constructorParameters, $constructorSource, $constructorComment);
+
+      // Only add the constructor if type constructor is selected
+      if ($this->config->getNoTypeConstructor() == false)
+      {
+        $class->addFunction($function);
       }
 
       $this->types[] = $class;

@@ -39,14 +39,13 @@ class CliParserTest extends PHPUnit_Framework_TestCase
     $arr = array('-a', '-b=foo', '-c bar', '--export', '--foo=bar', '-xyz', '-=asd', 'bluff', 'inva--lid');
     $this->object->parse($arr);
 
-    $this->assertTrue($this->object->flag('a'));
-    $this->assertEquals('foo', $this->object->flag('b'));
-    $this->assertEquals('bar', $this->object->flag('c'));
-    $this->assertTrue($this->object->flag('export'));
-    $this->assertEquals('bar', $this->object->flag('foo'));
-    $this->assertTrue($this->object->flag('x'));
-    $this->assertTrue($this->object->flag('y'));
-    $this->assertTrue($this->object->flag('z'));
+    $this->assertTrue($this->object->getValue('-a'));
+    $this->assertEquals('foo', $this->object->getValue('-b'));
+    $this->assertEquals('bar', $this->object->getValue('-c'));
+    $this->assertTrue($this->object->getValue('--export'));
+    $this->assertEquals('bar', $this->object->getValue('--foo'));
+    $this->assertTrue($this->object->getValue('-x'));
+    $this->assertTrue($this->object->getValue('-y'));
+    $this->assertTrue($this->object->getValue('-z'));
   }
 }
-?>
