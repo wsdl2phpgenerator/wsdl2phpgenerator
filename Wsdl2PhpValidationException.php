@@ -2,6 +2,8 @@
 
 namespace Wsdl2Php;
 
+include_once('Wsdl2PhpException.php');
+
 /**
  * Wrapper class for exception, only use is to collect functionality in one namespace
  * This groups all validation exeptions to one class

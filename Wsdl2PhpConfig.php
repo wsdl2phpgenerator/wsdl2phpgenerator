@@ -66,22 +66,30 @@ class Config
   private $compression;
 
   /**
+   *
+   * @var bool If a type constructor should not be generated
+   */
+  private $noTypeConstructor;
+
+  /**
    * Sets all variables
    *
    * @param string $inputFile
    * @param string $outputDir
    * @param bool $oneFile
    * @param bool $classExists
+   * @param bool $noTypeConstructor
    * @param string $namespaceName
    * @param array $optionsFeatures
    * @param string $wsdlCache
    * @param string $compression
    */
-  public function __construct($inputFile, $outputDir, $oneFile, $classExists, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '')
+  public function __construct($inputFile, $outputDir, $oneFile, $classExists, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '')
   {
     $this->namespaceName = $namespaceName;
     $this->oneFile = $oneFile;
     $this->classExists = $classExists;
+    $this->noTypeConstructor = $noTypeConstructor;
     $this->outputDir = $outputDir;
     if (substr($this->outputDir, 0, -1) != '/')
     {
@@ -122,6 +130,16 @@ class Config
   public function getClassExists()
   {
     return $this->classExists;
+  }
+
+  /**
+   *
+   * @return bool Returns true if no type constructor should be used
+   * @access public
+   */
+  public function getNoTypeConstructor()
+  {
+    return $this->noTypeConstructor;
   }
 
   /**

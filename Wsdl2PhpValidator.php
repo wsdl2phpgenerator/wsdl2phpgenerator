@@ -171,9 +171,9 @@ class Validator
     switch (strtolower($type))
     {
       case "int": case "integer": case "long": case "byte": case "short":
-      case "negativeInteger": case "nonNegativeInteger":
-      case "nonPositiveInteger": case "positiveInteger":
-      case "unsignedByte": case "unsignedInt": case "unsignedLong": case "unsignedShort":
+      case "negativeinteger": case "nonnegativeinteger":
+      case "nonpositiveinteger": case "positiveinteger":
+      case "unsignedbyte": case "unsignedint": case "unsignedlong": case "unsignedshort":
         $validType = "integer";
         break;
 
@@ -181,7 +181,7 @@ class Validator
         $validType = "double";
         break;
 
-      case "string": case "token": case "normalizedString": case "hexBinary":
+      case "string": case "token": case "normalizedstring": case "hexbinary":
         $validType = "string";
         break;
 
