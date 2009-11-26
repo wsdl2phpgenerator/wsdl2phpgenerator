@@ -64,6 +64,14 @@ class Wsdl2PhpConfig
   private $compression;
 
   /**
+
+   *
+   * @var string A comma separated list of classes to generate. Used to specify the classes to generate if the user doesn't want to generate all
+   */
+  private $classNames;
+
+  /**
+
    *
    * @var bool If a type constructor should not be generated
    */
@@ -81,26 +89,28 @@ class Wsdl2PhpConfig
    * @param array $optionsFeatures
    * @param string $wsdlCache
    * @param string $compression
+   * @param string $classNames
    */
-  public function __construct($inputFile, $outputDir, $oneFile, $classExists, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '')
+  public function __construct($inputFile, $outputDir, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '')
   {
-    $this->namespaceName = $namespaceName;
+    $this->namespaceName = trim($namespaceName);
     $this->oneFile = $oneFile;
     $this->classExists = $classExists;
     $this->noTypeConstructor = $noTypeConstructor;
-    $this->outputDir = $outputDir;
+    $this->outputDir = trim($outputDir);
     if (substr($this->outputDir, 0, -1) != '/')
     {
       $this->outputDir .= '/';
     }
-    $this->inputFile = $inputFile;
+    $this->inputFile = trim($inputFile);
     $this->optionFeatures = $optionsFeatures;
     $this->wsdlCache = '';
     if (in_array($wsdlCache, array('WSDL_CACHE_NONE', 'WSDL_CACHE_DISK', 'WSDL_CACHE_MEMORY', 'WSDL_CACHE_BOTH')))
     {
       $this->wsdlCache = $wsdlCache;
     }
-    $this->compression = $compression;
+    $this->compression = trim($compression);
+    $this->classNames = trim($classNames);
   }
 
   /**
@@ -183,5 +193,32 @@ class Wsdl2PhpConfig
   public function getCompression()
   {
     return $this->compression;
+  }
+
+  /**
+   *
+   * @return string The list of classes
+   */
+  public function getClassNames()
+  {
+    return $this->classNames;
+  }
+
+  /**
+   *
+   * @return array Returns an array with all classnames to generate
+   */
+  public function getClassNamesArray()
+  {
+    if (strpos($this->classNames, ',') !== false)
+    {
+      return array_map(trim, explode(',', $this->classNames));
+    }
+    else if (strlen($this->classNames) > 0 )
+    {
+      return array($this->classNames);
+    }
+
+    return array();
   }
 }

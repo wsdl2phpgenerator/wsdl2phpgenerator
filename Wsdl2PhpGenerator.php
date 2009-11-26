@@ -415,56 +415,85 @@ class Wsdl2PhpGenerator
       }
     }
 
+    $validClasses = $this->config->getClassNamesArray();
+
+    $file = null;
+
     if ($this->config->getOneFile())
     {
-      // Generate file and add all classes to it then save it
-      $file = new PhpFile($this->service->getIdentifier());
-
-      if ($useNamespace)
+      // Check if the service class is in valid classes of if all classes should be generated
+      if (count($validClasses) == 0 || count($validClasses) > 0 && in_array($this->service->getIdentifier(), $validClasses))
       {
-        $file->addNamespace($this->config->getNamespaceName());
-      }
-
-      $file->addClass($this->service);
-
-      foreach ($this->types as $class)
-      {
-        $file->addClass($class);
-      }
-
-      $file->save($outputDirectory);
-    }
-    else
-    {
-      // Save types
-      foreach ($this->types as $class)
-      {
-        $file = new PhpFile($class->getIdentifier());
+        // Generate file and add all classes to it then save it
+        $file = new PhpFile($this->service->getIdentifier());
 
         if ($useNamespace)
         {
           $file->addNamespace($this->config->getNamespaceName());
         }
 
-        $file->addClass($class);
+        $file->addClass($this->service);
+      }
+
+      foreach ($this->types as $class)
+      {
+        // Check if the class should be saved
+        if (count($validClasses) == 0 || count($validClasses) > 0 && in_array($class->getIdentifier(), $validClasses))
+        {
+          if ($file == null)
+          {
+            $file = new PhpFile($class->getIdentifier());
+          }
+        
+          $file->addClass($class);
+        }
+      }
+
+      // Sanity check, if the user only wanted to generate non-existing classes
+      if ($file != null)
+      {
+        $file->save($outputDirectory);
+      }
+    }
+    else
+    {
+      // Save types
+      foreach ($this->types as $class)
+      {
+        // Check if the class should be saved
+        if (count($validClasses) == 0 || count($validClasses) > 0 && in_array($class->getIdentifier(), $validClasses))
+        {
+          $file = new PhpFile($class->getIdentifier());
+
+          if ($useNamespace)
+          {
+            $file->addNamespace($this->config->getNamespaceName());
+          }
+
+          $file->addClass($class);
+
+          $file->save($outputDirectory);
+
+          // Add the filename as dependency for the service
+          $this->service->addDependency($class->getIdentifier().'.php');
+        }
+      }
+
+      // Check if the service class is in valid classes of if all classes should be generated
+      if (count($validClasses) == 0 || count($validClasses) > 0 && in_array($this->service->getIdentifier(), $validClasses))
+      {
+        // Generate file and save the service class
+        $file = new PhpFile($this->service->getIdentifier());
+
+        if ($useNamespace)
+        {
+          $file->addNamespace($this->config->getNamespaceName());
+        }
+
+        $file->addClass($this->service);
 
         $file->save($outputDirectory);
-
-        // Add the filename as dependency for the service
-        $this->service->addDependency($class->getIdentifier().'.php');
       }
-
-      // Generate file and save the service class
-      $file = new PhpFile($this->service->getIdentifier());
-
-      if ($useNamespace)
-      {
-        $file->addNamespace($this->config->getNamespaceName());
-      }
-
-      $file->addClass($this->service);
-
-      $file->save($outputDirectory);
     }
   }
 }
