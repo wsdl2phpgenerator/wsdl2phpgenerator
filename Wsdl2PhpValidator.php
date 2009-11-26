@@ -160,12 +160,9 @@ class Validator
    */
   private function validateTypeName($type)
   {
-    $array = false;
-
-    if (substr($type, -2) == "[]")
+    if (substr($type, -2) == "[]" || substr($type, 0, 7) == "ArrayOf")
     {
-      $array = true;
-      $type = substr($type, 0, -2);
+      return 'array';
     }
 
     switch (strtolower($type))
@@ -193,11 +190,6 @@ class Validator
     if ($this->isKeyword($validType))
     {
       throw new ValidationException($validType.' is a restricted keyword.');
-    }
-
-    if ($array)
-    {
-      $validType .= "[]";
     }
 
     return $validType;
