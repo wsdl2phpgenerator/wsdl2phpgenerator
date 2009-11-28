@@ -64,13 +64,13 @@ class PhpFunction extends PhpElement
 
     if ($this->comment !== null)
     {
-      $ret .= $this->comment->getSource();
+      $ret .= $this->getSourceRow($this->comment->getSource());
     }
 
-    $ret .= $this->access.' function '.$this->identifier.'('.$this->params.')'.PHP_EOL;
-    $ret .= '{'.PHP_EOL;
-    $ret .= $this->source;
-    $ret .= '}'.PHP_EOL;
+    $ret .= $this->getSourceRow($this->access.' function '.$this->identifier.'('.$this->params.')');
+    $ret .= $this->getSourceRow('{');
+    $ret .= $this->getSourceRow($this->source);
+    $ret .= $this->getSourceRow('}');
 
     return $ret;
   }
