@@ -78,6 +78,7 @@ class Wsdl2PhpConfig
   private $noTypeConstructor;
 
   /**
+
    * Sets all variables
    *
    * @param string $inputFile

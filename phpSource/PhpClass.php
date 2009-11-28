@@ -81,6 +81,7 @@ class PhpClass extends PhpElement
     $this->extends = $extends;
     $this->variables = array();
     $this->functions = array();
+    $this->indentionStr = '  '; // Use two spaces as indention
   }
 
   /**
@@ -128,6 +129,7 @@ class PhpClass extends PhpElement
     {
       foreach ($this->variables as $variable)
       {
+        $variable->setIndentionStr($this->getIndentionStr());
         $ret .= $variable->getSource();
       }
     }
@@ -136,6 +138,7 @@ class PhpClass extends PhpElement
     {
       foreach ($this->functions as $function)
       {
+        $function->setIndentionStr($this->getIndentionStr());
         $ret .= $function->getSource();
       }
     }
