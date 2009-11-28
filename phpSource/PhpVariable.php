@@ -57,10 +57,10 @@ class PhpVariable extends PhpElement
 
     if ($this->comment !== null)
     {
-      $ret .= $this->comment->getSource();
+      $ret .= PHP_EOL.$this->getSourceRow($this->comment->getSource());
     }
 
-    $ret .= $this->access.' $'.$this->identifier.$this->initialization.';'.PHP_EOL;
+    $ret .= $this->getSourceRow($this->access.' $'.$this->identifier.$this->initialization.';');
 
     return $ret;
   }
