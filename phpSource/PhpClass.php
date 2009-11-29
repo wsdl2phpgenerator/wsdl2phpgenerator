@@ -96,7 +96,7 @@ class PhpClass extends PhpElement
 
     if ($this->classExists)
     {
-      $ret .= 'if (!class_exists("'.$this->identifier.'")) '.PHP_EOL.'{'.PHP_EOL;
+      $ret .= 'if (!class_exists("'.$this->identifier.'", false)) '.PHP_EOL.'{'.PHP_EOL;
     }
 
     if (count($this->dependencies) > 0)
