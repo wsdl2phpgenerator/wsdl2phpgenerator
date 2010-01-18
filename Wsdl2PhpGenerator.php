@@ -86,9 +86,13 @@ class Generator
   {
     $this->config = $config;
 
+    $this->log(_('Starting generation'));
+
     $this->load();
 
     $this->savePhp();
+
+    $this->log(_('Generation complete'));
   }
 
   /**
@@ -100,6 +104,7 @@ class Generator
 
     try
     {
+      $this->log(_('Loading the wsdl'));
       $this->client = new \SoapClient($wsdl);
     } 
     catch(\SoapFault $e)
@@ -107,6 +112,7 @@ class Generator
       throw new Exception('Error connectiong to to the wsdl. Error: '.$e->getMessage());
     }
 
+    $this->log(_('Loading the DOM'));
     $this->dom = \DOMDocument::load($wsdl);
 
     $this->loadTypes();
@@ -124,6 +130,10 @@ class Generator
     $serviceName = $this->validator->validateClass($serviceName);
     $this->service = new \phpSource\PhpClass($serviceName, $this->config->getClassExists(), 'SoapClient');
 
+    $this->log(_('Generating class '.$serviceName));
+
+    $this->log(_('Generating comment for '.$serviceName));
+
     $comment = new \phpSource\PhpDocComment();
     $comment->addParam(\phpSource\PhpDocElementFactory::getParam('string', 'wsdl', 'The wsdl file to use'));
     $comment->addParam(\phpSource\PhpDocElementFactory::getParam('array', 'config', 'A array of config values'));
@@ -138,6 +148,8 @@ class Generator
   }
   '.$this->generateServiceOptions($this->config).'
   parent::__construct($wsdl, $options);'.PHP_EOL;
+
+    $this->log(_('Generating constructor for '.$serviceName));
 
     $function = new \phpSource\PhpFunction('public', '__construct', '$wsdl = \''.$this->config->getInputFile().'\', $options = array()', $source, $comment);
 
@@ -157,6 +169,10 @@ class Generator
     $init .= ')';
     $var = new \phpSource\PhpVariable('private static', $name, $init, $comment);
     $this->service->addVariable($var);
+
+    $this->log(_('Adding classmap'));
+
+    $this->log(_('Loading operations for '.$serviceName));
 
     // get operations
     $operations = $this->client->__getFunctions();
@@ -211,9 +227,12 @@ class Generator
 
       if ($this->service->functionExists($function->getIdentifier()) == false)
       {
+        $this->log(_('Adding operation '.$name));
         $this->service->addFunction($function);
       }
     }
+
+    $this->log(_('Done loading service'));
   }
 
   /**
@@ -226,8 +245,11 @@ class Generator
   {
     $ret = '';
 
+    $this->log(_('Generating service options'));
+
     if (count($config->getOptionFeatures()) > 0)
     {
+      $this->log(_('Adding option features'));
       $i = 0;
       $ret .= "
   if (isset(\$options['features']) == false)
@@ -249,6 +271,8 @@ class Generator
 
     if (strlen($config->getWsdlCache()) > 0)
     {
+      $this->log(_('Adding wsdl cache option'));
+
       $ret .= "
   if (isset(\$options['wsdl_cache']) == false)
   {
@@ -259,6 +283,8 @@ class Generator
 
     if (strlen($this->config->getCompression()) > 0)
     {
+      $this->log(_('Adding compression'));
+
       $ret .= "
   if (isset(\$options['compression']) == false)
   {
@@ -277,6 +303,8 @@ class Generator
    */
   private function loadTypes()
   {
+    $this->log(_('Loading types'));
+
     $types = $this->client->__getTypes();
 
     foreach($types as $type)
@@ -353,10 +381,12 @@ class Generator
         }
       }
 
+      $this->log(_('Generating type '.$className));
+
       $class = new \phpSource\PhpClass($className, $this->config->getClassExists());
 
       $constructorComment = new \phpSource\PhpDocComment();
-      $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());
+      $constructorComment->setAccess(\phpSource\PhpDocElementFactory::getPublicAccess());
       $constructorSource = '';
       $constructorParameters = '';
 
@@ -383,10 +413,14 @@ class Generator
       if ($this->config->getNoTypeConstructor() == false)
       {
         $class->addFunction($function);
+
+        $this->log(_('Adding constructor for '.$className));
       }
 
       $this->types[] = $class;
     }
+
+    $this->log(_('Done loading types'));
   }
 
   /**
@@ -401,6 +435,8 @@ class Generator
   {
     $outputDirectory = $this->config->getOutputDir();
 
+    $this->log(_('Starting save to directory '. $outputDirectory));
+
     if ($this->service === null)
     {
       throw new Exception('No service loaded');
@@ -411,6 +447,7 @@ class Generator
 	//Try to create output dir if non existing
     if (is_dir($outputDirectory) == false && is_file($outputDirectory) == false)
     {
+      $this->log(_('Creating output dir'));
       if(mkdir($outputDirectory, 0777, true) == false)
       {
         throw new Wsdl2PhpException('Could not create output directory and it does not exist!');
@@ -429,12 +466,16 @@ class Generator
         // Generate file and add all classes to it then save it
         $file = new \phpSource\PhpFile($this->service->getIdentifier());
 
+        $this->log(_('Opening file '.$this->service->getIdentifier()));
+
         if ($useNamespace)
         {
           $file->addNamespace($this->config->getNamespaceName());
         }
 
         $file->addClass($this->service);
+
+        $this->log(_('Adding service to file'));
       }
 
       foreach ($this->types as $class)
@@ -448,12 +489,14 @@ class Generator
           }
         
           $file->addClass($class);
+          $this->log(_('Adding type to file '.$class->getIdentifier()));
         }
       }
 
       // Sanity check, if the user only wanted to generate non-existing classes
       if ($file != null)
       {
+        $this->log(_('Saving file'));
         $file->save($outputDirectory);
       }
     }
@@ -474,10 +517,14 @@ class Generator
 
           $file->addClass($class);
 
+          $this->log(_('Adding class '.$class->getIdentifier().' to file'));
+
           $file->save($outputDirectory);
 
           // Add the filename as dependency for the service
           $this->service->addDependency($class->getIdentifier().'.php');
+
+          $this->log(_('Adding dependency'));
         }
       }
 
@@ -487,6 +534,8 @@ class Generator
         // Generate file and save the service class
         $file = new \phpSource\PhpFile($this->service->getIdentifier());
 
+        $this->log(_('Opening file '.$this->service->getIdentifier()));
+
         if ($useNamespace)
         {
           $file->addNamespace($this->config->getNamespaceName());
@@ -494,8 +543,25 @@ class Generator
 
         $file->addClass($this->service);
 
+        $this->log(_('Adding service to file'));
+
         $file->save($outputDirectory);
+
+        $this->log(_('Saving file'));
       }
+    }
+  }
+
+  /**
+   * Logs a message to the standard output
+   *
+   * @param string $message The message to log
+   */
+  private function log($message)
+  {
+    if ($this->config->getVerbose() == true)
+    {
+      print $message.PHP_EOL;
     }
   }
 }
