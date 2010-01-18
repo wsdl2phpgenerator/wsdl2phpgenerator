@@ -78,10 +78,17 @@ class Wsdl2PhpConfig
   private $noTypeConstructor;
 
   /**
+   *
+   * @var bool If we should output verbose information
+   */
+  private $verbose;
+
+  /**
    * Sets all variables
    *
    * @param string $inputFile
    * @param string $outputDir
+   * @param bool $verbose
    * @param bool $oneFile
    * @param bool $classExists
    * @param bool $noTypeConstructor
@@ -91,10 +98,11 @@ class Wsdl2PhpConfig
    * @param string $compression
    * @param string $classNames
    */
-  public function __construct($inputFile, $outputDir, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '')
+  public function __construct($inputFile, $outputDir, $verbose = false, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '')
   {
     $this->namespaceName = trim($namespaceName);
     $this->oneFile = $oneFile;
+    $this->verbose = $verbose;
     $this->classExists = $classExists;
     $this->noTypeConstructor = $noTypeConstructor;
     $this->outputDir = trim($outputDir);
@@ -220,5 +228,14 @@ class Wsdl2PhpConfig
     }
 
     return array();
+  }
+
+  /**
+   *
+   * @return bool Returns true if verbose output is selected
+   */
+  public function getVerbose()
+  {
+    return $this->verbose;
   }
 }

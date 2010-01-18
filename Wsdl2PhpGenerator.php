@@ -84,9 +84,13 @@ class Wsdl2PhpGenerator
   {
     $this->config = $config;
 
+    $this->log(_('Starting generation'));
+
     $this->load();
 
     $this->savePhp();
+
+    $this->log(_('Generation complete'));
   }
 
   /**
@@ -98,6 +102,7 @@ class Wsdl2PhpGenerator
 
     try
     {
+      $this->log(_('Loading the wsdl'));
       $this->client = new SoapClient($wsdl);
     }
     catch(SoapFault $e)
@@ -105,6 +110,7 @@ class Wsdl2PhpGenerator
       throw new Exception('Error connectiong to to the wsdl. Error: '.$e->getMessage());
     }
 
+    $this->log(_('Loading the DOM'));
     $this->dom = DOMDocument::load($wsdl);
 
     $this->loadTypes();
@@ -122,6 +128,10 @@ class Wsdl2PhpGenerator
     $serviceName = $this->validator->validateClass($serviceName);
     $this->service = new PhpClass($serviceName, $this->config->getClassExists(), 'SoapClient');
 
+    $this->log(_('Generating class '.$serviceName));
+
+    $this->log(_('Generating comment for '.$serviceName));
+
     $comment = new PhpDocComment();
     $comment->addParam(PhpDocElementFactory::getParam('string', 'wsdl', 'The wsdl file to use'));
     $comment->addParam(PhpDocElementFactory::getParam('array', 'config', 'A array of config values'));
@@ -136,6 +146,8 @@ class Wsdl2PhpGenerator
   }
   '.$this->generateServiceOptions($this->config).'
   parent::__construct($wsdl, $options);'.PHP_EOL;
+
+    $this->log(_('Generating constructor for '.$serviceName));
 
     $function = new PhpFunction('public', '__construct', '$wsdl = \''.$this->config->getInputFile().'\', $options = array()', $source, $comment);
 
@@ -155,6 +167,10 @@ class Wsdl2PhpGenerator
     $init .= ')';
     $var = new PhpVariable('private static', $name, $init, $comment);
     $this->service->addVariable($var);
+
+    $this->log(_('Adding classmap'));
+
+    $this->log(_('Loading operations for '.$serviceName));
 
     // get operations
     $operations = $this->client->__getFunctions();
@@ -209,9 +225,12 @@ class Wsdl2PhpGenerator
 
       if ($this->service->functionExists($function->getIdentifier()) == false)
       {
+        $this->log(_('Adding operation '.$name));
         $this->service->addFunction($function);
       }
     }
+
+    $this->log(_('Done loading service'));
   }
 
   /**
@@ -224,8 +243,11 @@ class Wsdl2PhpGenerator
   {
     $ret = '';
 
+    $this->log(_('Generating service options'));
+
     if (count($config->getOptionFeatures()) > 0)
     {
+      $this->log(_('Adding option features'));
       $i = 0;
       $ret .= "
   if (isset(\$options['features']) == false)
@@ -247,6 +269,8 @@ class Wsdl2PhpGenerator
 
     if (strlen($config->getWsdlCache()) > 0)
     {
+      $this->log(_('Adding wsdl cache option'));
+
       $ret .= "
   if (isset(\$options['wsdl_cache']) == false)
   {
@@ -257,6 +281,8 @@ class Wsdl2PhpGenerator
 
     if (strlen($this->config->getCompression()) > 0)
     {
+      $this->log(_('Adding compression'));
+
       $ret .= "
   if (isset(\$options['compression']) == false)
   {
@@ -275,6 +301,8 @@ class Wsdl2PhpGenerator
    */
   private function loadTypes()
   {
+    $this->log(_('Loading types'));
+
     $types = $this->client->__getTypes();
 
     foreach($types as $type)
@@ -351,6 +379,8 @@ class Wsdl2PhpGenerator
         }
       }
 
+      $this->log(_('Generating type '.$className));
+
       $class = new PhpClass($className, $this->config->getClassExists());
 
       $constructorComment = new PhpDocComment();
@@ -381,10 +411,14 @@ class Wsdl2PhpGenerator
       if ($this->config->getNoTypeConstructor() == false)
       {
         $class->addFunction($function);
+
+        $this->log(_('Adding constructor for '.$className));
       }
 
       $this->types[] = $class;
     }
+
+    $this->log(_('Done loading types'));
   }
 
   /**
@@ -399,6 +433,8 @@ class Wsdl2PhpGenerator
   {
     $outputDirectory = $this->config->getOutputDir();
 
+    $this->log(_('Starting save to directory '. $outputDirectory));
+
     if ($this->service === null)
     {
       throw new Wsdl2PhpException('No service loaded');
@@ -409,6 +445,7 @@ class Wsdl2PhpGenerator
     //Try to create output dir if non existing
     if (is_dir($outputDirectory) == false && is_file($outputDirectory) == false)
     {
+      $this->log(_('Creating output dir'));
       if(mkdir($outputDirectory, 0777, true) == false)
       {
         throw new Wsdl2PhpException('Could not create output directory and it does not exist!');
@@ -427,12 +464,16 @@ class Wsdl2PhpGenerator
         // Generate file and add all classes to it then save it
         $file = new PhpFile($this->service->getIdentifier());
 
+        $this->log(_('Opening file '.$this->service->getIdentifier()));
+
         if ($useNamespace)
         {
           $file->addNamespace($this->config->getNamespaceName());
         }
 
         $file->addClass($this->service);
+
+        $this->log(_('Adding service to file'));
       }
 
       foreach ($this->types as $class)
@@ -446,12 +487,14 @@ class Wsdl2PhpGenerator
           }
         
           $file->addClass($class);
+          $this->log(_('Adding type to file '.$class->getIdentifier()));
         }
       }
 
       // Sanity check, if the user only wanted to generate non-existing classes
       if ($file != null)
       {
+        $this->log(_('Saving file'));
         $file->save($outputDirectory);
       }
     }
@@ -472,10 +515,14 @@ class Wsdl2PhpGenerator
 
           $file->addClass($class);
 
+          $this->log(_('Adding class '.$class->getIdentifier().' to file'));
+
           $file->save($outputDirectory);
 
           // Add the filename as dependency for the service
           $this->service->addDependency($class->getIdentifier().'.php');
+
+          $this->log(_('Adding dependency'));
         }
       }
 
@@ -485,6 +532,8 @@ class Wsdl2PhpGenerator
         // Generate file and save the service class
         $file = new PhpFile($this->service->getIdentifier());
 
+        $this->log(_('Opening file '.$this->service->getIdentifier()));
+
         if ($useNamespace)
         {
           $file->addNamespace($this->config->getNamespaceName());
@@ -492,8 +541,25 @@ class Wsdl2PhpGenerator
 
         $file->addClass($this->service);
 
+        $this->log(_('Adding service to file'));
+
         $file->save($outputDirectory);
+
+        $this->log(_('Saving file'));
       }
+    }
+  }
+
+  /**
+   * Logs a message to the standard output
+   *
+   * @param string $message The message to log
+   */
+  private function log($message)
+  {
+    if ($this->config->getVerbose() == true)
+    {
+      print $message.PHP_EOL;
     }
   }
 }
