@@ -69,7 +69,7 @@ class Flag
    *
    * @param string $alias
    *
-   * @throws Exception Throws a exception if the alias already exists or if the maximum number of alias is reached
+   * @throws \Exception Throws a exception if the alias already exists or if the maximum number of alias is reached
    *
    * @return void
    */
@@ -77,12 +77,12 @@ class Flag
   {
     if (array_key_exists($alias, $this->aliases))
     {
-      throw new Exception('Flag ('.$alias.') is already a alias for '.$this->name.'!');
+      throw new \Exception('Flag ('.$alias.') is already a alias for '.$this->name.'!');
     }
 
     if (count($this->aliases) >= $this->maxNumAliases)
     {
-      throw new Exception('The maximum number of aliases have been reached');
+      throw new \Exception('The maximum number of aliases have been reached');
     }
 
     $this->aliases[] = $alias;

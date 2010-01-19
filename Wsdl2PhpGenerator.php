@@ -127,6 +127,10 @@ class Generator
   private function loadService()
   {
     $serviceName = $this->dom->getElementsByTagNameNS('*', 'service')->item(0)->getAttribute('name');
+
+    // Add prefix and suffix
+    $serviceName = $this->config->getPrefix().$serviceName.$this->config->getSuffix();
+
     $serviceName = $this->validator->validateClass($serviceName);
     $this->service = new \phpSource\PhpClass($serviceName, $this->config->getClassExists(), 'SoapClient');
 
@@ -313,7 +317,7 @@ class Generator
       $className = explode(" ", $parts[0]);
       $className = $className[1];
 
-      if( substr($className, -2, 2) == '[]' || substr($className, 0, 7) == 'ArrayOf')
+      if(substr($className, -2, 2) == '[]' || substr($className, 0, 7) == 'ArrayOf')
       {
         // skip arrays
         continue;
@@ -380,6 +384,11 @@ class Generator
           }
         }
       }
+
+      // Add prefix and suffix
+      $className = $this->config->getPrefix().$className.$this->config->getSuffix();
+
+      $className = $this->validator->validateClass($className);
 
       $this->log(_('Generating type '.$className));
 
