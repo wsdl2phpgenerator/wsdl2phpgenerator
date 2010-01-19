@@ -1,8 +1,36 @@
 <?php
 
 include_once('cli/Cli.php');
+include_once('config/FileConfig.php');
 include_once('Wsdl2PhpGenerator.php');
 
+// Try to read the config file if any
+try
+{
+  $config = new FileConfig('settings.conf');
+  $locale = $config->get('language');
+
+  $domain = 'messages';
+  $lcDir = 'LC_MESSAGES';
+  $path = $_SERVER['DOCUMENT_ROOT'].'translations';
+  $loc = substr($locale, 0, 5);
+  $file = $path.'/'.$loc.'/'.$lcDir.'/'.$domain.'.mo';
+
+  if (file_exists($file) == false)
+  {
+    throw new Exception('The selected language file ('.$file.') does not exist!');
+  }
+
+  bindtextdomain($domain, $path);
+  textdomain($domain);
+  setlocale(LC_ALL, $locale);
+}
+catch (Exception $e)
+{
+  // This should be the no file exception, then use the default settings
+}
+
+// Start
 $cli = new Cli('wsdl2php', '[-h] [-s] -i wsdlfile -o directory [-n namespace]', '1.3');
 $cli->addFlag('-e', 'If all classes should be guarded with if(!class_exists) statements', true, false);
 $cli->addFlag('-t', 'If no type constructor should be generated', true, false);
@@ -12,6 +40,8 @@ $cli->addFlag('-i', 'The input wsdl file', false, true);
 $cli->addFlag('-o', 'The output directory', false, true);
 $cli->addFlag('-n', 'Use namespace with the name', false, false);
 $cli->addFlag('-c', 'A comma separated list of classnames to generate. If this is used only classes that exist in the list will be generated. If the service is not in this list and the -s flag is used the filename will be the name of the first class that is generated', false, false);
+$cli->addFlag('-p', 'The prefix to use for the generated classes', false, false);
+$cli->addFlag('-q', 'The suffix to use for the generated classes', false, false);
 $cli->addFlag('--singleElementArrays', 'Adds the option to use single element arrays to the client', true, false);
 $cli->addFlag('--xsiArrayType', 'Adds the option to use xsi arrays to the client', true, false);
 $cli->addFlag('--waitOneWayCalls', 'Adds the option to use wait one way calls to the client', true, false);
@@ -33,6 +63,8 @@ $cli->addAlias('-n', '--namespace');
 $cli->addAlias('-c', '--classes');
 $cli->addAlias('-c', '--classNames');
 $cli->addAlias('-c', '--classList');
+$cli->addAlias('-p', '--prefix');
+$cli->addAlias('-q', '--suffix');
 $cli->addAlias('-h', '--help');
 $cli->addAlias('-h', '--h');
 
@@ -77,6 +109,8 @@ $noTypeConstructor = $cli->getValue('-t');
 $inputFile = $cli->getValue('-i');
 $outputDir = $cli->getValue('-o');
 $namespaceName = $cli->getValue('-n');
+$prefix = $cli->getValue('-p');
+$suffix = $cli->getValue('-q');
 
 $optionsArray = array();
 if ($cli->getValue('--singleElementArrays'))
@@ -114,7 +148,7 @@ if ($cli->getValue('--gzip'))
   $gzip = 'SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP';
 }
 
-$config = new Wsdl2PhpConfig($inputFile, $outputDir, $verbose, $singleFile, $classExists, $noTypeConstructor, $namespaceName, $optionsArray, $wsdlCache, $gzip, $classNames);
+$config = new Wsdl2PhpConfig($inputFile, $outputDir, $verbose, $singleFile, $classExists, $noTypeConstructor, $namespaceName, $optionsArray, $wsdlCache, $gzip, $classNames, $prefix, $suffix);
 
 $generator = new Wsdl2PhpGenerator();
 $generator->generate($config);

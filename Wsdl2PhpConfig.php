@@ -84,6 +84,18 @@ class Wsdl2PhpConfig
   private $verbose;
 
   /**
+   *
+   * @var string The prefix to use for all classes
+   */
+  private $prefix;
+
+  /**
+   *
+   * @var string The sufix to use for all classes
+   */
+  private $suffix;
+
+  /**
    * Sets all variables
    *
    * @param string $inputFile
@@ -97,8 +109,10 @@ class Wsdl2PhpConfig
    * @param string $wsdlCache
    * @param string $compression
    * @param string $classNames
+   * @param string $prefix
+   * @param string $suffix
    */
-  public function __construct($inputFile, $outputDir, $verbose = false, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '')
+  public function __construct($inputFile, $outputDir, $verbose = false, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '', $prefix = '', $suffix = '')
   {
     $this->namespaceName = trim($namespaceName);
     $this->oneFile = $oneFile;
@@ -119,6 +133,8 @@ class Wsdl2PhpConfig
     }
     $this->compression = trim($compression);
     $this->classNames = trim($classNames);
+    $this->prefix = trim($prefix);
+    $this->suffix = trim($suffix);
   }
 
   /**
@@ -220,7 +236,7 @@ class Wsdl2PhpConfig
   {
     if (strpos($this->classNames, ',') !== false)
     {
-      return array_map(trim, explode(',', $this->classNames));
+      return array_map('trim', explode(',', $this->classNames));
     }
     else if (strlen($this->classNames) > 0 )
     {
@@ -237,5 +253,23 @@ class Wsdl2PhpConfig
   public function getVerbose()
   {
     return $this->verbose;
+  }
+
+  /**
+   *
+   * @return string Returns the prefix if any
+   */
+  public function getPrefix()
+  {
+    return $this->prefix;
+  }
+
+  /**
+   *
+   * @return string Returns the suffix if any
+   */
+  public function getSuffix()
+  {
+    return $this->suffix;
   }
 }
