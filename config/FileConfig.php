@@ -75,6 +75,7 @@ class FileConfig implements Config
    */
   public function __construct($filename, $buffer = false, $separator = '=')
   {
+    $this->data = array();
     $this->filename = $filename;
     $this->separator = $separator;
     $this->limit = 2; // Key value pairs
@@ -181,6 +182,8 @@ class FileConfig implements Config
           $this->data[$arr[0]] = trim($arr[1]);
         }
       }
+
+      $this->loaded = true;
     }
     else
     {

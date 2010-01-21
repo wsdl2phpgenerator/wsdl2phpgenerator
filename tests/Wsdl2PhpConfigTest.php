@@ -20,7 +20,7 @@ class Wsdl2PhpConfigTest extends PHPUnit_Framework_TestCase
    */
   protected function setUp()
   {
-    $this->object = new Wsdl2PhpConfig('inputFile.xml', '/tmp/output', true, true, true, 'myNamespace', array('SOAP_SINGLE_ELEMENT_ARRAYS'), 'WSDL_CACHE_BOTH', 'SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP', 'test,test2, test3');
+    $this->object = new Wsdl2PhpConfig('inputFile.xml', '/tmp/output', false, true, true, true, 'myNamespace', array('SOAP_SINGLE_ELEMENT_ARRAYS'), 'WSDL_CACHE_BOTH', 'SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP', 'test,test2, test3', 'prefix', 'suffix');
   }
 
   /**
@@ -123,6 +123,29 @@ class Wsdl2PhpConfigTest extends PHPUnit_Framework_TestCase
 
     $this->object = new Wsdl2PhpConfig('', '');
     $this->assertEquals(0, count($this->object->getClassNamesArray()));
+
+    $this->object = new Wsdl2PhpConfig('inputFile.xml', '/tmp/output', false, true, true, true, 'myNamespace', array('SOAP_SINGLE_ELEMENT_ARRAYS'), 'WSDL_CACHE_BOTH', 'SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP', 'test');
+    $this->assertContains('test', $this->object->getClassNamesArray());
+  }
+
+  public function testGetNoTypeConstructor()
+  {
+    $this->assertTrue($this->object->getNoTypeConstructor());
+  }
+
+  public function testGetVerbose()
+  {
+    $this->assertFalse($this->object->getVerbose());
+  }
+
+  public function testGetPrefix()
+  {
+    $this->assertEquals('prefix', $this->object->getPrefix());
+  }
+
+  public function testGetSuffix()
+  {
+    $this->assertEquals('suffix', $this->object->getSuffix());
   }
 }
 ?>

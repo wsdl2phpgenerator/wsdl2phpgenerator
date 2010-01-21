@@ -23,7 +23,6 @@ class CliParser
   public function __construct()
   {
     $this->flags = array();
-    $this->args  = array();
   }
 
   /**
@@ -75,18 +74,12 @@ class CliParser
             $this->flags['-'.$str[$j]] = true;
           }
         }
-        // If we have a = at pos 2 -a=foo use that, otherwise we have a invalid input and just ignore it
-        else if (strpos($str, '=') === 2)
+        else 
         {
           $parts = explode('=', $str);
           $this->flags[$parts[0]] = true;
 
-          // Does not have an =, so choose the next arg as its value if it isn't a flag and exists
-          if(count($parts) == 1 && isset($argv[$i + 1]) && preg_match('/^--?.+/', $argv[$i + 1]) == 0)
-          {
-            $this->flags[$parts[0]] = $argv[$i + 1];
-          }
-          else if(count($parts) == 2) // Has a =, so pick the second piece
+          if(count($parts) == 2) // Has a =, so pick the second piece
           {
             $this->flags[$parts[0]] = $parts[1];
           }

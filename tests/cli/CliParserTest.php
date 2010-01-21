@@ -36,7 +36,7 @@ class CliParserTest extends PHPUnit_Framework_TestCase
    */
   public function testParse()
   {
-    $arr = array('-a', '-b=foo', '-c bar', '--export', '--foo=bar', '-xyz', '-=asd', 'bluff', 'inva--lid');
+    $arr = array('-a', '-b=foo', '-c', 'bar', '--export', '--foo=bar', '-xyz', '-=asd', 'bluff', 'inva--lid', '--test', 'value', '-q', 'woho');
     $this->object->parse($arr);
 
     $this->assertTrue($this->object->getValue('-a'));

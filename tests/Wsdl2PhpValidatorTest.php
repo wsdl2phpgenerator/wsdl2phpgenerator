@@ -42,9 +42,15 @@ class Wsdl2PhpValidatorTest extends PHPUnit_Framework_TestCase
     $this->assertEquals('foo523', $this->object->validateClass('foo523'));
 
     $this->setExpectedException('Wsdl2PhpValidationException');
-    $this->assertEquals('foo', $this->object->validateClass('foo')); // same class cant be defined twice
+    $this->object->validateClass('SoapClient');
 
     $this->setExpectedException('Wsdl2PhpValidationException');
+    $this->assertEquals('for', $this->object->validateClass('for')); // for is reserved keyword
+  }
+
+  public function testValidateClassReservedKeyword()
+  {
+    $this->setExpectedException('Wsdl2Php\ValidationException');
     $this->assertEquals('for', $this->object->validateClass('for')); // for is reserved keyword
   }
 
@@ -58,9 +64,11 @@ class Wsdl2PhpValidatorTest extends PHPUnit_Framework_TestCase
     $this->assertEquals('Foo', $this->object->validateType('Foo'));
     $this->assertEquals('foo523', $this->object->validateType('foo523'));
 
-    $this->assertEquals('integer', $this->object->validateType('nonNegativeInteger')); // should result in integer
-    $this->assertEquals('double', $this->object->validateType('float')); // should result in double
-    $this->assertEquals('string', $this->object->validateType('normalizedString')); // should result in string
+    $this->assertEquals('int', $this->object->validateType('nonNegativeInteger')); 
+    $this->assertEquals('float', $this->object->validateType('float'));
+    $this->assertEquals('string', $this->object->validateType('normalizedString'));
+    $this->assertEquals('array', $this->object->validateType('ArrayOfFoo'));
+    $this->assertEquals('array', $this->object->validateType('Foo[]'));
 
     $this->setExpectedException('Wsdl2PhpValidationException');
     $this->assertEquals('and', $this->object->validateType('and')); // and is reserved keyword
