@@ -52,5 +52,34 @@ class FlagTest extends \PHPUnit_Framework_TestCase
     $this->setExpectedException('Exception');
     $this->object->addAlias('-k');
   }
+
+  public function testAddAlias2()
+  {
+    $this->object->addAlias('-g');
+    $this->setExpectedException('Exception');
+    $this->object->addAlias('-g');
+  }
+
+  public function testGetName()
+  {
+    $this->assertEquals('-f', $this->object->getName());
+  }
+
+  public function testIsBool()
+  {
+    $this->assertFalse($this->object->isBool());
+    $this->object = new Flag('-f', '', true);
+    $this->assertTrue($this->object->isBool());
+  }
+
+  /**
+   * Tests the to string functionality
+   */
+  public function testToString()
+  {
+    $this->object = new Flag('-f', 'Flag');
+    $this->assertEquals('-f'."\t"."\t"."\t"."\t".'Flag'.\PHP_EOL, strval($this->object));
+    $this->assertNotEquals('', strval($this->object));
+  }
 }
 ?>

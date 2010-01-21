@@ -75,7 +75,7 @@ class Flag
    */
   public function addAlias($alias)
   {
-    if (array_key_exists($alias, $this->aliases))
+    if (in_array($alias, $this->aliases))
     {
       throw new \Exception('Flag ('.$alias.') is already a alias for '.$this->name.'!');
     }

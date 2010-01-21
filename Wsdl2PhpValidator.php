@@ -171,15 +171,15 @@ class Validator
       case "negativeinteger": case "nonnegativeinteger":
       case "nonpositiveinteger": case "positiveinteger":
       case "unsignedbyte": case "unsignedint": case "unsignedlong": case "unsignedshort":
-        $validType = "integer";
+        return 'int';
         break;
 
       case "float": case "long": case "double": case "decimal":
-        $validType = "double";
+        return 'float';
         break;
 
       case "string": case "token": case "normalizedstring": case "hexbinary":
-        $validType = "string";
+        return 'string';
         break;
 
       default:

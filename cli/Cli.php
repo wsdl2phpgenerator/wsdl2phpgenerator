@@ -78,7 +78,7 @@ class Cli extends CliParser
     // Check main name
     if (array_key_exists($flag, $this->acceptedFlags))
     {
-      throw new Exception('Flag ('.$flag.') is already mapped!');
+      throw new \Exception('Flag ('.$flag.') is already mapped!');
     }
 
     // Check all aliases
@@ -88,7 +88,7 @@ class Cli extends CliParser
       {
         if($alias == $flag)
         {
-          throw new Exception('Flag ('.$flag.') is already mapped!');
+          throw new \Exception('Flag ('.$flag.') is already mapped!');
         }
       }
     }
@@ -122,7 +122,7 @@ class Cli extends CliParser
         {
           if($a == $alias)
           {
-            throw new Exception('Flag ('.$alias.') is already mapped!');
+            throw new \Exception('Flag ('.$alias.') is already mapped!');
           }
         }
       }
@@ -131,7 +131,7 @@ class Cli extends CliParser
     }
     else
     {
-      throw new Exception('Flag ('.$flag.') is not mapped!');
+      throw new \Exception('Flag ('.$flag.') is not mapped!');
     }
   }
 
@@ -140,14 +140,14 @@ class Cli extends CliParser
    */
   public function showUsage()
   {
-    print 'Usage: '.$this->programName.' '.$this->usageString.PHP_EOL;
+    print _('Usage: ').$this->programName.' '.$this->usageString.PHP_EOL;
 
     foreach ($this->acceptedFlags as $flag)
     {
       print $flag;
     }
 
-    print 'Version: '.$this->version.PHP_EOL;
+    print _('Version: ').$this->version.PHP_EOL;
 
     print PHP_EOL;
     exit;
@@ -162,6 +162,12 @@ class Cli extends CliParser
   public function validate(array $argv)
   {
     $this->parse($argv);
+
+    // Add the help flag if not defined
+    if (array_key_exists('-h', $this->acceptedFlags) === false)
+    {
+      $this->acceptedFlags['-h'] = new Flag('-h', _('Help'), true);
+    }
 
     if ($this->getValue('-h'))
     {
@@ -183,7 +189,7 @@ class Cli extends CliParser
 
         if ($showError)
         {
-          print 'Required parameter missing!'.PHP_EOL;
+          print _('Required parameter missing!').PHP_EOL;
           $this->showUsage();
         }
       }
@@ -197,7 +203,7 @@ class Cli extends CliParser
       {
         if ($flag->isBool() === false && $value === true)
         {
-          print 'A flag that must have a parameter does not'.PHP_EOL;
+          print _('A flag that must have a parameter does not').PHP_EOL;
           $this->showUsage();
         }
       }
@@ -220,14 +226,6 @@ class Cli extends CliParser
       if (array_key_exists($flag, $this->flags))
       {
         return parent::getValue($f->getName());
-      }
-
-      foreach ($f->getAliases() as $alias)
-      {
-        if (array_key_exists($alias, $this->flags))
-        {
-          return parent::getValue($alias);
-        }
       }
     }
 
