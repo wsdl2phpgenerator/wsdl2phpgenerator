@@ -50,7 +50,7 @@ class Wsdl2PhpValidatorTest extends PHPUnit_Framework_TestCase
 
   public function testValidateClassReservedKeyword()
   {
-    $this->setExpectedException('Wsdl2Php\ValidationException');
+    $this->setExpectedException('Wsdl2PhpValidationException');
     $this->assertEquals('for', $this->object->validateClass('for')); // for is reserved keyword
   }
 

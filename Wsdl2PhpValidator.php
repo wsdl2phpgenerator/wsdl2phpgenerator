@@ -169,15 +169,15 @@ class Wsdl2PhpValidator
       case "negativeinteger": case "nonnegativeinteger":
       case "nonpositiveinteger": case "positiveinteger":
       case "unsignedbyte": case "unsignedint": case "unsignedlong": case "unsignedshort":
-        $validType = "integer";
+        return 'int';
         break;
 
       case "float": case "long": case "double": case "decimal":
-        $validType = "double";
+        return 'float';
         break;
 
       case "string": case "token": case "normalizedstring": case "hexbinary":
-        $validType = "string";
+        return 'string';
         break;
 
       default:
@@ -201,6 +201,6 @@ class Wsdl2PhpValidator
    */
   private function isKeyword($str)
   {
-    return in_array($str, $this->keywords);
+    return in_array(strtolower($str), $this->keywords);
   }
 }
