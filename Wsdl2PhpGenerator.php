@@ -131,7 +131,15 @@ class Generator
     // Add prefix and suffix
     $serviceName = $this->config->getPrefix().$serviceName.$this->config->getSuffix();
 
-    $serviceName = $this->validator->validateClass($serviceName);
+    try
+    {
+      $serviceName = $this->validator->validateClass($serviceName);
+    }
+    catch (ValidationException $e)
+    {
+      $serviceName .= 'Custom';
+    }
+
     $this->service = new \phpSource\PhpClass($serviceName, $this->config->getClassExists(), 'SoapClient');
 
     $this->log(_('Generating class '.$serviceName));
@@ -165,9 +173,9 @@ class Generator
     $comment->setVar(\phpSource\PhpDocElementFactory::getVar('array', $name, 'The defined classes'));
     
     $init = 'array('.PHP_EOL;
-    foreach ($this->types as $type)
+    foreach ($this->types as $realName => $type)
     {
-      $init .= "  '".$type->getIdentifier()."' => '".$type->getIdentifier()."',".PHP_EOL;
+      $init .= "  '".$realName."' => '".$type->getIdentifier()."',".PHP_EOL;
     }
     $init = substr($init, 0, strrpos($init, ','));
     $init .= ')';
@@ -388,7 +396,16 @@ class Generator
       // Add prefix and suffix
       $className = $this->config->getPrefix().$className.$this->config->getSuffix();
 
-      $className = $this->validator->validateClass($className);
+      $realName = $className;
+
+      try
+      {
+        $className = $this->validator->validateClass($className);
+      }
+      catch (ValidationException $e)
+      {
+        $className .= 'Custom';
+      }
 
       $this->log(_('Generating type '.$className));
 
@@ -401,7 +418,15 @@ class Generator
 
       foreach ($members as $varArr)
       {
-		$type = $this->validator->validateType($varArr['type']);
+        try
+        {
+          $type = $this->validator->validateType($varArr['type']);
+        }
+        catch (ValidationException $e)
+        {
+          $type .= 'Custom';
+        }
+
         $name = $this->validator->validateNamingConvention($varArr['member']);
         $comment = new \phpSource\PhpDocComment();
         $comment->setVar(\phpSource\PhpDocElementFactory::getVar($type, $name, ''));
@@ -426,7 +451,7 @@ class Generator
         $this->log(_('Adding constructor for '.$className));
       }
 
-      $this->types[] = $class;
+      $this->types[$realName] = $class;
     }
 
     $this->log(_('Done loading types'));
@@ -450,10 +475,10 @@ class Generator
     {
       throw new Exception('No service loaded');
     }
-    
+
     $useNamespace = (\strlen($this->config->getNamespaceName()) > 0);
-	
-	//Try to create output dir if non existing
+
+    //Try to create output dir if non existing
     if (is_dir($outputDirectory) == false && is_file($outputDirectory) == false)
     {
       $this->log(_('Creating output dir'));

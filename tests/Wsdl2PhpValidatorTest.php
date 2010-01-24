@@ -55,6 +55,13 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
   {
     $this->setExpectedException('Wsdl2Php\ValidationException');
     $this->assertEquals('for', $this->object->validateClass('for')); // for is reserved keyword
+    $this->assertEquals('List', $this->object->validateClass('List')); // for is reserved keyword
+  }
+
+  public function testValidateClassReservedKeyword2()
+  {
+    $this->setExpectedException('Wsdl2Php\ValidationException');
+    $this->assertEquals('List', $this->object->validateClass('List')); // list is reserved keyword. PHP is not case sensitive in keywords
   }
 
   /**
