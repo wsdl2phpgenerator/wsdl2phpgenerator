@@ -203,6 +203,6 @@ class Validator
    */
   private function isKeyword($str)
   {
-    return in_array($str, $this->keywords);
+    return in_array(strtolower($str), $this->keywords);
   }
 }
