@@ -129,7 +129,15 @@ class Wsdl2PhpGenerator
     // Add prefix and suffix
     $serviceName = $this->config->getPrefix().$serviceName.$this->config->getSuffix();
 
-    $serviceName = $this->validator->validateClass($serviceName);
+    try
+    {
+      $serviceName = $this->validator->validateClass($serviceName);
+    }
+    catch (Wsdl2PhpValidationException $e)
+    {
+      $serviceName .= 'Custom';
+    }
+
     $this->service = new PhpClass($serviceName, $this->config->getClassExists(), 'SoapClient');
 
     $this->log(_('Generating class '.$serviceName));
@@ -163,9 +171,9 @@ class Wsdl2PhpGenerator
     $comment->setVar(PhpDocElementFactory::getVar('array', $name, 'The defined classes'));
 
     $init = 'array('.PHP_EOL;
-    foreach ($this->types as $type)
+    foreach ($this->types as $realName => $type)
     {
-      $init .= "  '".$type->getIdentifier()."' => '".$type->getIdentifier()."',".PHP_EOL;
+      $init .= "  '".$realName."' => '".$type->getIdentifier()."',".PHP_EOL;
     }
     $init = substr($init, 0, strrpos($init, ','));
     $init .= ')';
@@ -386,7 +394,16 @@ class Wsdl2PhpGenerator
       // Add prefix and suffix
       $className = $this->config->getPrefix().$className.$this->config->getSuffix();
 
-      $className = $this->validator->validateClass($className);
+      $realName = $className;
+
+      try
+      {
+        $className = $this->validator->validateClass($className);
+      }
+      catch (Wsdl2PhpValidationException $e)
+      {
+        $className .= 'Custom';
+      }
 
       $this->log(_('Generating type '.$className));
 
@@ -399,7 +416,15 @@ class Wsdl2PhpGenerator
 
       foreach ($members as $varArr)
       {
-        $type = $this->validator->validateType($varArr['type']);
+        try
+        {
+          $type = $this->validator->validateType($varArr['type']);
+        }
+        catch (Wsdl2PhpValidationException $e)
+        {
+          $type .= 'Custom';
+        }
+
         $name = $this->validator->validateNamingConvention($varArr['member']);
         $comment = new PhpDocComment();
         $comment->setVar(PhpDocElementFactory::getVar($type, $name, ''));
@@ -424,7 +449,7 @@ class Wsdl2PhpGenerator
         $this->log(_('Adding constructor for '.$className));
       }
 
-      $this->types[] = $class;
+      $this->types[$realName] = $class;
     }
 
     $this->log(_('Done loading types'));

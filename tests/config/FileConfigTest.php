@@ -25,7 +25,7 @@ class FileConfigTest extends PHPUnit_Framework_TestCase
   {
     // Add the file fixture
     $this->fileName = '/tmp/'.md5(time().mt_rand(0, 1000));
-    $contents = '#Comment'.\PHP_EOL.'foo=bar';
+    $contents = '#Comment'.PHP_EOL.'foo=bar';
     file_put_contents($this->fileName, $contents);
     
     $this->object = new FileConfig($this->fileName);

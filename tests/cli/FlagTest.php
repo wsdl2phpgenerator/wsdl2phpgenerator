@@ -75,7 +75,7 @@ class FlagTest extends PHPUnit_Framework_TestCase
   public function testToString()
   {
     $this->object = new Flag('-f', 'Flag');
-    $this->assertEquals('-f'."\t"."\t"."\t"."\t".'Flag'.\PHP_EOL, strval($this->object));
+    $this->assertEquals('-f'."\t"."\t"."\t"."\t".'Flag'.PHP_EOL, strval($this->object));
     $this->assertNotEquals('', strval($this->object));
   }
 }
