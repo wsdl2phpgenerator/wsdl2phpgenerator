@@ -7,7 +7,7 @@ include_once('Wsdl2PhpGenerator.php');
 // Try to read the config file if any
 try
 {
-  $config = new FileConfig('settings.conf');
+  $config = new config\FileConfig('settings.conf');
   $locale = $config->get('language');
 
   $domain = 'messages';
@@ -18,20 +18,20 @@ try
 
   if (file_exists($file) == false)
   {
-    throw new Exception('The selected language file ('.$file.') does not exist!');
+    throw new \Exception('The selected language file ('.$file.') does not exist!');
   }
 
   bindtextdomain($domain, $path);
   textdomain($domain);
   setlocale(LC_ALL, $locale);
 }
-catch (Exception $e)
+catch (\Exception $e)
 {
   // This should be the no file exception, then use the default settings
 }
 
 // Start
-$cli = new Cli('wsdl2php', '[-h] [-s] -i wsdlfile -o directory [-n namespace]', '1.3');
+$cli = new cli\Cli('wsdl2php', '[-h] [-s] -i wsdlfile -o directory [-n namespace]', '1.3');
 $cli->addFlag('-e', _('If all classes should be guarded with if(!class_exists) statements'), true, false);
 $cli->addFlag('-t', _('If no type constructor should be generated'), true, false);
 $cli->addFlag('-s', _('If the output should be a single file'), true, false);
@@ -148,7 +148,7 @@ if ($cli->getValue('--gzip'))
   $gzip = 'SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP';
 }
 
-$config = new Wsdl2PhpConfig($inputFile, $outputDir, $verbose, $singleFile, $classExists, $noTypeConstructor, $namespaceName, $optionsArray, $wsdlCache, $gzip, $classNames, $prefix, $suffix);
+$config = new \Wsdl2Php\Config($inputFile, $outputDir, $verbose, $singleFile, $classExists, $noTypeConstructor, $namespaceName, $optionsArray, $wsdlCache, $gzip, $classNames, $prefix, $suffix);
 
-$generator = new Wsdl2PhpGenerator();
+$generator = new \Wsdl2Php\Generator();
 $generator->generate($config);

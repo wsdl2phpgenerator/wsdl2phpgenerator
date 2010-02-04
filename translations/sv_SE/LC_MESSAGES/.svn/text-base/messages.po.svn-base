@@ -1,0 +1,237 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: wsdl2phpgenerator\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-01-21 22:26+0100\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Fredrik Wallgren <fredrik@wallgren.me>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Swedish\n"
+"X-Poedit-Country: SWEDEN\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: ../../..\n"
+
+#: ../../../generate.php:35
+msgid "If all classes should be guarded with if(!class_exists) statements"
+msgstr "Om alla klasser ska skyddas med if(!class_exists) uttryck"
+
+#: ../../../generate.php:36
+msgid "If no type constructor should be generated"
+msgstr "Om ingen typkonstruktor ska genereras"
+
+#: ../../../generate.php:37
+msgid "If the output should be a single file"
+msgstr "Om utdata ska samlas i en fil"
+
+#: ../../../generate.php:38
+msgid "If the output to the console should be verbose"
+msgstr "Om uttryckligt läge skall användas"
+
+#: ../../../generate.php:39
+msgid "The input wsdl file"
+msgstr "Wsdl filen som skall parsas"
+
+#: ../../../generate.php:40
+msgid "The output directory"
+msgstr "Katalogen utdata sparas i"
+
+#: ../../../generate.php:41
+msgid "Use namespace with the name"
+msgstr "Namnrymden alla klasser skall tillhöra"
+
+#: ../../../generate.php:42
+msgid "A comma separated list of classnames to generate. If this is used only classes that exist in the list will be generated. If the service is not in this list and the -s flag is used the filename will be the name of the first class that is generated"
+msgstr "En kommaseparerad lista med klassnamn som skall genereras. Om denna flagga anges kommer endast de klasser som finns i listan genereras. Om inte tjänsteklassen finns med i listan och flaggan -s används kommer filnamnet bli namnet av den första klassen som genereras"
+
+#: ../../../generate.php:43
+msgid "The prefix to use for the generated classes"
+msgstr "Prefix att använda för de genererade klasserna"
+
+#: ../../../generate.php:44
+msgid "The suffix to use for the generated classes"
+msgstr "Suffix att använda för de genererade klasserna"
+
+#: ../../../generate.php:45
+msgid "Adds the option to use single element arrays to the client"
+msgstr "Lägger till funktionen att använda single element arrays till klienten"
+
+#: ../../../generate.php:46
+msgid "Adds the option to use xsi arrays to the client"
+msgstr "Lägger till funktionen att använda xsi arrays till klienten"
+
+#: ../../../generate.php:47
+msgid "Adds the option to use wait one way calls to the client"
+msgstr "Lägger till funktionen att använda wait one way calls till klienten"
+
+#: ../../../generate.php:48
+msgid "Adds the option to not cache the wsdl to the client"
+msgstr "Lägger till funktionen att inte cacha wsdl filen till klienten"
+
+#: ../../../generate.php:49
+msgid "Adds the option to cache the wsdl on disk to the client"
+msgstr "Lägger till funktionen att cacha wsdl filen till disk till klienten"
+
+#: ../../../generate.php:50
+msgid "Adds the option to cache the wsdl in memory to the client"
+msgstr "Lägger till funktionen att cacha wsdl filen i minnet till klienten"
+
+#: ../../../generate.php:51
+msgid "Adds the option to cache the wsdl in memory and on disk to the client"
+msgstr "Lägger till funktionen att cacha wsdl filen både i minnet och på disk till klienten"
+
+#: ../../../generate.php:52
+msgid "Adds the option to compress the wsdl with gzip to the client"
+msgstr "Lägger till funktionen att komprimera wsdl filen med gzip till klienten"
+
+#: ../../../generate.php:53
+msgid "Show this help"
+msgstr "Visa denna hjälp"
+
+#: ../../../generate.php:81
+#, php-format
+msgid "You have selected to only generate some of the classes in the wsdl(%s) and to save them in one file. Continue? [Y/n]"
+msgstr "Du har valt att endast generera några av klasserna i wsdlfilen(%s) och att spara dem i en fil. Fortsätt? [Y/n]"
+
+#: ../../../generate.php:85
+msgid "You have selected to only generate one class and save it to a single file. If you have selected the service class and outputs this file to a directory where you previosly have generated the classes the file will be overwritten. Continue? [Y/n]"
+msgstr "Du har valt att endast generera en klass och spara den i en fil. Om du har valt tjänsteklassen och sparar denna i samma utdatakatalog som du tidigare har genererat klasserna kommer filen skrivas över. Fortsätt? [Y/n]"
+
+#: ../../../generate.php:102
+msgid "Please select yes or no."
+msgstr "Var vänlig välj yes eller no"
+
+#: ../../../Wsdl2PhpGenerator.php:89
+msgid "Starting generation"
+msgstr "Startar generering"
+
+#: ../../../Wsdl2PhpGenerator.php:95
+msgid "Generation complete"
+msgstr "Generering klar"
+
+#: ../../../Wsdl2PhpGenerator.php:107
+msgid "Loading the wsdl"
+msgstr "Laddar wsdl filen"
+
+#: ../../../Wsdl2PhpGenerator.php:115
+msgid "Loading the DOM"
+msgstr "Laddar DOM träd"
+
+#: ../../../Wsdl2PhpGenerator.php:137
+msgid "Generating class "
+msgstr "Genererar klass"
+
+#: ../../../Wsdl2PhpGenerator.php:139
+msgid "Generating comment for "
+msgstr "Genererar kommentar för"
+
+#: ../../../Wsdl2PhpGenerator.php:156
+msgid "Generating constructor for "
+msgstr "Genererar konstruktor för"
+
+#: ../../../Wsdl2PhpGenerator.php:177
+msgid "Adding classmap"
+msgstr "Lägger till klasskarta"
+
+#: ../../../Wsdl2PhpGenerator.php:179
+msgid "Loading operations for "
+msgstr "Laddar metoder för"
+
+#: ../../../Wsdl2PhpGenerator.php:234
+msgid "Adding operation "
+msgstr "Lägger till metod"
+
+#: ../../../Wsdl2PhpGenerator.php:239
+msgid "Done loading service"
+msgstr "Klar med att ladda tjänst"
+
+#: ../../../Wsdl2PhpGenerator.php:252
+msgid "Generating service options"
+msgstr "Genererar tjänstetillval"
+
+#: ../../../Wsdl2PhpGenerator.php:256
+msgid "Adding option features"
+msgstr "Lägger till valda tillval"
+
+#: ../../../Wsdl2PhpGenerator.php:278
+msgid "Adding wsdl cache option"
+msgstr "Lägger till wsdl cache tillval"
+
+#: ../../../Wsdl2PhpGenerator.php:290
+msgid "Adding compression"
+msgstr "Lägger till kompression"
+
+#: ../../../Wsdl2PhpGenerator.php:310
+msgid "Loading types"
+msgstr "Laddar typer"
+
+#: ../../../Wsdl2PhpGenerator.php:393
+msgid "Generating type "
+msgstr "Genererar typ"
+
+#: ../../../Wsdl2PhpGenerator.php:426
+msgid "Adding constructor for "
+msgstr "Lägger till konstruktor för"
+
+#: ../../../Wsdl2PhpGenerator.php:432
+msgid "Done loading types"
+msgstr "Klar med att ladda typer"
+
+#: ../../../Wsdl2PhpGenerator.php:447
+msgid "Starting save to directory "
+msgstr "Börjar spara till mapp"
+
+#: ../../../Wsdl2PhpGenerator.php:459
+msgid "Creating output dir"
+msgstr "Skapar katalog för utdata"
+
+#: ../../../Wsdl2PhpGenerator.php:478
+#: ../../../Wsdl2PhpGenerator.php:546
+msgid "Opening file "
+msgstr "Öppnar fil"
+
+#: ../../../Wsdl2PhpGenerator.php:487
+#: ../../../Wsdl2PhpGenerator.php:555
+msgid "Adding service to file"
+msgstr "Lägger till tjänst till fil"
+
+#: ../../../Wsdl2PhpGenerator.php:501
+msgid "Adding type to file "
+msgstr "Lägger till typ till fil"
+
+#: ../../../Wsdl2PhpGenerator.php:508
+#: ../../../Wsdl2PhpGenerator.php:559
+msgid "Saving file"
+msgstr "Sparar fil"
+
+#: ../../../Wsdl2PhpGenerator.php:529
+msgid "Adding class "
+msgstr "Lägger till klass"
+
+#: ../../../Wsdl2PhpGenerator.php:536
+msgid "Adding dependency"
+msgstr "Lägger till beroende"
+
+#: ../../../cli/Cli.php:143
+msgid "Usage: "
+msgstr "Användning:"
+
+#: ../../../cli/Cli.php:150
+msgid "Version: "
+msgstr "Version:"
+
+#: ../../../cli/Cli.php:169
+msgid "Help"
+msgstr "Hjälp"
+
+#: ../../../cli/Cli.php:192
+msgid "Required parameter missing!"
+msgstr "Nödvändig parameter saknas!"
+
+#: ../../../cli/Cli.php:206
+msgid "A flag that must have a parameter does not"
+msgstr "En flagga som måste ha en parameter saknar den"
+

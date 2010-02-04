@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/28/branches/php5.3/tests/cli
+END
+FlagTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/29/branches/php5.3/tests/cli/FlagTest.php
+END
+CliParserTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/28/branches/php5.3/tests/cli/CliParserTest.php
+END
+CliTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/28/branches/php5.3/tests/cli/CliTest.php
+END

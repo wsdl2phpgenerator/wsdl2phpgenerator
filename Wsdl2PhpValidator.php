@@ -1,5 +1,7 @@
 <?php
 
+namespace Wsdl2Php;
+
 include_once('Wsdl2PhpValidationException.php');
 
 /**
@@ -10,7 +12,7 @@ include_once('Wsdl2PhpValidationException.php');
  * @author Fredrik Wallgren <fredrik@wallgren.me>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
-class Wsdl2PhpValidator
+class Validator
 {
   /**
    *
@@ -134,12 +136,12 @@ class Wsdl2PhpValidator
 
     if (class_exists($validClassName))
     {
-      throw new Wsdl2PhpValidationException("Class ".$validClassName." already defined. Cannot redefine class with class loaded.");
+      throw new ValidationException("Class ".$validClassName." already defined. Cannot redefine class with class loaded.");
     }
 
     if ($this->isKeyword($validClassName))
     {
-      throw new Wsdl2PhpValidationException($validClassName.' is a restricted keyword.');
+      throw new ValidationException($validClassName.' is a restricted keyword.');
     }
 
     return $validClassName;
@@ -187,7 +189,7 @@ class Wsdl2PhpValidator
 
     if ($this->isKeyword($validType))
     {
-      throw new Wsdl2PhpValidationException($validType.' is a restricted keyword.');
+      throw new ValidationException($validType.' is a restricted keyword.');
     }
 
     return $validType;

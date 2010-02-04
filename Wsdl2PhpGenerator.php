@@ -1,5 +1,7 @@
 <?php
 
+namespace Wsdl2Php;
+
 include_once('Wsdl2PhpConfig.php');
 include_once('Wsdl2PhpException.php');
 include_once('Wsdl2PhpValidator.php');
@@ -17,7 +19,7 @@ include_once('phpSource/PhpDocElementFactory.php');
  * @author Fredrik Wallgren <fredrik@wallgren.me>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
-class Wsdl2PhpGenerator
+class Generator
 {
   /**
    * A SoapClient for loading the WSDL
@@ -36,21 +38,21 @@ class Wsdl2PhpGenerator
   /**
    * A phpSource code representation of the client
    *
-   * @var PhpClass The service class
+   * @var \phpSource\PhpClass The service class
    */
   private $service;
 
   /**
    * An array of class objects that represents the complexTypes in the service
    *
-   * @var array Array of PhpClass objects
+   * @var array Array of \phpSource\PhpClass objects
    */
   private $types;
 
   /**
    * The validator to use
    *
-   * @var Wsdl2PhpValidator
+   * @var Validator
    * @access private
    */
   private $validator;
@@ -58,7 +60,7 @@ class Wsdl2PhpGenerator
   /**
    * This is the object that holds the current config
    *
-   * @var Wsdl2PhpConfig
+   * @var Config
    * @access private
    */
   private $config;
@@ -68,7 +70,7 @@ class Wsdl2PhpGenerator
    */
   public function __construct()
   {
-    $this->validator = new Wsdl2PhpValidator();
+    $this->validator = new Validator();
     $this->service = null;
     $this->types = array();
   }
@@ -76,11 +78,11 @@ class Wsdl2PhpGenerator
   /**
    * Generates php source code from a wsdl file
    *
-   * @see Wsdl2PhpConfig
-   * @param Wsdl2PhpConfig $config The config to use for generation
+   * @see Config
+   * @param Config $config The config to use for generation
    * @access public
    */
-  public function generate(Wsdl2PhpConfig $config)
+  public function generate(Config $config)
   {
     $this->config = $config;
 
@@ -103,15 +105,15 @@ class Wsdl2PhpGenerator
     try
     {
       $this->log(_('Loading the wsdl'));
-      $this->client = new SoapClient($wsdl);
-    }
-    catch(SoapFault $e)
+      $this->client = new \SoapClient($wsdl);
+    } 
+    catch(\SoapFault $e)
     {
       throw new Exception('Error connectiong to to the wsdl. Error: '.$e->getMessage());
     }
 
     $this->log(_('Loading the DOM'));
-    $this->dom = DOMDocument::load($wsdl);
+    $this->dom = \DOMDocument::load($wsdl);
 
     $this->loadTypes();
     $this->loadService();
@@ -133,21 +135,21 @@ class Wsdl2PhpGenerator
     {
       $serviceName = $this->validator->validateClass($serviceName);
     }
-    catch (Wsdl2PhpValidationException $e)
+    catch (ValidationException $e)
     {
       $serviceName .= 'Custom';
     }
 
-    $this->service = new PhpClass($serviceName, $this->config->getClassExists(), 'SoapClient');
+    $this->service = new \phpSource\PhpClass($serviceName, $this->config->getClassExists(), 'SoapClient');
 
     $this->log(_('Generating class '.$serviceName));
 
     $this->log(_('Generating comment for '.$serviceName));
 
-    $comment = new PhpDocComment();
-    $comment->addParam(PhpDocElementFactory::getParam('string', 'wsdl', 'The wsdl file to use'));
-    $comment->addParam(PhpDocElementFactory::getParam('array', 'config', 'A array of config values'));
-    $comment->setAccess(PhpDocElementFactory::getPublicAccess());
+    $comment = new \phpSource\PhpDocComment();
+    $comment->addParam(\phpSource\PhpDocElementFactory::getParam('string', 'wsdl', 'The wsdl file to use'));
+    $comment->addParam(\phpSource\PhpDocElementFactory::getParam('array', 'config', 'A array of config values'));
+    $comment->setAccess(\phpSource\PhpDocElementFactory::getPublicAccess());
 
     $source = '  foreach(self::$classmap as $key => $value)
   {
@@ -161,15 +163,15 @@ class Wsdl2PhpGenerator
 
     $this->log(_('Generating constructor for '.$serviceName));
 
-    $function = new PhpFunction('public', '__construct', '$wsdl = \''.$this->config->getInputFile().'\', $options = array()', $source, $comment);
+    $function = new \phpSource\PhpFunction('public', '__construct', '$wsdl = \''.$this->config->getInputFile().'\', $options = array()', $source, $comment);
 
     $this->service->addFunction($function);
 
     $name = 'classmap';
-    $comment = new PhpDocComment();
-    $comment->setAccess(PhpDocElementFactory::getPrivateAccess());
-    $comment->setVar(PhpDocElementFactory::getVar('array', $name, 'The defined classes'));
-
+    $comment = new \phpSource\PhpDocComment();
+    $comment->setAccess(\phpSource\PhpDocElementFactory::getPrivateAccess());
+    $comment->setVar(\phpSource\PhpDocElementFactory::getVar('array', $name, 'The defined classes'));
+    
     $init = 'array('.PHP_EOL;
     foreach ($this->types as $realName => $type)
     {
@@ -177,7 +179,7 @@ class Wsdl2PhpGenerator
     }
     $init = substr($init, 0, strrpos($init, ','));
     $init .= ')';
-    $var = new PhpVariable('private static', $name, $init, $comment);
+    $var = new \phpSource\PhpVariable('private static', $name, $init, $comment);
     $this->service->addVariable($var);
 
     $this->log(_('Adding classmap'));
@@ -204,13 +206,13 @@ class Wsdl2PhpGenerator
       else
       {
         // invalid function call
-        throw new Wsdl2PhpException('Invalid function call: '.$function);
+        throw new Exception('Invalid function call: '.$function);
       }
 
       $name = $this->validator->validateNamingConvention($call);
 
-      $comment = new PhpDocComment();
-      $comment->setAccess(PhpDocElementFactory::getPublicAccess());
+      $comment = new \phpSource\PhpDocComment();
+      $comment->setAccess(\phpSource\PhpDocElementFactory::getPublicAccess());
 
       $source = '  return $this->__soapCall(\''.$name.'\', array(';
       foreach (explode(', ', $params) as $param)
@@ -226,14 +228,14 @@ class Wsdl2PhpGenerator
         }
         if (strlen(@$val[1]) > 0)
         {
-          $comment->addParam(PhpDocElementFactory::getParam($val[0], $val[1], ''));
+          $comment->addParam(\phpSource\PhpDocElementFactory::getParam($val[0], $val[1], ''));
         }
       }
       // Remove last comma
       $source = substr($source, 0, -2);
       $source .= '));'.PHP_EOL;
 
-      $function = new PhpFunction('public', $name, $params, $source, $comment);
+      $function = new \phpSource\PhpFunction('public', $name, $params, $source, $comment);
 
       if ($this->service->functionExists($function->getIdentifier()) == false)
       {
@@ -247,11 +249,11 @@ class Wsdl2PhpGenerator
 
   /**
    *
-   * @param Wsdl2PhpConfig $config The config containing the values to use
+   * @param Config $config The config containing the values to use
    *
    * @return string Returns the string for the options array
    */
-  private function generateServiceOptions(Wsdl2PhpConfig $config)
+  private function generateServiceOptions(Config $config)
   {
     $ret = '';
 
@@ -400,17 +402,17 @@ class Wsdl2PhpGenerator
       {
         $className = $this->validator->validateClass($className);
       }
-      catch (Wsdl2PhpValidationException $e)
+      catch (ValidationException $e)
       {
         $className .= 'Custom';
       }
 
       $this->log(_('Generating type '.$className));
 
-      $class = new PhpClass($className, $this->config->getClassExists());
+      $class = new \phpSource\PhpClass($className, $this->config->getClassExists());
 
-      $constructorComment = new PhpDocComment();
-      $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());
+      $constructorComment = new \phpSource\PhpDocComment();
+      $constructorComment->setAccess(\phpSource\PhpDocElementFactory::getPublicAccess());
       $constructorSource = '';
       $constructorParameters = '';
 
@@ -420,27 +422,27 @@ class Wsdl2PhpGenerator
         {
           $type = $this->validator->validateType($varArr['type']);
         }
-        catch (Wsdl2PhpValidationException $e)
+        catch (ValidationException $e)
         {
           $type .= 'Custom';
         }
 
         $name = $this->validator->validateNamingConvention($varArr['member']);
-        $comment = new PhpDocComment();
-        $comment->setVar(PhpDocElementFactory::getVar($type, $name, ''));
-        $comment->setAccess(PhpDocElementFactory::getPublicAccess());
-        $var = new PhpVariable('public', $name, '', $comment);
+        $comment = new \phpSource\PhpDocComment();
+        $comment->setVar(\phpSource\PhpDocElementFactory::getVar($type, $name, ''));
+        $comment->setAccess(\phpSource\PhpDocElementFactory::getPublicAccess());
+        $var = new \phpSource\PhpVariable('public', $name, '', $comment);
         $class->addVariable($var);
 
         $constructorSource .= '  $this->'.$name.' = $'.$name.';'.PHP_EOL;
-        $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
-        $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());
+        $constructorComment->addParam(\phpSource\PhpDocElementFactory::getParam($type, $name, ''));
+        $constructorComment->setAccess(\phpSource\PhpDocElementFactory::getPublicAccess());
         $constructorParameters .= ', $'.$name;
       }
 
       $constructorParameters = substr($constructorParameters, 2); // Remove first comma
-      $function = new PhpFunction('public', '__construct', $constructorParameters, $constructorSource, $constructorComment);
-      
+      $function = new \phpSource\PhpFunction('public', '__construct', $constructorParameters, $constructorSource, $constructorComment);
+
       // Only add the constructor if type constructor is selected
       if ($this->config->getNoTypeConstructor() == false)
       {
@@ -458,8 +460,8 @@ class Wsdl2PhpGenerator
   /**
    * Save all the loaded classes to the configured output dir
    *
-   * @throws Wsdl2PhpException If no service is loaded
-   * @throws Wsdl2PhpException If the output dir does not exist and can't be created
+   * @throws Exception If no service is loaded
+   * @throws Exception If the output dir does not exist and can't be created
    *
    * @access private
    */
@@ -471,10 +473,10 @@ class Wsdl2PhpGenerator
 
     if ($this->service === null)
     {
-      throw new Wsdl2PhpException('No service loaded');
+      throw new Exception('No service loaded');
     }
 
-    $useNamespace = (strlen($this->config->getNamespaceName()) > 0);
+    $useNamespace = (\strlen($this->config->getNamespaceName()) > 0);
 
     //Try to create output dir if non existing
     if (is_dir($outputDirectory) == false && is_file($outputDirectory) == false)
@@ -496,7 +498,7 @@ class Wsdl2PhpGenerator
       if (count($validClasses) == 0 || count($validClasses) > 0 && in_array($this->service->getIdentifier(), $validClasses))
       {
         // Generate file and add all classes to it then save it
-        $file = new PhpFile($this->service->getIdentifier());
+        $file = new \phpSource\PhpFile($this->service->getIdentifier());
 
         $this->log(_('Opening file '.$this->service->getIdentifier()));
 
@@ -517,7 +519,7 @@ class Wsdl2PhpGenerator
         {
           if ($file == null)
           {
-            $file = new PhpFile($class->getIdentifier());
+            $file = new \phpSource\PhpFile($class->getIdentifier());
           }
         
           $file->addClass($class);
@@ -540,7 +542,7 @@ class Wsdl2PhpGenerator
         // Check if the class should be saved
         if (count($validClasses) == 0 || count($validClasses) > 0 && in_array($class->getIdentifier(), $validClasses))
         {
-          $file = new PhpFile($class->getIdentifier());
+          $file = new \phpSource\PhpFile($class->getIdentifier());
 
           if ($useNamespace)
           {
@@ -564,7 +566,7 @@ class Wsdl2PhpGenerator
       if (count($validClasses) == 0 || count($validClasses) > 0 && in_array($this->service->getIdentifier(), $validClasses))
       {
         // Generate file and save the service class
-        $file = new PhpFile($this->service->getIdentifier());
+        $file = new \phpSource\PhpFile($this->service->getIdentifier());
 
         $this->log(_('Opening file '.$this->service->getIdentifier()));
 

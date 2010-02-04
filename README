@@ -1,4 +1,4 @@
-README wsdl2phpgenerator
+README
 
 Simple WSDL to PHP classes converter. Takes a wsdl file and outputs class files ready to use.
 

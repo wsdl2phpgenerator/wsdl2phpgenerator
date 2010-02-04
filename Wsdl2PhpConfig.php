@@ -1,5 +1,7 @@
 <?php
 
+namespace Wsdl2Php;
+
 /**
  * Class that contains all the settings possible for the Wsdl2PhpGenerator
  *
@@ -7,7 +9,7 @@
  * @author Fredrik Wallgren <fredrik@wallgren.me>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
-class Wsdl2PhpConfig
+class Config
 {
   /**
    *

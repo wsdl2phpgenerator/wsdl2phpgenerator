@@ -1,5 +1,7 @@
 <?php
 
+namespace Wsdl2Php;
+
 include_once('Wsdl2PhpException.php');
 
 /**
@@ -9,10 +11,10 @@ include_once('Wsdl2PhpException.php');
  * @package Wsdl2PhpGenerator
  * @author Fredrik Wallgren <fredrik@wallgren.me>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
- * @see Wsdl2PhpException
- * @see Wsdl2PhpValidator
+ * @see Exception
+ * @see Validator
  */
-class Wsdl2PhpValidationException extends Wsdl2PhpException
+class ValidationException extends Exception
 {
 
 }
