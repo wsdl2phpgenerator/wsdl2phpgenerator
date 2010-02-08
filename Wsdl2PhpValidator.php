@@ -1,7 +1,13 @@
 <?php
+/**
+ * @package Wsdl2PhpGenerator
+ */
 
 namespace Wsdl2Php;
 
+/**
+ * Include the needed files
+ */
 include_once('Wsdl2PhpValidationException.php');
 
 /**
@@ -20,6 +26,15 @@ class Validator
    */
   private $keywords;
 
+  /**
+   *
+   * @var array Array containing primitive types
+   */
+  private $primitives;
+
+  /**
+   * Set up the object. Defines all keywords
+   */
   public function __construct()
   {
     $this->keywords = array('and',
@@ -83,6 +98,13 @@ class Validator
     'protected',
     'throw',
     'try');
+
+    $this->primitives = array('string',
+      'int',
+      'float',
+      'double',
+      'bool',
+      'boolean');
   }
 
   /**
@@ -118,6 +140,17 @@ class Validator
   public function validateNamingConvention($name)
   {
     return preg_replace('/[^a-zA-Z0-9_\x7f-\xff]*/', '', preg_replace('/^[^a-zA-Z_\x7f-\xff]*/', '', $name));
+  }
+
+  /**
+   * Checks if $str is a primitive datatype
+   *
+   * @param string $str
+   * @return bool True if $str is a primitive
+   */
+  public function isPrimitive($str)
+  {
+    return in_array(strtolower($str), $this->primitives);
   }
 
   /**
@@ -160,7 +193,7 @@ class Validator
    */
   private function validateTypeName($type)
   {
-    if (substr($type, -2) == "[]" || substr($type, 0, 7) == "ArrayOf")
+    if (substr($type, -2) == "[]" || strtolower(substr($type, 0, 7)) == "arrayof")
     {
       return 'array';
     }

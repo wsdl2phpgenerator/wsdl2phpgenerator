@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package phpSource
+ */
 
 namespace phpSource;
 

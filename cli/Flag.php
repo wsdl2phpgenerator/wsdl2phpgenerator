@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package cli
+ */
 
 namespace cli;
 

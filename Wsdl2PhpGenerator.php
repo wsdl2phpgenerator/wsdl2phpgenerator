@@ -1,7 +1,13 @@
 <?php
+/**
+ * @package Wsdl2PhpGenerator
+ */
 
 namespace Wsdl2Php;
 
+/**
+ * Include the needed files
+ */
 include_once('Wsdl2PhpConfig.php');
 include_once('Wsdl2PhpException.php');
 include_once('Wsdl2PhpValidator.php');
@@ -215,19 +221,34 @@ class Generator
       $comment->setAccess(\phpSource\PhpDocElementFactory::getPublicAccess());
 
       $source = '  return $this->__soapCall(\''.$name.'\', array(';
+      $paramStr = '';
       foreach (explode(', ', $params) as $param)
       {
         $val = explode(' ', $param);
+
+        // Check if we have type hint
         if (count($val) == 1)
         {
-          $source .= $val[0].', ';
+          if (strlen($val[0]) > 0)
+          {
+            $source .= $val[0].', ';
+            $paramStr .= $val[0].', ';
+            $comment->addParam(\phpSource\PhpDocElementFactory::getParam('', $val[0], ''));
+          }
         }
         else
         {
           $source .= $val[1].', ';
-        }
-        if (strlen(@$val[1]) > 0)
-        {
+
+          // If we have valid typehint use it otherwise not
+          if ($this->validator->isPrimitive($val[0]))
+          {
+            $paramStr .= $val[1].', ';
+          }
+          else
+          {
+            $paramStr .= $val[0].' '.$val[1].', ';
+          }
           $comment->addParam(\phpSource\PhpDocElementFactory::getParam($val[0], $val[1], ''));
         }
       }
@@ -235,11 +256,13 @@ class Generator
       $source = substr($source, 0, -2);
       $source .= '));'.PHP_EOL;
 
-      $function = new \phpSource\PhpFunction('public', $name, $params, $source, $comment);
+      $paramStr = substr($paramStr, 0, -2);
+
+      $function = new \phpSource\PhpFunction('public', $name, $paramStr, $source, $comment);
 
       if ($this->service->functionExists($function->getIdentifier()) == false)
       {
-        $this->log(_('Adding operation '.$name));
+        $this->log(_('Adding operation '.$name.'('.$paramStr.')'));
         $this->service->addFunction($function);
       }
     }

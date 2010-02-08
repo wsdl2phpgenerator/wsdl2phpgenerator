@@ -1,7 +1,13 @@
 <?php
+/**
+ * @package phpSource
+ */
 
 namespace phpSource;
 
+/**
+ * Include the needed files
+ */
 include_once('PhpClass.php');
 include_once('PhpFunction.php'); // Just in case and to show where the functionality is
 

@@ -1,7 +1,13 @@
 <?php
+/**
+ * @package Wsdl2PhpGenerator
+ */
 
 namespace Wsdl2Php;
 
+/**
+ * Include the needed files
+ */
 include_once('Wsdl2PhpException.php');
 
 /**

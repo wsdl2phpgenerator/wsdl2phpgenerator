@@ -1,7 +1,13 @@
 <?php
+/**
+ * @package phpSource
+ */
 
 namespace phpSource;
 
+/**
+ * Include the needed files
+ */
 include_once('PhpElement.php');
 include_once('PhpDocComment.php');
 include_once('PhpVariable.php');

@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package Wsdl2PhpGenerator
+ */
 
 namespace Wsdl2Php;
 

@@ -1,5 +1,11 @@
 <?php
+/**
+ * @package Wsdl2PhpGenerator
+ */
 
+/**
+ * Include the needed files
+ */
 include_once('cli/Cli.php');
 include_once('config/FileConfig.php');
 include_once('Wsdl2PhpGenerator.php');
@@ -31,7 +37,7 @@ catch (\Exception $e)
 }
 
 // Start
-$cli = new cli\Cli('wsdl2php', '[-h] [-s] -i wsdlfile -o directory [-n namespace]', '1.3');
+$cli = new cli\Cli('wsdl2php', '[-h] [-s] -i wsdlfile -o directory [-n namespace]', '1.3.1');
 $cli->addFlag('-e', _('If all classes should be guarded with if(!class_exists) statements'), true, false);
 $cli->addFlag('-t', _('If no type constructor should be generated'), true, false);
 $cli->addFlag('-s', _('If the output should be a single file'), true, false);

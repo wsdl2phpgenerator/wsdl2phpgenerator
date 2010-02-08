@@ -3,6 +3,11 @@
 namespace config;
 
 /**
+ * @package config
+ */
+
+
+/**
  * Interface of all config classes using key value setup
  *
  * @package config
