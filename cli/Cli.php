@@ -1,4 +1,7 @@
 <?php
+/**
+* @package cli
+*/
 
 include_once('CliParser.php');
 include_once('Flag.php');

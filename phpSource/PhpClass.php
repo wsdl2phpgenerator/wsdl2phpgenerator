@@ -1,5 +1,11 @@
 <?php
+/**
+ * @package phpSource
+ */
 
+/**
+ * Include the needed files
+ */
 include_once('PhpElement.php');
 include_once('PhpDocComment.php');
 include_once('PhpFunction.php');

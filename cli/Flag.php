@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package cli
+ */
 
 /**
  * Class that represents a flag in the cli, can have aliases and a description

@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package config
+ */
 
 /**
  * Interface of all config classes using key value setup

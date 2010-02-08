@@ -1,5 +1,11 @@
 <?php
+/**
+ * @package phpSource
+ */
 
+/**
+ * Include the needed files
+ */
 include_once('PhpDocElement.php');
 
 /**
@@ -17,10 +23,18 @@ class PhpDocElementFactory
    * @param string $dataType The name of the datatype of the variable
    * @param string $name The name of the variable
    * @param string $description
+   *
+   * @throws \Exception Throws exception if no name is supplied
+   *
    * @return PhpDocElement The created element
    */
   public static function getParam($dataType, $name, $description)
   {
+    if (strlen($name) == 0)
+    {
+      throw new \Exception('A parameter must have a name!');
+    }
+
     if ($name[0] == '$')
     {
       $name = substr($name, 1);
@@ -123,7 +137,6 @@ class PhpDocElementFactory
    * @param string $dataType The name of the datatype
    * @param string $description The description of the return value
    * @return PhpDocElement The created element
-   * @
    */
   public static function getReturn($dataType, $description)
   {
@@ -144,7 +157,6 @@ class PhpDocElementFactory
    * Creates a final element
    *
    * @return PhpDocElement The created element
-   * @
    */
   public static function getFinal()
   {

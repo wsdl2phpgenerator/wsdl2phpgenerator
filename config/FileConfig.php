@@ -1,5 +1,11 @@
 <?php
+/**
+ * @package config
+ */
 
+/**
+ * Include the interface
+ */
 include_once('Config.php');
 
 /**

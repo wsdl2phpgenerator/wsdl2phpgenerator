@@ -1,5 +1,11 @@
 <?php
+/**
+ * @package phpSource
+ */
 
+/**
+ * Include the needed files
+ */
 include_once('PhpElement.php');
 
 /**
@@ -21,7 +27,7 @@ class PhpVariable extends PhpElement
   /**
    *
    * @var string The value of the initialized value
-   * @var access private
+   * @access private
    */
   private $initialization;
 

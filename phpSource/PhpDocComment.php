@@ -1,5 +1,11 @@
 <?php
+/**
+ * @package phpSource
+ */
 
+/**
+ * Include the needed files
+ */
 include_once('PhpDocElement.php');
 
 /**
@@ -82,7 +88,6 @@ class PhpDocComment
    *
    * @return string The sourcecoude of the comment
    * @access public
-   * @
    */
   public function getSource() 
   {

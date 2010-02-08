@@ -1,4 +1,7 @@
 <?php
+/**
+* @package cli
+*/
 
 /**
  * Class that contains functions for parsing a array, based on the $argv array

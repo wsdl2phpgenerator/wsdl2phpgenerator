@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package phpSource
+ */
 
 /**
  * Abstract base class for all PHP elements, variables, functions and classes etc.
