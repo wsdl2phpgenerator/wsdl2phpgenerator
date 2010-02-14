@@ -40,7 +40,7 @@ class FlagTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * 
+   * Test add alias
    */
   public function testAddAlias()
   {
@@ -58,6 +58,9 @@ class FlagTest extends PHPUnit_Framework_TestCase
     $this->object->addAlias('-k');
   }
 
+  /**
+   * Test add alias with exception
+   */
   public function testAddAlias2()
   {
     $this->object->addAlias('-g');
@@ -65,11 +68,17 @@ class FlagTest extends PHPUnit_Framework_TestCase
     $this->object->addAlias('-g');
   }
 
+  /**
+   * Test the get name function
+   */
   public function testGetName()
   {
     $this->assertEquals('-f', $this->object->getName());
   }
 
+  /**
+   * Test the is bool function
+   */
   public function testIsBool()
   {
     $this->assertFalse($this->object->isBool());

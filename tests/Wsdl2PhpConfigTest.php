@@ -41,7 +41,7 @@ class Wsdl2PhpConfigTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * 
+   * Test the getter
    */
   public function testGetNamespaceName()
   {
@@ -50,7 +50,7 @@ class Wsdl2PhpConfigTest extends PHPUnit_Framework_TestCase
   
 
   /**
-   * 
+   * Test the getter
    */
   public function testGetOneFile()
   {
@@ -58,7 +58,7 @@ class Wsdl2PhpConfigTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * 
+   * Test the getter
    */
   public function testGetClassExists()
   {
@@ -66,7 +66,7 @@ class Wsdl2PhpConfigTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * 
+   * Test the getter
    */
   public function testGetOutputDir()
   {
@@ -75,7 +75,7 @@ class Wsdl2PhpConfigTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * 
+   * Test the getter
    */
   public function testGetInputFile()
   {
@@ -83,7 +83,7 @@ class Wsdl2PhpConfigTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * 
+   * Test the getter
    */
   public function testGetOptionFeatures()
   {
@@ -96,7 +96,7 @@ class Wsdl2PhpConfigTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * 
+   * Test the getter
    */
   public function testGetWsdlCache()
   {
@@ -105,7 +105,7 @@ class Wsdl2PhpConfigTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * 
+   * Test the getter
    */
   public function testGetCompression()
   {
@@ -113,7 +113,7 @@ class Wsdl2PhpConfigTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * 
+   * Test the getter
    */
   public function testGetClassNames()
   {
@@ -122,7 +122,7 @@ class Wsdl2PhpConfigTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * 
+   * Test the getter
    */
   public function testGetClassNamesArray()
   {
@@ -137,21 +137,33 @@ class Wsdl2PhpConfigTest extends PHPUnit_Framework_TestCase
     $this->assertContains('test', $this->object->getClassNamesArray());
   }
 
+  /**
+   * Test the getter
+   */
   public function testGetNoTypeConstructor()
   {
     $this->assertTrue($this->object->getNoTypeConstructor());
   }
 
+  /**
+   * Test the getter
+   */
   public function testGetVerbose()
   {
     $this->assertFalse($this->object->getVerbose());
   }
 
+  /**
+   * Test the getter
+   */
   public function testGetPrefix()
   {
     $this->assertEquals('prefix', $this->object->getPrefix());
   }
 
+  /**
+   * Test the getter
+   */
   public function testGetSuffix()
   {
     $this->assertEquals('suffix', $this->object->getSuffix());

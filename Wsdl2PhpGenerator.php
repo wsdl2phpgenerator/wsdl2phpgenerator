@@ -54,6 +54,19 @@ class Wsdl2PhpGenerator
   private $types;
 
   /**
+   * An array of class objects that represents the simpleTypes in the service
+   *
+   * @var array Array of \phpSource\PhpClass objects
+   */
+  private $enums;
+
+  /**
+   *
+   * @var array Array with restriction datatypes for simple types
+   */
+  private $simple;
+
+  /**
    * The validator to use
    *
    * @var Wsdl2PhpValidator
@@ -70,6 +83,12 @@ class Wsdl2PhpGenerator
   private $config;
 
   /**
+   *
+   * @var array Array containing documentation for service and functions 'service' => "" 'functions' => array()
+   */
+  private $documentation;
+
+  /**
    * Construct the generator
    */
   public function __construct()
@@ -77,6 +96,10 @@ class Wsdl2PhpGenerator
     $this->validator = new Wsdl2PhpValidator();
     $this->service = null;
     $this->types = array();
+    $this->enums = array();
+    $this->simple = array();
+    $this->documentation = array('service' => '',
+            'functions' => array());
   }
 
   /**
@@ -119,6 +142,7 @@ class Wsdl2PhpGenerator
     $this->log(_('Loading the DOM'));
     $this->dom = DOMDocument::load($wsdl);
 
+    $this->loadDocumentation();
     $this->loadTypes();
     $this->loadService();
   }
@@ -144,7 +168,9 @@ class Wsdl2PhpGenerator
       $serviceName .= 'Custom';
     }
 
-    $this->service = new PhpClass($serviceName, $this->config->getClassExists(), 'SoapClient');
+    $serviceComment = new PhpDocComment($this->documentation['service']);
+
+    $this->service = new PhpClass($serviceName, $this->config->getClassExists(), 'SoapClient', $serviceComment);
 
     $this->log(_('Generating class '.$serviceName));
 
@@ -190,18 +216,17 @@ class Wsdl2PhpGenerator
 
     $this->log(_('Loading operations for '.$serviceName));
 
-    // get operations
-    $operations = $this->client->__getFunctions();
-    foreach($operations as $operation)
+    $functions = $this->client->__getFunctions();
+    foreach($functions as $function)
     {
       $matches = array();
-      if(preg_match('/^(\w[\w\d_]*) (\w[\w\d_]*)\(([\w\$\d,_ ]*)\)$/', $operation, $matches))
+      if(preg_match('/^(\w[\w\d_]*) (\w[\w\d_]*)\(([\w\$\d,_ ]*)\)$/', $function, $matches))
       {
         $returns = $matches[1];
         $call = $matches[2];
         $params = $matches[3];
       }
-      else if(preg_match('/^(list\([\w\$\d,_ ]*\)) (\w[\w\d_]*)\(([\w\$\d,_ ]*)\)$/', $operation, $matches))
+      else if(preg_match('/^(list\([\w\$\d,_ ]*\)) (\w[\w\d_]*)\(([\w\$\d,_ ]*)\)$/', $function, $matches))
       {
         $returns = $matches[1];
         $call = $matches[2];
@@ -213,9 +238,15 @@ class Wsdl2PhpGenerator
         throw new Wsdl2PhpException('Invalid function call: '.$function);
       }
 
+      $docDesc = '';
+      if (array_key_exists($call, $this->documentation['functions']))
+      {
+        $docDesc = $this->documentation['functions'][$call];
+      }
+
       $name = $this->validator->validateNamingConvention($call);
 
-      $comment = new PhpDocComment();
+      $comment = new PhpDocComment($docDesc);
       $comment->setAccess(PhpDocElementFactory::getPublicAccess());
 
       $source = '  return $this->__soapCall(\''.$name.'\', array(';
@@ -245,9 +276,54 @@ class Wsdl2PhpGenerator
           }
           else
           {
-            $paramStr .= $val[0].' '.$val[1].', ';
+            $found = false;
+            // Check so the input type is a valid type in the wsdl
+            foreach ($this->types as $type)
+            {
+              if ($type->getIdentifier() == $val[0])
+              {
+                $found = true;
+                break;
+              }
+            }
+
+            if ($found)
+            {
+              $paramStr .= $val[0].' '.$val[1].', ';
+            }
+            else
+            {
+              $paramStr .= $val[1].', ';
+            }
           }
-          $comment->addParam(PhpDocElementFactory::getParam($val[0], $val[1], ''));
+
+          // Use the restriction datatype for phpdoc for non enum simple types
+          if (array_key_exists($val[0], $this->simple))
+          {
+            $found = false;
+            foreach ($this->enums as $type)
+            {
+              if ($type->getIdentifier() == $val[0])
+              {
+                $found = true;
+                break;
+              }
+            }
+
+            if ($found)
+            {
+              $comment->addParam(PhpDocElementFactory::getParam($val[0], $val[1], _('Constant: ').$this->simple[$val[0]][0]));
+            }
+            else
+            {
+              // TODO: Refactor simple type to a separate class
+              $comment->addParam(PhpDocElementFactory::getParam($this->simple[$val[0]][0], $val[1], _('Restriction pattern: ').$this->simple[$val[0]][1]));
+            }
+          }
+          else
+          {
+            $comment->addParam(PhpDocElementFactory::getParam($val[0], $val[1], ''));
+          }
         }
       }
       // Remove last comma
@@ -322,7 +398,7 @@ class Wsdl2PhpGenerator
   if (isset(\$options['compression']) == false)
   {
     \$options['compression'] = ".$config->getCompression();
-       $ret .= ";
+      $ret .= ";
   }".PHP_EOL;
     }
 
@@ -379,8 +455,14 @@ class Wsdl2PhpGenerator
         }
       }
 
-      // gather enumeration values
+      // Add prefix and suffix
+      $className = $this->config->getPrefix().$className.$this->config->getSuffix();
+
+      $realName = $className;
+
+      // Collect simple types
       $values = array();
+      $restrictions = array();
       if(count($members) == 0)
       {
         $theNode = null;
@@ -388,36 +470,68 @@ class Wsdl2PhpGenerator
         $typesNode  = $this->dom->getElementsByTagName('types')->item(0);
         $schemaList = $typesNode->getElementsByTagName('schema');
 
-        for ($i = 0; $i < $schemaList->length; $i++)
+        foreach ($schemaList as $schema)
         {
-          $children = $schemaList->item($i)->childNodes;
-          for ($j = 0; $j < $children->length; $j++)
+          foreach ($schema->childNodes as $node)
           {
-            $node = $children->item($j);
-            if ($node instanceof DOMElement && $node->hasAttributes() && $node->attributes->getNamedItem('name')->nodeValue == $className)
+            if($node instanceof DOMElement)
             {
-              $theNode = $node;
+              if ($node->hasAttributes())
+              {
+                $t = $node->attributes->getNamedItem('name');
+                if ($t)
+                {
+                  if($t->nodeValue == $className)
+                  {
+                    $theNode = $node;
+                  }
+                }
+              }
             }
           }
         }
 
+        // Simple type
         if($theNode)
         {
-          $valueList = $theNode->getElementsByTagName('enumeration');
-          if($valueList->length > 0)
+          $restriction = '';
+          $pattern = '';
+
+          $restrictionList = $theNode->getElementsByTagName('restriction');
+          if ($restrictionList->item(0))
           {
-            for($i = 0; $i < $valueList->length; $i++)
+            $restriction = $restrictionList->item(0)->attributes->getNamedItem('base')->nodeValue;
+            if (strpos($restriction, ':'))
             {
-              $values[] = $valueList->item($i)->attributes->getNamedItem('value')->nodeValue;
+              $arr = explode(':', $restriction);
+              $restriction = $arr[1];
             }
+          }
+
+          // If enum
+          $valueList = $theNode->getElementsByTagName('enumeration');
+          if ($valueList->length > 0)
+          {
+            foreach ($valueList as $value)
+            {
+              $values[] = $value->attributes->getNamedItem('value')->nodeValue;
+            }
+          }
+          else // If pattern
+          {
+            if (strlen($restriction) > 0)
+            {
+              $patternList = $theNode->getElementsByTagName('pattern');
+              $pattern = $patternList->item(0)->attributes->getNamedItem('value')->nodeValue;
+            }
+          }
+
+          if (strlen($restriction) > 0)
+          {
+            $restrictions[$realName] = array($restriction, $pattern);
           }
         }
       }
-
-      // Add prefix and suffix
-      $className = $this->config->getPrefix().$className.$this->config->getSuffix();
-
-      $realName = $className;
 
       try
       {
@@ -437,6 +551,30 @@ class Wsdl2PhpGenerator
       $constructorSource = '';
       $constructorParameters = '';
 
+      // Add enumerators "const members"
+      foreach ($values as $value)
+      {
+        try
+        {
+          $name = $this->validator->validateNamingConvention($value);
+        }
+        catch (ValidationException $e)
+        {
+          $name = 'constant'.$name;
+        }
+        try
+        {
+          $name = $this->validator->validateType($name);
+        }
+        catch (ValidationException $e)
+        {
+          $name .= 'Custom';
+        }
+
+        $class->addConstant($value, $name);
+      }
+
+      // Add member variables
       foreach ($members as $varArr)
       {
         try
@@ -472,10 +610,51 @@ class Wsdl2PhpGenerator
         $this->log(_('Adding constructor for '.$className));
       }
 
-      $this->types[$realName] = $class;
+      // Add the class to the right container
+      if(count($members) == 0 && count($values) > 0)
+      {
+        $this->enums[$realName] = $class;
+        $this->simple[$realName] = $restrictions[$realName];
+      }
+      else if(count($members) > 0 && count($values) == 0)
+      {
+        $this->types[$realName] = $class;
+      }
+      else
+      {
+        if (array_key_exists($realName, $restrictions))
+        {
+          $this->simple[$realName] = $restrictions[$realName];
+        }
+        else
+        {
+          $this->types[$realName] = $class;
+        }
+      }
     }
 
     $this->log(_('Done loading types'));
+  }
+
+  /**
+   * Loads the documentation for service and functions
+   */
+  private function loadDocumentation()
+  {
+    $docList = $this->dom->getElementsByTagName('documentation');
+
+    foreach($docList as $item)
+    {
+      if($item->parentNode->localName == 'service')
+      {
+        $this->documentation['service'] = trim($item->parentNode->nodeValue);
+      }
+      else if($item->parentNode->localName == 'operation')
+      {
+        $name = $item->parentNode->getAttribute('name');
+        $this->documentation['functions'][$name] = trim($item->nodeValue);
+      }
+    }
   }
 
   /**
@@ -533,7 +712,7 @@ class Wsdl2PhpGenerator
         $this->log(_('Adding service to file'));
       }
 
-      foreach ($this->types as $class)
+      foreach (array_merge($this->types, $this->enums) as $class)
       {
         // Check if the class should be saved
         if (count($validClasses) == 0 || count($validClasses) > 0 && in_array($class->getIdentifier(), $validClasses))
@@ -542,7 +721,7 @@ class Wsdl2PhpGenerator
           {
             $file = new PhpFile($class->getIdentifier());
           }
-        
+
           $file->addClass($class);
           $this->log(_('Adding type to file '.$class->getIdentifier()));
         }
@@ -558,7 +737,7 @@ class Wsdl2PhpGenerator
     else
     {
       // Save types
-      foreach ($this->types as $class)
+      foreach (array_merge($this->types, $this->enums) as $class)
       {
         // Check if the class should be saved
         if (count($validClasses) == 0 || count($validClasses) > 0 && in_array($class->getIdentifier(), $validClasses))

@@ -3,6 +3,9 @@
 * @package cli
 */
 
+/**
+ * Include the needed files
+ */
 include_once('CliParser.php');
 include_once('Flag.php');
 

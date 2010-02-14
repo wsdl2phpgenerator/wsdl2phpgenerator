@@ -50,7 +50,7 @@ class FileConfigTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * 
+   * Test the set function standard
    */
   public function testSet()
   {
@@ -59,6 +59,9 @@ class FileConfigTest extends PHPUnit_Framework_TestCase
     $this->assertEquals('foo', $this->object->get('bar'));
   }
 
+  /**
+   * Test the set function with buffer
+   */
   public function testSetBuffer()
   {
     $this->object = new FileConfig($this->fileName, true);
@@ -67,6 +70,9 @@ class FileConfigTest extends PHPUnit_Framework_TestCase
     $this->assertEquals('foo', $this->object->get('bar'));
   }
 
+  /**
+   * Test the get function with invalid file
+   */
   public function testInvalidFile()
   {
     $this->object = new FileConfig($this->fileName, true, '$');
@@ -74,6 +80,9 @@ class FileConfigTest extends PHPUnit_Framework_TestCase
     $this->object->get('woho');
   }
 
+  /**
+   * Test the get function with no file
+   */
   public function testNoFile()
   {
     $this->object = new FileConfig('');
