@@ -139,6 +139,12 @@ class Validator
    */
   public function validateNamingConvention($name)
   {
+    // Prepend the string a to names that begin with anything but a-z This is to make a valid name
+    if(!preg_match('/^[A-Za-z_]/', $name))
+    {
+      $name = 'a'.$name;
+    }
+    
     return preg_replace('/[^a-zA-Z0-9_\x7f-\xff]*/', '', preg_replace('/^[^a-zA-Z_\x7f-\xff]*/', '', $name));
   }
 

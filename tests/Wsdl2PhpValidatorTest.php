@@ -111,9 +111,8 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     $this->assertEquals('foobar', $this->object->validateNamingConvention('foo-bar'));
     $this->assertEquals('Foo', $this->object->validateNamingConvention('Foo'));
     $this->assertEquals('foo523', $this->object->validateNamingConvention('foo523'));
-    $this->assertEquals('foo', $this->object->validateNamingConvention('123foo'));
-    $this->assertEquals('foo123', $this->object->validateNamingConvention('123foo$123'));
-    $this->assertEquals('foo', $this->object->validateNamingConvention('123f|o|o'));
+    $this->assertEquals('a123foo', $this->object->validateNamingConvention('123foo'));
+    $this->assertEquals('a123foo123', $this->object->validateNamingConvention('123foo$123'));
+    $this->assertEquals('a123foo', $this->object->validateNamingConvention('123f|o|o'));
   }
 }
-?>

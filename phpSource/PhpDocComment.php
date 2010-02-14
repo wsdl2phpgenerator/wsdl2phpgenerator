@@ -25,21 +25,21 @@ class PhpDocComment
    * @access private
    */
   private $access;
-  
+
   /**
    *
    * @var PhpDocElement A var element
    * @access private
    */
   private $var;
-  
+
   /**
    *
    * @var array Array of PhpDocElements
    * @access private
    */
   private $params;
-  
+
   /**
    *
    * @var PhpDocElement
@@ -63,7 +63,7 @@ class PhpDocComment
    * @var PhpDocElement
    */
   private $licence;
-  
+
   /**
    *
    * @var array Array of PhpDocElements
@@ -71,10 +71,17 @@ class PhpDocComment
   private $throws;
 
   /**
+   *
+   * @var string A description in the comment
+   */
+  private $description;
+
+  /**
    * Constructs the object, sets all variables to empty
    */
-  public function __construct()
+  public function __construct($description = '')
   {
+    $this->description = $description;
     $this->access = null;
     $this->var = null;
     $this->params = array();
@@ -91,12 +98,23 @@ class PhpDocComment
    * @return string The sourcecoude of the comment
    * @access public
    */
-  public function getSource() 
+  public function getSource()
   {
     $ret = PHP_EOL.'/**'.PHP_EOL;
 
     // TODO: Look over the generation and possible combinations
-    
+
+    $lines = explode(PHP_EOL, $this->description);
+    foreach ($lines as $line)
+    {
+      $ret .= ' * '.trim($line).PHP_EOL;
+    }
+
+    if (strlen($this->description) > 0)
+    {
+      $ret .= ' * '.PHP_EOL;
+    }
+
     if (count($this->params) > 0)
     {
       foreach ($this->params as $param)
@@ -131,9 +149,9 @@ class PhpDocComment
     {
       $ret .= $this->return->getSource();
     }
-        
+
     $ret .= ' */'.PHP_EOL;
-    
+
     return $ret;
   }
 
@@ -207,5 +225,15 @@ class PhpDocComment
   public function addThrows(PhpDocElement $throws)
   {
     $this->throws[] = $throws;
+  }
+
+  /**
+   * Sets the description
+   *
+   * @param string $description
+   */
+  public function setDescription($description)
+  {
+    $this->description = $description;
   }
 }

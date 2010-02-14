@@ -51,6 +51,12 @@ class PhpClass extends PhpElement
 
   /**
    *
+   * @var array Array of constants key = name of constant value = value of constant
+   */
+  private $constants;
+
+  /**
+   *
    * @var array Array of PhpVariable objects
    * @access private
    */
@@ -87,6 +93,7 @@ class PhpClass extends PhpElement
     $this->identifier = $identifier;
     $this->access = '';
     $this->extends = $extends;
+    $this->constants = array();
     $this->variables = array();
     $this->functions = array();
     $this->indentionStr = '  '; // Use two spaces as indention
@@ -133,6 +140,15 @@ class PhpClass extends PhpElement
 
     $ret .= PHP_EOL.'{'.PHP_EOL;
 
+    if (count($this->constants) > 0)
+    {
+      foreach ($this->constants as $name => $value)
+      {
+        $ret .= $this->getIndentionStr().'const '.$name.' = \''.$value.'\';'.PHP_EOL;
+      }
+      $ret .= PHP_EOL;
+    }
+
     if (count($this->variables) > 0)
     {
       foreach ($this->variables as $variable)
@@ -176,6 +192,41 @@ class PhpClass extends PhpElement
   }
 
   /**
+   * Adds a constant to the class. If no name is supplied and the value is a string the value is used as name otherwise exception is raised
+   *
+   * @param mixed $value
+   * @param string $name
+   * @throws Exception
+   */
+  public function addConstant($value, $name = '')
+  {
+    if (strlen($value) == 0)
+    {
+      throw new \Exception('No value supplied');
+    }
+
+    // If no name is supplied use the value as name
+    if (strlen($name) == 0)
+    {
+      if (is_string($value))
+      {
+        $name = $value;
+      }
+      else
+      {
+        throw new \Exception('No name supplied');
+      }
+    }
+
+    if (array_key_exists($name, $this->constants))
+    {
+      throw new \Exception('A constant of the name ('.$name.') does already exist.');
+    }
+
+    $this->constants[$name] = $value;
+  }
+
+  /**
    * Adds a variable to the class
    * Throws Exception if the variable does already exist
    *
@@ -186,7 +237,7 @@ class PhpClass extends PhpElement
   {
     if ($this->variableExists($variable->getIdentifier()))
     {
-      throw new Exception('A variable of the name ('.$variable->getIdentifier().') does already exist.');
+      throw new \Exception('A variable of the name ('.$variable->getIdentifier().') does already exist.');
     }
 
     $this->variables[$variable->getIdentifier()] = $variable;
@@ -203,7 +254,7 @@ class PhpClass extends PhpElement
   {
     if ($this->functionExists($function->getIdentifier()))
     {
-      throw new Exception('A function of the name ('.$function->getIdentifier().') does already exist.');
+      throw new \Exception('A function of the name ('.$function->getIdentifier().') does already exist.');
     }
 
     $this->functions[$function->getIdentifier()] = $function;
