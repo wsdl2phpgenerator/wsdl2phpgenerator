@@ -6,30 +6,31 @@
 /**
  * Include the needed files
  */
-include_once('cli/Cli.php');
-include_once('config/FileConfig.php');
-include_once('Wsdl2PhpGenerator.php');
+require_once \dirname(__FILE__).'/lib/cli/Cli.php';
+require_once \dirname(__FILE__).'/lib/config/FileConfig.php';
+
+require_once \dirname(__FILE__).'/src/Generator.php';
 
 // Try to read the config file if any
 try
 {
-  $config = new config\FileConfig('settings.conf');
+  $config = new \config\FileConfig(\dirname(__FILE__).'/conf/settings.conf');
   $locale = $config->get('language');
 
   $domain = 'messages';
   $lcDir = 'LC_MESSAGES';
-  $path = $_SERVER['DOCUMENT_ROOT'].'translations';
-  $loc = substr($locale, 0, 5);
+  $path = 'conf/translations';
+  $loc = \substr($locale, 0, 5);
   $file = $path.'/'.$loc.'/'.$lcDir.'/'.$domain.'.mo';
 
-  if (file_exists($file) == false)
+  if (\file_exists($file) == false)
   {
     throw new \Exception('The selected language file ('.$file.') does not exist!');
   }
 
-  bindtextdomain($domain, $path);
-  textdomain($domain);
-  setlocale(LC_ALL, $locale);
+  \bindtextdomain($domain, $path);
+  \textdomain($domain);
+  \setlocale(LC_ALL, $locale);
 }
 catch (\Exception $e)
 {
@@ -37,7 +38,7 @@ catch (\Exception $e)
 }
 
 // Start
-$cli = new cli\Cli('wsdl2php', '[OPTIONS] -i wsdlfile -o directory', '1.4');
+$cli = new \cli\Cli('wsdl2php', '[OPTIONS] -i wsdlfile -o directory', '1.4');
 $cli->addFlag('-e', _('If all classes should be guarded with if(!class_exists) statements'), true, false);
 $cli->addFlag('-t', _('If no type constructor should be generated'), true, false);
 $cli->addFlag('-s', _('If the output should be a single file'), true, false);
@@ -77,35 +78,37 @@ $cli->addAlias('-h', '--h');
 $cli->validate($argv);
 
 $singleFile = $cli->getValue('-s');
-$classNames = trim($cli->getValue('-c'));
+$classNames = \trim($cli->getValue('-c'));
 
-if ($singleFile && strlen($classNames) > 0)
+if ($singleFile && \strlen($classNames) > 0)
 {
   // Print different messages based on if more than one class is requested for generation
-  if (strpos($classNames, ',') !== false)
+  if (\strpos($classNames, ',') !== false)
   {
-    print printf(_('You have selected to only generate some of the classes in the wsdl(%s) and to save them in one file. Continue? [Y/n]'), $classNames).PHP_EOL;
+    print \printf(_('You have selected to only generate some of the classes in the wsdl(%s) and to save them in one file. Continue? [Y/n]'), $classNames).\PHP_EOL;
   }
   else
   {
-    print _('You have selected to only generate one class and save it to a single file. If you have selected the service class and outputs this file to a directory where you previosly have generated the classes the file will be overwritten. Continue? [Y/n]').PHP_EOL;
+    print _('You have selected to only generate one class and save it to a single file. If you have selected the service class and outputs this file to a directory where you previosly have generated the classes the file will be overwritten. Continue? [Y/n]').\PHP_EOL;
   }
+
+  //TODO: Refactor this to cli class?
 
   // Force the user to supply a valid input
   while(true)
   {
-    $cmd = readline(null); // Reads from the standard input
+    $cmd = \readline(null); // Reads from the standard input
 
-    if (in_array($cmd, array('', 'y', 'Y', 'yes')))
+    if (\in_array($cmd, array('', 'y', 'Y', 'yes')))
     {
       break; // Continue
     }
-    else if (in_array($cmd, array('n', 'no', 'N')))
+    else if (\in_array($cmd, array('n', 'no', 'N')))
     {
       exit; // Terminate
     }
 
-    print _('Please select yes or no.').PHP_EOL;
+    print _('Please select yes or no.').\PHP_EOL;
   }
 }
 
@@ -154,7 +157,7 @@ if ($cli->getValue('--gzip'))
   $gzip = 'SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP';
 }
 
-$config = new \Wsdl2Php\Config($inputFile, $outputDir, $verbose, $singleFile, $classExists, $noTypeConstructor, $namespaceName, $optionsArray, $wsdlCache, $gzip, $classNames, $prefix, $suffix);
+$config = new \wsdl2php\Config($inputFile, $outputDir, $verbose, $singleFile, $classExists, $noTypeConstructor, $namespaceName, $optionsArray, $wsdlCache, $gzip, $classNames, $prefix, $suffix);
 
-$generator = new \Wsdl2Php\Generator();
+$generator = new \wsdl2php\Generator();
 $generator->generate($config);
