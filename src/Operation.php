@@ -134,7 +134,7 @@ class Operation
 
     foreach ($validTypes as $type)
     {
-      if ($paramType == $type->getPhpIdentifier())
+      if ($paramType == $type->getIdentifier())
       {
         if ($type instanceof \wsdl2php\Pattern)
         {

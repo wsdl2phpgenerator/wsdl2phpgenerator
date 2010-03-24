@@ -238,6 +238,7 @@ class Generator
         {
           // If enum
           $enumerationList = $typenode->getElementsByTagName('enumeration');
+          $patternList = $typenode->getElementsByTagName('pattern');
           if ($enumerationList->length > 0)
           {
             $type = new \wsdl2php\Enum($className, $restriction);
@@ -247,12 +248,15 @@ class Generator
               $type->addValue($enum->attributes->getNamedItem('value')->nodeValue);
             }
           }
-          else // If pattern
+          else if ($patternList->length > 0)// If pattern
           {
             $type = new \wsdl2php\Pattern($className, $restriction);
             $this->log(_('Loading pattern ').$type->getPhpIdentifier());
-            $patternList = $typenode->getElementsByTagName('pattern');
             $type->setValue($patternList->item(0)->attributes->getNamedItem('value')->nodeValue);
+          }
+          else
+          {
+            continue; // Don't load the type if we don't know what it is
           }
         }
       }

@@ -143,7 +143,7 @@ class Service
     {
       if($type instanceof \wsdl2php\ComplexType)
       {
-        $init .= "  '".$type->getPhpIdentifier()."' => '".$type->getIdentifier()."',".\PHP_EOL;
+        $init .= "  '".$type->getIdentifier()."' => '".$type->getPhpIdentifier()."',".\PHP_EOL;
       }
     }
     $init = \substr($init, 0, \strrpos($init, ','));
