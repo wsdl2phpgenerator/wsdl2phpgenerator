@@ -1,5 +1,11 @@
 CHANGES
 
+Version 1.4.1
+
+* Fixed issue #20 with the generation of classes not working if simple type is not enum or pattern. Thanks to rc.poison
+* Fixed issue #21 with the classmap listing the classnames in the wrong way. Thanks to rc.poison
+* Fixed issue #22 with the php classname being used as comparison instead of the real classname. Thanks to rc.poison
+
 Version 1.4
 
 * Improved the phpdoc generated
