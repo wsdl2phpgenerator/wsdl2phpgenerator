@@ -4,6 +4,25 @@
  */
 
 /**
+ * Gettext should not be required - Thanks jeichhor
+ */
+if (!function_exists("_"))
+{
+  function _($str)
+  {
+    return gettext($str);
+  }
+}
+
+if (!function_exists("gettext"))
+{
+  function gettext($str)
+  {
+    return $str;
+  }
+}
+
+/**
  * Include the needed files
  */
 require_once dirname(__FILE__).'/lib/cli/Cli.php';
