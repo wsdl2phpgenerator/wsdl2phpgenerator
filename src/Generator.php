@@ -46,7 +46,7 @@ class Generator
   private $dom = null;
 
   /**
-   * 
+   *
    *
    * @var Service The service class
    */
@@ -129,7 +129,7 @@ class Generator
     try
     {
       $this->log(_('Loading the wsdl'));
-      $this->client = new \SoapClient($wsdl);
+      $this->client = new \SoapClient($wsdl, array('cache_wsdl' => WSDL_CACHE_NONE));
     }
     catch(\SoapFault $e)
     {
@@ -140,7 +140,7 @@ class Generator
     $this->dom = \DOMDocument::load($wsdl);
 
     $this->documentation->loadDocumentation($this->dom);
-    
+
     $this->loadTypes();
     $this->loadService();
   }
@@ -211,7 +211,7 @@ class Generator
         // skip arrays
         continue;
       }
-      
+
       $type = null;
       $numParts = \count($parts);
       // ComplexType
@@ -287,7 +287,7 @@ class Generator
     {
       throw new \wsdl2php\Exception('No service loaded');
     }
-    
+
     $output = new \wsdl2php\OutputManager($this->config);
 
     // Generate all type classes
@@ -305,10 +305,10 @@ class Generator
         }
       }
     }
-    
+
     $output->save($service, $types);
   }
-  
+
   /**
    * Logs a message to the standard output
    *
@@ -396,3 +396,4 @@ class Generator
     return $typenode;
   }
 }
+
