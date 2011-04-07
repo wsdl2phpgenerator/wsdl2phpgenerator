@@ -365,22 +365,27 @@ class Generator
   {
     $typenode = null;
 
-    $schemaList = $this->dom->getElementsByTagName('types')->item(0)->getElementsByTagName('schema');
-
-    foreach ($schemaList as $schema)
+    $types = $this->dom->getElementsByTagName('types');
+    if ($types->length > 0)
     {
-      foreach ($schema->childNodes as $node)
+      $schemaList = $types->item(0)->getElementsByTagName('schema');
+      $schemaList = $this->dom->getElementsByTagName('types')->item(0)->getElementsByTagName('schema');
+
+      foreach ($schemaList as $schema)
       {
-        if($node instanceof DOMElement)
+        foreach ($schema->childNodes as $node)
         {
-          if ($node->hasAttributes())
+          if($node instanceof DOMElement)
           {
-            $t = $node->attributes->getNamedItem('name');
-            if ($t)
+            if ($node->hasAttributes())
             {
-              if($t->nodeValue == $name)
+              $t = $node->attributes->getNamedItem('name');
+              if ($t)
               {
-                $typenode = $node;
+                if($t->nodeValue == $name)
+                {
+                  $typenode = $node;
+                }
               }
             }
           }
