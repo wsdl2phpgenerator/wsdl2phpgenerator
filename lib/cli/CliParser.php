@@ -44,26 +44,28 @@ class CliParser
       if(strlen($str) > 2 && substr($str, 0, 2) == '--')
       {
         $parts = explode('=', $str);
-        $this->flags[$parts[0]] = true;
+	$flag_name = $parts[0];
+	$flag_value = true;
 
         // Does not have an =, so choose the next arg as its value if it isn't a flag and exists
         if(count($parts) == 1 && isset($argv[$i + 1]) && preg_match('/^--?.+/', $argv[$i + 1]) == 0)
         {
-          $this->flags[$parts[0]] = $argv[$i + 1];
+          $flag_value = $argv[$i + 1];
         }
         else if(count($parts) == 2) // Has a =, so pick the second piece
         {
-          $this->flags[$parts[0]] = $parts[1];
+          $flag_value = $parts[1];
         }
       }
       // If we have a ordinary - flag
       else if(strlen($str) == 2 && $str[0] == '-')
       {
-        $this->flags[$str] = true;
+	$flag_name = $str;
+        $flag_value = true;
         // Check if we want to set a value to the flag
         if(isset($argv[$i + 1]) && preg_match('/^--?.+/', $argv[$i + 1]) == 0)
         {
-          $this->flags[$str] = $argv[$i + 1];
+          $flag_value = $argv[$i + 1];
         }
       }
       // If we have multiple flags with one dash
@@ -80,13 +82,27 @@ class CliParser
         else
         {
           $parts = explode('=', $str);
-          $this->flags[$parts[0]] = true;
+	  $flag_name = $parts[0];
+	  $flag_value = true;
 
           if(count($parts) == 2) // Has a =, so pick the second piece
           {
-            $this->flags[$parts[0]] = $parts[1];
+	    $flag_value = $parts[1];
           }
         }
+      }
+      if (isset($flag_name) && isset($flag_value)) {
+	if (isset($this->flags[$flag_name]) && ($this->flags[$flag_name] !== true))
+	  if (is_array($this->flags[$flag_name]))
+	    $this->flags[$flag_name][] = $flag_value;
+	  else {
+	    $this->flags[$flag_name] = array($this->flags[$flag_name]);
+	    $this->flags[$flag_name][] = $flag_value;
+	  }
+	else
+	  $this->flags[$flag_name] = $flag_value;
+	unset($flag_value);
+	unset($flag_name);
       }
     }
   }

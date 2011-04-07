@@ -99,6 +99,12 @@ class Config
   private $suffix;
 
   /**
+   *
+   * @var string If multiple class got the name, the first will be used, other will be ignored
+   */
+  private $sharedTypes;
+
+  /**
    * Sets all variables
    *
    * @param string $inputFile
@@ -114,8 +120,9 @@ class Config
    * @param string $classNames
    * @param string $prefix
    * @param string $suffix
+   * @param string $sharedTypes
    */
-  public function __construct($inputFile, $outputDir, $verbose = false, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '', $prefix = '', $suffix = '')
+  public function __construct($inputFile, $outputDir, $verbose = false, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '', $prefix = '', $suffix = '', $sharedTypes = false)
   {
     $this->namespaceName = trim($namespaceName);
     $this->oneFile = $oneFile;
@@ -123,11 +130,12 @@ class Config
     $this->classExists = $classExists;
     $this->noTypeConstructor = $noTypeConstructor;
     $this->outputDir = trim($outputDir);
-    if (substr($this->outputDir, 0, -1) != '/')
-    {
-      $this->outputDir .= '/';
-    }
-    $this->inputFile = trim($inputFile);
+    if (is_array($inputFile))
+      foreach ($inputFile as &$file)
+	$file = trim($file);
+    else
+      $inputFile = trim($inputFile);
+    $this->inputFile = $inputFile;
     $this->optionFeatures = $optionsFeatures;
     $this->wsdlCache = '';
     if (in_array($wsdlCache, array('WSDL_CACHE_NONE', 'WSDL_CACHE_DISK', 'WSDL_CACHE_MEMORY', 'WSDL_CACHE_BOTH')))
@@ -138,6 +146,7 @@ class Config
     $this->classNames = trim($classNames);
     $this->prefix = trim($prefix);
     $this->suffix = trim($suffix);
+    $this->sharedTypes = trim($sharedTypes);
   }
 
   /**
@@ -274,6 +283,15 @@ class Config
   public function getSuffix()
   {
     return $this->suffix;
+  }
+
+  /**
+   *
+   * @return string Returns the shared types
+   */
+  public function getSharedTypes()
+  {
+    return $this->sharedTypes;
   }
 }
 

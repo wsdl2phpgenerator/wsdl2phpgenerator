@@ -109,7 +109,12 @@ class Generator
 
     $this->log(_('Starting generation'));
 
-    $this->load();
+    $wsdl = $this->config->getInputFile();
+    if (is_array($wsdl))
+      foreach($wsdl as $ws)
+	$this->load($ws);
+    else
+      $this->load($wsdl);
 
     $this->savePhp();
 
@@ -119,10 +124,8 @@ class Generator
   /**
    * Load the wsdl file into php
    */
-  private function load()
+  private function load($wsdl)
   {
-    $wsdl = $this->config->getInputFile();
-
     try
     {
       $this->log(_('Loading the wsdl'));
@@ -260,6 +263,15 @@ class Generator
 
       if ($type != null)
       {
+	$already_registered = FALSE;
+	if ($this->config->getSharedTypes())
+	  foreach ($this->types as $registered_types) {
+	    if ($registered_types->getIdentifier() == $type->getIdentifier()) {
+	      $already_registered = TRUE;
+	      break;
+	    }
+	  }
+	if (!$already_registered)
         $this->types[] = $type;
       }
     }

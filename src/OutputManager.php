@@ -73,6 +73,9 @@ class OutputManager
 
     if ($this->config->getOneFile())
     {
+      if (!is_dir($this->config->getOutputDir()))
+	$this->file = new PhpFile(basename($this->config->getOutputDir()));
+      else
       $this->file = new PhpFile($service->getIdentifier());
       $this->addNamespace();
       $this->addClassToFile($service);
@@ -81,6 +84,9 @@ class OutputManager
         $this->addClassToFile($type);
       }
 
+      if (!is_dir($this->config->getOutputDir()))
+	$this->file->save(dirname($this->config->getOutputDir()));
+      else
       $this->file->save($this->dir);
     }
     else
@@ -104,7 +110,9 @@ class OutputManager
     $outputDirectory = $this->config->getOutputDir();
 
     //Try to create output dir if non existing
-    if (is_dir($outputDirectory) == false && is_file($outputDirectory) == false)
+    if ($this->config->getOneFile())
+      $outputDirectory = dirname($outputDirectory);
+    if (is_dir($outputDirectory) == false)
     {
       if(mkdir($outputDirectory, 0777, true) == false)
       {
