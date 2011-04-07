@@ -21,7 +21,7 @@ class FileConfigTest extends PHPUnit_Framework_TestCase
    * @var FileConfig
    */
   protected $object;
-  
+
   private $fileName;
 
   /**
@@ -34,8 +34,8 @@ class FileConfigTest extends PHPUnit_Framework_TestCase
     $this->fileName = '/tmp/'.md5(time().mt_rand(0, 1000));
     $contents = '#Comment'.PHP_EOL.'foo=bar';
     file_put_contents($this->fileName, $contents);
-    
-    $this->object = new configFileConfig($this->fileName);
+
+    $this->object = new FileConfig($this->fileName);
   }
 
   /**
@@ -64,7 +64,7 @@ class FileConfigTest extends PHPUnit_Framework_TestCase
    */
   public function testSetBuffer()
   {
-    $this->object = new configFileConfig($this->fileName, true);
+    $this->object = new FileConfig($this->fileName, true);
     $this->object->set('bar', 'foo');
     $this->assertEquals('bar', $this->object->get('foo'));
     $this->assertEquals('foo', $this->object->get('bar'));
@@ -75,7 +75,7 @@ class FileConfigTest extends PHPUnit_Framework_TestCase
    */
   public function testInvalidFile()
   {
-    $this->object = new configFileConfig($this->fileName, true, '$');
+    $this->object = new FileConfig($this->fileName, true, '$');
     $this->setExpectedException('Exception');
     $this->object->get('woho');
   }
@@ -85,13 +85,13 @@ class FileConfigTest extends PHPUnit_Framework_TestCase
    */
   public function testNoFile()
   {
-    $this->object = new configFileConfig('');
+    $this->object = new FileConfig('');
     $this->setExpectedException('Exception');
     $this->object->get('woho');
   }
 
   /**
-   * 
+   *
    */
   public function testGet()
   {
@@ -101,7 +101,7 @@ class FileConfigTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * 
+   *
    */
   public function testExists()
   {
@@ -110,3 +110,4 @@ class FileConfigTest extends PHPUnit_Framework_TestCase
   }
 }
 ?>
+

@@ -28,7 +28,7 @@ class FlagTest extends PHPUnit_Framework_TestCase
    */
   protected function setUp()
   {
-    $this->object = new cliFlag('-f', '');
+    $this->object = new Flag('-f', '');
   }
 
   /**
@@ -82,7 +82,7 @@ class FlagTest extends PHPUnit_Framework_TestCase
   public function testIsBool()
   {
     $this->assertFalse($this->object->isBool());
-    $this->object = new cliFlag('-f', '', true);
+    $this->object = new Flag('-f', '', true);
     $this->assertTrue($this->object->isBool());
   }
 
@@ -91,9 +91,10 @@ class FlagTest extends PHPUnit_Framework_TestCase
    */
   public function testToString()
   {
-    $this->object = new cliFlag('-f', 'Flag');
+    $this->object = new Flag('-f', 'Flag');
     $this->assertEquals('-f'."t"."t"."t"."t".'Flag'.PHP_EOL, strval($this->object));
     $this->assertNotEquals('', strval($this->object));
   }
 }
 ?>
+

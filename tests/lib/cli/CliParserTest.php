@@ -28,7 +28,7 @@ class CliParserTest extends PHPUnit_Framework_TestCase
    */
   protected function setUp()
   {
-    $this->object = new cliCliParser;
+    $this->object = new CliParser;
   }
 
   /**
@@ -57,3 +57,4 @@ class CliParserTest extends PHPUnit_Framework_TestCase
     $this->assertTrue($this->object->getValue('-z'));
   }
 }
+

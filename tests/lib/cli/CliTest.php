@@ -28,7 +28,7 @@ class CliTest extends PHPUnit_Framework_TestCase
    */
   protected function setUp()
   {
-    $this->object = new cliCli('Test', 'test', '1.0');
+    $this->object = new Cli('Test', 'test', '1.0');
   }
 
   /**
@@ -86,7 +86,7 @@ class CliTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * 
+   *
    */
   public function testValidate()
   {
@@ -113,3 +113,4 @@ class CliTest extends PHPUnit_Framework_TestCase
 }
 
 ?>
+
