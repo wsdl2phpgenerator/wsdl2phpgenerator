@@ -12,7 +12,7 @@ require_once dirname(__FILE__).'/Type.php';
  * Pattern represents a simple type with restriction and a pattern
  *
  * @package Wsdl2PhpGenerator
- * @author Fredrik Wallgren <fredrik@wallgren.me>
+ * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 class Pattern extends Type

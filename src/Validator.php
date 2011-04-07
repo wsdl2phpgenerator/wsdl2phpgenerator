@@ -13,7 +13,7 @@ require_once dirname(__FILE__).'/ValidationException.php';
  * Contains functionf for validating Type, Classname and Naming convention
  *
  * @package Wsdl2PhpGenerator
- * @author Fredrik Wallgren <fredrik@wallgren.me>
+ * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 class Validator

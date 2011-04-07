@@ -7,7 +7,7 @@
  * Class that represents a flag in the cli, can have aliases and a description
  *
  * @package cli
- * @author Fredrik Wallgren <fredrik@wallgren.me>
+ * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 class Flag

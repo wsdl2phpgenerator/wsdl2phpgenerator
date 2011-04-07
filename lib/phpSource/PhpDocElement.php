@@ -7,7 +7,7 @@
  * Class that represents a element (var, param, throws etc.) in a comment in php
  *
  * @package phpSource
- * @author Fredrik Wallgren <fredrik@wallgren.me>
+ * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 class PhpDocElement

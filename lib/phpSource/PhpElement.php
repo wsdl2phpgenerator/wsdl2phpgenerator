@@ -7,7 +7,7 @@
  * Abstract base class for all PHP elements, variables, functions and classes etc.
  *
  * @package phpSource
- * @author Fredrik Wallgren <fredrik@wallgren.me>
+ * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 abstract class PhpElement

@@ -18,7 +18,7 @@ require_once dirname(__FILE__).'/Validator.php';
  * Type is an abstract baseclass for all types in the wsdl
  *
  * @package Wsdl2PhpGenerator
- * @author Fredrik Wallgren <fredrik@wallgren.me>
+ * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 abstract class Type

@@ -12,7 +12,7 @@ require_once dirname(__FILE__).'/PhpDocElement.php';
  * Class that contains static methods to create preset doc elements
  *
  * @package phpSource
- * @author Fredrik Wallgren <fredrik@wallgren.me>
+ * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 class PhpDocElementFactory

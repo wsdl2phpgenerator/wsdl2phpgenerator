@@ -14,7 +14,7 @@ require_once dirname(__FILE__).'/PhpVariable.php';
  * Class that represents the source code for a function in php
  *
  * @package phpSource
- * @author Fredrik Wallgren <fredrik@wallgren.me>
+ * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 class PhpFunction extends PhpElement

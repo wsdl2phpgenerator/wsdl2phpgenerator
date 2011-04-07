@@ -12,7 +12,7 @@ require_once dirname(__FILE__).'/IConfig.php';
  * A implementation of Config using a flatfile for storage
  *
  * @package config
- * @author Fredrik Wallgren <fredrik@wallgren.me>
+ * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 class FileConfig implements IConfig

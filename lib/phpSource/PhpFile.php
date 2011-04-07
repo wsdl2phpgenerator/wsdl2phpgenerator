@@ -13,7 +13,7 @@ require_once dirname(__FILE__).'/PhpClass.php';
  * A file can contain namespaces, classes and global functions
  *
  * @package phpSource
- * @author Fredrik Wallgren <fredrik@wallgren.me>
+ * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 class PhpFile

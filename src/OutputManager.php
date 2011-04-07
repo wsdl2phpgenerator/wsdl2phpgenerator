@@ -13,7 +13,7 @@ require_once dirname(__FILE__).'/../lib/phpSource/PhpFile.php';
  * Manages the output of php files from the generator
  *
  * @package Wsdl2PhpGenerator
- * @author Fredrik Wallgren <fredrik@wallgren.me>
+ * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 class OutputManager

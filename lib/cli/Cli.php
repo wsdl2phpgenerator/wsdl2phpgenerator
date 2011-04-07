@@ -13,7 +13,7 @@ require_once dirname(__FILE__).'/Flag.php';
  * Class that represents the command line interface
  *
  * @package cli
- * @author Fredrik Wallgren <fredrik@wallgren.me>
+ * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 class Cli extends CliParser

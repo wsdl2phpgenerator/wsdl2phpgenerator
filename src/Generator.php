@@ -23,7 +23,7 @@ require_once dirname(__FILE__).'/../lib/phpSource/PhpFile.php';
  * Class that contains functionality for generating classes from a wsdl file
  *
  * @package Wsdl2PhpGenerator
- * @author Fredrik Wallgren <fredrik@wallgren.me>
+ * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 class Generator

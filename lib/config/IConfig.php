@@ -8,7 +8,7 @@
  * Interface of all config classes using key value setup
  *
  * @package config
- * @author Fredrik Wallgren <fredrik@wallgren.me>
+ * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 interface IConfig

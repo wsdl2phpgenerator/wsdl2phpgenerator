@@ -7,7 +7,7 @@
  * Class that contains functions for parsing a array, based on the $argv array
  *
  * @package cli
- * @author Fredrik Wallgren <fredrik@wallgren.me>
+ * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 class CliParser
