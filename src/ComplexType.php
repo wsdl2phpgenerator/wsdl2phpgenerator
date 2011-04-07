@@ -1,16 +1,16 @@
 <?php
 
 /**
- * @package Wsdl2PhpGenerator
+ * @package Generator
  */
 
 /**
- * @see wsdl2phpType
+ * @see Type
  */
 require_once dirname(__FILE__).'/Type.php';
 
 /**
- * @see wsdl2phpVariable
+ * @see Variable
  */
 require_once dirname(__FILE__).'/Variable.php';
 
@@ -21,7 +21,7 @@ require_once dirname(__FILE__).'/Variable.php';
  * @author Fredrik Wallgren <fredrik@wallgren.me>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
-class wsdl2phpComplexType extends wsdl2phpType
+class ComplexType extends Type
 {
   /**
    *
@@ -43,16 +43,16 @@ class wsdl2phpComplexType extends wsdl2phpType
 
   /**
    * Implements the loading of the class object
-   * @throws wsdl2phpException if the class is already generated(not null)
+   * @throws Exception if the class is already generated(not null)
    */
   protected function generateClass()
   {
     if ($this->class != null)
     {
-      throw new wsdl2phpException("The class has already been generated");
+      throw new Exception("The class has already been generated");
     }
 
-    $config = wsdl2phpGenerator::getInstance()->getConfig();
+    $config = Generator::getInstance()->getConfig();
 
     $class = new PhpClass($this->phpIdentifier, $config->getClassExists());
 
@@ -68,14 +68,14 @@ class wsdl2phpComplexType extends wsdl2phpType
 
       try
       {
-        $type = wsdl2phpValidator::validateType($member->getType());
+        $type = Validator::validateType($member->getType());
       }
-      catch (wsdl2phpValidationException $e)
+      catch (ValidationException $e)
       {
         $type .= 'Custom';
       }
 
-      $name = wsdl2phpValidator::validateNamingConvention($member->getName());
+      $name = Validator::validateNamingConvention($member->getName());
       $comment = new PhpDocComment();
       $comment->setVar(PhpDocElementFactory::getVar($type, $name, ''));
       $comment->setAccess(PhpDocElementFactory::getPublicAccess());
@@ -108,7 +108,7 @@ class wsdl2phpComplexType extends wsdl2phpType
    */
   public function addMember($type, $name)
   {
-    $this->members[$name] = new wsdl2phpVariable($type, $name);
+    $this->members[$name] = new Variable($type, $name);
   }
 }
 

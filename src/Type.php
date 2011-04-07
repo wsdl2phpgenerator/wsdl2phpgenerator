@@ -5,12 +5,12 @@
  */
 
 /**
- * @see phpSourcePhpClass
+ * @see PhpClass
  */
 require_once dirname(__FILE__).'/../lib/phpSource/PhpClass.php';
 
 /**
- * @see wsdl2phpValidator
+ * @see Validator
  */
 require_once dirname(__FILE__).'/Validator.php';
 
@@ -21,11 +21,11 @@ require_once dirname(__FILE__).'/Validator.php';
  * @author Fredrik Wallgren <fredrik@wallgren.me>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
-abstract class wsdl2phpType
+abstract class Type
 {
   /**
    *
-   * @var phpSourcePhpClass The class used to create the type. This is not used by patterns
+   * @var PhpClass The class used to create the type. This is not used by patterns
    */
   protected $class;
 
@@ -59,16 +59,16 @@ abstract class wsdl2phpType
     $this->datatype = $datatype;
     $this->identifier = $name;
 
-    $config = wsdl2phpGenerator::getInstance()->getConfig();
+    $config = Generator::getInstance()->getConfig();
 
     // Add prefix and suffix
     $name = $config->getPrefix().$this->identifier.$config->getSuffix();
 
     try
     {
-      $name = wsdl2phpValidator::validateClass($name);
+      $name = Validator::validateClass($name);
     }
-    catch (wsdl2phpValidationException $e)
+    catch (ValidationException $e)
     {
       $name .= 'Custom';
     }
@@ -86,7 +86,7 @@ abstract class wsdl2phpType
   /**
    * Getter for the class. Generates the class if it's null
    *
-   * @return phpSourcePhpClass
+   * @return PhpClass
    */
   public function getClass()
   {
@@ -127,3 +127,4 @@ abstract class wsdl2phpType
     return $this->phpIdentifier;
   }
 }
+

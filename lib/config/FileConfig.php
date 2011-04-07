@@ -6,7 +6,7 @@
 /**
  * Include the interface
  */
-require_once dirname(__FILE__).'/Config.php';
+require_once dirname(__FILE__).'/IConfig.php';
 
 /**
  * A implementation of Config using a flatfile for storage
@@ -15,7 +15,7 @@ require_once dirname(__FILE__).'/Config.php';
  * @author Fredrik Wallgren <fredrik@wallgren.me>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
-class FileConfig implements Config
+class FileConfig implements IConfig
 {
   /**
    * The separator in the file

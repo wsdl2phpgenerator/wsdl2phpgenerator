@@ -16,7 +16,7 @@ require_once dirname(__FILE__).'/../lib/phpSource/PhpFile.php';
  * @author Fredrik Wallgren <fredrik@wallgren.me>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
-class wsdl2phpOutputManager
+class OutputManager
 {
   /**
    *
@@ -38,7 +38,7 @@ class wsdl2phpOutputManager
 
   /**
    *
-   * @var wsdl2phpConfig A reference to the config
+   * @var Config A reference to the config
    */
   private $config;
 
@@ -52,7 +52,7 @@ class wsdl2phpOutputManager
    *
    * @param Config $config The config to use
    */
-  public function __construct(wsdl2phpConfig $config)
+  public function __construct(Config $config)
   {
     $this->config = $config;
     $this->dir = '';
@@ -97,7 +97,7 @@ class wsdl2phpOutputManager
    * Sets the output directory, creates it if needed
    * This must be called before saving a file
    *
-   * @throws wsdl2phpException If the dir can't be created and dont already exists
+   * @throws Exception If the dir can't be created and dont already exists
    */
   private function setOutputDirectory()
   {
@@ -108,7 +108,7 @@ class wsdl2phpOutputManager
     {
       if(mkdir($outputDirectory, 0777, true) == false)
       {
-        throw new wsdl2phpException('Could not create output directory and it does not exist!');
+        throw new Exception('Could not create output directory and it does not exist!');
       }
     }
 

@@ -16,7 +16,7 @@ require_once dirname(__FILE__).'/ValidationException.php';
  * @author Fredrik Wallgren <fredrik@wallgren.me>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
-class wsdl2phpValidator
+class Validator
 {
   /**
    *
@@ -126,7 +126,7 @@ class wsdl2phpValidator
    * @param string $name the name to validate
      *
    * @return string the validated version of the submitted name
-     * 
+     *
    * @access public
    */
   public static function validateNamingConvention($name)
@@ -136,7 +136,7 @@ class wsdl2phpValidator
     {
       $name = 'a'.$name;
     }
-    
+
     return preg_replace('/[^a-zA-Z0-9_x7f-xff]*/', '', preg_replace('/^[^a-zA-Z_x7f-xff]*/', '', $name));
   }
 
@@ -167,12 +167,12 @@ class wsdl2phpValidator
 
     if (class_exists($validClassName))
     {
-      throw new wsdl2phpValidationException("Class ".$validClassName." already defined. Cannot redefine class with class loaded.");
+      throw new ValidationException("Class ".$validClassName." already defined. Cannot redefine class with class loaded.");
     }
 
     if (self::isKeyword($validClassName))
     {
-      throw new wsdl2phpValidationException($validClassName.' is a restricted keyword.');
+      throw new ValidationException($validClassName.' is a restricted keyword.');
     }
 
     return $validClassName;
@@ -220,7 +220,7 @@ class wsdl2phpValidator
 
     if (self::isKeyword($validType))
     {
-      throw new wsdl2phpValidationException($validType.' is a restricted keyword.');
+      throw new ValidationException($validType.' is a restricted keyword.');
     }
 
     return $validType;
@@ -237,3 +237,4 @@ class wsdl2phpValidator
     return in_array(strtolower($str), self::$keywords);
   }
 }
+

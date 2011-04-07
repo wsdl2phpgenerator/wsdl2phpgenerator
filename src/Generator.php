@@ -7,7 +7,6 @@
  * Include the needed files
  */
 require_once dirname(__FILE__).'/Config.php';
-require_once dirname(__FILE__).'/Exception.php';
 require_once dirname(__FILE__).'/Validator.php';
 require_once dirname(__FILE__).'/Variable.php';
 require_once dirname(__FILE__).'/Enum.php';
@@ -27,7 +26,7 @@ require_once dirname(__FILE__).'/../lib/phpSource/PhpFile.php';
  * @author Fredrik Wallgren <fredrik@wallgren.me>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
-class wsdl2phpGenerator
+class Generator
 {
   /**
    * A SoapClient for loading the WSDL
@@ -54,21 +53,21 @@ class wsdl2phpGenerator
    * An array of Type objects that represents the types in the service
    *
    * @var array Array of Type objects
-   * @see wsdl2phpType
+   * @see Type
    */
   private $types;
 
   /**
    * This is the object that holds the current config
    *
-   * @var wsdl2phpConfig
+   * @var Config
    * @access private
    */
   private $config;
 
   /**
    *
-   * @var wsdl2phpDocumentationManager A manager for the documentation
+   * @var DocumentationManager A manager for the documentation
    */
   private $documentation;
 
@@ -87,11 +86,11 @@ class wsdl2phpGenerator
     $this->types = array();
     $this->enums = array();
     $this->simple = array();
-    $this->documentation = new wsdl2phpDocumentationManager();
+    $this->documentation = new DocumentationManager();
 
     if (self::$instance != null)
     {
-      throw new wsdl2phpException('wsdl2phpGenerator is only supposed to be constructed once. Check your code!');
+      throw new Exception('wsdl2phpGenerator is only supposed to be constructed once. Check your code!');
     }
 
     self::$instance = $this;
@@ -100,11 +99,11 @@ class wsdl2phpGenerator
   /**
    * Generates php source code from a wsdl file
    *
-   * @see wsdl2phpConfig
-   * @param wsdl2phpConfig $config The config to use for generation
+   * @see Config
+   * @param Config $config The config to use for generation
    * @access public
    */
-  public function generate(wsdl2phpConfig $config)
+  public function generate(Config $config)
   {
     $this->config = $config;
 
@@ -154,7 +153,7 @@ class wsdl2phpGenerator
 
     $this->log(_('Starting to load service ').$name);
 
-    $this->service = new wsdl2phpService($name, $this->types, $this->documentation->getServiceDescription());
+    $this->service = new Service($name, $this->types, $this->documentation->getServiceDescription());
 
     $functions = $this->client->__getFunctions();
     foreach($functions as $function)
@@ -175,7 +174,7 @@ class wsdl2phpGenerator
       else
       {
         // invalid function call
-        throw new wsdl2phpException('Invalid function call: '.$function);
+        throw new Exception('Invalid function call: '.$function);
       }
 
       $this->log(_('Loading function ').$function);
@@ -215,7 +214,7 @@ class wsdl2phpGenerator
       // ComplexType
       if ($numParts > 1)
       {
-        $type = new wsdl2phpComplexType($className);
+        $type = new ComplexType($className);
         $this->log(_('Loading type ').$type->getPhpIdentifier());
 
         for($i = 1; $i < $numParts - 1; $i++)
@@ -239,7 +238,7 @@ class wsdl2phpGenerator
           $patternList = $typenode->getElementsByTagName('pattern');
           if ($enumerationList->length > 0)
           {
-            $type = new wsdl2phpEnum($className, $restriction);
+            $type = new Enum($className, $restriction);
             $this->log(_('Loading enum ').$type->getPhpIdentifier());
             foreach ($enumerationList as $enum)
             {
@@ -248,7 +247,7 @@ class wsdl2phpGenerator
           }
           else if ($patternList->length > 0)// If pattern
           {
-            $type = new wsdl2phpPattern($className, $restriction);
+            $type = new Pattern($className, $restriction);
             $this->log(_('Loading pattern ').$type->getPhpIdentifier());
             $type->setValue($patternList->item(0)->attributes->getNamedItem('value')->nodeValue);
           }
@@ -281,10 +280,10 @@ class wsdl2phpGenerator
 
     if ($service == null)
     {
-      throw new wsdl2phpException('No service loaded');
+      throw new Exception('No service loaded');
     }
 
-    $output = new wsdl2phpOutputManager($this->config);
+    $output = new OutputManager($this->config);
 
     // Generate all type classes
     $types = array();
@@ -322,7 +321,7 @@ class wsdl2phpGenerator
    * Returns the singleton of the generator class. This may be changed to a "better" solution but I don't know any of the top of my head
    * Used by different classes to get the loaded config
    *
-   * @return wsdl2phpGenerator The dreaded singleton instance
+   * @return Generator The dreaded singleton instance
    */
   public static function getInstance()
   {
@@ -332,7 +331,7 @@ class wsdl2phpGenerator
   /**
    * Returns the loaded config
    *
-   * @return wsdl2phpConfig The loaded config
+   * @return Config The loaded config
    */
   public function getConfig()
   {

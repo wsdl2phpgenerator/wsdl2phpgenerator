@@ -11,7 +11,7 @@
  * @author Fredrik Wallgren <fredrik@wallgren.me>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
-interface Config
+interface IConfig
 {
     /**
      * Binds a value to the key

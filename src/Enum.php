@@ -5,7 +5,7 @@
  */
 
 /**
- * @see wsdl2phpType
+ * @see Type
  */
 require_once dirname(__FILE__).'/Type.php';
 
@@ -16,7 +16,7 @@ require_once dirname(__FILE__).'/Type.php';
  * @author Fredrik Wallgren <fredrik@wallgren.me>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
-class wsdl2phpEnum extends wsdl2phpType
+class Enum extends Type
 {
   /**
    *
@@ -38,16 +38,16 @@ class wsdl2phpEnum extends wsdl2phpType
 
   /**
    * Implements the loading of the class object
-   * @throws wsdl2phpException if the class is already generated(not null)
+   * @throws Exception if the class is already generated(not null)
    */
   protected function generateClass()
   {
     if ($this->class != null)
     {
-      throw new wsdl2phpException("The class has already been generated");
+      throw new Exception("The class has already been generated");
     }
 
-    $config = wsdl2phpGenerator::getInstance()->getConfig();
+    $config = Generator::getInstance()->getConfig();
 
     $this->class = new PhpClass($this->phpIdentifier, $config->getClassExists());
 
@@ -55,17 +55,17 @@ class wsdl2phpEnum extends wsdl2phpType
     {
       try
       {
-        $name = wsdl2phpValidator::validateNamingConvention($value);
+        $name = Validator::validateNamingConvention($value);
       }
-      catch (wsdl2phpValidationException $e)
+      catch (ValidationException $e)
       {
         $name = 'constant'.$name;
       }
       try
       {
-        $name = wsdl2phpValidator::validateType($name);
+        $name = Validator::validateType($name);
       }
-      catch (wsdl2phpValidationException $e)
+      catch (ValidationException $e)
       {
         $name .= 'Custom';
       }

@@ -10,7 +10,7 @@
  * @author Fredrik Wallgren <fredrik@wallgren.me>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
-class wsdl2phpVariable
+class Variable
 {
   /**
    *
@@ -53,3 +53,4 @@ class wsdl2phpVariable
     return $this->name;
   }
 }
+

@@ -26,7 +26,7 @@ require_once dirname(__FILE__).'/Operation.php';
  * @author Fredrik Wallgren <fredrik@wallgren.me>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
-class wsdl2phpService
+class Service
 {
   /**
    *
@@ -54,7 +54,7 @@ class wsdl2phpService
 
   /**
    *
-   * @var array An array of wsdl2phpTypes
+   * @var array An array of Types
    */
   private $types;
 
@@ -90,7 +90,7 @@ class wsdl2phpService
    */
   public function generateClass()
   {
-    $config = wsdl2phpGenerator::getInstance()->getConfig();
+    $config = Generator::getInstance()->getConfig();
 
     // Add prefix and suffix
     $name = $config->getPrefix().$this->identifier.$config->getSuffix();
@@ -98,9 +98,9 @@ class wsdl2phpService
     // Generate a valid classname
     try
     {
-      $name = wsdl2phpValidator::validateClass($name);
+      $name = Validator::validateClass($name);
     }
-    catch (wsdl2phpValidationException $e)
+    catch (ValidationException $e)
     {
       $name .= 'Custom';
     }
@@ -139,7 +139,7 @@ class wsdl2phpService
     $init = 'array('.PHP_EOL;
     foreach ($this->types as $type)
     {
-      if($type instanceof wsdl2phpComplexType)
+      if($type instanceof ComplexType)
       {
         $init .= "  '".$type->getIdentifier()."' => '".$type->getPhpIdentifier()."',".PHP_EOL;
       }
@@ -154,7 +154,7 @@ class wsdl2phpService
     // Add all methods
     foreach ($this->operations as $operation)
     {
-      $name = wsdl2phpValidator::validateNamingConvention($operation->getName());
+      $name = Validator::validateNamingConvention($operation->getName());
 
       $comment = new PhpDocComment($operation->getDescription());
       $comment->setAccess(PhpDocElementFactory::getPublicAccess());
@@ -187,16 +187,16 @@ class wsdl2phpService
    */
   public function addOperation($name, $params, $description)
   {
-    $this->operations[] = new wsdl2phpOperation($name, $params, $description);
+    $this->operations[] = new Operation($name, $params, $description);
   }
 
   /**
    *
-   * @param wsdl2phpConfig $config The config containing the values to use
+   * @param Config $config The config containing the values to use
    *
    * @return string Returns the string for the options array
    */
-  private function generateServiceOptions(wsdl2phpConfig $config)
+  private function generateServiceOptions(Config $config)
   {
     $ret = '';
 

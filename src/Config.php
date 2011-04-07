@@ -10,7 +10,7 @@
  * @author Fredrik Wallgren <fredrik@wallgren.me>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
-class wsdl2phpConfig
+class Config
 {
   /**
    *
@@ -276,3 +276,4 @@ class wsdl2phpConfig
     return $this->suffix;
   }
 }
+

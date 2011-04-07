@@ -10,7 +10,7 @@
  * @author Fredrik Wallgren <fredrik@wallgren.me>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
-class wsdl2phpOperation
+class Operation
 {
   /**
    *
@@ -21,7 +21,7 @@ class wsdl2phpOperation
   /**
    *
    * @var array An array with Variables
-   * @see wsdl2phpVariable
+   * @see Variable
    */
   private $params;
 
@@ -66,7 +66,7 @@ class wsdl2phpOperation
 
   /**
    *
-   * @param array An array of wsdl2phpType objects with valid types for typehinting
+   * @param array An array of Type objects with valid types for typehinting
    * @return string A parameter string
    */
   public function getParamString(array $validTypes)
@@ -86,7 +86,7 @@ class wsdl2phpOperation
       {
         foreach ($validTypes as $type)
         {
-          if ($type instanceof wsdl2phpComplexType)
+          if ($type instanceof ComplexType)
           {
             if ($typeHint == $type->getPhpIdentifier())
             {
@@ -110,7 +110,7 @@ class wsdl2phpOperation
   /**
    *
    * @param string $name The param to get
-   * @param array An array of wsdl2phpType objects with valid types for typehinting
+   * @param array An array of Type objects with valid types for typehinting
    * @return array A array with three keys 'type' => the typehint to use 'name' => the name of the param and 'desc' => A description of the param
    */
   public function getPhpDocParams($name, array $validTypes)
@@ -134,7 +134,7 @@ class wsdl2phpOperation
     {
       if ($paramType == $type->getIdentifier())
       {
-        if ($type instanceof wsdl2phpPattern)
+        if ($type instanceof Pattern)
         {
           $ret['type'] = $type->getDatatype();
           $ret['desc'] = _('Restriction pattern: ').$type->getValue();
@@ -143,7 +143,7 @@ class wsdl2phpOperation
         {
           $ret['type'] = $type->getPhpIdentifier();
 
-          if ($type instanceof wsdl2phpEnum)
+          if ($type instanceof Enum)
           {
             $ret['desc'] = _('Constant: ').$type->getDatatype();
           }
@@ -201,3 +201,4 @@ class wsdl2phpOperation
     }
   }
 }
+
