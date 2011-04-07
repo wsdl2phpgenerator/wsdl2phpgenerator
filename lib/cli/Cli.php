@@ -16,7 +16,7 @@ require_once dirname(__FILE__).'/Flag.php';
  * @author Fredrik Wallgren <fredrik@wallgren.me>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
-class cliCli extends cliCliParser
+class Cli extends CliParser
 {
   /**
    *
@@ -41,7 +41,7 @@ class cliCli extends cliCliParser
    * @var array An array of accepted Flags, all the flags that have a meaning
    */
   private $acceptedFlags;
-  
+
   /**
    *
    * @var array An array of the requred Flag objects
@@ -72,7 +72,7 @@ class cliCli extends cliCliParser
    * @param string $description
    * @param bool $isBool If the flag has to have a parameter
    * @param bool $reqired If the flag is required
-   * 
+   *
    * @throws Exception If the flag is already used
    *
    * @return void
@@ -98,8 +98,8 @@ class cliCli extends cliCliParser
     }
 
     // Not busy, add it
-    $this->acceptedFlags[$flag] = new cliFlag($flag, $description, $isBool);
-    
+    $this->acceptedFlags[$flag] = new Flag($flag, $description, $isBool);
+
     if ($required)
     {
       $this->requiredFlags[$flag] = $this->acceptedFlags[$flag];
@@ -170,7 +170,7 @@ class cliCli extends cliCliParser
     // Add the help flag if not defined
     if (array_key_exists('-h', $this->acceptedFlags) === false)
     {
-      $this->acceptedFlags['-h'] = new cliFlag('-h', _('Help'), true);
+      $this->acceptedFlags['-h'] = new Flag('-h', _('Help'), true);
     }
 
     if ($this->getValue('-h'))
@@ -239,7 +239,7 @@ class cliCli extends cliCliParser
   /**
    *
    * @param string $flag
-   * @return cliFlag|null Returns the flag either by name or alias
+   * @return Flag|null Returns the flag either by name or alias
    */
   private function getFlag($flag)
   {
@@ -261,3 +261,4 @@ class cliCli extends cliCliParser
     return null;
   }
 }
+

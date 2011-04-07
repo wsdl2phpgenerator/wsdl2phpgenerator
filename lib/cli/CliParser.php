@@ -10,7 +10,7 @@
  * @author Fredrik Wallgren <fredrik@wallgren.me>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
-class cliCliParser
+class CliParser
 {
   /**
    * Flags is stored flag => value
@@ -77,7 +77,7 @@ class cliCliParser
             $this->flags['-'.$str[$j]] = true;
           }
         }
-        else 
+        else
         {
           $parts = explode('=', $str);
           $this->flags[$parts[0]] = true;
@@ -101,3 +101,4 @@ class cliCliParser
     return isset($this->flags[$flag]) ? $this->flags[$flag] : false;
   }
 }
+
