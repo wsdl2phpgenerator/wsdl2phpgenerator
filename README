@@ -16,7 +16,8 @@ usage listed under ./wsdl2php -h
 
 Usage code:
 <?php
-$config = new Wsdl2PhpConfig($inputFile, $outputDir);
-$generator = new Wsdl2PhpGenerator();
+$config = new Config($inputFile, $outputDir);
+$generator = new Generator();
 $generator->generate($config);
 ?>
+
