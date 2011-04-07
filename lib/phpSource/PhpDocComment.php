@@ -15,56 +15,56 @@ require_once dirname(__FILE__).'/PhpDocElement.php';
  * @author Fredrik Wallgren <fredrik@wallgren.me>
   * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
-class phpSourcePhpDocComment
+class PhpDocComment
 {
   /**
    *
-   * @var phpSourcePhpDocElement A access element
+   * @var PhpDocElement A access element
    * @access private
    */
   private $access;
 
   /**
    *
-   * @var phpSourcePhpDocElement A var element
+   * @var PhpDocElement A var element
    * @access private
    */
   private $var;
 
   /**
    *
-   * @var array Array of phpSourcePhpDocElements
+   * @var array Array of PhpDocElements
    * @access private
    */
   private $params;
 
   /**
    *
-   * @var phpSourcePhpDocElement
+   * @var PhpDocElement
    */
   private $return;
 
   /**
    *
-   * @var phpSourcePhpDocElement
+   * @var PhpDocElement
    */
   private $package;
 
   /**
    *
-   * @var phpSourcePhpDocElement
+   * @var PhpDocElement
    */
   private $author;
 
   /**
    *
-   * @var phpSourcePhpDocElement
+   * @var PhpDocElement
    */
   private $licence;
 
   /**
    *
-   * @var array Array of phpSourcePhpDocElements
+   * @var array Array of PhpDocElements
    */
   private $throws;
 
@@ -155,72 +155,72 @@ class phpSourcePhpDocComment
 
   /**
    *
-   * @param phpSourcePhpDocElement $access Sets the new access
+   * @param PhpDocElement $access Sets the new access
    */
-  public function setAccess(phpSourcePhpDocElement $access)
+  public function setAccess(PhpDocElement $access)
   {
     $this->access = $access;
   }
 
   /**
    *
-   * @param phpSourcePhpDocElement $var Sets the new var
+   * @param PhpDocElement $var Sets the new var
    */
-  public function setVar(phpSourcePhpDocElement $var)
+  public function setVar(PhpDocElement $var)
   {
     $this->var = $var;
   }
 
   /**
    *
-   * @param phpSourcePhpDocElement $package The package element
+   * @param PhpDocElement $package The package element
    */
-  public function setPackage(phpSourcePhpDocElement $package)
+  public function setPackage(PhpDocElement $package)
   {
     $this->package = $package;
   }
 
   /**
    *
-   * @param phpSourcePhpDocElement $author The author element
+   * @param PhpDocElement $author The author element
    */
-  public function setAuthor(phpSourcePhpDocElement $author)
+  public function setAuthor(PhpDocElement $author)
   {
     $this->author = $author;
   }
 
   /**
    *
-   * @param phpSourcePhpDocElement $licence The license elemnt
+   * @param PhpDocElement $licence The license elemnt
    */
-  public function setLicence(phpSourcePhpDocElement $licence)
+  public function setLicence(PhpDocElement $licence)
   {
     $this->licence = $licence;
   }
 
   /**
    *
-   * @param phpSourcePhpDocElement $return Sets the new return
+   * @param PhpDocElement $return Sets the new return
    */
-  public function setReturn(phpSourcePhpDocElement $return)
+  public function setReturn(PhpDocElement $return)
   {
     $this->return = $return;
   }
 
   /**
    *
-   * @param phpSourcePhpDocElement $param Adds a new param
+   * @param PhpDocElement $param Adds a new param
    */
-  public function addParam(phpSourcePhpDocElement $param)
+  public function addParam(PhpDocElement $param)
   {
     $this->params[] = $param;
   }
 
   /**
    *
-   * @param phpSourcePhpDocElement $throws Adds a new throws
+   * @param PhpDocElement $throws Adds a new throws
    */
-  public function addThrows(phpSourcePhpDocElement $throws)
+  public function addThrows(PhpDocElement $throws)
   {
     $this->throws[] = $throws;
   }
@@ -235,3 +235,4 @@ class phpSourcePhpDocComment
     $this->description = $description;
   }
 }
+

@@ -15,11 +15,11 @@ require_once dirname(__FILE__).'/PhpElement.php';
  * @author Fredrik Wallgren <fredrik@wallgren.me>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
-class phpSourcePhpVariable extends phpSourcePhpElement
+class PhpVariable extends PhpElement
 {
   /**
    *
-   * @var phpSourcePhpDocComment A comment in phpdoc format that describes the variable
+   * @var PhpDocComment A comment in phpdoc format that describes the variable
    * @access private
    */
   private $comment;
@@ -36,9 +36,9 @@ class phpSourcePhpVariable extends phpSourcePhpElement
    * @param string $access
    * @param string $identifier
    * @param string $initialization The value to set the variable at initialization
-   * @param phpSourcePhpDocComment $comment
+   * @param PhpDocComment $comment
    */
-  function __construct($access, $identifier, $initialization = '', phpSourcePhpDocComment $comment = null)
+  function __construct($access, $identifier, $initialization = '', PhpDocComment $comment = null)
   {
     $this->comment = $comment;
     $this->access = $access;
@@ -69,3 +69,4 @@ class phpSourcePhpVariable extends phpSourcePhpElement
     return $ret;
   }
 }
+

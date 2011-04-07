@@ -16,7 +16,7 @@ require_once dirname(__FILE__).'/PhpClass.php';
  * @author Fredrik Wallgren <fredrik@wallgren.me>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
-class phpSourcePhpFile
+class PhpFile
 {
   /**
    *
@@ -24,28 +24,28 @@ class phpSourcePhpFile
    * @access private
    */
   private $name;
-  
+
   /**
    *
    * @var array Array of strings, the strings are namespace names, only one namespace supported for now
    * @access private
    */
   private $namespaces;
-  
+
   /**
    *
-   * @var array Array of phpSourcePhpClass objects
+   * @var array Array of PhpClass objects
    * @access private
    */
   private $classes;
-  
+
   /**
    *
-   * @var array Array of phpSourcePhpFunction objects
+   * @var array Array of PhpFunction objects
    * @access private
    */
   private $functions;
-  
+
   /**
    * Sets the name of the file, and sets all other members to empty
    *
@@ -58,7 +58,7 @@ class phpSourcePhpFile
     $this->classes = array();
     $this->functions = array();
   }
-  
+
   /**
    * Generates the complete source code for the file
    *
@@ -67,31 +67,31 @@ class phpSourcePhpFile
   public function getSource()
   {
     $ret = '<?php'.PHP_EOL.PHP_EOL;
-    
+
     if (count($this->namespaces) > 0)
     {
       $ret .= 'namespace '.$this->namespaces[0].';'.PHP_EOL.PHP_EOL;
     }
-    
+
     if (count($this->classes) > 0)
     {
-      foreach ($this->classes as $class) 
+      foreach ($this->classes as $class)
       {
         $ret .= $class->getSource();
       }
     }
-    
+
     if (count($this->functions) > 0)
     {
-      foreach ($this->functions as $function) 
+      foreach ($this->functions as $function)
       {
         $ret .= $function->getSource();
       }
     }
-    
+
     return $ret;
   }
-  
+
   /**
    * Saves the source code for the file in $directory
    *
@@ -101,13 +101,13 @@ class phpSourcePhpFile
   {
     file_put_contents($directory.$this->name.'.php', $this->getSource());
   }
-  
+
   /**
    * Adds a namespace, only one namespace is currently supported
    *
    * @param string $namespace The namespace to add
    */
-  public function addNamespace($namespace) 
+  public function addNamespace($namespace)
   {
     if (in_array($namespace, $this->namespaces) == false)
     {
@@ -124,14 +124,14 @@ class phpSourcePhpFile
   {
     return (count($this->namespaces) > 0);
   }
-  
+
   /**
    * Adds a class to the file
    *
-   * @param phpSourcePhpClass $class The class to add
+   * @param PhpClass $class The class to add
    * @throws Exception If the class already exists
    */
-  public function addClass(phpSourcePhpClass $class)
+  public function addClass(PhpClass $class)
   {
     if ($this->classExists($class->getIdentifier()))
     {
@@ -140,14 +140,14 @@ class phpSourcePhpFile
 
     $this->classes[$class->getIdentifier()] = $class;
   }
-  
+
   /**
    * Adds a global function to the file, should not be used, classes rocks :)
    *
-   * @param phpSourcePhpFunction $function The function to add
+   * @param PhpFunction $function The function to add
    * @throws Exception If the function already exists
    */
-  public function addFunction(phpSourcePhpFunction $function)
+  public function addFunction(PhpFunction $function)
   {
     if ($this->functionExists($function->getIdentifier()))
     {
@@ -181,3 +181,4 @@ class phpSourcePhpFile
     return array_key_exists($identifier, $this->functions);
   }
 }
+

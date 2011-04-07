@@ -17,7 +17,7 @@ require_once dirname(__FILE__).'/PhpVariable.php';
  * @author Fredrik Wallgren <fredrik@wallgren.me>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
-class phpSourcePhpFunction extends phpSourcePhpElement
+class PhpFunction extends PhpElement
 {
   /**
    *
@@ -35,7 +35,7 @@ class phpSourcePhpFunction extends phpSourcePhpElement
 
   /**
    *
-   * @var phpSourcePhpDocComment A comment in phpdoc format that describes the function
+   * @var PhpDocComment A comment in phpdoc format that describes the function
    * @access private
    */
   private $comment;
@@ -46,9 +46,9 @@ class phpSourcePhpFunction extends phpSourcePhpElement
    * @param string $identifier
    * @param string $params
    * @param string $source
-   * @param phpSourcePhpDocComment $comment
+   * @param PhpDocComment $comment
    */
-  function __construct($access, $identifier, $params, $source, phpSourcePhpDocComment $comment = null)
+  function __construct($access, $identifier, $params, $source, PhpDocComment $comment = null)
   {
     $this->access = $access;
     $this->identifier = $identifier;
@@ -79,3 +79,4 @@ class phpSourcePhpFunction extends phpSourcePhpElement
     return $ret;
   }
 }
+

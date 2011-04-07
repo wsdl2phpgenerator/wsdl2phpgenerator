@@ -54,10 +54,10 @@ class wsdl2phpComplexType extends wsdl2phpType
 
     $config = wsdl2phpGenerator::getInstance()->getConfig();
 
-    $class = new phpSourcePhpClass($this->phpIdentifier, $config->getClassExists());
+    $class = new PhpClass($this->phpIdentifier, $config->getClassExists());
 
-    $constructorComment = new phpSourcePhpDocComment();
-    $constructorComment->setAccess(phpSourcePhpDocElementFactory::getPublicAccess());
+    $constructorComment = new PhpDocComment();
+    $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());
     $constructorSource = '';
     $constructorParameters = '';
 
@@ -65,7 +65,7 @@ class wsdl2phpComplexType extends wsdl2phpType
     foreach ($this->members as $member)
     {
       $type = '';
-      
+
       try
       {
         $type = wsdl2phpValidator::validateType($member->getType());
@@ -76,20 +76,20 @@ class wsdl2phpComplexType extends wsdl2phpType
       }
 
       $name = wsdl2phpValidator::validateNamingConvention($member->getName());
-      $comment = new phpSourcePhpDocComment();
-      $comment->setVar(phpSourcePhpDocElementFactory::getVar($type, $name, ''));
-      $comment->setAccess(phpSourcePhpDocElementFactory::getPublicAccess());
-      $var = new phpSourcePhpVariable('public', $name, '', $comment);
+      $comment = new PhpDocComment();
+      $comment->setVar(PhpDocElementFactory::getVar($type, $name, ''));
+      $comment->setAccess(PhpDocElementFactory::getPublicAccess());
+      $var = new PhpVariable('public', $name, '', $comment);
       $class->addVariable($var);
 
       $constructorSource .= '  $this->'.$name.' = $'.$name.';'.PHP_EOL;
-      $constructorComment->addParam(phpSourcePhpDocElementFactory::getParam($type, $name, ''));
-      $constructorComment->setAccess(phpSourcePhpDocElementFactory::getPublicAccess());
+      $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
+      $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());
       $constructorParameters .= ', $'.$name;
     }
 
     $constructorParameters = substr($constructorParameters, 2); // Remove first comma
-    $function = new phpSourcePhpFunction('public', '__construct', $constructorParameters, $constructorSource, $constructorComment);
+    $function = new PhpFunction('public', '__construct', $constructorParameters, $constructorSource, $constructorComment);
 
     // Only add the constructor if type constructor is selected
     if ($config->getNoTypeConstructor() == false)
@@ -111,3 +111,4 @@ class wsdl2phpComplexType extends wsdl2phpType
     $this->members[$name] = new wsdl2phpVariable($type, $name);
   }
 }
+

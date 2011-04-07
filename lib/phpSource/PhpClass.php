@@ -17,7 +17,7 @@ require_once dirname(__FILE__).'/PhpFunction.php';
  * @author Fredrik Wallgren <fredrik@wallgren.me>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
-class phpSourcePhpClass extends phpSourcePhpElement
+class PhpClass extends PhpElement
 {
   /**
    *
@@ -25,7 +25,7 @@ class phpSourcePhpClass extends phpSourcePhpElement
    * @access private
    */
   private $dependencies;
-  
+
   /**
    *
    * @var bool If the class should be protected by a if(!class_exists() statement
@@ -79,10 +79,10 @@ class phpSourcePhpClass extends phpSourcePhpElement
    * @param string $identifier
    * @param bool $classExists
    * @param string $extends A string of the class that this class extends
-   * @param phpSourcePhpDocComment $comment
+   * @param PhpDocComment $comment
    * @param bool $final
    */
-  public function __construct($identifier, $classExists = false, $extends = '', phpSourcePhpDocComment $comment = null, $final = false)
+  public function __construct($identifier, $classExists = false, $extends = '', PhpDocComment $comment = null, $final = false)
   {
     $this->dependencies = array();
     $this->classExists = $classExists;
@@ -228,11 +228,11 @@ class phpSourcePhpClass extends phpSourcePhpElement
    * Adds a variable to the class
    * Throws Exception if the variable does already exist
    *
-   * @param phpSourcePhpVariable $variable The variable object to add
+   * @param PhpVariable $variable The variable object to add
    * @access public
    * @throws Exception If the variable name already exists
    */
-  public function addVariable(phpSourcePhpVariable $variable)
+  public function addVariable(PhpVariable $variable)
   {
     if ($this->variableExists($variable->getIdentifier()))
     {
@@ -246,11 +246,11 @@ class phpSourcePhpClass extends phpSourcePhpElement
    * Adds a function to the class
    * Overwrites
    *
-   * @param phpSourcePhpFunction $function The function object to add
+   * @param PhpFunction $function The function object to add
    * @access public
    * @throws Exception If the function name already exists
    */
-  public function addFunction(phpSourcePhpFunction $function)
+  public function addFunction(PhpFunction $function)
   {
     if ($this->functionExists($function->getIdentifier()))
     {
@@ -259,7 +259,7 @@ class phpSourcePhpClass extends phpSourcePhpElement
 
     $this->functions[$function->getIdentifier()] = $function;
   }
-  
+
   /**
    * Checks if a variable with the same name does already exist
    *
@@ -284,3 +284,4 @@ class phpSourcePhpClass extends phpSourcePhpElement
     return array_key_exists($identifier, $this->functions);
   }
 }
+

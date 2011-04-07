@@ -49,7 +49,7 @@ class wsdl2phpEnum extends wsdl2phpType
 
     $config = wsdl2phpGenerator::getInstance()->getConfig();
 
-    $this->class = new phpSourcePhpClass($this->phpIdentifier, $config->getClassExists());
+    $this->class = new PhpClass($this->phpIdentifier, $config->getClassExists());
 
     foreach ($this->values as $value)
     {
@@ -114,3 +114,4 @@ class wsdl2phpEnum extends wsdl2phpType
     $this->values[] = $value;
   }
 }
+

@@ -5,12 +5,12 @@
  */
 
 /**
- * @see phpSourcePhpClass
+ * @see PhpClass
  */
 require_once dirname(__FILE__).'/../lib/phpSource/PhpClass.php';
 
 /**
- * @see phpSourcePhpDocElementFactory.php
+ * @see PhpDocElementFactory.php
  */
 require_once dirname(__FILE__).'/../lib/phpSource/PhpDocElementFactory.php';
 
@@ -30,7 +30,7 @@ class wsdl2phpService
 {
   /**
    *
-   * @var phpSourcePhpClass The class used to create the service.
+   * @var PhpClass The class used to create the service.
    */
   private $class;
 
@@ -73,7 +73,7 @@ class wsdl2phpService
 
   /**
    *
-   * @return phpSourcePhpClass Returns the class, generates it if not done
+   * @return PhpClass Returns the class, generates it if not done
    */
   public function getClass()
   {
@@ -106,14 +106,14 @@ class wsdl2phpService
     }
 
     // Create the class object
-    $comment = new phpSourcePhpDocComment($this->description);
-    $this->class = new phpSourcePhpClass($name, $config->getClassExists(), 'SoapClient', $comment);
+    $comment = new PhpDocComment($this->description);
+    $this->class = new PhpClass($name, $config->getClassExists(), 'SoapClient', $comment);
 
     // Create the constructor
-    $comment = new phpSourcePhpDocComment();
-    $comment->addParam(phpSourcePhpDocElementFactory::getParam('array', 'config', 'A array of config values'));
-    $comment->addParam(phpSourcePhpDocElementFactory::getParam('string', 'wsdl', 'The wsdl file to use'));
-    $comment->setAccess(phpSourcePhpDocElementFactory::getPublicAccess());
+    $comment = new PhpDocComment();
+    $comment->addParam(PhpDocElementFactory::getParam('array', 'config', 'A array of config values'));
+    $comment->addParam(PhpDocElementFactory::getParam('string', 'wsdl', 'The wsdl file to use'));
+    $comment->setAccess(PhpDocElementFactory::getPublicAccess());
 
     $source = '  foreach(self::$classmap as $key => $value)
   {
@@ -125,16 +125,16 @@ class wsdl2phpService
   '.$this->generateServiceOptions($config).'
   parent::__construct($wsdl, $options);'.PHP_EOL;
 
-    $function = new phpSourcePhpFunction('public', '__construct', 'array $options = array(), $wsdl = \''.$config->getInputFile().'\'', $source, $comment);
+    $function = new PhpFunction('public', '__construct', 'array $options = array(), $wsdl = \''.$config->getInputFile().'\'', $source, $comment);
 
     // Add the constructor
     $this->class->addFunction($function);
 
     // Generate the classmap
     $name = 'classmap';
-    $comment = new phpSourcePhpDocComment();
-    $comment->setAccess(phpSourcePhpDocElementFactory::getPrivateAccess());
-    $comment->setVar(phpSourcePhpDocElementFactory::getVar('array', $name, 'The defined classes'));
+    $comment = new PhpDocComment();
+    $comment->setAccess(PhpDocElementFactory::getPrivateAccess());
+    $comment->setVar(PhpDocElementFactory::getVar('array', $name, 'The defined classes'));
 
     $init = 'array('.PHP_EOL;
     foreach ($this->types as $type)
@@ -146,7 +146,7 @@ class wsdl2phpService
     }
     $init = substr($init, 0, strrpos($init, ','));
     $init .= ')';
-    $var = new phpSourcePhpVariable('private static', $name, $init, $comment);
+    $var = new PhpVariable('private static', $name, $init, $comment);
 
     // Add the classmap variable
     $this->class->addVariable($var);
@@ -156,20 +156,20 @@ class wsdl2phpService
     {
       $name = wsdl2phpValidator::validateNamingConvention($operation->getName());
 
-      $comment = new phpSourcePhpDocComment($operation->getDescription());
-      $comment->setAccess(phpSourcePhpDocElementFactory::getPublicAccess());
-      
+      $comment = new PhpDocComment($operation->getDescription());
+      $comment->setAccess(PhpDocElementFactory::getPublicAccess());
+
       foreach ($operation->getParams() as $param => $hint)
       {
         $arr = $operation->getPhpDocParams($param, $this->types);
-        $comment->addParam(phpSourcePhpDocElementFactory::getParam($arr['type'], $arr['name'], $arr['desc']));
+        $comment->addParam(PhpDocElementFactory::getParam($arr['type'], $arr['name'], $arr['desc']));
       }
 
       $source = '  return $this->__soapCall(\''.$name.'\', array('.$operation->getParamStringNoTypeHints().'));'.PHP_EOL;
 
       $paramStr = $operation->getParamString($this->types);
 
-      $function = new phpSourcePhpFunction('public', $name, $paramStr, $source, $comment);
+      $function = new PhpFunction('public', $name, $paramStr, $source, $comment);
 
       if ($this->class->functionExists($function->getIdentifier()) == false)
       {
@@ -244,3 +244,4 @@ class wsdl2phpService
     return $ret;
   }
 }
+

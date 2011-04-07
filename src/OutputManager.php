@@ -5,7 +5,7 @@
  */
 
 /**
- * @see phpSourcePhpClass
+ * @see PhpClass
  */
 require_once dirname(__FILE__).'/../lib/phpSource/PhpFile.php';
 
@@ -23,31 +23,31 @@ class wsdl2phpOutputManager
    * @var string The directory to save the files
    */
   private $dir;
-  
+
   /**
    *
    * @var bool If we should add a namespace to the files
    */
   private $useNamespace;
-  
+
   /**
    *
    * @var array An array with classnames to save
    */
   private $classesToSave;
-  
+
   /**
    *
-   * @var wsdl2phpConfig A reference to the config 
+   * @var wsdl2phpConfig A reference to the config
    */
   private $config;
-  
+
   /**
    *
-   * @var phpSourcePhpFile The file object to use for saving the files
+   * @var PhpFile The file object to use for saving the files
    */
   private $file;
-  
+
   /**
    *
    * @param Config $config The config to use
@@ -67,20 +67,20 @@ class wsdl2phpOutputManager
    * @param PhpClass $service
    * @param array $types
    */
-  public function save(phpSourcePhpClass $service, array $types)
+  public function save(PhpClass $service, array $types)
   {
     $this->setOutputDirectory();
-    
+
     if ($this->config->getOneFile())
     {
-      $this->file = new phpSourcePhpFile($service->getIdentifier());
+      $this->file = new PhpFile($service->getIdentifier());
       $this->addNamespace();
       $this->addClassToFile($service);
       foreach ($types as $type)
       {
         $this->addClassToFile($type);
       }
-      
+
       $this->file->save($this->dir);
     }
     else
@@ -102,7 +102,7 @@ class wsdl2phpOutputManager
   private function setOutputDirectory()
   {
     $outputDirectory = $this->config->getOutputDir();
-    
+
     //Try to create output dir if non existing
     if (is_dir($outputDirectory) == false && is_file($outputDirectory) == false)
     {
@@ -111,7 +111,7 @@ class wsdl2phpOutputManager
         throw new wsdl2phpException('Could not create output directory and it does not exist!');
       }
     }
-    
+
     $this->dir = $outputDirectory;
   }
 
@@ -121,14 +121,14 @@ class wsdl2phpOutputManager
    *
    * @param PhpClass $class
    */
-  private function addClassToFile(phpSourcePhpClass $class)
+  private function addClassToFile(PhpClass $class)
   {
     // Check if the class should be saved
     if ($this->isValidClass($class))
     {
       if ($this->file == null)
       {
-        $this->file = new phpSourcePhpFile($class->getIdentifier());
+        $this->file = new PhpFile($class->getIdentifier());
         $this->addNamespace();
       }
 
@@ -142,7 +142,7 @@ class wsdl2phpOutputManager
    *
    * @param PhpClass $class
    */
-  private function saveClassToFile(phpSourcePhpClass $class)
+  private function saveClassToFile(PhpClass $class)
   {
     $this->addClassToFile($class);
     if ($this->file != null)
@@ -170,7 +170,7 @@ class wsdl2phpOutputManager
    * @param PhpClass $class
    * @return bool Returns true if the class is ok to add to file
    */
-  private function isValidClass(phpSourcePhpClass $class)
+  private function isValidClass(PhpClass $class)
   {
     $suffix = strlen($this->config->getSuffix());
     if ($suffix > 0)
@@ -187,7 +187,8 @@ class wsdl2phpOutputManager
     {
       return true;
     }
-    
+
     return false;
   }
 }
+
