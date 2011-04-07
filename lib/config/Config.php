@@ -11,7 +11,7 @@
  * @author Fredrik Wallgren <fredrik@wallgren.me>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
-interface configConfig
+interface Config
 {
     /**
      * Binds a value to the key
@@ -38,3 +38,4 @@ interface configConfig
      */
     public function exists($key);
 }
+

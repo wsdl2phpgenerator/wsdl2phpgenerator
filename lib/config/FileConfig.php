@@ -15,7 +15,7 @@ require_once dirname(__FILE__).'/Config.php';
  * @author Fredrik Wallgren <fredrik@wallgren.me>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
-class configFileConfig implements configConfig
+class FileConfig implements Config
 {
   /**
    * The separator in the file
@@ -218,3 +218,4 @@ class configFileConfig implements configConfig
     }
   }
 }
+

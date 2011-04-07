@@ -33,7 +33,7 @@ require_once dirname(__FILE__).'/src/Generator.php';
 // Try to read the config file if any
 try
 {
-  $config = new configFileConfig(dirname(__FILE__).'/conf/settings.conf');
+  $config = new FileConfig(dirname(__FILE__).'/conf/settings.conf');
   $locale = $config->get('language');
 
   $domain = 'messages';
