@@ -113,5 +113,23 @@ class Enum extends Type
 
     $this->values[] = $value;
   }
+
+  /**
+  * Returns a comma separated list of all the possible values for the enum
+  *
+  * @return string
+  */
+  public function getValidValues()
+  {
+    $ret = '';
+    foreach ($this->values as $value)
+    {
+      $ret .= $value.', ';
+    }
+
+    $ret = substr($ret, 0, -2);
+
+    return $ret;
+  }
 }
 

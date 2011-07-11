@@ -145,7 +145,7 @@ class Operation
 
           if ($type instanceof Enum)
           {
-            $ret['desc'] = _('Constant: ').$type->getDatatype();
+            $ret['desc'] = _('Constant: ').$type->getDatatype() .' - '. _('Valid values: ').$type->getValidValues();
           }
         }
       }
