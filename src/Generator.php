@@ -201,7 +201,8 @@ class Generator
 
     foreach($types as $typeStr)
     {
-      $parts = explode(PHP_EOL, $typeStr);
+	  $wsdlNewline = ( strpos( $typeStr, "\r\n" ) ? "\r\n" : "\n" );
+      $parts = explode($wsdlNewline, $typeStr);
       $tArr = explode(" ", $parts[0]);
       $restriction = $tArr[0];
       $className = $tArr[1];
@@ -226,7 +227,6 @@ class Generator
           list($typename, $name) = explode(" ", substr($parts[$i], 0, strlen($parts[$i])-1) );
 
           $name = $this->cleanNamespace($name);
-
           $type->addMember($typename, $name);
         }
       }
