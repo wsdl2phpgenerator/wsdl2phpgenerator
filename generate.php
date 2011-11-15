@@ -57,7 +57,7 @@ catch (Exception $e)
 }
 
 // Start
-$cli = new Cli('wsdl2php', '[OPTIONS] -i wsdlfile -o directory', '1.5.0');
+$cli = new Cli('wsdl2php', '[OPTIONS] -i wsdlfile -o directory', '1.5.1');
 $cli->addFlag('-e', _('If all classes should be guarded with if(!class_exists) statements'), true, false);
 $cli->addFlag('-t', _('If no type constructor should be generated'), true, false);
 $cli->addFlag('-s', _('If the output should be a single file'), true, false);
