@@ -75,7 +75,7 @@ class Generator
    *
    * @var Generator The infamous singleton instance
    */
-  private static $instance;
+  private static $instance = null;
 
   /**
    * @var displayCallback The function called to display output internally. Initially set to gettext if set
@@ -92,9 +92,13 @@ class Generator
     $this->enums = array();
     $this->simple = array();
     $this->documentation = new DocumentationManager();
+    // default to gettext, even if its unavailable (will lead to runtime exception if not and not injected)
     $this->displayCallback = ( function_exists('gettext') ? 'gettext' : null );
   }
 
+  /**
+   * Initializes the single instance if it hasn't been, and returns it if it has.
+   */
   public static function instance() {
   	if( self::$instance === null ) {
   		self::$instance = new Generator();
@@ -102,10 +106,20 @@ class Generator
   	return self::$instance;
   }
   
-  public function setDisplayCallback( Closure $callback ) {
+  /**
+   * Sets the display callback to an anonymous function, or a string referring to a built-in callable
+   *
+   * @param callable $callback
+   */
+  public function setDisplayCallback( $callback ) {
   	$this->displayCallback = $callback;
   }
 
+  /**
+   * Use the display callback to output a message to the logger (or otherwise).
+   *
+   * @param string $string
+   */
   private function display( $string ) {
   	$disp = $this->displayCallback;
   	return $disp( $string );
