@@ -78,24 +78,39 @@ class Generator
   private static $instance;
 
   /**
+   * @var displayCallback The function called to display output internally. Initially set to gettext if set
+   */
+  private $displayCallback;
+  
+  /**
    * Construct the generator
    */
-  public function __construct()
+  private function __construct()
   {
     $this->service = null;
     $this->types = array();
     $this->enums = array();
     $this->simple = array();
     $this->documentation = new DocumentationManager();
-
-    if (self::$instance != null)
-    {
-      throw new Exception('wsdl2phpGenerator is only supposed to be constructed once. Check your code!');
-    }
-
-    self::$instance = $this;
+    $this->displayCallback = ( function_exists('gettext') ? 'gettext' : null );
   }
 
+  public static function instance() {
+  	if( self::$instance === null ) {
+  		self::$instance = new Generator();
+  	}
+  	return self::$instance;
+  }
+  
+  public function setDisplayCallback( Closure $callback ) {
+  	$this->displayCallback = $callback;
+  }
+
+  private function display( $string ) {
+  	$disp = $this->displayCallback;
+  	return $disp( $string );
+  }
+  
   /**
    * Generates php source code from a wsdl file
    *
@@ -107,7 +122,7 @@ class Generator
   {
     $this->config = $config;
 
-    $this->log(_('Starting generation'));
+    $this->log($this->display('Starting generation'));
 
     $wsdl = $this->config->getInputFile();
     if (is_array($wsdl))
@@ -118,7 +133,7 @@ class Generator
 
     $this->savePhp();
 
-    $this->log(_('Generation complete'));
+    $this->log($this->display('Generation complete'));
   }
 
   /**
@@ -128,7 +143,7 @@ class Generator
   {
     try
     {
-      $this->log(_('Loading the wsdl'));
+      $this->log($this->display('Loading the wsdl'));
       $this->client = new SoapClient($wsdl, array('cache_wsdl' => WSDL_CACHE_NONE));
     }
     catch(SoapFault $e)
@@ -136,7 +151,7 @@ class Generator
       throw new Exception('Error connectiong to to the wsdl. Error: '.$e->getMessage());
     }
 
-    $this->log(_('Loading the DOM'));
+    $this->log($this->display('Loading the DOM'));
     $this->dom = DOMDocument::load($wsdl);
 
     $this->documentation->loadDocumentation($this->dom);
@@ -154,7 +169,7 @@ class Generator
   {
     $name = $this->dom->getElementsByTagNameNS('*', 'service')->item(0)->getAttribute('name');
 
-    $this->log(_('Starting to load service ').$name);
+    $this->log($this->display('Starting to load service ').$name);
 
     $this->service = new Service($name, $this->types, $this->documentation->getServiceDescription());
 
@@ -180,12 +195,12 @@ class Generator
         throw new Exception('Invalid function call: '.$function);
       }
 
-      $this->log(_('Loading function ').$function);
+      $this->log($this->display('Loading function ').$function);
 
       $this->service->addOperation($function, $params, $this->documentation->getFunctionDescription($function));
     }
 
-    $this->log(_('Done loading service ').$name);
+    $this->log($this->display('Done loading service ').$name);
   }
 
   /**
@@ -195,7 +210,7 @@ class Generator
    */
   private function loadTypes()
   {
-    $this->log(_('Loading types'));
+    $this->log($this->display('Loading types'));
 
     $types = $this->client->__getTypes();
 
@@ -219,7 +234,7 @@ class Generator
       if ($numParts > 1)
       {
         $type = new ComplexType($className);
-        $this->log(_('Loading type ').$type->getPhpIdentifier());
+        $this->log($this->display('Loading type ').$type->getPhpIdentifier());
 
         for($i = 1; $i < $numParts - 1; $i++)
         {
@@ -242,7 +257,7 @@ class Generator
           if ($enumerationList->length > 0)
           {
             $type = new Enum($className, $restriction);
-            $this->log(_('Loading enum ').$type->getPhpIdentifier());
+            $this->log($this->display('Loading enum ').$type->getPhpIdentifier());
             foreach ($enumerationList as $enum)
             {
               $type->addValue($enum->attributes->getNamedItem('value')->nodeValue);
@@ -251,7 +266,7 @@ class Generator
           else if ($patternList->length > 0)// If pattern
           {
             $type = new Pattern($className, $restriction);
-            $this->log(_('Loading pattern ').$type->getPhpIdentifier());
+            $this->log($this->display('Loading pattern ').$type->getPhpIdentifier());
             $type->setValue($patternList->item(0)->attributes->getNamedItem('value')->nodeValue);
           }
           else
@@ -276,7 +291,7 @@ class Generator
       }
     }
 
-    $this->log(_('Done loading types'));
+    $this->log($this->display('Done loading types'));
   }
 
   /**
