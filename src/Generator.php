@@ -162,11 +162,12 @@ class Generator
     }
     catch(SoapFault $e)
     {
-      throw new Exception('Error connectiong to to the wsdl. Error: '.$e->getMessage());
+      throw new Exception('Error connecting to to the wsdl. Error: '.$e->getMessage());
     }
 
     $this->log($this->display('Loading the DOM'));
-    $this->dom = DOMDocument::load($wsdl);
+    $this->dom = new DOMDocument();
+    $this->dom->load( $wsdl );
 
     $this->documentation->loadDocumentation($this->dom);
 
@@ -366,7 +367,7 @@ class Generator
    */
   public static function getInstance()
   {
-    return self::$instance;
+    return self::instance();
   }
 
   /**
