@@ -16,24 +16,13 @@ usage listed under ./wsdl2php -h
 
 Usage code:
 <?php
+require_once __DIR__."/path/here/Generator.php";
 
-if (!function_exists("_"))
-{
-  function _($str)
-  {
-    return gettext($str);
-  }
-}
-
-if (!function_exists("gettext"))
-{
-  function gettext($str)
-  {
-    echo "{$str}\n";
-  }
-}
-
-$config = new Config($inputFile, $outputDir);
-$generator = new Generator();
-$generator->generate($config);
+$generator = Generator::instance();
+$generator->setDisplayCallback( function( $msg ) {
+	echo "{$msg}\n";
+});
+$generator->generate( 
+	new Config( SOAPSERVICE, SOAPDIR ) 
+);
 ?>
