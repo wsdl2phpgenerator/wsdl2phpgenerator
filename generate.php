@@ -180,6 +180,6 @@ if ($cli->getValue('--gzip'))
 
 $config = new Config($inputFile, $outputDir, $verbose, $singleFile, $classExists, $noTypeConstructor, $namespaceName, $optionsArray, $wsdlCache, $gzip, $classNames, $prefix, $suffix);
 
-$generator = new Generator();
+$generator = Generator::instance();
 $generator->generate($config);
 
