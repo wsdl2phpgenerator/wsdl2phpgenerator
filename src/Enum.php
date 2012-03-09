@@ -49,7 +49,9 @@ class Enum extends Type
 
     $config = Generator::getInstance()->getConfig();
 
-    $this->class = new PhpClass($this->phpIdentifier, $config->getClassExists());
+    $this->class = new PhpClass($this->phpIdentifier, $config->getClassExists(), 'SplEnum');
+
+    $first = true;
 
     foreach ($this->values as $value)
     {
@@ -68,6 +70,13 @@ class Enum extends Type
       catch (ValidationException $e)
       {
         $name .= 'Custom';
+      }
+
+      if ($first) {
+
+          $this->class->addConstant($name, '__default');
+          $first = false;
+
       }
 
       $this->class->addConstant($value, $name);

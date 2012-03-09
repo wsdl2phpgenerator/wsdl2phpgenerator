@@ -28,6 +28,12 @@ require_once dirname(__FILE__).'/../lib/phpSource/PhpFile.php';
  */
 class Generator
 {
+
+    /**
+     * Schema in simplexml format
+     */
+    private $schema = array();
+
   /**
    * A SoapClient for loading the WSDL
    * @var SoapClient
@@ -166,13 +172,48 @@ class Generator
     }
 
     $this->log($this->display('Loading the DOM'));
-    $this->dom = new DOMDocument();
-    $this->dom->load( $wsdl );
+    $this->dom[0] = new DOMDocument();
+    $this->dom[0]->load( $wsdl );
 
-    $this->documentation->loadDocumentation($this->dom);
+    $this->documentation->loadDocumentation($this->dom[0]);
 
+    $sxml = simplexml_import_dom($this->dom[0]);
+
+    foreach ($sxml->xpath('//wsdl:import/@location') as $wsdl_file) {
+
+
+        $dom = new DOMDocument();
+        $dom->load($wsdl_file);
+        $this->documentation->loadDocumentation($dom);
+        $this->dom[] = $dom;
+
+    }
+
+    $this->loadSchema();
     $this->loadTypes();
     $this->loadService();
+  }
+
+  /**
+   * Load schemas
+   */
+  private function loadSchema()
+  {
+
+      foreach ($this->dom as $dom) {
+
+          $sxml = simplexml_import_dom($dom);
+
+          foreach ($sxml->xpath('//xsd:import/@schemaLocation') as $schema_file) {
+
+              $schema = simplexml_load_file($schema_file);
+
+              $this->schema[] = $schema;
+ 
+          }
+
+      }
+
   }
 
   /**
@@ -182,7 +223,7 @@ class Generator
    */
   private function loadService()
   {
-    $name = $this->dom->getElementsByTagNameNS('*', 'service')->item(0)->getAttribute('name');
+    $name = $this->dom[0]->getElementsByTagNameNS('*', 'service')->item(0)->getAttribute('name');
 
     $this->log($this->display('Starting to load service ').$name);
 
@@ -257,7 +298,19 @@ class Generator
           list($typename, $name) = explode(" ", substr($parts[$i], 0, strlen($parts[$i])-1) );
 
           $name = $this->cleanNamespace($name);
-          $type->addMember($typename, $name);
+          $nillable = false;
+
+          foreach ($this->schema as $schema) {
+
+              $tmp = $schema->xpath('//xs:complexType[@name = "'. $className . '"]/descendant::xs:element[@name = "' . $name . '"]/@nillable');
+              if (!empty($tmp) && (string) $tmp[0] == 'true') {
+                  $nillable = true;
+                  break;
+              }
+
+          }
+
+          $type->addMember($typename, $name, $nillable);
         }
       }
       else // Enum or Pattern
@@ -407,32 +460,48 @@ class Generator
   {
     $typenode = null;
 
-    $types = $this->dom->getElementsByTagName('types');
-    if ($types->length > 0)
-    {
-      $schemaList = $types->item(0)->getElementsByTagName('schema');
-      $schemaList = $this->dom->getElementsByTagName('types')->item(0)->getElementsByTagName('schema');
-
-      foreach ($schemaList as $schema)
-      {
-        foreach ($schema->childNodes as $node)
+    foreach ($this->dom as $dom) {
+        $types = $this->dom[0]->getElementsByTagName('types');
+        if ($types->length > 0)
         {
-          if($node instanceof DOMElement)
-          {
-            if ($node->hasAttributes())
+            $schemaList = $types->item(0)->getElementsByTagName('schema');
+            $schemaList = $this->dom[0]->getElementsByTagName('types')->item(0)->getElementsByTagName('schema');
+
+            foreach ($schemaList as $schema)
             {
-              $t = $node->attributes->getNamedItem('name');
-              if ($t)
-              {
-                if($t->nodeValue == $name)
+                foreach ($schema->childNodes as $node)
                 {
-                  $typenode = $node;
+                    if($node instanceof DOMElement)
+                    {
+                        if ($node->hasAttributes())
+                        {
+                            $t = $node->attributes->getNamedItem('name');
+                            if ($t)
+                            {
+                                if($t->nodeValue == $name)
+                                {
+                                    $typenode = $node;
+                                }
+                            }
+                        }
+                    }
                 }
-              }
             }
-          }
+
+            if ($typenode != null) {
+                return $typenode;
+            }
+
         }
-      }
+    }
+
+    foreach ($this->schema as $schema) {
+
+        $tmp = $schema->xpath('/xs:schema/*[@name = "' . $name . '"]');
+        if (count($tmp) != 0) {
+            return dom_import_simplexml($tmp[0]);
+        }
+
     }
 
     return $typenode;

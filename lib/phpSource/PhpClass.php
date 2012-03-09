@@ -49,6 +49,13 @@ class PhpClass extends PhpElement
 
   /**
    *
+   * @var const
+   * @access private
+   */
+  private $default;
+
+  /**
+   *
    * @var array Array of constants key = name of constant value = value of constant
    */
   private $constants;
@@ -136,7 +143,12 @@ class PhpClass extends PhpElement
       $ret .= ' extends '.$this->extends;
     }
 
-    $ret .= PHP_EOL.'{'.PHP_EOL;
+    $ret .= PHP_EOL.'{'.PHP_EOL; 
+
+    if (isset($this->default))
+    {
+        $ret .= $this->getIndentionStr().'const __default = '.$this->default.';'.PHP_EOL;
+    }
 
     if (count($this->constants) > 0)
     {
@@ -176,17 +188,27 @@ class PhpClass extends PhpElement
   }
 
   /**
-   * Adds a dependency to be loaded for the class to use
-   * Only adds it if it does not already exist
+   * adds a dependency to be loaded for the class to use
+   * only adds it if it does not already exist
    *
    * @param string $filename
    */
-  public function addDependency($filename)
+  public function adddependency($filename)
   {
     if (in_array($filename, $this->dependencies) == false)
     {
       $this->dependencies[] = $filename;
     }
+  } 
+
+  /**
+   * set default value
+   *
+   * @param string $filename
+   */
+  public function setDefault($const)
+  {
+      $this->default = $const;
   }
 
   /**

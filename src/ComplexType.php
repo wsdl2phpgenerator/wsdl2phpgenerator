@@ -79,13 +79,20 @@ class ComplexType extends Type
       $comment = new PhpDocComment();
       $comment->setVar(PhpDocElementFactory::getVar($type, $name, ''));
       $comment->setAccess(PhpDocElementFactory::getPublicAccess());
-      $var = new PhpVariable('public', $name, '', $comment);
+      $var = new PhpVariable('public', $name, 'null', $comment);
       $class->addVariable($var);
 
-      $constructorSource .= '  $this->'.$name.' = $'.$name.';'.PHP_EOL;
-      $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
-      $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());
-      $constructorParameters .= ', $'.$name;
+      if (!$member->getNillable()) {
+          $constructorSource .= '  $this->'.$name.' = $'.$name.';'.PHP_EOL;
+          $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
+          $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());
+
+          if (strtoupper($type[0]) == $type[0] || $type == 'array') {
+              $constructorParameters .= ', '. $type . ' $' . $name;
+          } else {
+              $constructorParameters .= ', $' . $name;
+          }
+      }
     }
 
     $constructorParameters = substr($constructorParameters, 2); // Remove first comma
@@ -106,9 +113,9 @@ class ComplexType extends Type
    * @param string $type
    * @param string $name
    */
-  public function addMember($type, $name)
+  public function addMember($type, $name, $nillable)
   {
-    $this->members[$name] = new Variable($type, $name);
+    $this->members[$name] = new Variable($type, $name, $nillable);
   }
 }
 
