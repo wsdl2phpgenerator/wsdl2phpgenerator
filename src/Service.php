@@ -109,7 +109,7 @@ class Service
 
     // Create the class object
     $comment = new \phpSource\PhpDocComment($this->description);
-    $this->class = new \phpSource\PhpClass($name, $config->getClassExists(), 'SoapClient', $comment);
+    $this->class = new \phpSource\PhpClass($name, $config->getClassExists(), '\SoapClient', $comment);
 
     // Create the constructor
     $comment = new \phpSource\PhpDocComment();
@@ -143,7 +143,7 @@ class Service
     {
       if($type instanceof \wsdl2php\ComplexType)
       {
-        $init .= "  '".$type->getIdentifier()."' => '".$type->getPhpIdentifier()."',".\PHP_EOL;
+        $init .= "  '".$type->getIdentifier()."' => '".(($ns = $config->getNamespaceName()) ? $ns . '\\' : '').$type->getPhpIdentifier()."',".\PHP_EOL;
       }
     }
     $init = \substr($init, 0, \strrpos($init, ','));
