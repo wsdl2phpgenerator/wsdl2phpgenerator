@@ -91,6 +91,7 @@ class Operation
             if ($typeHint == $type->getPhpIdentifier())
             {
               $ret .= $typeHint.' ';
+              break;
             }
           }
         }
@@ -201,4 +202,3 @@ class Operation
     }
   }
 }
-
