@@ -105,6 +105,9 @@ class Service
       $name .= 'Custom';
     }
 
+    // uppercase the name
+    $name = ucfirst($name);
+
     // Create the class object
     $comment = new PhpDocComment($this->description);
     $this->class = new PhpClass($name, $config->getClassExists(), 'SoapClient', $comment);
