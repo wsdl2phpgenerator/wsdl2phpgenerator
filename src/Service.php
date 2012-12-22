@@ -111,7 +111,7 @@ class Service
 
     // Create the constructor
     $comment = new PhpDocComment();
-    $comment->addParam(PhpDocElementFactory::getParam('array', 'config', 'A array of config values'));
+    $comment->addParam(PhpDocElementFactory::getParam('array', 'options', 'A array of config values'));
     $comment->addParam(PhpDocElementFactory::getParam('string', 'wsdl', 'The wsdl file to use'));
     $comment->setAccess(PhpDocElementFactory::getPublicAccess());
 
