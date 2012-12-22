@@ -39,6 +39,11 @@ class PhpDocElementFactory
     {
       $name = substr($name, 1);
     }
+	if ($dataType == 'long') {
+		$dataType = 'int';
+	} else if ($dataType == 'double') {
+		$dataType = 'float';
+	}
 
     return new PhpDocElement('param', $dataType, $name, $description);
   }
