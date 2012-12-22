@@ -42,7 +42,7 @@ class Service
 
   /**
    *
-   * @var array An array containing the operations of the service
+   * @var Operation[] An array containing the operations of the service
    */
   private $operations;
 
