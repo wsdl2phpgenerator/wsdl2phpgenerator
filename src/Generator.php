@@ -212,7 +212,7 @@ class Generator
 
       $this->log($this->display('Loading function ').$function);
 
-      $this->service->addOperation($function, $params, $this->documentation->getFunctionDescription($function));
+      $this->service->addOperation($function, $params, $this->documentation->getFunctionDescription($function), $returns);
     }
 
     $this->log($this->display('Done loading service ').$name);
