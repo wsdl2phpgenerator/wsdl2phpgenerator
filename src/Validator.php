@@ -191,9 +191,13 @@ class Validator
    */
   private static function validateTypeName($type)
   {
-    if (substr($type, -2) == "[]" || strtolower(substr($type, 0, 7)) == "arrayof")
+    if (substr($type, -2) == "[]")
     {
-      return 'array';
+      return $type;
+    }
+    if (strtolower(substr($type, 0, 7)) == "arrayof")
+    {
+      return substr($type, 7).'[]';
     }
 
     switch (strtolower($type))
