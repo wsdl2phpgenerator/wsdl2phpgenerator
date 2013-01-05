@@ -144,7 +144,7 @@ class Service
         $init .= "  '".$type->getIdentifier()."' => '".$type->getPhpIdentifier()."',".PHP_EOL;
       }
     }
-    $init = substr($init, 0, strrpos($init, ','));
+    $init .= substr($init, 0, strrpos($init, ','));
     $init .= ')';
     $var = new PhpVariable('private static', $name, $init, $comment);
 
