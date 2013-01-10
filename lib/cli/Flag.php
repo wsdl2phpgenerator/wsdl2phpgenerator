@@ -55,6 +55,8 @@ class Flag
     $this->isBool = $isBool;
     $this->aliases = array();
     $this->maxNumAliases = 4;
+    // Based on the longest one : "-c, --classes, --classNames, --classList"
+    $this->maxLength = 41; // TODO : must be computed
   }
 
   /**
@@ -63,7 +65,8 @@ class Flag
    */
   public function  __toString()
   {
-    return implode(', ', array_merge(array($this->name), $this->aliases)).str_pad('', $this->maxNumAliases - count($this->aliases), "t").$this->description.PHP_EOL;
+    $aliasesString = implode(', ', array_merge(array($this->name), $this->aliases));
+    return $aliasesString . str_repeat(' ', 42-strlen($aliasesString)).$this->description.PHP_EOL;
   }
 
   /**
