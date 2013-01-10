@@ -65,8 +65,10 @@ class Flag
    */
   public function  __toString()
   {
-    $aliasesString = implode(', ', array_merge(array($this->name), $this->aliases));
-    return $aliasesString . str_repeat(' ', 42-strlen($aliasesString)).$this->description.PHP_EOL;
+    $maxWidth = getenv('COLUMNS') ? getenv('COLUMNS') : 80;
+    $switchString =  implode(', ', array_merge(array($this->name), $this->aliases));
+    $switchString .= str_repeat(' ', 42-strlen($switchString));
+    return $switchString . str_replace("\n", "\n" . str_repeat(' ', strlen($switchString)), $this->description) . PHP_EOL;
   }
 
   /**
