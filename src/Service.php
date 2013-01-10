@@ -158,6 +158,7 @@ class Service
 
       $comment = new PhpDocComment($operation->getDescription());
       $comment->setAccess(PhpDocElementFactory::getPublicAccess());
+	  $comment->setReturn(PhpDocElementFactory::getReturn($operation->getReturns(), ''));
 
       foreach ($operation->getParams() as $param => $hint)
       {
@@ -184,10 +185,11 @@ class Service
    * @param string $name
    * @param array $params
    * @param string $description
+   * @param string $returns
    */
-  public function addOperation($name, $params, $description)
+  public function addOperation($name, $params, $description, $returns)
   {
-    $this->operations[] = new Operation($name, $params, $description);
+    $this->operations[] = new Operation($name, $params, $description, $returns);
   }
 
   /**
