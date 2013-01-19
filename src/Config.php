@@ -112,6 +112,13 @@ class Config
   private $createAccessors;
 
   /**
+   *
+   * @var bool Decides if the constructor parameters should have null default values
+   * @access private
+   */
+  private $constructorParamsDefaultToNull;
+
+  /**
    * Sets all variables
    *
    * @param string $inputFile
@@ -130,7 +137,7 @@ class Config
    * @param string $sharedTypes
    * @param bool $createAccessors
    */
-  public function __construct($inputFile, $outputDir, $verbose = false, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '', $prefix = '', $suffix = '', $sharedTypes = false, $createAccessors = false)
+  public function __construct($inputFile, $outputDir, $verbose = false, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '', $prefix = '', $suffix = '', $sharedTypes = false, $createAccessors = false, $constructorParamsDefaultToNull = false)
   {
     $this->namespaceName = trim($namespaceName);
     $this->oneFile = $oneFile;
@@ -156,6 +163,7 @@ class Config
     $this->suffix = trim($suffix);
     $this->sharedTypes = trim($sharedTypes);
     $this->createAccessors = $createAccessors;
+    $this->constructorParamsDefaultToNull = $constructorParamsDefaultToNull;
   }
 
   /**
@@ -311,6 +319,13 @@ class Config
   }
 
   /**
+   * @return boolean Returns if the constructor parameters should have null default values
+   */
+  public function getConstructorParamsDefaultToNull() {
+    return $this->constructorParamsDefaultToNull;
+  }
+
+  /**
    * @param boolean $classExists
    */
   public function setClassExists($classExists) {
@@ -413,6 +428,13 @@ class Config
    */
   public function setCreateAccessors($createAccessors) {
     $this->createAccessors = $createAccessors;
+  }
+
+  /**
+   * @param boolean $constructorParamsDefaultToNull
+   */
+  public function setConstructorParamsDefaultToNull($constructorParamsDefaultToNull) {
+    $this->constructorParamsDefaultToNull = $constructorParamsDefaultToNull;
   }
 }
 

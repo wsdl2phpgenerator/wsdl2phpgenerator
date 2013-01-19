@@ -87,6 +87,9 @@ class ComplexType extends Type
       $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
       $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());
       $constructorParameters .= ', $'.$name;
+      if ($config->getConstructorParamsDefaultToNull()) {
+        $constructorParameters .= ' = null';
+      }
 
       if ($config->getCreateAccessors()) {
         $getterComment = new PhpDocComment();
