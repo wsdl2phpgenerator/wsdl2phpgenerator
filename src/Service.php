@@ -42,7 +42,7 @@ class Service
 
   /**
    *
-   * @var array An array containing the operations of the service
+   * @var Operation[] An array containing the operations of the service
    */
   private $operations;
 
@@ -111,7 +111,7 @@ class Service
 
     // Create the constructor
     $comment = new PhpDocComment();
-    $comment->addParam(PhpDocElementFactory::getParam('array', 'config', 'A array of config values'));
+    $comment->addParam(PhpDocElementFactory::getParam('array', 'options', 'A array of config values'));
     $comment->addParam(PhpDocElementFactory::getParam('string', 'wsdl', 'The wsdl file to use'));
     $comment->setAccess(PhpDocElementFactory::getPublicAccess());
 
@@ -158,6 +158,7 @@ class Service
 
       $comment = new PhpDocComment($operation->getDescription());
       $comment->setAccess(PhpDocElementFactory::getPublicAccess());
+	  $comment->setReturn(PhpDocElementFactory::getReturn($operation->getReturns(), ''));
 
       foreach ($operation->getParams() as $param => $hint)
       {
@@ -184,10 +185,11 @@ class Service
    * @param string $name
    * @param array $params
    * @param string $description
+   * @param string $returns
    */
-  public function addOperation($name, $params, $description)
+  public function addOperation($name, $params, $description, $returns)
   {
-    $this->operations[] = new Operation($name, $params, $description);
+    $this->operations[] = new Operation($name, $params, $description, $returns);
   }
 
   /**
