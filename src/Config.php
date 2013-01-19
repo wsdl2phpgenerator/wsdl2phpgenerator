@@ -293,5 +293,103 @@ class Config
   {
     return $this->sharedTypes;
   }
+
+  /**
+   * @param boolean $classExists
+   */
+  public function setClassExists($classExists) {
+    $this->classExists = $classExists;
+  }
+
+  /**
+   * @param string $classNames
+   */
+  public function setClassNames($classNames) {
+    $this->classNames = $classNames;
+  }
+
+  /**
+   * @param string $compression
+   */
+  public function setCompression($compression) {
+    $this->compression = $compression;
+  }
+
+  /**
+   * @param string $inputFile
+   */
+  public function setInputFile($inputFile) {
+    $this->inputFile = $inputFile;
+  }
+
+  /**
+   * @param string $namespaceName
+   */
+  public function setNamespaceName($namespaceName) {
+    $this->namespaceName = $namespaceName;
+  }
+
+  /**
+   * @param boolean $noTypeConstructor
+   */
+  public function setNoTypeConstructor($noTypeConstructor) {
+    $this->noTypeConstructor = $noTypeConstructor;
+  }
+
+  /**
+   * @param boolean $oneFile
+   */
+  public function setOneFile($oneFile) {
+    $this->oneFile = $oneFile;
+  }
+
+  /**
+   * @param array $optionFeatures
+   */
+  public function setOptionFeatures($optionFeatures) {
+    $this->optionFeatures = $optionFeatures;
+  }
+
+  /**
+   * @param string $outputDir
+   */
+  public function setOutputDir($outputDir) {
+    $this->outputDir = $outputDir;
+  }
+
+  /**
+   * @param string $prefix
+   */
+  public function setPrefix($prefix) {
+    $this->prefix = $prefix;
+  }
+
+  /**
+   * @param string $sharedTypes
+   */
+  public function setSharedTypes($sharedTypes) {
+    $this->sharedTypes = $sharedTypes;
+  }
+
+  /**
+   * @param string $suffix
+   */
+  public function setSuffix($suffix) {
+    $this->suffix = $suffix;
+  }
+
+  /**
+   * @param boolean $verbose
+   */
+  public function setVerbose($verbose) {
+    $this->verbose = $verbose;
+  }
+
+  /**
+   * @param string $wsdlCache
+   */
+  public function setWsdlCache($wsdlCache) {
+    $this->wsdlCache = $wsdlCache;
+  }
 }
 
