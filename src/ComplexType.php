@@ -60,6 +60,7 @@ class ComplexType extends Type
     $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());
     $constructorSource = '';
     $constructorParameters = '';
+    $accessors = array();
 
     // Add member variables
     foreach ($this->members as $member)
@@ -86,6 +87,21 @@ class ComplexType extends Type
       $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
       $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());
       $constructorParameters .= ', $'.$name;
+      if ($config->getConstructorParamsDefaultToNull()) {
+        $constructorParameters .= ' = null';
+      }
+
+      if ($config->getCreateAccessors()) {
+        $getterComment = new PhpDocComment();
+        $getterComment->setReturn(PhpDocElementFactory::getReturn($type, ''));
+        $getter = new PhpFunction('public', 'get' . ucfirst($name), '', '  return $this->'.$name.';'.PHP_EOL, $getterComment);
+        $accessors[] = $getter;
+
+        $setterComment = new PhpDocComment();
+        $setterComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
+        $setter = new PhpFunction('public', 'set' . ucfirst($name), '$'.$name, '  $this->'.$name.' = $'.$name.';'.PHP_EOL, $setterComment);
+        $accessors[] = $setter;
+      }
     }
 
     $constructorParameters = substr($constructorParameters, 2); // Remove first comma
@@ -96,6 +112,10 @@ class ComplexType extends Type
     {
       $class->addFunction($function);
     }
+
+    foreach ($accessors as $accessor) {
+ 		  $class->addFunction($accessor);
+ 	  }
 
     $this->class = $class;
   }
