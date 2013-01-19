@@ -105,6 +105,13 @@ class Config
   private $sharedTypes;
 
   /**
+   *
+   * @var bool Decides if getter and setter methods should be created for member variables
+   * @access private
+   */
+  private $createAccessors;
+
+  /**
    * Sets all variables
    *
    * @param string $inputFile
@@ -121,8 +128,9 @@ class Config
    * @param string $prefix
    * @param string $suffix
    * @param string $sharedTypes
+   * @param bool $createAccessors
    */
-  public function __construct($inputFile, $outputDir, $verbose = false, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '', $prefix = '', $suffix = '', $sharedTypes = false)
+  public function __construct($inputFile, $outputDir, $verbose = false, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '', $prefix = '', $suffix = '', $sharedTypes = false, $createAccessors = false)
   {
     $this->namespaceName = trim($namespaceName);
     $this->oneFile = $oneFile;
@@ -147,6 +155,7 @@ class Config
     $this->prefix = trim($prefix);
     $this->suffix = trim($suffix);
     $this->sharedTypes = trim($sharedTypes);
+    $this->createAccessors = $createAccessors;
   }
 
   /**
@@ -292,6 +301,118 @@ class Config
   public function getSharedTypes()
   {
     return $this->sharedTypes;
+  }
+
+  /**
+   * @return boolean Returns if getter and setter methods should be created for member variables
+   */
+  public function getCreateAccessors() {
+    return $this->createAccessors;
+  }
+
+  /**
+   * @param boolean $classExists
+   */
+  public function setClassExists($classExists) {
+    $this->classExists = $classExists;
+  }
+
+  /**
+   * @param string $classNames
+   */
+  public function setClassNames($classNames) {
+    $this->classNames = $classNames;
+  }
+
+  /**
+   * @param string $compression
+   */
+  public function setCompression($compression) {
+    $this->compression = $compression;
+  }
+
+  /**
+   * @param string $inputFile
+   */
+  public function setInputFile($inputFile) {
+    $this->inputFile = $inputFile;
+  }
+
+  /**
+   * @param string $namespaceName
+   */
+  public function setNamespaceName($namespaceName) {
+    $this->namespaceName = $namespaceName;
+  }
+
+  /**
+   * @param boolean $noTypeConstructor
+   */
+  public function setNoTypeConstructor($noTypeConstructor) {
+    $this->noTypeConstructor = $noTypeConstructor;
+  }
+
+  /**
+   * @param boolean $oneFile
+   */
+  public function setOneFile($oneFile) {
+    $this->oneFile = $oneFile;
+  }
+
+  /**
+   * @param array $optionFeatures
+   */
+  public function setOptionFeatures($optionFeatures) {
+    $this->optionFeatures = $optionFeatures;
+  }
+
+  /**
+   * @param string $outputDir
+   */
+  public function setOutputDir($outputDir) {
+    $this->outputDir = $outputDir;
+  }
+
+  /**
+   * @param string $prefix
+   */
+  public function setPrefix($prefix) {
+    $this->prefix = $prefix;
+  }
+
+  /**
+   * @param string $sharedTypes
+   */
+  public function setSharedTypes($sharedTypes) {
+    $this->sharedTypes = $sharedTypes;
+  }
+
+  /**
+   * @param string $suffix
+   */
+  public function setSuffix($suffix) {
+    $this->suffix = $suffix;
+  }
+
+  /**
+   * @param boolean $verbose
+   */
+  public function setVerbose($verbose) {
+    $this->verbose = $verbose;
+  }
+
+  /**
+   * @param string $wsdlCache
+   */
+  public function setWsdlCache($wsdlCache) {
+    $this->wsdlCache = $wsdlCache;
+  }
+
+  /**
+   * @param boolean $createAccessors
+   */
+  public function setCreateAccessors($createAccessors) {
+    $this->createAccessors = $createAccessors;
   }
 }
 
