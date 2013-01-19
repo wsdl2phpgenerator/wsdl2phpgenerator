@@ -105,6 +105,13 @@ class Config
   private $sharedTypes;
 
   /**
+   *
+   * @var bool Decides if getter and setter methods should be created for member variables
+   * @access private
+   */
+  private $createAccessors;
+
+  /**
    * Sets all variables
    *
    * @param string $inputFile
@@ -121,8 +128,9 @@ class Config
    * @param string $prefix
    * @param string $suffix
    * @param string $sharedTypes
+   * @param bool $createAccessors
    */
-  public function __construct($inputFile, $outputDir, $verbose = false, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '', $prefix = '', $suffix = '', $sharedTypes = false)
+  public function __construct($inputFile, $outputDir, $verbose = false, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '', $prefix = '', $suffix = '', $sharedTypes = false, $createAccessors = false)
   {
     $this->namespaceName = trim($namespaceName);
     $this->oneFile = $oneFile;
@@ -147,6 +155,7 @@ class Config
     $this->prefix = trim($prefix);
     $this->suffix = trim($suffix);
     $this->sharedTypes = trim($sharedTypes);
+    $this->createAccessors = $createAccessors;
   }
 
   /**
@@ -295,6 +304,13 @@ class Config
   }
 
   /**
+   * @return boolean Returns if getter and setter methods should be created for member variables
+   */
+  public function getCreateAccessors() {
+    return $this->createAccessors;
+  }
+
+  /**
    * @param boolean $classExists
    */
   public function setClassExists($classExists) {
@@ -390,6 +406,13 @@ class Config
    */
   public function setWsdlCache($wsdlCache) {
     $this->wsdlCache = $wsdlCache;
+  }
+
+  /**
+   * @param boolean $createAccessors
+   */
+  public function setCreateAccessors($createAccessors) {
+    $this->createAccessors = $createAccessors;
   }
 }
 
