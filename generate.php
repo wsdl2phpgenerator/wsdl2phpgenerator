@@ -65,7 +65,7 @@ $cli->addFlag('-v', _('If the output to the console should be verbose'), true, f
 $cli->addFlag('-i', _('The input wsdl file'), false, true);
 $cli->addFlag('-o', _('The output directory or file if -s is used (in that case, .php will be appened to file name)'), false, true);
 $cli->addFlag('-n', _('Use namespace with the name'), false, false);
-$cli->addFlag('-c', _('A comma separated list of classnames to generate. If this is used only classes that exist in the list will be generated. If the service is not in this list and the -s flag is used the filename will be the name of the first class that is generated'), false, false);
+$cli->addFlag('-c', _("A comma separated list of classnames to generate.\nIf this is used only classes that exist in the list will be generated.\nIf the service is not in this list and the -s flag is used\nthe filename will be the name of the first class that is generated"), false, false);
 $cli->addFlag('-p', _('The prefix to use for the generated classes'), false, false);
 $cli->addFlag('-q', _('The suffix to use for the generated classes'), false, false);
 $cli->addFlag('--singleElementArrays', _('Adds the option to use single element arrays to the client'), true, false);
