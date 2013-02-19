@@ -363,7 +363,7 @@ class Generator
       {
         $types[] = $class;
 
-        if ($this->config->getOneFile() == false)
+        if (!$this->config->getOneFile() && !$this->config->getNoIncludes())
         {
           $service->addDependency($class->getIdentifier().'.php');
         }

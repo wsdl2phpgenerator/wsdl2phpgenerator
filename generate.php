@@ -71,6 +71,7 @@ $cli->addFlag('-q', _('The suffix to use for the generated classes'), false, fal
 $cli->addFlag('--sharedTypes', _('If multiple class got the name, the first will be used, other will be ignored'), true, false);
 $cli->addFlag('--createAccessors', _('Create getter and setter methods for member variables'), true, false);
 $cli->addFlag('--constructorNull', _('Create getter and setter methods for member variables'), true, false);
+$cli->addFlag('--noIncludes', _('Do not add include_once statements for loading individual files'), true, false);
 $cli->addFlag('--singleElementArrays', _('Adds the option to use single element arrays to the client'), true, false);
 $cli->addFlag('--xsiArrayType', _('Adds the option to use xsi arrays to the client'), true, false);
 $cli->addFlag('--waitOneWayCalls', _('Adds the option to use wait one way calls to the client'), true, false);
@@ -145,6 +146,7 @@ $suffix = $cli->getValue('-q');
 $sharedTypes = $cli->getValue('--sharedTypes');
 $createAccessors = $cli->getValue('--createAccessors');
 $constructorDefaultsToNull = $cli->getValue('--constructorNull');
+$noIncludes = $cli->getValue('--noIncludes');
 
 $optionsArray = array();
 if ($cli->getValue('--singleElementArrays'))
@@ -182,7 +184,7 @@ if ($cli->getValue('--gzip'))
   $gzip = 'SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP';
 }
 
-$config = new Config($inputFile, $outputDir, $verbose, $singleFile, $classExists, $noTypeConstructor, $namespaceName, $optionsArray, $wsdlCache, $gzip, $classNames, $prefix, $suffix, $sharedTypes, $createAccessors, $constructorDefaultsToNull);
+$config = new Config($inputFile, $outputDir, $verbose, $singleFile, $classExists, $noTypeConstructor, $namespaceName, $optionsArray, $wsdlCache, $gzip, $classNames, $prefix, $suffix, $sharedTypes, $createAccessors, $constructorDefaultsToNull, $noIncludes);
 
 $generator = Generator::instance();
 $generator->generate($config);

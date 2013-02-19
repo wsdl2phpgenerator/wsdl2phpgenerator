@@ -119,6 +119,12 @@ class Config
   private $constructorParamsDefaultToNull;
 
   /**
+   * @var bool If the service class should explicitly include all other classes or not
+   *  Including may not be needed if using an autoloader etc.
+   */
+  private $noIncludes;
+
+  /**
    * Sets all variables
    *
    * @param string $inputFile
@@ -136,8 +142,10 @@ class Config
    * @param string $suffix
    * @param string $sharedTypes
    * @param bool $createAccessors
+   * @param bool $constructorParamsDefaultToNull
+   * @param bool $noIncludes
    */
-  public function __construct($inputFile, $outputDir, $verbose = false, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '', $prefix = '', $suffix = '', $sharedTypes = false, $createAccessors = false, $constructorParamsDefaultToNull = false)
+  public function __construct($inputFile, $outputDir, $verbose = false, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '', $prefix = '', $suffix = '', $sharedTypes = false, $createAccessors = false, $constructorParamsDefaultToNull = false, $noIncludes)
   {
     $this->namespaceName = trim($namespaceName);
     $this->oneFile = $oneFile;
@@ -164,6 +172,7 @@ class Config
     $this->sharedTypes = trim($sharedTypes);
     $this->createAccessors = $createAccessors;
     $this->constructorParamsDefaultToNull = $constructorParamsDefaultToNull;
+    $this->noIncludes = $noIncludes;
   }
 
   /**
@@ -326,6 +335,16 @@ class Config
   }
 
   /**
+   *
+   * @return string Returns whether include statements should be generated
+   */
+  public function getNoIncludes()
+  {
+    return $this->noIncludes;
+  }
+
+
+  /**
    * @param boolean $classExists
    */
   public function setClassExists($classExists) {
@@ -436,5 +455,15 @@ class Config
   public function setConstructorParamsDefaultToNull($constructorParamsDefaultToNull) {
     $this->constructorParamsDefaultToNull = $constructorParamsDefaultToNull;
   }
+
+  /**
+   * @param boolean $noIncludes
+   */
+  public function setNoIncludes($noIncludes)
+  {
+    return $this->noIncludes = $noIncludes;
+  }
+
+
 }
 
