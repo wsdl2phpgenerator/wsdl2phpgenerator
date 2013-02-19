@@ -105,9 +105,12 @@ class Service
       $name .= 'Custom';
     }
 
+    // uppercase the name
+    $name = ucfirst($name);
+
     // Create the class object
     $comment = new PhpDocComment($this->description);
-    $this->class = new PhpClass($name, $config->getClassExists(), 'SoapClient', $comment);
+    $this->class = new PhpClass($name, $config->getClassExists(), '\SoapClient', $comment);
 
     // Create the constructor
     $comment = new PhpDocComment();
@@ -141,7 +144,7 @@ class Service
     {
       if($type instanceof ComplexType)
       {
-        $init .= "  '".$type->getIdentifier()."' => '".$type->getPhpIdentifier()."',".PHP_EOL;
+        $init .= "  '".$type->getIdentifier()."' => '\\".$config->getNamespaceName()."\\".$type->getPhpIdentifier()."',".PHP_EOL;
       }
     }
     $init = substr($init, 0, strrpos($init, ','));
