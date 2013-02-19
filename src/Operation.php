@@ -33,15 +33,23 @@ class Operation
 
   /**
    *
+   * @var string A description of the operation
+   */
+  private $returns;
+
+  /**
+   *
    * @param string $name
    * @param array $paramStr The parameter string for a operation from the wsdl
    * @param string $description
+   * @param string $returns
    */
-  function __construct($name, $paramStr, $description)
+  function __construct($name, $paramStr, $description, $returns)
   {
     $this->name = $name;
     $this->params = array();
     $this->description = $description;
+    $this->returns = $returns;
 
     $this->generateParams($paramStr);
   }
@@ -62,6 +70,15 @@ class Operation
   public function getDescription()
   {
     return $this->description;
+  }
+
+  /**
+   *
+   * @return string
+   */
+  public function getReturns()
+  {
+    return $this->returns;
   }
 
   /**
