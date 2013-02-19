@@ -68,6 +68,9 @@ $cli->addFlag('-n', _('Use namespace with the name'), false, false);
 $cli->addFlag('-c', _("A comma separated list of classnames to generate.\nIf this is used only classes that exist in the list will be generated.\nIf the service is not in this list and the -s flag is used\nthe filename will be the name of the first class that is generated"), false, false);
 $cli->addFlag('-p', _('The prefix to use for the generated classes'), false, false);
 $cli->addFlag('-q', _('The suffix to use for the generated classes'), false, false);
+$cli->addFlag('--sharedTypes', _('If multiple class got the name, the first will be used, other will be ignored'), true, false);
+$cli->addFlag('--createAccessors', _('Create getter and setter methods for member variables'), true, false);
+$cli->addFlag('--constructorNull', _('Create getter and setter methods for member variables'), true, false);
 $cli->addFlag('--singleElementArrays', _('Adds the option to use single element arrays to the client'), true, false);
 $cli->addFlag('--xsiArrayType', _('Adds the option to use xsi arrays to the client'), true, false);
 $cli->addFlag('--waitOneWayCalls', _('Adds the option to use wait one way calls to the client'), true, false);
@@ -76,7 +79,6 @@ $cli->addFlag('--cacheDisk', _('Adds the option to cache the wsdl on disk to the
 $cli->addFlag('--cacheMemory', _('Adds the option to cache the wsdl in memory to the client'), true, false);
 $cli->addFlag('--cacheBoth', _('Adds the option to cache the wsdl in memory and on disk to the client'), true, false);
 $cli->addFlag('--gzip', _('Adds the option to compress the wsdl with gzip to the client'), true, false);
-$cli->addFlag('--sharedTypes', _('Adds the option to use share types'), true, false);
 $cli->addFlag('-h', _('Show this help'), true, false);
 
 $cli->addAlias('-e', '--classExists');
@@ -141,6 +143,8 @@ $namespaceName = $cli->getValue('-n');
 $prefix = $cli->getValue('-p');
 $suffix = $cli->getValue('-q');
 $sharedTypes = $cli->getValue('--sharedTypes');
+$createAccessors = $cli->getValue('--createAccessors');
+$constructorDefaultsToNull = $cli->getValue('--constructorNull');
 
 $optionsArray = array();
 if ($cli->getValue('--singleElementArrays'))
@@ -178,7 +182,7 @@ if ($cli->getValue('--gzip'))
   $gzip = 'SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP';
 }
 
-$config = new Config($inputFile, $outputDir, $verbose, $singleFile, $classExists, $noTypeConstructor, $namespaceName, $optionsArray, $wsdlCache, $gzip, $classNames, $prefix, $suffix);
+$config = new Config($inputFile, $outputDir, $verbose, $singleFile, $classExists, $noTypeConstructor, $namespaceName, $optionsArray, $wsdlCache, $gzip, $classNames, $prefix, $suffix, $sharedTypes, $createAccessors, $constructorDefaultsToNull);
 
 $generator = Generator::instance();
 $generator->generate($config);
