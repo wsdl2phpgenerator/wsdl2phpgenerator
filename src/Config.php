@@ -105,6 +105,14 @@ class Config
   private $sharedTypes;
 
   /**
+   *
+   * @var bool If the service class should explicitly include all other classes or not
+   *  Including may not be needed if using an autoloader etc.
+   */
+  private $noIncludes;
+
+
+  /**
    * Sets all variables
    *
    * @param string $inputFile
@@ -121,8 +129,9 @@ class Config
    * @param string $prefix
    * @param string $suffix
    * @param string $sharedTypes
+   * @param bool $noIncludes
    */
-  public function __construct($inputFile, $outputDir, $verbose = false, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '', $prefix = '', $suffix = '', $sharedTypes = false)
+  public function __construct($inputFile, $outputDir, $verbose = false, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '', $prefix = '', $suffix = '', $sharedTypes = false, $noIncludes = false)
   {
     $this->namespaceName = trim($namespaceName);
     $this->oneFile = $oneFile;
@@ -147,6 +156,7 @@ class Config
     $this->prefix = trim($prefix);
     $this->suffix = trim($suffix);
     $this->sharedTypes = trim($sharedTypes);
+    $this->noIncludes = $noIncludes;
   }
 
   /**
@@ -292,6 +302,15 @@ class Config
   public function getSharedTypes()
   {
     return $this->sharedTypes;
+  }
+
+  /**
+   *
+   * @return string Returns whether include statements should be generated
+   */
+  public function getNoIncludes()
+  {
+    return $this->noIncludes;
   }
 }
 

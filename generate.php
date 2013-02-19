@@ -68,6 +68,7 @@ $cli->addFlag('-n', _('Use namespace with the name'), false, false);
 $cli->addFlag('-c', _('A comma separated list of classnames to generate. If this is used only classes that exist in the list will be generated. If the service is not in this list and the -s flag is used the filename will be the name of the first class that is generated'), false, false);
 $cli->addFlag('-p', _('The prefix to use for the generated classes'), false, false);
 $cli->addFlag('-q', _('The suffix to use for the generated classes'), false, false);
+$cli->addFlag('--noIncludes', _('Do not add include_once statements for loading individual files'), true, false);
 $cli->addFlag('--singleElementArrays', _('Adds the option to use single element arrays to the client'), true, false);
 $cli->addFlag('--xsiArrayType', _('Adds the option to use xsi arrays to the client'), true, false);
 $cli->addFlag('--waitOneWayCalls', _('Adds the option to use wait one way calls to the client'), true, false);
@@ -141,6 +142,7 @@ $namespaceName = $cli->getValue('-n');
 $prefix = $cli->getValue('-p');
 $suffix = $cli->getValue('-q');
 $sharedTypes = $cli->getValue('--sharedTypes');
+$noIncludes = $cli->getValue('--noIncludes');
 
 $optionsArray = array();
 if ($cli->getValue('--singleElementArrays'))
@@ -178,7 +180,7 @@ if ($cli->getValue('--gzip'))
   $gzip = 'SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP';
 }
 
-$config = new Config($inputFile, $outputDir, $verbose, $singleFile, $classExists, $noTypeConstructor, $namespaceName, $optionsArray, $wsdlCache, $gzip, $classNames, $prefix, $suffix);
+$config = new Config($inputFile, $outputDir, $verbose, $singleFile, $classExists, $noTypeConstructor, $namespaceName, $optionsArray, $wsdlCache, $gzip, $classNames, $prefix, $suffix, $sharedTypes, $noIncludes);
 
 $generator = Generator::instance();
 $generator->generate($config);
