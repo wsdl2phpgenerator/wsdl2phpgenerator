@@ -80,27 +80,29 @@ class ComplexType extends Type
       $comment = new PhpDocComment();
       $comment->setVar(PhpDocElementFactory::getVar($type, $name, ''));
       $comment->setAccess(PhpDocElementFactory::getPublicAccess());
-      $var = new PhpVariable('public', $name, '', $comment);
+      $var = new PhpVariable('public', $name, 'null', $comment);
       $class->addVariable($var);
 
-      $constructorSource .= '  $this->'.$name.' = $'.$name.';'.PHP_EOL;
-      $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
-      $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());
-      $constructorParameters .= ', $'.$name;
-      if ($config->getConstructorParamsDefaultToNull()) {
-        $constructorParameters .= ' = null';
-      }
+      if (!$member->getNillable()) {
+        $constructorSource .= '  $this->'.$name.' = $'.$name.';'.PHP_EOL;
+        $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
+        $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());
+        $constructorParameters .= ', $'.$name;
+        if ($config->getConstructorParamsDefaultToNull()) {
+          $constructorParameters .= ' = null';
+        }
 
-      if ($config->getCreateAccessors()) {
-        $getterComment = new PhpDocComment();
-        $getterComment->setReturn(PhpDocElementFactory::getReturn($type, ''));
-        $getter = new PhpFunction('public', 'get' . ucfirst($name), '', '  return $this->'.$name.';'.PHP_EOL, $getterComment);
-        $accessors[] = $getter;
+        if ($config->getCreateAccessors()) {
+          $getterComment = new PhpDocComment();
+          $getterComment->setReturn(PhpDocElementFactory::getReturn($type, ''));
+          $getter = new PhpFunction('public', 'get' . ucfirst($name), '', '  return $this->'.$name.';'.PHP_EOL, $getterComment);
+          $accessors[] = $getter;
 
-        $setterComment = new PhpDocComment();
-        $setterComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
-        $setter = new PhpFunction('public', 'set' . ucfirst($name), '$'.$name, '  $this->'.$name.' = $'.$name.';'.PHP_EOL, $setterComment);
-        $accessors[] = $setter;
+          $setterComment = new PhpDocComment();
+          $setterComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
+          $setter = new PhpFunction('public', 'set' . ucfirst($name), '$'.$name, '  $this->'.$name.' = $'.$name.';'.PHP_EOL, $setterComment);
+          $accessors[] = $setter;
+        }
       }
     }
 
@@ -126,9 +128,9 @@ class ComplexType extends Type
    * @param string $type
    * @param string $name
    */
-  public function addMember($type, $name)
+  public function addMember($type, $name, $nillable)
   {
-    $this->members[$name] = new Variable($type, $name);
+    $this->members[$name] = new Variable($type, $name, $nillable);
   }
 }
 
