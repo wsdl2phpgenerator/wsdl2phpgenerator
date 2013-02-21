@@ -288,10 +288,9 @@ class Generator
           list($typename, $name) = explode(" ", substr($parts[$i], 0, strlen($parts[$i])-1) );
 
           $name = $this->cleanNamespace($name);
-		  if (array_key_exists($name, $arrayVars)) {
-				$typename .= '[]';
-		  }
-          $type->addMember($typename, $name);
+          if (array_key_exists($name, $arrayVars)) {
+            $typename .= '[]';
+          }
 
           $nillable = false;
           foreach ($this->schema as $schema) {
