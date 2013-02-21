@@ -26,13 +26,20 @@ class Variable
 
   /**
    *
+   * @var boolean Nillable
+   */
+  private $nillable;
+
+  /**
+   *
    * @param string $type
    * @param string $name
    */
-  function __construct($type, $name)
+  function __construct($type, $name, $nillable)
   {
     $this->type = $type;
     $this->name = $name;
+    $this->nillable = $nillable;
   }
 
   /**
@@ -51,6 +58,15 @@ class Variable
   public function getName()
   {
     return $this->name;
+  }
+
+  /**
+   *
+   * @return boolean
+   */
+  public function getNillable()
+  {
+    return $this->nillable;
   }
 }
 
