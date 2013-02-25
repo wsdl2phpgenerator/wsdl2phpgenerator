@@ -6,8 +6,6 @@
 /**
  * Include needed files
  */
-require_once 'PHPUnit/Framework.php';
-
 require_once dirname(__FILE__).'/../src/Config.php';
 
 /**
@@ -70,8 +68,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
    */
   public function testGetOutputDir()
   {
-    $this->assertNotEquals('/tmp/output', $this->object->getOutputDir());
-    $this->assertEquals('/tmp/output/', $this->object->getOutputDir());
+    $this->assertEquals('/tmp/output', $this->object->getOutputDir());
   }
 
   /**

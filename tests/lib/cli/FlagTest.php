@@ -6,8 +6,6 @@
 /**
  * Include the needed files
  */
-require_once 'PHPUnit/Framework.php';
-
 require_once dirname(__FILE__).'/../../../lib/cli/Flag.php';
 
 /**
@@ -92,8 +90,9 @@ class FlagTest extends PHPUnit_Framework_TestCase
   public function testToString()
   {
     $this->object = new Flag('-f', 'Flag');
-    $this->assertEquals('-f'."t"."t"."t"."t".'Flag'.PHP_EOL, strval($this->object));
-    $this->assertNotEquals('', strval($this->object));
+    $this->assertContains('-f', strval($this->object));
+    $this->assertContains('Flag', strval($this->object));
+    $this->assertStringEndsWith(PHP_EOL, strval($this->object));
   }
 }
 ?>
