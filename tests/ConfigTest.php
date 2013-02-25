@@ -68,8 +68,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
    */
   public function testGetOutputDir()
   {
-    $this->assertNotEquals('/tmp/output', $this->object->getOutputDir());
-    $this->assertEquals('/tmp/output/', $this->object->getOutputDir());
+    $this->assertEquals('/tmp/output', $this->object->getOutputDir());
   }
 
   /**
