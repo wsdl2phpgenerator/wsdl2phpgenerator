@@ -83,16 +83,16 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
     $this->assertEquals('foobar', Validator::validateType('foo-bar'));
     $this->assertEquals('Foo', Validator::validateType('Foo'));
     $this->assertEquals('foo523', Validator::validateType('foo523'));
-    $this->assertEquals('array', Validator::validateType('arrayOf_test'));
-    $this->assertEquals('array', Validator::validateType('arrayOfTest'));
-    $this->assertEquals('array', Validator::validateType('test[]'));
-    $this->assertEquals('array', Validator::validateType('ArrayOf_xsd_int'));
+    $this->assertEquals('_test[]', Validator::validateType('arrayOf_test'));
+    $this->assertEquals('Test[]', Validator::validateType('arrayOfTest'));
+    $this->assertEquals('test[]', Validator::validateType('test[]'));
+    $this->assertEquals('_xsd_int[]', Validator::validateType('ArrayOf_xsd_int'));
 
     $this->assertEquals('int', Validator::validateType('nonNegativeInteger'));
     $this->assertEquals('float', Validator::validateType('float'));
     $this->assertEquals('string', Validator::validateType('normalizedString'));
-    $this->assertEquals('array', Validator::validateType('ArrayOfFoo'));
-    $this->assertEquals('array', Validator::validateType('Foo[]'));
+    $this->assertEquals('Foo[]', Validator::validateType('ArrayOfFoo'));
+    $this->assertEquals('Foo[]', Validator::validateType('Foo[]'));
 
     $this->setExpectedException('ValidationException');
     $this->assertEquals('and', Validator::validateType('and')); // and is reserved keyword
