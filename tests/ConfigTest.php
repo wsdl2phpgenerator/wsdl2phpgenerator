@@ -6,8 +6,6 @@
 /**
  * Include needed files
  */
-require_once 'PHPUnit/Framework.php';
-
 require_once dirname(__FILE__).'/../src/Config.php';
 
 /**
