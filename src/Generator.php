@@ -198,9 +198,12 @@ class Generator
   {
       foreach ($this->dom as $dom) {
           $sxml = simplexml_import_dom($dom);
-          foreach ($sxml->xpath('//xsd:import/@schemaLocation') as $schema_file) {
-              $schema = simplexml_load_file($schema_file);
-              $this->schema[] = $schema;
+          $namespaces = $sxml->getDocNamespaces();
+          if (!empty($namespaces['xsd'])) {
+            foreach ($sxml->xpath('//xsd:import/@schemaLocation') as $schema_file) {
+                $schema = simplexml_load_file($schema_file);
+                $this->schema[] = $schema;
+            }
           }
       }
   }
