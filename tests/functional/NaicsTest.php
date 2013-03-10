@@ -17,7 +17,7 @@ class NaicsTest extends Wsdl2PhpGeneratorFunctionalTestCase {
     $this->generator->generate($this->config);
 
     // Perform the request.
-    require_once $this->outputDir . '/GenericNaics.php';
+    require_once $this->outputDir . '/GenericNAICS.php';
     $service = new GenericNAICS();
     $request = new GetNAICSByIndustry('Computer Systems');
     $response = $service->GetNAICSByIndustry($request);
