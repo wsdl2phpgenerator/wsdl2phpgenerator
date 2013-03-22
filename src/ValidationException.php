@@ -15,6 +15,4 @@
  */
 class ValidationException extends Exception
 {
-
 }
-

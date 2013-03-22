@@ -12,111 +12,107 @@
  */
 class PhpDocElement
 {
-  /**
-   *
-   * @var string The type of element
-   */
-  private $type;
+    /**
+     *
+     * @var string The type of element
+     */
+    private $type;
 
-  /**
-   *
-   * @var string The name of the datatype
-   */
-  private $datatype;
+    /**
+     *
+     * @var string The name of the datatype
+     */
+    private $datatype;
 
-  /**
-   *
-   * @var string The name of the variable it represents
-   */
-  private $variableName;
+    /**
+     *
+     * @var string The name of the variable it represents
+     */
+    private $variableName;
 
-  /**
-   *
-   * @var string The description
-   */
-  private $description;
+    /**
+     *
+     * @var string The description
+     */
+    private $description;
 
-  /**
-   *
-   * @param string $type
-   * @param string $dataType
-   * @param string $variableName
-   * @param string $description
-   */
-  public function __construct($type, $dataType, $variableName, $description)
-  {
-    $this->type = $type;
-    $this->datatype = $dataType;
-    $this->variableName = $variableName;
-    $this->description = $description;
-  }
-
-  /**
-   * Returns the whole row of generated comment source
-   *
-   * @access public
-   * @return string
-   */
-  public function getSource()
-  {
-    $ret = ' * ';
-
-    $ret .= '@'.$this->type;
-
-    if (strlen($this->datatype) > 0)
+    /**
+     *
+     * @param string $type
+     * @param string $dataType
+     * @param string $variableName
+     * @param string $description
+     */
+    public function __construct($type, $dataType, $variableName, $description)
     {
-      $ret .= ' '.$this->datatype;
+        $this->type = $type;
+        $this->datatype = $dataType;
+        $this->variableName = $variableName;
+        $this->description = $description;
     }
 
-    if (strlen($this->variableName) > 0)
+    /**
+     * Returns the whole row of generated comment source
+     *
+     * @access public
+     * @return string
+     */
+    public function getSource()
     {
-      $ret .= ' $'.$this->variableName;
+        $ret = ' * ';
+
+        $ret .= '@' . $this->type;
+
+        if (strlen($this->datatype) > 0) {
+            $ret .= ' ' . $this->datatype;
+        }
+
+        if (strlen($this->variableName) > 0) {
+            $ret .= ' $' . $this->variableName;
+        }
+
+        if (strlen($this->description) > 0) {
+            $ret .= ' ' . $this->description;
+        }
+
+        $ret .= PHP_EOL;
+
+        return $ret;
     }
 
-    if (strlen($this->description) > 0)
+    /**
+     *
+     * @return string Returns the type
+     */
+    public function getType()
     {
-      $ret .= ' '.$this->description;
+        return $this->type;
     }
 
-    $ret .= PHP_EOL;
+    /**
+     *
+     * @return string Returns the datatype
+     */
+    public function getDatatype()
+    {
+        return $this->datatype;
+    }
 
-    return $ret;
-  }
+    /**
+     *
+     * @return string Returns the identifier
+     */
+    public function getVariableName()
+    {
+        return $this->variableName;
+    }
 
-  /**
-   *
-   * @return string Returns the type
-   */
-  public function getType()
-  {
-    return $this->type;
-  }
-
-  /**
-   *
-   * @return string Returns the datatype
-   */
-  public function getDatatype()
-  {
-    return $this->datatype;
-  }
-
-  /**
-   *
-   * @return string Returns the identifier
-   */
-  public function getVariableName()
-  {
-    return $this->variableName;
-  }
-
-  /**
-   *
-   * @return string Returns the description
-   */
-  public function getDescription()
-  {
-    return $this->description;
-  }
+    /**
+     *
+     * @return string Returns the description
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
 }
-

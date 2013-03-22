@@ -10,85 +10,83 @@
  */
 class FlagTest extends PHPUnit_Framework_TestCase
 {
-  /**
-   * @var Flag
-   */
-  protected $object;
+    /**
+     * @var Flag
+     */
+    protected $object;
 
-  /**
-   * Sets up the fixture, for example, opens a network connection.
-   * This method is called before a test is executed.
-   */
-  protected function setUp()
-  {
-    $this->object = new Flag('-f', '');
-  }
+    /**
+     * Sets up the fixture, for example, opens a network connection.
+     * This method is called before a test is executed.
+     */
+    protected function setUp()
+    {
+        $this->object = new Flag('-f', '');
+    }
 
-  /**
-   * Tears down the fixture, for example, closes a network connection.
-   * This method is called after a test is executed.
-   */
-  protected function tearDown()
-  {
-  }
+    /**
+     * Tears down the fixture, for example, closes a network connection.
+     * This method is called after a test is executed.
+     */
+    protected function tearDown()
+    {
+    }
 
-  /**
-   * Test add alias
-   */
-  public function testAddAlias()
-  {
-    $this->assertEquals(0, count($this->object->getAliases()));
-    $this->object->addAlias('-g');
-    $this->assertEquals(1, count($this->object->getAliases()));
-    $this->object->addAlias('-h');
-    $this->assertEquals(2, count($this->object->getAliases()));
-    $this->object->addAlias('-i');
-    $this->assertEquals(3, count($this->object->getAliases()));
-    $this->object->addAlias('-j');
-    $this->assertEquals(4, count($this->object->getAliases()));
+    /**
+     * Test add alias
+     */
+    public function testAddAlias()
+    {
+        $this->assertEquals(0, count($this->object->getAliases()));
+        $this->object->addAlias('-g');
+        $this->assertEquals(1, count($this->object->getAliases()));
+        $this->object->addAlias('-h');
+        $this->assertEquals(2, count($this->object->getAliases()));
+        $this->object->addAlias('-i');
+        $this->assertEquals(3, count($this->object->getAliases()));
+        $this->object->addAlias('-j');
+        $this->assertEquals(4, count($this->object->getAliases()));
 
-    $this->setExpectedException('Exception');
-    $this->object->addAlias('-k');
-  }
+        $this->setExpectedException('Exception');
+        $this->object->addAlias('-k');
+    }
 
-  /**
-   * Test add alias with exception
-   */
-  public function testAddAlias2()
-  {
-    $this->object->addAlias('-g');
-    $this->setExpectedException('Exception');
-    $this->object->addAlias('-g');
-  }
+    /**
+     * Test add alias with exception
+     */
+    public function testAddAlias2()
+    {
+        $this->object->addAlias('-g');
+        $this->setExpectedException('Exception');
+        $this->object->addAlias('-g');
+    }
 
-  /**
-   * Test the get name function
-   */
-  public function testGetName()
-  {
-    $this->assertEquals('-f', $this->object->getName());
-  }
+    /**
+     * Test the get name function
+     */
+    public function testGetName()
+    {
+        $this->assertEquals('-f', $this->object->getName());
+    }
 
-  /**
-   * Test the is bool function
-   */
-  public function testIsBool()
-  {
-    $this->assertFalse($this->object->isBool());
-    $this->object = new Flag('-f', '', true);
-    $this->assertTrue($this->object->isBool());
-  }
+    /**
+     * Test the is bool function
+     */
+    public function testIsBool()
+    {
+        $this->assertFalse($this->object->isBool());
+        $this->object = new Flag('-f', '', true);
+        $this->assertTrue($this->object->isBool());
+    }
 
-  /**
-   * Tests the to string functionality
-   */
-  public function testToString()
-  {
-    $this->object = new Flag('-f', 'Flag');
-    $this->assertContains('-f', strval($this->object));
-    $this->assertContains('Flag', strval($this->object));
-    $this->assertStringEndsWith(PHP_EOL, strval($this->object));
-  }
+    /**
+     * Tests the to string functionality
+     */
+    public function testToString()
+    {
+        $this->object = new Flag('-f', 'Flag');
+        $this->assertContains('-f', strval($this->object));
+        $this->assertContains('Flag', strval($this->object));
+        $this->assertStringEndsWith(PHP_EOL, strval($this->object));
+    }
 }
-?>
-

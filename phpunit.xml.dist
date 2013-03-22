@@ -7,16 +7,16 @@
      passed through.
      @TODO Process isolation is a temporary hack. Can this be fixed? -->
 <phpunit
-        backupGlobals               = "false"
-        backupStaticAttributes      = "false"
-        colors                      = "true"
-        convertErrorsToExceptions   = "true"
-        convertNoticesToExceptions  = "true"
-        convertWarningsToExceptions = "true"
-        processIsolation            = "true"
-        stopOnFailure               = "false"
-        syntaxCheck                 = "false"
-        bootstrap                   = "tests/bootstrap.php" >
+        backupGlobals="false"
+        backupStaticAttributes="false"
+        colors="true"
+        convertErrorsToExceptions="true"
+        convertNoticesToExceptions="true"
+        convertWarningsToExceptions="true"
+        processIsolation="true"
+        stopOnFailure="false"
+        syntaxCheck="false"
+        bootstrap="tests/bootstrap.php">
 
     <testsuites>
         <testsuite name="Unit tests">

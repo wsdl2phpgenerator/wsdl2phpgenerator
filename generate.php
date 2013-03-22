@@ -6,54 +6,50 @@
 /**
  * Gettext should not be required - Thanks jeichhor
  */
-if (!function_exists("_"))
-{
-  function _($str)
-  {
-    return gettext($str);
-  }
+if (!function_exists("_")) {
+    public
+    function _($str)
+    {
+        return gettext($str);
+    }
 }
 
-if (!function_exists("gettext"))
-{
-  function gettext($str)
-  {
-    return $str;
-  }
+if (!function_exists("gettext")) {
+    public
+    function gettext($str)
+    {
+        return $str;
+    }
 }
 
 /**
  * Include the needed files
  */
-require_once dirname(__FILE__).'/lib/cli/Cli.php';
-require_once dirname(__FILE__).'/lib/config/FileConfig.php';
+require_once dirname(__FILE__) . '/lib/cli/Cli.php';
+require_once dirname(__FILE__) . '/lib/config/FileConfig.php';
 
-require_once dirname(__FILE__).'/src/Generator.php';
+require_once dirname(__FILE__) . '/src/Generator.php';
 
 // Try to read the config file if any
-try
-{
-  $config = new FileConfig(dirname(__FILE__).'/conf/settings.conf');
-  $locale = $config->get('language');
+try {
+    $config = new FileConfig(dirname(__FILE__) . '/conf/settings.conf');
+    $locale = $config->get('language');
 
-  $domain = 'messages';
-  $lcDir = 'LC_MESSAGES';
-  $path = 'conf/translations';
-  $loc = substr($locale, 0, 5);
-  $file = $path.'/'.$loc.'/'.$lcDir.'/'.$domain.'.mo';
+    $domain = 'messages';
+    $lcDir = 'LC_MESSAGES';
+    $path = 'conf/translations';
+    $loc = substr($locale, 0, 5);
+    $file = $path . '/' . $loc . '/' . $lcDir . '/' . $domain . '.mo';
 
-  if (file_exists($file) == false)
-  {
-    throw new Exception('The selected language file ('.$file.') does not exist!');
-  }
+    if (file_exists($file) == false) {
+        throw new Exception('The selected language file (' . $file . ') does not exist!');
+    }
 
-  bindtextdomain($domain, $path);
-  textdomain($domain);
-  setlocale(LC_ALL, $locale);
-}
-catch (Exception $e)
-{
-  // This should be the no file exception, then use the default settings
+    bindtextdomain($domain, $path);
+    textdomain($domain);
+    setlocale(LC_ALL, $locale);
+} catch (Exception $e) {
+    // This should be the no file exception, then use the default settings
 }
 
 // Start
@@ -103,36 +99,28 @@ $cli->validate($argv);
 $singleFile = $cli->getValue('-s');
 $classNames = trim($cli->getValue('-c'));
 
-if ($singleFile && strlen($classNames) > 0)
-{
-  // Print different messages based on if more than one class is requested for generation
-  if (strpos($classNames, ',') !== false)
-  {
-    print printf(_('You have selected to only generate some of the classes in the wsdl(%s) and to save them in one file. Continue? [Y/n]'), $classNames).PHP_EOL;
-  }
-  else
-  {
-    print _('You have selected to only generate one class and save it to a single file. If you have selected the service class and outputs this file to a directory where you previosly have generated the classes the file will be overwritten. Continue? [Y/n]').PHP_EOL;
-  }
-
-  //TODO: Refactor this to cli class?
-
-  // Force the user to supply a valid input
-  while(true)
-  {
-    $cmd = readline(null); // Reads from the standard input
-
-    if (in_array($cmd, array('', 'y', 'Y', 'yes')))
-    {
-      break; // Continue
-    }
-    else if (in_array($cmd, array('n', 'no', 'N')))
-    {
-      exit; // Terminate
+if ($singleFile && strlen($classNames) > 0) {
+    // Print different messages based on if more than one class is requested for generation
+    if (strpos($classNames, ',') !== false) {
+        print printf(_('You have selected to only generate some of the classes in the wsdl(%s) and to save them in one file. Continue? [Y/n]'), $classNames) . PHP_EOL;
+    } else {
+        print _('You have selected to only generate one class and save it to a single file. If you have selected the service class and outputs this file to a directory where you previosly have generated the classes the file will be overwritten. Continue? [Y/n]') . PHP_EOL;
     }
 
-    print _('Please select yes or no.').PHP_EOL;
-  }
+    //TODO: Refactor this to cli class?
+
+    // Force the user to supply a valid input
+    while (true) {
+        $cmd = readline(null); // Reads from the standard input
+
+        if (in_array($cmd, array('', 'y', 'Y', 'yes'))) {
+            break; // Continue
+        } elseif (in_array($cmd, array('n', 'no', 'N'))) {
+            exit; // Terminate
+        }
+
+        print _('Please select yes or no.') . PHP_EOL;
+    }
 }
 
 $classExists = $cli->getValue('-e');
@@ -149,43 +137,31 @@ $constructorDefaultsToNull = $cli->getValue('--constructorNull');
 $noIncludes = $cli->getValue('--noIncludes');
 
 $optionsArray = array();
-if ($cli->getValue('--singleElementArrays'))
-{
-  $optionsArray[] = 'SOAP_SINGLE_ELEMENT_ARRAYS';
+if ($cli->getValue('--singleElementArrays')) {
+    $optionsArray[] = 'SOAP_SINGLE_ELEMENT_ARRAYS';
 }
-if ($cli->getValue('--xsiArrayType'))
-{
-  $optionsArray[] = 'SOAP_USE_XSI_ARRAY_TYPE';
+if ($cli->getValue('--xsiArrayType')) {
+    $optionsArray[] = 'SOAP_USE_XSI_ARRAY_TYPE';
 }
-if ($cli->getValue('--waitOneWayCalls'))
-{
-  $optionsArray[] = 'SOAP_WAIT_ONE_WAY_CALLS';
+if ($cli->getValue('--waitOneWayCalls')) {
+    $optionsArray[] = 'SOAP_WAIT_ONE_WAY_CALLS';
 }
 $wsdlCache = '';
-if ($cli->getValue('--cacheNone'))
-{
-  $wsdlCache = 'WSDL_CACHE_NONE';
-}
-else if ($cli->getValue('--cacheDisk'))
-{
-  $wsdlCache = 'WSDL_CACHE_DISK';
-}
-else if ($cli->getValue('--cacheMemory'))
-{
-  $wsdlCache = 'WSDL_CACHE_MEMORY';
-}
-else if ($cli->getValue('--cacheBoth'))
-{
-  $wsdlCache = 'WSDL_CACHE_BOTH';
+if ($cli->getValue('--cacheNone')) {
+    $wsdlCache = 'WSDL_CACHE_NONE';
+} elseif ($cli->getValue('--cacheDisk')) {
+    $wsdlCache = 'WSDL_CACHE_DISK';
+} elseif ($cli->getValue('--cacheMemory')) {
+    $wsdlCache = 'WSDL_CACHE_MEMORY';
+} elseif ($cli->getValue('--cacheBoth')) {
+    $wsdlCache = 'WSDL_CACHE_BOTH';
 }
 $gzip = '';
-if ($cli->getValue('--gzip'))
-{
-  $gzip = 'SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP';
+if ($cli->getValue('--gzip')) {
+    $gzip = 'SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP';
 }
 
 $config = new Config($inputFile, $outputDir, $verbose, $singleFile, $classExists, $noTypeConstructor, $namespaceName, $optionsArray, $wsdlCache, $gzip, $classNames, $prefix, $suffix, $sharedTypes, $createAccessors, $constructorDefaultsToNull, $noIncludes);
 
 $generator = Generator::instance();
 $generator->generate($config);
-
