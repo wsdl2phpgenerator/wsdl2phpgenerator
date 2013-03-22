@@ -13,87 +13,82 @@
  */
 class DocumentationManager
 {
-  /**
-   *
-   * @var string The documentation for the service
-   */
-  private $serviceDescription;
+    /**
+     *
+     * @var string The documentation for the service
+     */
+    private $serviceDescription;
 
-  /**
-   * The key is the function name
-   *
-   * @var array An array with strings with function descriptions
-   */
-  private $functionDescriptions;
+    /**
+     * The key is the function name
+     *
+     * @var array An array with strings with function descriptions
+     */
+    private $functionDescriptions;
 
-  public function __construct()
-  {
-    $this->serviceDescription = '';
-    $this->functionDescriptions = array();
-  }
-
-  /**
-   * Loads all documentation into the instance
-   *
-   * @param DOMDocument $dom The wsdl file dom document
-   */
-  public function loadDocumentation(DOMDocument $dom)
-  {
-    $docList = $dom->getElementsByTagName('documentation');
-
-    foreach($docList as $item)
+    public function __construct()
     {
-      if($item->parentNode->localName == 'service')
-      {
-        $this->serviceDescription = trim($item->parentNode->nodeValue);
-      }
-      else if($item->parentNode->localName == 'operation')
-      {
-        $name = $item->parentNode->getAttribute('name');
-        $this->setFunctionDescription($name, trim($item->nodeValue));
-      }
+        $this->serviceDescription = '';
+        $this->functionDescriptions = array();
     }
-  }
 
-  /**
-   *
-   * @return string The documentation for the service
-   */
-  public function getServiceDescription()
-  {
-    return $this->serviceDescription;
-  }
+    /**
+     * Loads all documentation into the instance
+     *
+     * @param DOMDocument $dom The wsdl file dom document
+     */
+    public function loadDocumentation(DOMDocument $dom)
+    {
+        $docList = $dom->getElementsByTagName('documentation');
 
-  /**
-   *
-   * @param string $serviceDescription The new documentation
-   */
-  public function setServiceDescription($serviceDescription)
-  {
-    $this->serviceDescription = $serviceDescription;
-  }
+        foreach ($docList as $item) {
+            if ($item->parentNode->localName == 'service') {
+                $this->serviceDescription = trim($item->parentNode->nodeValue);
+            } elseif ($item->parentNode->localName == 'operation') {
+                $name = $item->parentNode->getAttribute('name');
+                $this->setFunctionDescription($name, trim($item->nodeValue));
+            }
+        }
+    }
 
-  /**
-   *
-   * @param string $function The name of the function
-   * @param string $description The documentation
-   */
-  public function setFunctionDescription($function, $description)
-  {
-    $this->functionDescriptions[$function] = $description;
-  }
+    /**
+     *
+     * @return string The documentation for the service
+     */
+    public function getServiceDescription()
+    {
+        return $this->serviceDescription;
+    }
 
-  /**
-   *
-   * @param string $function
-   * @return string The description
-   */
-  public function getFunctionDescription($function)
-  {
-    $ret = '';
-    $ret = @$this->functionDescriptions[$function];
+    /**
+     *
+     * @param string $serviceDescription The new documentation
+     */
+    public function setServiceDescription($serviceDescription)
+    {
+        $this->serviceDescription = $serviceDescription;
+    }
 
-    return $ret;
-  }
+    /**
+     *
+     * @param string $function The name of the function
+     * @param string $description The documentation
+     */
+    public function setFunctionDescription($function, $description)
+    {
+        $this->functionDescriptions[$function] = $description;
+    }
+
+    /**
+     *
+     * @param string $function
+     * @return string The description
+     */
+    public function getFunctionDescription($function)
+    {
+        $ret = '';
+        $ret = @$this->functionDescriptions[$function];
+
+        return $ret;
+    }
 }
-

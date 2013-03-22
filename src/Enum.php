@@ -7,7 +7,7 @@
 /**
  * @see Type
  */
-require_once dirname(__FILE__).'/Type.php';
+require_once dirname(__FILE__) . '/Type.php';
 
 /**
  * Enum represents a simple type with enumerated values
@@ -18,125 +18,106 @@ require_once dirname(__FILE__).'/Type.php';
  */
 class Enum extends Type
 {
-  /**
-   *
-   * @var array The values in the enum
-   */
-  private $values;
+    /**
+     *
+     * @var array The values in the enum
+     */
+    private $values;
 
-  /**
-   * Construct the object
-   *
-   * @param string $name The identifier for the class
-   * @param string $restriction The restriction(datatype) of the values
-   */
-  function __construct($name, $restriction)
-  {
-    parent::__construct($name, $restriction);
-    $this->values = array();
-  }
-
-  /**
-   * Implements the loading of the class object
-   * @throws Exception if the class is already generated(not null)
-   */
-  protected function generateClass()
-  {
-    if ($this->class != null)
+    /**
+     * Construct the object
+     *
+     * @param string $name The identifier for the class
+     * @param string $restriction The restriction(datatype) of the values
+     */
+    public function __construct($name, $restriction)
     {
-      throw new Exception("The class has already been generated");
+        parent::__construct($name, $restriction);
+        $this->values = array();
     }
 
-    $config = Generator::getInstance()->getConfig();
-
-    $this->class = new PhpClass($this->phpIdentifier, $config->getClassExists());
-
-    $first = true;
-
-    foreach ($this->values as $value)
+    /**
+     * Implements the loading of the class object
+     * @throws Exception if the class is already generated(not null)
+     */
+    protected function generateClass()
     {
-      try
-      {
-        $name = Validator::validateNamingConvention($value);
-      }
-      catch (ValidationException $e)
-      {
-        $name = 'constant'.$name;
-      }
-      try
-      {
-        $name = Validator::validateType($name);
-      }
-      catch (ValidationException $e)
-      {
-        $name .= 'Custom';
-      }
+        if ($this->class != null) {
+            throw new Exception("The class has already been generated");
+        }
 
-      if ($first) {
-        $this->class->addConstant($name, '__default');
-        $first = false;
-      }
+        $config = Generator::getInstance()->getConfig();
 
-      $this->class->addConstant($value, $name);
-    }
-  }
+        $this->class = new PhpClass($this->phpIdentifier, $config->getClassExists());
 
-  /**
-   * Adds the value, typechecks strings and integers.
-   * Otherwise it only checks so the value is not null
-   *
-   * @param mixed $value The value to add
-   * @throws InvalidArgumentException if the value doesn'nt fit in the restriction
-   */
-  public function addValue($value)
-  {
-    if ($this->datatype == 'string')
-    {
-      if (is_string($value) == false)
-      {
-        throw new InvalidArgumentException('The value('.$value.') is not string but the restriction demands it');
-      }
-    }
-    elseif ($this->datatype == 'integer')
-    {
-      // The value comes as string from the wsdl
-      if (is_string($value))
-      {
-        $value = intval($value);
-      }
+        $first = true;
 
-      if (is_int($value) == false)
-      {
-        throw new InvalidArgumentException('The value('.$value.') is not int but the restriction demands it');
-      }
-    }
-    else
-    {
-      if ($value == null)
-      {
-        throw new InvalidArgumentException('Value('.$value.') is null');
-      }
+        foreach ($this->values as $value) {
+            try {
+                $name = Validator::validateNamingConvention($value);
+            } catch (ValidationException $e) {
+                $name = 'constant' . $name;
+            }
+            try {
+                $name = Validator::validateType($name);
+            } catch (ValidationException $e) {
+                $name .= 'Custom';
+            }
+
+            if ($first) {
+                $this->class->addConstant($name, '__default');
+                $first = false;
+            }
+
+            $this->class->addConstant($value, $name);
+        }
     }
 
-    $this->values[] = $value;
-  }
-
-  /**
-  * Returns a comma separated list of all the possible values for the enum
-  *
-  * @return string
-  */
-  public function getValidValues()
-  {
-    $ret = '';
-    foreach ($this->values as $value)
+    /**
+     * Adds the value, typechecks strings and integers.
+     * Otherwise it only checks so the value is not null
+     *
+     * @param mixed $value The value to add
+     * @throws InvalidArgumentException if the value doesn'nt fit in the restriction
+     */
+    public function addValue($value)
     {
-      $ret .= $value.', ';
+        if ($this->datatype == 'string') {
+            if (is_string($value) == false) {
+                throw new InvalidArgumentException('The value(' . $value . ') is not string but the restriction demands it');
+            }
+        } elseif ($this->datatype == 'integer') {
+            // The value comes as string from the wsdl
+            if (is_string($value)) {
+                $value = intval($value);
+            }
+
+            if (is_int($value) == false) {
+                throw new InvalidArgumentException('The value(' . $value . ') is not int but the restriction demands it');
+            }
+        } else {
+            if ($value == null) {
+                throw new InvalidArgumentException('Value(' . $value . ') is null');
+            }
+        }
+
+        $this->values[] = $value;
     }
 
-    $ret = substr($ret, 0, -2);
+    /**
+     * Returns a comma separated list of all the possible values for the enum
+     *
+     * @return string
+     */
+    public function getValidValues()
+    {
+        $ret = '';
+        foreach ($this->values as $value) {
+            $ret .= $value . ', ';
+        }
 
-    return $ret;
-  }
+        $ret = substr($ret, 0, -2);
+
+        return $ret;
+    }
 }
-

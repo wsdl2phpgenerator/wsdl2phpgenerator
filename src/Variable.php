@@ -12,61 +12,60 @@
  */
 class Variable
 {
-  /**
-   *
-   * @var string The type
-   */
-  private $type;
+    /**
+     *
+     * @var string The type
+     */
+    private $type;
 
-  /**
-   *
-   * @var string The name
-   */
-  private $name;
+    /**
+     *
+     * @var string The name
+     */
+    private $name;
 
-  /**
-   *
-   * @var boolean Nillable
-   */
-  private $nillable;
+    /**
+     *
+     * @var boolean Nillable
+     */
+    private $nillable;
 
-  /**
-   *
-   * @param string $type
-   * @param string $name
-   */
-  function __construct($type, $name, $nillable)
-  {
-    $this->type = $type;
-    $this->name = $name;
-    $this->nillable = $nillable;
-  }
+    /**
+     *
+     * @param string $type
+     * @param string $name
+     */
+    public function __construct($type, $name, $nillable)
+    {
+        $this->type = $type;
+        $this->name = $name;
+        $this->nillable = $nillable;
+    }
 
-  /**
-   *
-   * @return string
-   */
-  public function getType()
-  {
-    return $this->type;
-  }
+    /**
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
 
-  /**
-   *
-   * @return string
-   */
-  public function getName()
-  {
-    return $this->name;
-  }
+    /**
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
 
-  /**
-   *
-   * @return boolean
-   */
-  public function getNillable()
-  {
-    return $this->nillable;
-  }
+    /**
+     *
+     * @return boolean
+     */
+    public function getNillable()
+    {
+        return $this->nillable;
+    }
 }
-
