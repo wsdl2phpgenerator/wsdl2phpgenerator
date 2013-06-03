@@ -7,7 +7,6 @@
  * Gettext should not be required - Thanks jeichhor
  */
 if (!function_exists("_")) {
-    public
     function _($str)
     {
         return gettext($str);
@@ -15,7 +14,6 @@ if (!function_exists("_")) {
 }
 
 if (!function_exists("gettext")) {
-    public
     function gettext($str)
     {
         return $str;
