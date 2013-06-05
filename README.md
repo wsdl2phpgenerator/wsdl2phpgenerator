@@ -1,5 +1,6 @@
 # wsdl2phpgenerator
 [![Build Status](https://travis-ci.org/reload/wsdl2phpgenerator.png?branch=master)](https://travis-ci.org/reload/wsdl2phpgenerator)
+[![Coverage Status](https://coveralls.io/repos/reload/wsdl2phpgenerator/badge.png?branch=code-coverage-coveralls)](https://coveralls.io/r/reload/wsdl2phpgenerator?branch=code-coverage-coveralls)
 
 Simple WSDL to PHP classes converter. Takes a WSDL file and outputs class files ready to use.
 
