@@ -77,25 +77,59 @@ class ComplexType extends Type
 
       $name = Validator::validateNamingConvention($member->getName());
       $comment = new PhpDocComment();
-      $comment->setVar(PhpDocElementFactory::getVar($type, $name, ''));
-      $comment->setAccess(PhpDocElementFactory::getPublicAccess());
-      $var = new PhpVariable('public', $name, '', $comment);
+      $comment->setVar(PhpDocElementFactory::getParam($type, $name, ''));
+      $comment->setAccess(PhpDocElementFactory::getPrivateAccess());
+      $var = new PhpVariable('private', $name, '', $comment);
       $class->addVariable($var);
-
+      
+      // gpali
+      // add getter
+      $getterComment = new PhpDocComment();
+      $getterComment->setAccess(PhpDocElementFactory::getPublicAccess());
+      $getterComment->setReturn(PhpDocElementFactory::getReturn($type, ''));
+      $class->addFunction(new PhpFunction('public'
+      										, 'get' . ucfirst($name)
+      										, ''
+      										, '  return $this->'.$name.';'.PHP_EOL
+    										, $getterComment));
+      // add setter
+      $setterComment = new PhpDocComment();
+      $setterComment->setAccess(PhpDocElementFactory::getPublicAccess());
+      $setterComment->setVar(PhpDocElementFactory::getVar($type, $name, ''));
+      
+      $class->addFunction(new PhpFunction('public'
+      										, 'set' . ucfirst($name)
+      										, '$'.$name
+      										, '  $this->'.$name.' = $'.$name.';'.PHP_EOL.'  return $this;'.PHP_EOL
+    										, $setterComment));
+      
+      
+      
+      
       $constructorSource .= '  $this->'.$name.' = $'.$name.';'.PHP_EOL;
       $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
       $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());
       $constructorParameters .= ', $'.$name;
+      
     }
 
     $constructorParameters = substr($constructorParameters, 2); // Remove first comma
-    $function = new PhpFunction('public', '__construct', $constructorParameters, $constructorSource, $constructorComment);
+    $parameterSubmitConstructor = new PhpFunction('public', '__construct', $constructorParameters, $constructorSource, $constructorComment);
 
     // Only add the constructor if type constructor is selected
     if ($config->getNoTypeConstructor() == false)
     {
-      $class->addFunction($function);
-    }
+    	
+      	$class->addFunction($parameterSubmitConstructor);
+    } 
+    
+    
+    
+    
+    
+    
+    
+    
 
     $this->class = $class;
   }

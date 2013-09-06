@@ -139,15 +139,14 @@ class PhpDocComment
     {
       $ret .= $this->author->getSource();
     }
-    if ($this->access != null)
-    {
-      $ret .= $this->access->getSource();
-    }
     if ($this->return != null)
     {
       $ret .= $this->return->getSource();
     }
-
+    if ($this->access != null)
+    {
+    	$ret .= $this->access->getSource();
+    }
     $ret .= ' */'.PHP_EOL;
 
     return $ret;

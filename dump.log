@@ -1,0 +1,387 @@
+array(140) {
+  [0]=>
+  string(23) "boolean CalculationMode"
+  [1]=>
+  string(12) "string Token"
+  [2]=>
+  string(16) "boolean TestMode"
+  [3]=>
+  string(17) "boolean CheckMode"
+  [4]=>
+  string(18) "string ServiceCode"
+  [5]=>
+  string(19) "string LanguageCode"
+  [6]=>
+  string(19) "string CurrencyCode"
+  [7]=>
+  string(21) "string ProviderNumber"
+  [8]=>
+  string(19) "string AgencyNumber"
+  [9]=>
+  string(19) "integer AgencyLevel"
+  [10]=>
+  string(22) "string SubAgencyNumber"
+  [11]=>
+  string(30) "string ExternalReferenceNumber"
+  [12]=>
+  string(19) "string PolicyNumber"
+  [13]=>
+  string(17) "string PolicyText"
+  [14]=>
+  string(18) "string ProductCode"
+  [15]=>
+  string(18) "string ProductName"
+  [16]=>
+  string(19) "string VarianceCode"
+  [17]=>
+  string(26) "string VarianceDescription"
+  [18]=>
+  string(14) "string Comment"
+  [19]=>
+  string(17) "string Identifier"
+  [20]=>
+  string(18) "string ResourceKey"
+  [21]=>
+  string(29) "string DestinationCountryCode"
+  [22]=>
+  string(29) "string DestinationAirportCode"
+  [23]=>
+  string(29) "integer NumberOfInsuredPerson"
+  [24]=>
+  string(34) "integer NumberOfInsuredPersonAdult"
+  [25]=>
+  string(22) "integer DurationOfTrip"
+  [26]=>
+  string(30) "decimal TotalAmountOfInsurance"
+  [27]=>
+  string(21) "decimal SinglePremium"
+  [28]=>
+  string(20) "decimal TotalPremium"
+  [29]=>
+  string(24) "string SinglePremiumText"
+  [30]=>
+  string(23) "string TotalPremiumText"
+  [31]=>
+  string(25) "string TermsAgreementText"
+  [32]=>
+  string(30) "boolean TermsOfAgreementAccept"
+  [33]=>
+  string(19) "string DocumentText"
+  [34]=>
+  string(18) "string DocumentURL"
+  [35]=>
+  string(18) "date TripStartDate"
+  [36]=>
+  string(16) "date TripEndDate"
+  [37]=>
+  string(16) "date BookingDate"
+  [38]=>
+  string(18) "date InceptionDate"
+  [39]=>
+  string(17) "date ContractDate"
+  [40]=>
+  string(20) "date CancelationDate"
+  [41]=>
+  string(18) "string PaymentCode"
+  [42]=>
+  string(16) "string CardOwner"
+  [43]=>
+  string(17) "string CardNumber"
+  [44]=>
+  string(25) "string CardNumberFragment"
+  [45]=>
+  string(16) "string CheckCode"
+  [46]=>
+  string(17) "integer ValidYear"
+  [47]=>
+  string(18) "integer ValidMonth"
+  [48]=>
+  string(21) "string CreditCardType"
+  [49]=>
+  string(17) "string SuccessURL"
+  [50]=>
+  string(17) "string ServiceURL"
+  [51]=>
+  string(16) "string UserAgent"
+  [52]=>
+  string(20) "string AcceptHeaders"
+  [53]=>
+  string(12) "string PaRes"
+  [54]=>
+  string(9) "string MD"
+  [55]=>
+  string(18) "string OrderNumber"
+  [56]=>
+  string(15) "string BankName"
+  [57]=>
+  string(15) "string BankCode"
+  [58]=>
+  string(22) "string BankCountryCode"
+  [59]=>
+  string(23) "string BankAccountOwner"
+  [60]=>
+  string(24) "string BankAccountNumber"
+  [61]=>
+  string(26) "boolean BankConfirmation18"
+  [62]=>
+  string(13) "integer Index"
+  [63]=>
+  string(21) "string SalutationCode"
+  [64]=>
+  string(13) "string Street"
+  [65]=>
+  string(14) "string ZipCode"
+  [66]=>
+  string(11) "string City"
+  [67]=>
+  string(18) "string CountryCode"
+  [68]=>
+  string(18) "string CountryText"
+  [69]=>
+  string(12) "string Phone"
+  [70]=>
+  string(10) "string Fax"
+  [71]=>
+  string(13) "string Mobile"
+  [72]=>
+  string(12) "string Email"
+  [73]=>
+  string(15) "string Homepage"
+  [74]=>
+  string(12) "string Title"
+  [75]=>
+  string(16) "string FirstName"
+  [76]=>
+  string(15) "string LastName"
+  [77]=>
+  string(15) "date DayOfBirth"
+  [78]=>
+  string(18) "string CompanyName"
+  [79]=>
+  string(20) "string ContactPerson"
+  [80]=>
+  string(19) "string ContactPhone"
+  [81]=>
+  string(19) "string ContactEmail"
+  [82]=>
+  string(22) "string ContactPosition"
+  [83]=>
+  string(14) "string UnitKey"
+  [84]=>
+  string(16) "string UnitValue"
+  [85]=>
+  string(29) "StringLength0to32 MessageCode"
+  [86]=>
+  string(33) "StringLength0to64 MessageCodeText"
+  [87]=>
+  string(35) "StringLength0to256 MessageParameter"
+  [88]=>
+  string(31) "StringLength0to1024 MessageText"
+  [89]=>
+  string(17) "boolean ErrorFlag"
+  [90]=>
+  string(16) "boolean InfoFlag"
+  [91]=>
+  string(18) "string Description"
+  [92]=>
+  string(23) "string StringLengthFix1"
+  [93]=>
+  string(23) "string StringLengthFix2"
+  [94]=>
+  string(23) "string StringLengthFix3"
+  [95]=>
+  string(23) "string StringLength0to8"
+  [96]=>
+  string(24) "string StringLength0to16"
+  [97]=>
+  string(24) "string StringLength0to32"
+  [98]=>
+  string(24) "string StringLength0to64"
+  [99]=>
+  string(25) "string StringLength0to128"
+  [100]=>
+  string(25) "string StringLength0to256"
+  [101]=>
+  string(26) "string StringLength0to1024"
+  [102]=>
+  string(26) "string StringLength0to4000"
+  [103]=>
+  string(21) "integer Numeric1Digit"
+  [104]=>
+  string(21) "integer Numeric2Digit"
+  [105]=>
+  string(21) "integer Numeric3Digit"
+  [106]=>
+  string(21) "integer Numeric4Digit"
+  [107]=>
+  string(21) "integer Numeric5Digit"
+  [108]=>
+  string(21) "integer Numeric6Digit"
+  [109]=>
+  string(21) "integer Numeric8Digit"
+  [110]=>
+  string(22) "integer Numeric10Digit"
+  [111]=>
+  string(24) "decimal NumericFloat13-2"
+  [112]=>
+  string(9) "date Date"
+  [113]=>
+  string(12) "boolean Bool"
+  [114]=>
+  string(29) "StringLength0to32 ProcessType"
+  [115]=>
+  string(27) "PaymentCode MethodOfPayment"
+  [116]=>
+  string(36) "SalutationCode SalutationCodeNatural"
+  [117]=>
+  string(37) "SalutationCode SalutationCodeJuristic"
+  [118]=>
+  string(29) "BankCountryCode BankCountries"
+  [119]=>
+  string(127) "struct TeleOrderPayment {
+ CardOwner cardOwner;
+ CardNumber cardNumber;
+ ValidYear cardValidYear;
+ ValidMonth cardValidMonth;
+}"
+  [120]=>
+  string(54) "struct CreditCardPayment {
+ CheckCode cardCheckCode;
+}"
+  [121]=>
+  string(194) "struct Secure3DPayment {
+ SuccessURL successURL;
+ ServiceURL serviceURL;
+ UserAgent userAgent;
+ AcceptHeaders acceptHeaders;
+ Bool callbackMode;
+ PaRes paRes;
+ MD mD;
+ OrderNumber orderNumber;
+}"
+  [122]=>
+  string(215) "struct DirectDebitPayment {
+ BankAccountOwner bankAccountOwner;
+ BankAccountNumber bankAccountNumber;
+ BankName bankName;
+ BankCountries bankCountryCode;
+ BankCode bankCode;
+ BankConfirmation18 bankConfirmation18;
+}"
+  [123]=>
+  string(32) "struct BankCollectionPayment {
+}"
+  [124]=>
+  string(173) "struct QMorePayment {
+ OrderNumber storageId;
+ QMCreditCardPayment qMCreditCardPayment;
+ QMBankCollectionPayment qMBankCollectionPayment;
+ QMMobilePayment qMMobilePayment;
+}"
+  [125]=>
+  string(126) "struct QMCreditCardPayment {
+ CardOwner cardholdername;
+ CardNumberFragment maskedPan;
+ CreditCardType financialInstitution;
+}"
+  [126]=>
+  string(207) "struct QMBankCollectionPayment {
+ BankName bankName;
+ LanguageCode bankCountry;
+ BankAccountOwner accountOwner;
+ BankAccountNumber bankAccount;
+ BankCode bankNumber;
+ BankConfirmation18 bankConfirmation18;
+}"
+  [127]=>
+  string(52) "struct QMMobilePayment {
+ Phone payerPayboxNumber;
+}"
+  [128]=>
+  string(240) "struct Payment {
+ TeleOrderPayment teleOrderPayment;
+ CreditCardPayment creditCardPayment;
+ Secure3DPayment secure3DPayment;
+ BankCollectionPayment bankCollectionPayment;
+ DirectDebitPayment directDebitPayment;
+ QMorePayment qMorePayment;
+}"
+  [129]=>
+  string(189) "struct Person {
+ Street street;
+ ZipCode zipCode;
+ City city;
+ CountryCode countryCode;
+ CountryText countryText;
+ Phone phone;
+ Fax fax;
+ Mobile mobile;
+ Email email;
+ Homepage homepage;
+}"
+  [130]=>
+  string(143) "struct NaturalPerson {
+ SalutationCodeNatural salutationCode;
+ Title title;
+ FirstName firstName;
+ LastName lastName;
+ DayOfBirth dayOfBirth;
+}"
+  [131]=>
+  string(177) "struct JuristicPerson {
+ SalutationCodeJuristic salutationCode;
+ CompanyName companyName;
+ ContactPerson contactPerson;
+ ContactPhone contactPhone;
+ ContactEmail contactEmail;
+}"
+  [132]=>
+  string(85) "struct PolicyHolder {
+ NaturalPerson naturalPerson;
+ JuristicPerson juristicPerson;
+}"
+  [133]=>
+  string(104) "struct InsuredPerson {
+ FirstName firstName;
+ LastName lastName;
+ DayOfBirth dayOfBirth;
+ Index index;
+}"
+  [134]=>
+  string(55) "struct KeyValueUnit {
+ UnitKey key;
+ UnitValue value;
+}"
+  [135]=>
+  string(84) "struct KeyValueList {
+ UnitKey key;
+ StringLength0to128 name;
+ KeyValueUnit entry;
+}"
+  [136]=>
+  string(112) "struct Message {
+ MessageCode code;
+ MessageCodeText codeText;
+ MessageParameter parameter;
+ MessageText text;
+}"
+  [137]=>
+  string(76) "struct MessageHolder {
+ ErrorFlag error;
+ InfoFlag info;
+ Message message;
+}"
+  [138]=>
+  string(171) "struct InsuranceInformationRQ {
+ LanguageCode languageCode;
+ ProviderNumber providerNumber;
+ AgencyNumber agencyNumber;
+ Identifier identifier;
+ ProductCode productCode;
+}"
+  [139]=>
+  string(84) "struct InsuranceInformationRS {
+ KeyValueUnit entry;
+ MessageHolder messageHolder;
+}"
+}

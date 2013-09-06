@@ -168,9 +168,9 @@ class Generator
     $this->log($this->display('Loading the DOM'));
     $this->dom = new DOMDocument();
     $this->dom->load( $wsdl );
-
+    
     $this->documentation->loadDocumentation($this->dom);
-
+    
     $this->loadTypes();
     $this->loadService();
   }
