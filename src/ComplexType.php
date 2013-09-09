@@ -55,7 +55,7 @@ class ComplexType extends Type
     $config = Generator::getInstance()->getConfig();
 
     $class = new PhpClass($this->phpIdentifier, $config->getClassExists());
-
+    
     $constructorComment = new PhpDocComment();
     $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());
     $constructorSource = '';

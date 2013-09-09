@@ -110,7 +110,7 @@ class SimplifyTypesService {
 	 * @return boolean
 	 */
 	protected function isInSimpleTypeArray($className) {
-		return (isset($this->extendetSimpleTypes[$className]))?true:false;
+		return (array_key_exists($className, $this->extendetSimpleTypes))?true:false;
 	}
 }
 
