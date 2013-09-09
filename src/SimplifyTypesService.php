@@ -16,8 +16,6 @@ class SimplifyTypesService {
 
 	private function makeFullRestrictionList(array $types) {
 		
-		$restrictionList = array();
-		
 		foreach ($types as $typeStr) {
 			$wsdlNewline = ( strpos( $typeStr, "\r\n" ) ? "\r\n" : "\n" );
 			$parts = explode($wsdlNewline, $typeStr);
@@ -29,14 +27,14 @@ class SimplifyTypesService {
 			
 			
 		}
-		
-		
-		//@todo dump
-		var_dump($this->extendetSimpleTypes);
-		
-		
-		
-		return $restrictionList;
+	}
+	
+	public function getRootType($type) {
+		if (true === $this->isInSimpleTypeArray($type) && 'struct' != $this->extendetSimpleTypes[$type] ) {
+				$restriction = $this->extendetSimpleTypes[$type];
+				return $this->getRootType($restriction);
+			} 
+		return $type;
 	}
 	
 	/**
@@ -64,11 +62,12 @@ class SimplifyTypesService {
 			*/
 			 
 			//@todo gpali add extended classes
-		 	if (true === $this->isInSimpleTypeArray($restriction) && 'struct' != $this->extendetSimpleTypes[$restriction] ) {
-				$restriction = $this->extendetSimpleTypes[$restriction];
-			} 
-				$this->addSimpleTypeArray($restriction, $className);
+// 		 	if (true === $this->isInSimpleTypeArray($restriction) && 'struct' != $this->extendetSimpleTypes[$restriction] ) {
+// 				$restriction = $this->extendetSimpleTypes[$restriction];
+// 			} 
+// 				$this->addSimpleTypeArray($restriction, $className);
 
+			$restriction = $this->getRootType($restriction);
 			/*
 			*
 			*
@@ -85,10 +84,12 @@ class SimplifyTypesService {
 					/*
 					* gpali change to simplytype
 					*/
-					if ($this->isInSimpleTypeArray($typename) && 'struct' != $this->extendetSimpleTypes[$typename] ) {
-						$typename = $this->extendetSimpleTypes[$typename];
-					}
-					$complexType .= '	' . $typename . ' ' . $name . ';' . PHP_EOL ;
+// 					if ($this->isInSimpleTypeArray($typename) && 'struct' != $this->extendetSimpleTypes[$typename] ) {
+// 						$typename = $this->extendetSimpleTypes[$typename];
+// 					}
+// 					$complexType .= '	' . $typename . ' ' . $name . ';' . PHP_EOL ;
+					$complexType .= '	' . $this->getRootType($typename) . ' ' . $name . ';' . PHP_EOL ;
+						
 				}
 				
 				$this->typesArray[] =  $complexType . '}';
@@ -99,6 +100,13 @@ class SimplifyTypesService {
 			
 			
 		}
+		
+
+
+		//@todo dump
+		var_dump($this->typesArray);
+		
+		
 		
 		
 		return $this->typesArray;
