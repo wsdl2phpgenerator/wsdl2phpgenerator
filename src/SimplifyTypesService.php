@@ -14,6 +14,10 @@ class SimplifyTypesService {
 	 */
 	private $typesArray = array();
 
+	/**
+	 * makes list of types
+	 * @param array $types
+	 */
 	private function makeFullRestrictionList(array $types) {
 		
 		foreach ($types as $typeStr) {
@@ -22,13 +26,15 @@ class SimplifyTypesService {
 			$tArr = explode(" ", $parts[0]);
 			$restriction = $tArr[0];
 			$className = $tArr[1];
-			
 			$this->addSimpleTypeArray($restriction, $className);
-			
-			
 		}
 	}
 	
+	/**
+	 * returns the root of class hirarchie for simple types
+	 * @param string $type
+	 * @return string (simpleType)
+	 */
 	public function getRootType($type) {
 		if (true === $this->isInSimpleTypeArray($type) && 'struct' != $this->extendetSimpleTypes[$type] ) {
 				$restriction = $this->extendetSimpleTypes[$type];
@@ -55,23 +61,7 @@ class SimplifyTypesService {
 			$restriction = $tArr[0];
 			$className = $tArr[1];
 		
-		   /*
-			*
-			*
-			*
-			*/
-			 
-			//@todo gpali add extended classes
-// 		 	if (true === $this->isInSimpleTypeArray($restriction) && 'struct' != $this->extendetSimpleTypes[$restriction] ) {
-// 				$restriction = $this->extendetSimpleTypes[$restriction];
-// 			} 
-// 				$this->addSimpleTypeArray($restriction, $className);
-
 			$restriction = $this->getRootType($restriction);
-			/*
-			*
-			*
-			*/
 			$numParts = count($parts);
 			
 			if ($numParts > 1) {
@@ -80,35 +70,14 @@ class SimplifyTypesService {
 				for($i = 1; $i < $numParts - 1; $i++){
 					$parts[$i] = trim($parts[$i]);
 					list($typename, $name) = explode(" ", substr($parts[$i], 0, strlen($parts[$i])-1) );
-
-					/*
-					* gpali change to simplytype
-					*/
-// 					if ($this->isInSimpleTypeArray($typename) && 'struct' != $this->extendetSimpleTypes[$typename] ) {
-// 						$typename = $this->extendetSimpleTypes[$typename];
-// 					}
-// 					$complexType .= '	' . $typename . ' ' . $name . ';' . PHP_EOL ;
 					$complexType .= '	' . $this->getRootType($typename) . ' ' . $name . ';' . PHP_EOL ;
-						
 				}
-				
 				$this->typesArray[] =  $complexType . '}';
 				
 			} else {
 				$this->typesArray[] = $restriction . ' ' . $className;
 			}
-			
-			
 		}
-		
-
-
-		//@todo dump
-		var_dump($this->typesArray);
-		
-		
-		
-		
 		return $this->typesArray;
 	}
 
@@ -136,17 +105,13 @@ class SimplifyTypesService {
 		$this->extendetSimpleTypes[$className] = $restriction;
 	}
 	
-	
-	
 	/**
 	 * @param string $className
 	 * @return boolean
 	 */
 	protected function isInSimpleTypeArray($className) {
-		return (array_key_exists($className, $this->extendetSimpleTypes))?true:false;
+		return (isset($this->extendetSimpleTypes[$className]))?true:false;
 	}
-	
-	
 }
 
 ?>
