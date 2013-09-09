@@ -14,6 +14,30 @@ class SimplifyTypesService {
 	 */
 	private $typesArray = array();
 
+	private function makeFullRestrictionList(array $types) {
+		
+		$restrictionList = array();
+		
+		foreach ($types as $typeStr) {
+			$wsdlNewline = ( strpos( $typeStr, "\r\n" ) ? "\r\n" : "\n" );
+			$parts = explode($wsdlNewline, $typeStr);
+			$tArr = explode(" ", $parts[0]);
+			$restriction = $tArr[0];
+			$className = $tArr[1];
+			
+			$this->addSimpleTypeArray($restriction, $className);
+			
+			
+		}
+		
+		
+		//@todo dump
+		var_dump($this->extendetSimpleTypes);
+		
+		
+		
+		return $restrictionList;
+	}
 	
 	/**
 	 * @param SoapClient $client
@@ -23,7 +47,7 @@ class SimplifyTypesService {
 		
 		$types = $client->__getTypes();
 		
-		
+ 		$this->makeFullRestrictionList($types);
 		
 		foreach($types as $typeStr)
 		{
@@ -40,10 +64,10 @@ class SimplifyTypesService {
 			*/
 			 
 			//@todo gpali add extended classes
-		 	if (true === $this->isInSimpleTypeArray($restriction)) {
+		 	if (true === $this->isInSimpleTypeArray($restriction) && 'struct' != $this->extendetSimpleTypes[$restriction] ) {
 				$restriction = $this->extendetSimpleTypes[$restriction];
-			}
-			$this->addSimpleTypeArray($restriction, $className);
+			} 
+				$this->addSimpleTypeArray($restriction, $className);
 
 			/*
 			*
@@ -61,7 +85,7 @@ class SimplifyTypesService {
 					/*
 					* gpali change to simplytype
 					*/
-					if ($this->isInSimpleTypeArray($typename)) {
+					if ($this->isInSimpleTypeArray($typename) && 'struct' != $this->extendetSimpleTypes[$typename] ) {
 						$typename = $this->extendetSimpleTypes[$typename];
 					}
 					$complexType .= '	' . $typename . ' ' . $name . ';' . PHP_EOL ;

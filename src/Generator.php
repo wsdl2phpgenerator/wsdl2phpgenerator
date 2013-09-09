@@ -245,13 +245,7 @@ class Generator
   {
     $this->log($this->display('Loading types'));
 
-// 	$types = $this->client->__getTypes();
 	$types = $this->simplifyTypesService->getSimplifiedTypes($this->client);
-    
-
-	//@todo dump
-	var_dump($types);
-	 
     
     foreach($types as $typeStr)
     {
