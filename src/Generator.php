@@ -15,6 +15,7 @@ require_once dirname(__FILE__).'/Pattern.php';
 require_once dirname(__FILE__).'/DocumentationManager.php';
 require_once dirname(__FILE__).'/Service.php';
 require_once dirname(__FILE__).'/OutputManager.php';
+require_once dirname(__FILE__).'/SimplifyTypesService.php';
 
 // Php code classes
 require_once dirname(__FILE__).'/../lib/phpSource/PhpFile.php';
@@ -81,6 +82,13 @@ class Generator
    * @var displayCallback The function called to display output internally. Initially set to gettext if set
    */
   private $displayCallback;
+
+  private $extendetSimpleTypes;
+  
+  /**
+   * @var SimplifyTypesService
+   */
+  private $simplifyTypesService;
   
   /**
    * Construct the generator
@@ -92,6 +100,7 @@ class Generator
     $this->enums = array();
     $this->simple = array();
     $this->documentation = new DocumentationManager();
+    $this->simplifyTypesService = new SimplifyTypesService();
     // default to gettext, even if its unavailable (will lead to runtime exception if not and not injected)
     $this->displayCallback = ( function_exists('gettext') ? 'gettext' : null );
   }
@@ -158,7 +167,17 @@ class Generator
     try
     {
       $this->log($this->display('Loading the wsdl'));
-      $this->client = new SoapClient($wsdl, array('cache_wsdl' => WSDL_CACHE_NONE));
+      $this->client = new SoapClient($wsdl, 
+      						array(	'cache_wsdl' => WSDL_CACHE_NONE
+      								,'features'    => SOAP_SINGLE_ELEMENT_ARRAYS
+      								,'trace'      => true
+                					,'exceptions' => true
+      								,'soap_version' => SOAP_1_2
+      						)
+      					);
+      
+      
+      
     }
     catch(SoapFault $e)
     {
@@ -168,9 +187,8 @@ class Generator
     $this->log($this->display('Loading the DOM'));
     $this->dom = new DOMDocument();
     $this->dom->load( $wsdl );
-    
+   
     $this->documentation->loadDocumentation($this->dom);
-    
     $this->loadTypes();
     $this->loadService();
   }
@@ -227,10 +245,17 @@ class Generator
   {
     $this->log($this->display('Loading types'));
 
-    $types = $this->client->__getTypes();
+// 	$types = $this->client->__getTypes();
+	$types = $this->simplifyTypesService->getSimplifiedTypes($this->client);
+    
 
+	//@todo dump
+	var_dump($types);
+	 
+    
     foreach($types as $typeStr)
     {
+    	
 	  $wsdlNewline = ( strpos( $typeStr, "\r\n" ) ? "\r\n" : "\n" );
       $parts = explode($wsdlNewline, $typeStr);
       $tArr = explode(" ", $parts[0]);
@@ -245,9 +270,11 @@ class Generator
 
       $type = null;
       $numParts = count($parts);
+      
       // ComplexType
       if ($numParts > 1)
       {
+      	
         $type = new ComplexType($className);
         $this->log($this->display('Loading type ').$type->getPhpIdentifier());
 
@@ -255,15 +282,15 @@ class Generator
         {
           $parts[$i] = trim($parts[$i]);
           list($typename, $name) = explode(" ", substr($parts[$i], 0, strlen($parts[$i])-1) );
-
           $name = $this->cleanNamespace($name);
           $type->addMember($typename, $name);
+          
         }
+
       }
       else // Enum or Pattern
       {
-        $typenode = $this->findTypenode($className);
-
+      	$typenode = $this->findTypenode($className);
         if ($typenode)
         {
           // If enum
@@ -305,7 +332,7 @@ class Generator
         $this->types[] = $type;
       }
     }
-
+    
     $this->log($this->display('Done loading types'));
   }
 
@@ -437,5 +464,46 @@ class Generator
 
     return $typenode;
   }
+  
+  
+
+  
+  
+  
+  
+  // helper for extended simpleTypes
+  
+ 
+  
+  	/**
+  	 * @param string $restriction
+  	 * @param string $className
+  	 */
+  	protected function addSimpleTypeArray($restriction, $className) {
+  		$this->extendetSimpleTypes[$className] = $restriction;
+  	}
+  
+  
+  
+  	/**
+  	 * @param string $className
+  	 * @return boolean
+  	 */
+  	protected function isInSimpleTypeArray($className) {
+  		return (array_key_exists($className, $this->simplifyTypesService->getExtendetSimpleTypes() ))?true:false;
+  	}
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 }
 

@@ -50,9 +50,11 @@ class DocumentationManager
       else if($item->parentNode->localName == 'operation')
       {
         $name = $item->parentNode->getAttribute('name');
+        
         $this->setFunctionDescription($name, trim($item->nodeValue));
       }
     }
+    
   }
 
   /**
@@ -95,5 +97,40 @@ class DocumentationManager
 
     return $ret;
   }
+  
+  
+  
+  
+  
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 }
 
