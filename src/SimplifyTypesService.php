@@ -1,6 +1,12 @@
 <?php
 
 
+/**
+ * @package Wsdl2PhpGenerator
+ * service for searching simple data types (simpleTypes)
+ * @example stringLength0to32 -> string 
+ *
+ */
 class SimplifyTypesService {
 	
 	

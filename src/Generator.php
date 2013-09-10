@@ -83,8 +83,6 @@ class Generator
    */
   private $displayCallback;
 
-  private $extendetSimpleTypes;
-  
   /**
    * @var SimplifyTypesService
    */
@@ -187,7 +185,7 @@ class Generator
     $this->log($this->display('Loading the DOM'));
     $this->dom = new DOMDocument();
     $this->dom->load( $wsdl );
-   
+    
     $this->documentation->loadDocumentation($this->dom);
     $this->loadTypes();
     $this->loadService();
@@ -461,37 +459,6 @@ class Generator
   
   
 
-  
-  
-  
-  
-  // helper for extended simpleTypes
-  
- 
-  
-  	/**
-  	 * @param string $restriction
-  	 * @param string $className
-  	 */
-  	protected function addSimpleTypeArray($restriction, $className) {
-  		$this->extendetSimpleTypes[$className] = $restriction;
-  	}
-  
-  
-  
-  	/**
-  	 * @param string $className
-  	 * @return boolean
-  	 */
-  	protected function isInSimpleTypeArray($className) {
-  		return (array_key_exists($className, $this->simplifyTypesService->getExtendetSimpleTypes() ))?true:false;
-  	}
-  
-  
-  
-  
-  
-  
   
   
   

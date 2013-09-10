@@ -98,6 +98,38 @@ class PhpClass extends PhpElement
   }
 
   /**
+	 * @return string the $extends
+	 */
+	public function getExtends() {
+		return $this->extends;
+	}
+
+/**
+	 * @return multitype: the $constants
+	 */
+	public function getConstants() {
+		return $this->constants;
+	}
+
+/**
+	 * @param string $extends
+	 * @return PhpClass
+	 */
+	public function setExtends($extends) {
+		$this->extends = $extends;
+		return $this;
+	}
+
+/**
+	 * @param multitype: $constants
+	 * @return PhpClass
+	 */
+	public function setConstants($constants) {
+		$this->constants = $constants;
+		return $this;
+	}
+
+/**
    *
    * @return string Returns the compete source code for the class
    */
