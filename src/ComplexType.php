@@ -126,7 +126,7 @@ class ComplexType extends Type
     
     
 //@TODO add extends    
-	$class->setExtends('Basic');    
+	$class->setExtends('Basic');
 
     $this->class = $class;
   }

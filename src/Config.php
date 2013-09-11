@@ -48,6 +48,17 @@ class Config
   private $inputFile;
 
   /**
+   * @var string the dir for xsd files to generate classes with extends hirarchy
+   */
+  private $inputXsdDir;
+  
+  
+  /**
+   * @var string the class name for inheritance of complexTypes
+   */
+  private $basicClassName;
+  
+  /**
    * The array should contain the strings for the options to enable
    *
    * @var array containing all features in the options for the client
@@ -122,8 +133,11 @@ class Config
    * @param string $suffix
    * @param string $sharedTypes
    */
-  public function __construct($inputFile, $outputDir, $verbose = false, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '', $prefix = '', $suffix = '', $sharedTypes = false)
+  public function __construct($inputFile, $outputDir, $verbose = false, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '', $prefix = '', $suffix = '', $sharedTypes = false, $inputXsdDir = '', $basicClassName = '')
   {
+  	
+
+  	
     $this->namespaceName = trim($namespaceName);
     $this->oneFile = $oneFile;
     $this->verbose = $verbose;
@@ -136,6 +150,8 @@ class Config
     else
       $inputFile = trim($inputFile);
     $this->inputFile = $inputFile;
+    $this->inputXsdDir = trim($inputXsdDir);
+    $this->basicClassName = trim($basicClassName);
     $this->optionFeatures = $optionsFeatures;
     $this->wsdlCache = '';
     if (in_array($wsdlCache, array('WSDL_CACHE_NONE', 'WSDL_CACHE_DISK', 'WSDL_CACHE_MEMORY', 'WSDL_CACHE_BOTH')))
@@ -204,7 +220,21 @@ class Config
     return $this->inputFile;
   }
 
-  /**
+  	/**
+	 * @return string the $inputXsdDir
+	 */
+	public function getInputXsdDir() {
+		return $this->inputXsdDir;
+	}
+
+	/**
+	 * @return string the $basicClassName
+	 */
+	public function getBasicClassName() {
+		return $this->basicClassName;
+	}
+
+	/**
    *
    * @return array An array of strings of all the features to enable
    */

@@ -16,6 +16,7 @@ require_once dirname(__FILE__).'/DocumentationManager.php';
 require_once dirname(__FILE__).'/Service.php';
 require_once dirname(__FILE__).'/OutputManager.php';
 require_once dirname(__FILE__).'/SimplifyTypesService.php';
+require_once dirname(__FILE__).'/XsdInspectorService.php';
 
 // Php code classes
 require_once dirname(__FILE__).'/../lib/phpSource/PhpFile.php';
@@ -185,6 +186,11 @@ class Generator
     $this->log($this->display('Loading the DOM'));
     $this->dom = new DOMDocument();
     $this->dom->load( $wsdl );
+    
+    if ($this->config->getInputXsdDir() != '') {
+   	    //init and load wsdl dom structure if xsd documents in directory 
+    	XsdInspectorService::instance()->loadWsdlDom($this->dom, $this->config);
+    }
     
     $this->documentation->loadDocumentation($this->dom);
     $this->loadTypes();
