@@ -187,10 +187,7 @@ class Generator
     $this->dom = new DOMDocument();
     $this->dom->load( $wsdl );
     
-    if ($this->config->getInputXsdDir() != '') {
-   	    //init and load wsdl dom structure if xsd documents in directory 
-    	XsdInspectorService::instance()->loadWsdlDom($this->dom, $this->config);
-    }
+    XsdInspectorService::instance()->loadWsdlDom($this->dom, $this->config);
     
     $this->documentation->loadDocumentation($this->dom);
     $this->loadTypes();

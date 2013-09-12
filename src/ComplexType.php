@@ -90,7 +90,7 @@ class ComplexType extends Type
       $class->addFunction(new PhpFunction('public'
       										, 'get' . ucfirst($name)
       										, ''
-      										, '  return $this->'.$name.';'.PHP_EOL
+      										, '	return $this->'.$name.';'.PHP_EOL
     										, $getterComment));
       // add setter
       $setterComment = new PhpDocComment();
@@ -100,13 +100,13 @@ class ComplexType extends Type
       $class->addFunction(new PhpFunction('public'
       										, 'set' . ucfirst($name)
       										, '$'.$name
-      										, '  $this->'.$name.' = $'.$name.';'.PHP_EOL.'  return $this;'.PHP_EOL
+      										, '	$this->'.$name.' = $'.$name.';'.PHP_EOL.'	return $this;'.PHP_EOL
     										, $setterComment));
       
       
       
       
-      $constructorSource .= '  $this->'.$name.' = $'.$name.';'.PHP_EOL;
+      $constructorSource .= '	$this->'.$name.' = $'.$name.';'.PHP_EOL;
       $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
       $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());
       $constructorParameters .= ', $'.$name;
@@ -125,9 +125,9 @@ class ComplexType extends Type
     
     
     
-//@TODO add extends    
-	$class->setExtends('Basic');
-
+	//add extends    
+	$class->setExtends(XsdInspectorService::instance()->getExtensionClassName($class->getIdentifier()));
+	
     $this->class = $class;
   }
 

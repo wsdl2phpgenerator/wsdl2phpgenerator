@@ -94,7 +94,7 @@ class PhpClass extends PhpElement
     $this->constants = array();
     $this->variables = array();
     $this->functions = array();
-    $this->indentionStr = '  '; // Use two spaces as indention
+    $this->indentionStr = '		'; // Use two tabs as indention
   }
 
   /**
@@ -139,7 +139,7 @@ class PhpClass extends PhpElement
 
     if ($this->classExists)
     {
-      $ret .= 'if (!class_exists("'.$this->identifier.'", false)) '.PHP_EOL.'{'.PHP_EOL;
+      $ret .= 'if (!class_exists("'.$this->identifier.'", false)) '.' {'.PHP_EOL;
     }
 
     if (count($this->dependencies) > 0)
@@ -168,7 +168,7 @@ class PhpClass extends PhpElement
       $ret .= ' extends '.$this->extends;
     }
 
-    $ret .= PHP_EOL.'{'.PHP_EOL;
+    $ret .= ' {'.PHP_EOL;
 
     if (count($this->constants) > 0)
     {

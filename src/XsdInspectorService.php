@@ -54,19 +54,22 @@ class XsdInspectorService {
 	 * @uses Config.php
 	 * @param DOMDocument $dom
 	 * @param Config $config
-	 * @throws Exception
 	 * @return boolean
 	 */
 	public function loadWsdlDom(DOMDocument $dom, Config $config){
-		if ("" == $config->getInputXsdDir()) {
-			throw new Exception('No xsd-file directory set. Nothing to do.');
-			return false;
-		}
-		
 		$this->config = $config;
-		$this->xsdDirectoryPath = ('' != $this->xsdDirectoryPath = $this->config->getInputXsdDir() . DIRECTORY_SEPARATOR)
+		if ("" == $config->getInputXsdDir()) {
+			// use directory from wsdl importfile
+			$directory = stristr($config->getInputFile(), substr(strrchr($config->getInputFile(), DIRECTORY_SEPARATOR), 1),true );
+			if (strtolower(substr($directory, 0,4)) != 'http') {
+				$this->xsdDirectoryPath = $directory;
+			}
+		} else {
+			// xsd directory specified	
+			$this->xsdDirectoryPath = ('' != $this->xsdDirectoryPath = $this->config->getInputXsdDir() . DIRECTORY_SEPARATOR)
 									?$this->config->getInputXsdDir() . DIRECTORY_SEPARATOR
 									:'';
+		}
 		
 		
 		foreach ($dom->getElementsByTagName("import") as $xsd) {
@@ -75,10 +78,13 @@ class XsdInspectorService {
 			$this->searchXsdDocumentLocation($document);
 		}
 		$this->scanAllXsd();
-		var_dump($this->elementList);
 		return true;
 	}
 	
+	/**
+	 * search for all xsd document in wsdl reques/response and child
+	 * @param string $document
+	 */
 	private function searchXsdDocumentLocation($document) {
 		$dom = new DOMDocument('1.0', 'UTF-8');
 		$dom->xmlStandalone = false;
@@ -93,12 +99,18 @@ class XsdInspectorService {
 		}
 	}
 	
+	/**
+	 * start scanning all xsd document
+	 */
 	private function scanAllXsd(){
 		foreach ($this->xsdDocumentList as $index => $document) {
 			$this->scanXsd($document);
 		}
 	}
 	
+	/**
+	 * @param string $document
+	 */
 	private function scanXsd($document) {
 		$dom = new DOMDocument('1.0', 'UTF-8');
 		$dom->xmlStandalone = false;
@@ -128,14 +140,6 @@ class XsdInspectorService {
 				}
 			}
 			
-			// enumeration
-			$aEnum = array();
-			foreach ($tag->getElementsByTagName('enumeration') as $node){
-				$aEnum[] = $node->getAttribute('value');
-			}
-			if (0 < count($aEnum) ) {
-				$aComplexType['ENUM'] = $aEnum;
-			}
 			if (0 < count($aComplexType)) {
 				$this->elementList[$complexTypeName] = $aComplexType;
 			}
@@ -156,7 +160,29 @@ class XsdInspectorService {
 		}
 	}
 
+	/**
+	 * search if element has special properties (inheritance, choices, enumeration)
+	 * @param string $elementName
+	 * @return boolean
+	 */
+	public function isInElementList($elementName){
+		return (array_key_exists($elementName, $this->elementList));
+	}
 	
+	
+	/**
+	 * returns basis class (Wsdl2PhpGeneratorBasicClass) or extension class if avail
+	 * @param string $className
+	 * @return string
+	 */
+	public function getExtensionClassName($className) {
+		if ($this->isInElementList($className)) {
+			if (array_key_exists('EXTENDS', $this->elementList[$className])  ) {
+				return $this->elementList[$className]['EXTENDS'];
+			}
+		}
+		return 'Wsdl2PhpGeneratorBasicClass';
+	}
 	
 	
 	

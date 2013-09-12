@@ -71,8 +71,8 @@ class PhpFunction extends PhpElement
       $ret .= $this->getSourceRow($this->comment->getSource());
     }
 
-    $ret .= $this->getSourceRow($this->access.' function '.$this->identifier.'('.$this->params.')');
-    $ret .= $this->getSourceRow('{');
+    $ret .= $this->getSourceRow($this->access.' function '.$this->identifier.'('.$this->params.') {');
+//     $ret .= $this->getSourceRow('{');
     $ret .= $this->getSourceRow($this->source);
     $ret .= $this->getSourceRow('}');
 
