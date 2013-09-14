@@ -61,14 +61,15 @@ class BasicClassTemplate extends ComplexType {
 		// 		$return = PhpDocElementFactory::getReturn($type, '');
 		$param1Comment = PhpDocElementFactory::getVar('string', 'name', 'the var name');
 		$param2Comment = PhpDocElementFactory::getVar('unknown', 'value', 'the value');
-	
+		
+		$use = array('Exception');
 		$functionBlock = '	if(method_exists($this, \'set\'.ucfirst($name))){' . PHP_EOL;
 		$functionBlock .= '		$this->{\'set\'.ucfirst($name)}($value);' . PHP_EOL;
 		$functionBlock .= '	} else {' . PHP_EOL;
 		$functionBlock .= '		throw new Exception("Setter not found!");' . PHP_EOL;
 		$functionBlock .= '	}' . PHP_EOL;
 	
-		$this->addClassMethode($methodeName, $functionBlock, $description, $return, $param1, $param1Comment,$param2,$param2Comment);
+		$this->addClassMethode($methodeName, $use, $functionBlock, $description, $return, $param1, $param1Comment,$param2,$param2Comment);
 	}
 	
 
@@ -81,13 +82,14 @@ class BasicClassTemplate extends ComplexType {
 		$param1 = 'name';
 		$return = PhpDocElementFactory::getReturn('unknown', '');
 		
+		$use = array('Exception');
 		$functionBlock = '	if(method_exists($this, \'get\'.ucfirst($name))){' . PHP_EOL;
 		$functionBlock .= '		return $this->{\'get\'.ucfirst($name)}();' . PHP_EOL;
 		$functionBlock .= '	} else {' . PHP_EOL;
 		$functionBlock .= '		throw new Exception("Getter not found!");' . PHP_EOL;
 		$functionBlock .= '	}' . PHP_EOL;
 
-		$this->addClassMethode($methodeName, $functionBlock, $description, $return,$param1);
+		$this->addClassMethode($methodeName, $use, $functionBlock, $description, $return,$param1);
 	}
 	
 	
@@ -95,6 +97,7 @@ class BasicClassTemplate extends ComplexType {
 	/**
 	 * add class methode (access public)
 	 * @param string $methodeName
+	 * @param string $use
 	 * @param string $functionBlock
 	 * @param string $description
 	 * @param string $return
@@ -103,7 +106,8 @@ class BasicClassTemplate extends ComplexType {
 	 * @param string $param2
 	 * @param PhpDocElement $param2Comment
 	 */
-	final private function addClassMethode(	$methodeName, 
+	final private function addClassMethode(	$methodeName,
+											$use = null, 
 											$functionBlock,
 											$description = '', 
 											$return = null,
@@ -131,6 +135,13 @@ class BasicClassTemplate extends ComplexType {
 			$paramStr .= '$' . $param2;
 		}
 		$comment->setAccess(PhpDocElementFactory::getPublicAccess());
+		
+		if (null != $use) {
+			foreach ($use as $className){
+				$this->class->addUse($className);
+			}
+		}
+		
 		$this->class->addFunction(new PhpFunction('public'
 				, $methodeName
 				, $paramStr

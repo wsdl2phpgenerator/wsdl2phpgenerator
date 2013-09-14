@@ -25,6 +25,11 @@ class PhpClass extends PhpElement
    * @access private
    */
   private $dependencies;
+  
+  /**
+   * @var array An array of strings, use classesnames and namespace to include for the class
+   */
+  private $use;
 
   /**
    *
@@ -90,6 +95,7 @@ class PhpClass extends PhpElement
   public function __construct($identifier, $classExists = false, $extends = '', PhpDocComment $comment = null, $final = false, $abstract = false)
   {
     $this->dependencies = array();
+    $this->use = array();
     $this->classExists = $classExists;
     $this->comment = $comment;
     $this->final = $final;
@@ -148,11 +154,20 @@ class PhpClass extends PhpElement
       $ret .= 'if (!class_exists("'.$this->identifier.'", false)) '.' {'.PHP_EOL;
     }
 
-    if (count($this->dependencies) > 0)
+  if (count($this->dependencies) > 0)
     {
       foreach ($this->dependencies as $file)
       {
         $ret .= 'include_once(\''.$file.'\');'.PHP_EOL;
+      }
+      $ret .= PHP_EOL;
+    }
+
+  if (count($this->use) > 0)
+    {
+      foreach ($this->use as $file)
+      {
+        $ret .= 'use ' .$file.';'.PHP_EOL;
       }
       $ret .= PHP_EOL;
     }
@@ -231,7 +246,21 @@ class PhpClass extends PhpElement
       $this->dependencies[] = $filename;
     }
   }
-
+  
+  /**
+   * Adds uses to be loaded for the class to use
+   * Only adds it if it does not already exist
+   *
+   * @param string $className
+   */
+  public function addUse($className)
+  {
+  	if (in_array($className, $this->use) == false)
+  	{
+  		$this->use[] = $className;
+  	}
+  }
+  
   /**
    * Adds a constant to the class. If no name is supplied and the value is a string the value is used as name otherwise exception is raised
    *
