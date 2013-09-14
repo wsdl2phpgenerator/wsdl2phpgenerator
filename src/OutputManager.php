@@ -69,25 +69,27 @@ class OutputManager
    */
   public function save(PhpClass $service, array $types)
   {
+  	
     $this->setOutputDirectory();
 
     if ($this->config->getOneFile())
     {
-      if (!is_dir($this->config->getOutputDir()))
-	$this->file = new PhpFile(basename($this->config->getOutputDir()));
-      else
-      $this->file = new PhpFile($service->getIdentifier());
+      if (!is_dir($this->config->getOutputDir())){
+		$this->file = new PhpFile(basename($this->config->getOutputDir()));
+      }else{
+      	$this->file = new PhpFile($service->getIdentifier());
+      }
       $this->addNamespace();
       $this->addClassToFile($service);
-      foreach ($types as $type)
-      {
+      foreach ($types as $type) {
         $this->addClassToFile($type);
       }
 
-      if (!is_dir($this->config->getOutputDir()))
-	$this->file->save(dirname($this->config->getOutputDir()));
-      else
-      $this->file->save($this->dir);
+      if (!is_dir($this->config->getOutputDir())){
+	    $this->file->save(dirname($this->config->getOutputDir()));
+      } else {
+        $this->file->save($this->dir);
+      }
     }
     else
     {

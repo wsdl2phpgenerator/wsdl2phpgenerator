@@ -140,9 +140,9 @@ class ConfigTest extends PHPUnit_Framework_TestCase
   /**
    * Test the getter
    */
-  public function testGetNoTypeConstructor()
+  public function testGetUseTypeConstructor()
   {
-    $this->assertTrue($this->object->getNoTypeConstructor());
+    $this->assertFalse($this->object->getUseTypeConstructor());
   }
 
   /**

@@ -11,6 +11,7 @@ require_once dirname(__FILE__).'/Validator.php';
 require_once dirname(__FILE__).'/Variable.php';
 require_once dirname(__FILE__).'/Enum.php';
 require_once dirname(__FILE__).'/ComplexType.php';
+require_once dirname(__FILE__).'/BasicClassTemplate.php';
 require_once dirname(__FILE__).'/Pattern.php';
 require_once dirname(__FILE__).'/DocumentationManager.php';
 require_once dirname(__FILE__).'/Service.php';
@@ -191,6 +192,7 @@ class Generator
     
     $this->documentation->loadDocumentation($this->dom);
     $this->loadTypes();
+    $this->types[] = new BasicClassTemplate();
     $this->loadService();
   }
 
@@ -327,6 +329,8 @@ class Generator
         $this->types[] = $type;
       }
     }
+    
+    
     
     $this->log($this->display('Done loading types'));
   }

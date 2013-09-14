@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package Generator
+ * @package Wsdl2PhpGenerator
  */
 
 /**
@@ -82,7 +82,6 @@ class ComplexType extends Type
       $var = new PhpVariable('private', $name, '', $comment);
       $class->addVariable($var);
       
-      // gpali
       // add getter
       $getterComment = new PhpDocComment();
       $getterComment->setAccess(PhpDocElementFactory::getPublicAccess());
@@ -96,6 +95,7 @@ class ComplexType extends Type
       $setterComment = new PhpDocComment();
       $setterComment->setAccess(PhpDocElementFactory::getPublicAccess());
       $setterComment->setVar(PhpDocElementFactory::getVar($type, $name, ''));
+      $setterComment->setReturn(PhpDocElementFactory::getReturn($this->phpIdentifier, ''));
       
       $class->addFunction(new PhpFunction('public'
       										, 'set' . ucfirst($name)
@@ -117,7 +117,7 @@ class ComplexType extends Type
     $parameterSubmitConstructor = new PhpFunction('public', '__construct', $constructorParameters, $constructorSource, $constructorComment);
 
     // Only add the constructor if type constructor is selected
-    if ($config->getNoTypeConstructor() == false)
+    if ($config->getUseTypeConstructor() == true)
     {
     	
       	$class->addFunction($parameterSubmitConstructor);

@@ -89,7 +89,7 @@ class Config
    *
    * @var bool If a type constructor should not be generated
    */
-  private $noTypeConstructor;
+  private $useTypeConstructor;
 
   /**
    *
@@ -123,7 +123,7 @@ class Config
    * @param bool $verbose
    * @param bool $oneFile
    * @param bool $classExists
-   * @param bool $noTypeConstructor
+   * @param bool $useTypeConstructor
    * @param string $namespaceName
    * @param array $optionsFeatures
    * @param string $wsdlCache
@@ -133,7 +133,7 @@ class Config
    * @param string $suffix
    * @param string $sharedTypes
    */
-  public function __construct($inputFile, $outputDir, $verbose = false, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '', $prefix = '', $suffix = '', $sharedTypes = false, $inputXsdDir = '', $basicClassName = '')
+  public function __construct($inputFile, $outputDir, $verbose = false, $oneFile = false, $classExists = false, $useTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '', $prefix = '', $suffix = '', $sharedTypes = false, $inputXsdDir = '', $basicClassName = '')
   {
   	
 
@@ -142,7 +142,7 @@ class Config
     $this->oneFile = $oneFile;
     $this->verbose = $verbose;
     $this->classExists = $classExists;
-    $this->noTypeConstructor = $noTypeConstructor;
+    $this->useTypeConstructor = $useTypeConstructor;
     $this->outputDir = trim($outputDir);
     if (is_array($inputFile))
       foreach ($inputFile as &$file)
@@ -197,9 +197,9 @@ class Config
    * @return bool Returns true if no type constructor should be used
    * @access public
    */
-  public function getNoTypeConstructor()
+  public function getUseTypeConstructor()
   {
-    return $this->noTypeConstructor;
+    return $this->useTypeConstructor;
   }
 
   /**
