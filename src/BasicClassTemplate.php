@@ -58,7 +58,7 @@ class BasicClassTemplate extends ComplexType {
 		$param1 = 'name';
 		$param2 = 'value';
 		$return = null;
-		// 		$return = PhpDocElementFactory::getReturn($type, '');
+// 		$return = PhpDocElementFactory::getReturn('unknown', '');
 		$param1Comment = PhpDocElementFactory::getVar('string', 'name', 'the var name');
 		$param2Comment = PhpDocElementFactory::getVar('unknown', 'value', 'the value');
 		
@@ -92,6 +92,193 @@ class BasicClassTemplate extends ComplexType {
 		$this->addClassMethode($methodeName, $use, $functionBlock, $description, $return,$param1);
 	}
 	
+	/**
+	 * add unset instance var with name methode
+	 */
+	final private function addMethode_2() {
+		$methodeName = 'unsetVarname';
+		$description = 'unset instance var with name';
+		$param1 = 'varName';
+		$param2 = null;
+		$return = null;
+		$param1Comment = PhpDocElementFactory::getVar('string', 'varName', '');
+		$param2Comment = null;
+	
+		$use = null;
+		$functionBlock = '	unset($this->$varName);' . PHP_EOL;
+	
+		$this->addClassMethode($methodeName, $use, $functionBlock, $description, $return, $param1, $param1Comment,$param2,$param2Comment);
+	}
+	
+	/**
+	 * add unset all instance vars methode
+	 */
+	final private function addMethode_3() {
+		$methodeName = 'unsetAll';
+		$description = 'unset all instance vars';
+		$param1 = null;
+		$param2 = null;
+		$return = null;
+		$param1Comment = null;
+		$param2Comment = null;
+	
+		$use = null;
+		$functionBlock = '	foreach ($this as $key => $value){' . PHP_EOL;
+		$functionBlock .= '		unset($this->$key);' . PHP_EOL;
+		$functionBlock .= '	}' . PHP_EOL;
+	
+		$this->addClassMethode($methodeName, $use, $functionBlock, $description, $return, $param1, $param1Comment,$param2,$param2Comment);
+	}
+	
+	/**
+	 * add unset all instance vars excluded one by name methode
+	 */
+	final private function addMethode_4() {
+		$methodeName = 'unsetAllOther';
+		$description = 'unset all instance vars exclude one by name';
+		$param1 = 'varName';
+		$param2 = null;
+		$return = null;
+		$param1Comment = PhpDocElementFactory::getVar('string', 'varName', 'the var name');
+		$param2Comment = null;
+	
+		$use = null;
+		$functionBlock = '	foreach ($this as $key => $value){' . PHP_EOL;
+		$functionBlock .= '		if ($key != $varName){' . PHP_EOL;
+		$functionBlock .= '			unset($this->$key);' . PHP_EOL;
+		$functionBlock .= '		}' . PHP_EOL;
+		$functionBlock .= '	}' . PHP_EOL;
+	
+		$this->addClassMethode($methodeName, $use, $functionBlock, $description, $return, $param1, $param1Comment,$param2,$param2Comment);
+	}
+	
+	/**
+	 * add unset all instance vars named in array methode
+	 */
+	final private function addMethode_5() {
+		$methodeName = 'unsetAllOtherExcludeNamedVarsInArray';
+		$description = 'unset all instance vars exclude the named in array';
+		$param1 = 'paramArray';
+		$param2 = null;
+		$return = null;
+		$param1Comment = PhpDocElementFactory::getVar('array', 'paramArray', '');
+		$param2Comment = null;
+	
+		$use = null;
+		$functionBlock = '	foreach ($this as $key => $value){' . PHP_EOL;
+		$functionBlock .= '		if (! in_array($key, $paramArray)){' . PHP_EOL;
+		$functionBlock .= '			unset($this->$key);' . PHP_EOL;
+		$functionBlock .= '		}' . PHP_EOL;
+		$functionBlock .= '	}' . PHP_EOL;
+	
+		$this->addClassMethode($methodeName, $use, $functionBlock, $description, $return, $param1, $param1Comment,$param2,$param2Comment);
+	}
+	/**
+	 * add unset all instance vars named in array methode
+	 */
+	final private function addMethode_6() {
+		$methodeName = 'unsetNamedVarsInArray';
+		$description = 'unset all instance vars named in array';
+		$param1 = 'paramArray';
+		$param2 = null;
+		$return = null;
+		$param1Comment = PhpDocElementFactory::getVar('array', 'paramArray', '');
+		$param2Comment = null;
+	
+		$use = null;
+		$functionBlock = '	foreach ($this as $key => $value){' . PHP_EOL;
+		$functionBlock .= '		if (in_array($key, $paramArray)){' . PHP_EOL;
+		$functionBlock .= '			unset($this->$key);' . PHP_EOL;
+		$functionBlock .= '		}' . PHP_EOL;
+		$functionBlock .= '	}' . PHP_EOL;
+	
+		$this->addClassMethode($methodeName, $use, $functionBlock, $description, $return, $param1, $param1Comment,$param2,$param2Comment);
+	}
+	
+	/**
+	 * add reset all instance vars methode
+	 */
+	final private function addMethode_7() {
+		$methodeName = 'resetAll';
+		$description = 'reset all instance vars';
+		$param1 = null;
+		$param2 = null;
+		$return = null;
+		$param1Comment = null;
+		$param2Comment = null;
+	
+		$use = null;
+		$functionBlock = '	foreach ($this as $key => $value){' . PHP_EOL;
+		$functionBlock .= '		$this->$key= null;' . PHP_EOL;
+		$functionBlock .= '	}' . PHP_EOL;
+		
+		$this->addClassMethode($methodeName, $use, $functionBlock, $description, $return, $param1, $param1Comment,$param2,$param2Comment);
+	}
+	
+	/**
+	 * add reset all instance vars exluded one by name methode
+	 */
+	final private function addMethode_8() {
+		$methodeName = 'resetAllOther';
+		$description = 'reset all instance vars exluded one by name';
+		$param1 = 'varName';
+		$param2 = null;
+		$return = null;
+		$param1Comment = PhpDocElementFactory::getVar('string', 'varName', 'the var name');
+		$param2Comment = null;
+	
+		$use = null;
+		$functionBlock = '	foreach ($this as $key => $value){' . PHP_EOL;
+		$functionBlock .= '		if ($key != $varName){' . PHP_EOL;
+		$functionBlock .= '			$this->$key = null;' . PHP_EOL;
+		$functionBlock .= '		}' . PHP_EOL;
+		$functionBlock .= '	}' . PHP_EOL;
+	
+		$this->addClassMethode($methodeName, $use, $functionBlock, $description, $return, $param1, $param1Comment,$param2,$param2Comment);
+	}
+	
+	/**
+	 * add reset all instance vars named in array methode
+	 */
+	final private function addMethode_9() {
+		$methodeName = 'resetAllOtherExcludeVarsInArray';
+		$description = 'reset all instance vars exclude names in array';
+		$param1 = 'paramArray';
+		$param2 = null;
+		$return = null;
+		$param1Comment = PhpDocElementFactory::getVar('array', 'paramArray', '');
+		$param2Comment = null;
+	
+		$use = null;
+		$functionBlock = '	foreach ($this as $key => $value){' . PHP_EOL;
+		$functionBlock .= '		if (! in_array($key, $paramArray)){' . PHP_EOL;
+		$functionBlock .= '			$this->$key = null;' . PHP_EOL;
+		$functionBlock .= '		}' . PHP_EOL;
+		$functionBlock .= '	}' . PHP_EOL;
+	
+		$this->addClassMethode($methodeName, $use, $functionBlock, $description, $return, $param1, $param1Comment,$param2,$param2Comment);
+	}
+	/**
+	 * add reset all instance vars named in array methode
+	 */
+	final private function addMethode_10() {
+		$methodeName = 'resetNamedVarsInArray';
+		$description = 'reset all instance vars named in array';
+		$param1 = 'paramArray';
+		$param2 = null;
+		$return = null;
+		$param1Comment = PhpDocElementFactory::getVar('array', 'paramArray', '');
+		$param2Comment = null;
+	
+		$use = null;
+		$functionBlock = '	foreach ($this as $key => $value){' . PHP_EOL;
+		$functionBlock .= '		if (in_array($key, $paramArray)){' . PHP_EOL;
+		$functionBlock .= '			$this->$key = null;' . PHP_EOL;
+		$functionBlock .= '		}' . PHP_EOL;
+		$functionBlock .= '	}' . PHP_EOL;
+	
+		$this->addClassMethode($methodeName, $use, $functionBlock, $description, $return, $param1, $param1Comment,$param2,$param2Comment);
+	}
 	
 	
 	/**
@@ -150,6 +337,9 @@ class BasicClassTemplate extends ComplexType {
 	}
 	
 	
+	/* (non-PHPdoc)
+	 * @see Type::getClass()
+	 */
 	public function getClass() {
 		$this->generateClass();
 		return parent::getClass();

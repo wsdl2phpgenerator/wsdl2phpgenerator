@@ -79,7 +79,7 @@ class Wsdl2PhpGeneratorBasicClass {
 	 */
 	public function unsetAllOtherFromArray($paramArray) {
 		foreach ($this as $key => $value){
-			if (! in_array($key, $paramArray)){
+			if (!in_array($key, $paramArray)){
 				unset($this->$key);
 			}
 		}
