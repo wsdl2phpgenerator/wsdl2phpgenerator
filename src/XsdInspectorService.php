@@ -78,6 +78,7 @@ class XsdInspectorService {
 			$this->searchXsdDocumentLocation($document);
 		}
 		$this->scanAllXsd();
+		
 		return true;
 	}
 	
@@ -152,7 +153,7 @@ class XsdInspectorService {
 			// enumeration
 			$aEnum = array();
 			foreach ($tag->getElementsByTagName('enumeration') as $node) {
-				$aEnum[] = $node->getAttribute('value');
+				$aEnum[] = '"' . $node->getAttribute('value') . '"';
 			}
 			if (0 < count($aEnum) ){
 				$this->elementList[$tag->getAttribute('name')] = array('ENUM' => $aEnum);
@@ -184,7 +185,19 @@ class XsdInspectorService {
 		return 'Wsdl2PhpGeneratorBasicClass';
 	}
 	
-	
+	/**
+	 * returns an array of strings if var is enumeration else null
+	 * @param string $varType
+	 * @return NULL|multitype:string
+	 */
+	public function getEnumeration($varType) {
+		if ($this->isInElementList($varType)) {
+			if (array_key_exists('ENUM', $this->elementList[$varType])) {
+				return $this->elementList[$varType]['ENUM'];
+			};
+		}
+		return null;
+	}
 	
 	
 	

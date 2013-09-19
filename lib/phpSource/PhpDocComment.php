@@ -33,13 +33,6 @@ class PhpDocComment
   
   /**
    *
-   * @var PhpDocElement A var element
-   * @access private
-   */
-  private $var2;
-  
-  /**
-   *
    * @var array Array of PhpDocElements
    * @access private
    */
@@ -138,10 +131,6 @@ class PhpDocComment
     {
       $ret .= $this->var->getSource();
     }
-  	if ($this->var2 != null)
-    {
-      $ret .= $this->var2->getSource();
-    }
     if ($this->package != null)
     {
       $ret .= $this->package->getSource();
@@ -179,15 +168,6 @@ class PhpDocComment
   public function setVar(PhpDocElement $var)
   {
     $this->var = $var;
-  }
-  
-  /**
-   *
-   * @param PhpDocElement $var2 Sets the new var
-   */
-  public function setVar2(PhpDocElement $var2)
-  {
-  	$this->var2 = $var2;
   }
   
   /**

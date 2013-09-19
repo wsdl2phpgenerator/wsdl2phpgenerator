@@ -153,11 +153,11 @@ class BasicClassTemplate extends ComplexType {
 	}
 	
 	/**
-	 * add unset all instance vars named in array methode
+	 * add unset all instance vars defined in array methode
 	 */
 	final private function addMethode_5() {
-		$methodeName = 'unsetAllOtherExcludeNamedVarsInArray';
-		$description = 'unset all instance vars exclude the named in array';
+		$methodeName = 'unsetAllOtherExcludeDefinedVarsInArray';
+		$description = 'unset all instance vars exclude the defined in array';
 		$param1 = 'paramArray';
 		$param2 = null;
 		$return = null;
@@ -174,11 +174,11 @@ class BasicClassTemplate extends ComplexType {
 		$this->addClassMethode($methodeName, $use, $functionBlock, $description, $return, $param1, $param1Comment,$param2,$param2Comment);
 	}
 	/**
-	 * add unset all instance vars named in array methode
+	 * add unset all instance vars defined in array methode
 	 */
 	final private function addMethode_6() {
-		$methodeName = 'unsetNamedVarsInArray';
-		$description = 'unset all instance vars named in array';
+		$methodeName = 'unsetDefinedVarsInArray';
+		$description = 'unset all instance vars defined in array';
 		$param1 = 'paramArray';
 		$param2 = null;
 		$return = null;
@@ -238,7 +238,7 @@ class BasicClassTemplate extends ComplexType {
 	}
 	
 	/**
-	 * add reset all instance vars named in array methode
+	 * add reset all instance vars defined in array methode
 	 */
 	final private function addMethode_9() {
 		$methodeName = 'resetAllOtherExcludeVarsInArray';
@@ -259,11 +259,11 @@ class BasicClassTemplate extends ComplexType {
 		$this->addClassMethode($methodeName, $use, $functionBlock, $description, $return, $param1, $param1Comment,$param2,$param2Comment);
 	}
 	/**
-	 * add reset all instance vars named in array methode
+	 * add reset all instance vars defined in array methode
 	 */
 	final private function addMethode_10() {
-		$methodeName = 'resetNamedVarsInArray';
-		$description = 'reset all instance vars named in array';
+		$methodeName = 'resetDefinedVarsInArray';
+		$description = 'reset all instance vars defined in array';
 		$param1 = 'paramArray';
 		$param2 = null;
 		$return = null;
@@ -277,6 +277,28 @@ class BasicClassTemplate extends ComplexType {
 		$functionBlock .= '		}' . PHP_EOL;
 		$functionBlock .= '	}' . PHP_EOL;
 	
+		$this->addClassMethode($methodeName, $use, $functionBlock, $description, $return, $param1, $param1Comment,$param2,$param2Comment);
+	}
+	/**
+	 * add reset enumeration setter methode
+	 */
+	final private function addMethode_11() {
+		$methodeName = 'enumSet';
+		$description = 'set var with string defined in Enum array';
+		$param1 = 'varName';
+		$param2 = 'value';
+		$return = null;
+		$param1Comment = PhpDocElementFactory::getVar('string', 'varName', '');
+		$param2Comment = PhpDocElementFactory::getVar('string', 'value', '');
+	
+		$use = array('Exception');
+		$functionBlock = '$enumArray = $varName . "Enum";' . PHP_EOL;
+		$functionBlock .= '	if(in_array($value, self::$$enumArray)){' . PHP_EOL;
+		$functionBlock .= '		$this->$varName = $value;' . PHP_EOL;
+		$functionBlock .= '	} else {' . PHP_EOL;
+		$functionBlock .= '		throw new Exception($value . "is not in Enumeration " . $enumArray . "!");' . PHP_EOL;
+		$functionBlock .= '	}' . PHP_EOL;
+		
 		$this->addClassMethode($methodeName, $use, $functionBlock, $description, $return, $param1, $param1Comment,$param2,$param2Comment);
 	}
 	
@@ -308,10 +330,10 @@ class BasicClassTemplate extends ComplexType {
 			$comment->setReturn($return);
 		}
 		if (null != $param1Comment) {
-			$comment->setVar( $param1Comment );
+			$comment->addParam($param1Comment);
 		}
 		if (null != $param2Comment) {
-			$comment->setVar2( $param2Comment );
+			$comment->addParam($param2Comment);
 		}
 		$comment->setDescription($description);
 		

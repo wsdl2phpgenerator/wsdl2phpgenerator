@@ -65,27 +65,37 @@ class ComplexType extends Type
     foreach ($this->members as $member)
     {
       $type = '';
-
+      
       try
       {
         $type = Validator::validateType($member->getType());
+        $simplyfiedType = SimplifyTypesService::instance()->getRootType($type);
       }
       catch (ValidationException $e)
       {
         $type .= 'Custom';
       }
 
+      
+      
       $name = Validator::validateNamingConvention($member->getName());
       $comment = new PhpDocComment();
-      $comment->setVar(PhpDocElementFactory::getParam($type, $name, ''));
-      $comment->setAccess(PhpDocElementFactory::getPrivateAccess());
-      $var = new PhpVariable('private', $name, '', $comment);
+      $comment->setVar(PhpDocElementFactory::getParam($simplyfiedType, $name, ''));
+      $comment->setAccess(PhpDocElementFactory::getProtectedAccess());
+      $var = new PhpVariable('protected', $name, '', $comment);
       $class->addVariable($var);
+      
+      $enumVars = XsdInspectorService::instance()->getEnumeration($type);
       
       // add getter
       $getterComment = new PhpDocComment();
       $getterComment->setAccess(PhpDocElementFactory::getPublicAccess());
-      $getterComment->setReturn(PhpDocElementFactory::getReturn($type, ''));
+      $getterReturnDescription = '';
+      if (null !== $enumVars) {
+      	$getterReturnDescription .= ' <'.implode(',', $enumVars).'>';
+      }
+      
+      $getterComment->setReturn(PhpDocElementFactory::getReturn($simplyfiedType, $getterReturnDescription));
       $class->addFunction(new PhpFunction('public'
       										, 'get' . ucfirst($name)
       										, ''
@@ -94,18 +104,37 @@ class ComplexType extends Type
       // add setter
       $setterComment = new PhpDocComment();
       $setterComment->setAccess(PhpDocElementFactory::getPublicAccess());
-      $setterComment->setVar(PhpDocElementFactory::getVar($type, $name, ''));
-      $setterComment->setReturn(PhpDocElementFactory::getReturn($this->phpIdentifier, ''));
+      $setterComment->setVar(PhpDocElementFactory::getVar($simplyfiedType, $name, ''));
       
+      
+      $setterReturnDescription = '';
+      $setterFunctionSrc = '	$this->'.$name.' = $'.$name.';'.PHP_EOL.'	return $this;'.PHP_EOL;
+      
+      //check enums
+      if (null !== $enumVars) {
+      	$comment = new PhpDocComment();
+      	$comment->setVar(PhpDocElementFactory::getParam('multitype:string', $name.'Enum', ''));
+      	$comment->setAccess(PhpDocElementFactory::getPublicAccess());
+      	
+      	$var = new PhpVariable('public static', $name.'Enum', 'array('.implode(',', $enumVars).')', $comment);
+		$class->addVariable($var);
+		$setterComment->setDescription('Enumeration of <' . implode(',', $enumVars) . '>');
+		$setterFunctionSrc = '	$this->enumSet(\''.$name.'\', $'.$name.');'.PHP_EOL;
+		$setterFunctionSrc .= '	return $this;'.PHP_EOL;
+      }
+      
+      
+      
+      
+      
+      $setterComment->setReturn(PhpDocElementFactory::getReturn($this->phpIdentifier, $setterReturnDescription));
       $class->addFunction(new PhpFunction('public'
       										, 'set' . ucfirst($name)
       										, '$'.$name
-      										, '	$this->'.$name.' = $'.$name.';'.PHP_EOL.'	return $this;'.PHP_EOL
+      										, $setterFunctionSrc
     										, $setterComment));
       
-      
-      
-      
+      // constructor
       $constructorSource .= '	$this->'.$name.' = $'.$name.';'.PHP_EOL;
       $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
       $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());

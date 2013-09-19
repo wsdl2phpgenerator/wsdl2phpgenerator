@@ -9,6 +9,11 @@
  */
 class SimplifyTypesService {
 	
+	/**
+	 * @var SimplifyTypesService singelton instance
+	 *
+	 */
+	private static $instance = null;
 	
 	/**
 	 * @var array list of extended simpleTypes
@@ -20,6 +25,19 @@ class SimplifyTypesService {
 	 */
 	private $typesArray = array();
 
+	private function __construct() {}
+	
+	/**
+	 * Initializes the single instance if it hasn't been, and returns it if it has.
+	 */
+	public static function instance() {
+		if( self::$instance === null ) {
+			self::$instance = new self();
+		}
+		return self::$instance;
+	}
+	
+	
 	/**
 	 * makes list of types
 	 * @param array $types
@@ -53,7 +71,7 @@ class SimplifyTypesService {
 	 * @param SoapClient $client
 	 * @return multitype:string
 	 */
-	public function getSimplifiedTypes(SoapClient $client){
+	public function loadTypes(SoapClient $client){
 		
 		$types = $client->__getTypes();
 		
@@ -115,7 +133,7 @@ class SimplifyTypesService {
 	 * @param string $className
 	 * @return boolean
 	 */
-	protected function isInSimpleTypeArray($className) {
+	public function isInSimpleTypeArray($className) {
 		return (array_key_exists($className, $this->extendetSimpleTypes))?true:false;
 	}
 }

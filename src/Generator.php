@@ -85,10 +85,6 @@ class Generator
    */
   private $displayCallback;
 
-  /**
-   * @var SimplifyTypesService
-   */
-  private $simplifyTypesService;
   
   /**
    * Construct the generator
@@ -100,7 +96,6 @@ class Generator
     $this->enums = array();
     $this->simple = array();
     $this->documentation = new DocumentationManager();
-    $this->simplifyTypesService = new SimplifyTypesService();
     // default to gettext, even if its unavailable (will lead to runtime exception if not and not injected)
     $this->displayCallback = ( function_exists('gettext') ? 'gettext' : null );
   }
@@ -248,8 +243,9 @@ class Generator
   {
     $this->log($this->display('Loading types'));
 
-	$types = $this->simplifyTypesService->getSimplifiedTypes($this->client);
-    
+	$types = $this->client->__getTypes();
+	SimplifyTypesService::instance()->loadTypes($this->client);
+	
     foreach($types as $typeStr)
     {
     	
