@@ -1,0 +1,124 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Wsdl2phpgenerator by wsdl2phpgenerator</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/wsdl2phpgenerator/wsdl2phpgenerator">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/wsdl2phpgenerator/wsdl2phpgenerator/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/wsdl2phpgenerator/wsdl2phpgenerator/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Wsdl2phpgenerator</h1>
+          <p>Simple utility and class library for generating php classes from a wsdl file.</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/wsdl2phpgenerator">wsdl2phpgenerator</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h1>
+<a name="wsdl2phpgenerator" class="anchor" href="#wsdl2phpgenerator"><span class="octicon octicon-link"></span></a>wsdl2phpgenerator</h1>
+
+<p><a href="https://travis-ci.org/reload/wsdl2phpgenerator"><img src="https://travis-ci.org/reload/wsdl2phpgenerator.png?branch=master" alt="Build Status"></a>
+<a href="https://coveralls.io/r/reload/wsdl2phpgenerator?branch=code-coverage-coveralls"><img src="https://coveralls.io/repos/reload/wsdl2phpgenerator/badge.png?branch=code-coverage-coveralls" alt="Coverage Status"></a></p>
+
+<p>Simple WSDL to PHP classes converter. Takes a WSDL file and outputs class files ready to use.</p>
+
+<p>Uses the <a href="http://www.opensource.org/licenses/mit-license.php">MIT licence</a></p>
+
+<h2>
+<a name="contributors" class="anchor" href="#contributors"><span class="octicon octicon-link"></span></a>Contributors</h2>
+
+<p>Originally developed by Fredrik Wallgren, <a href="https://github.com/walle/wsdl2phpgenerator">https://github.com/walle/wsdl2phpgenerator</a></p>
+
+<p>Includes bugfixes and improvements from:</p>
+
+<ul>
+<li>Vardan Akopian, <a href="https://github.com/vakopian/wsdl2phpgenerator">https://github.com/vakopian/wsdl2phpgenerator</a>
+</li>
+<li>
+<a href="http://www.statik.be">http://www.statik.be</a>, <a href="https://github.com/statikbe/wsdl2phpgenerator">https://github.com/statikbe/wsdl2phpgenerator</a>
+</li>
+<li>Eric Colinet, <a href="https://github.com/ecolinet/wsdl2phpgenerator">https://github.com/ecolinet/wsdl2phpgenerator</a>
+</li>
+<li>Nuth, <a href="https://github.com/nuth/wsdl2phpgenerator">https://github.com/nuth/wsdl2phpgenerator</a>
+</li>
+<li>Kasper Garnæs, <a href="https://github.com/kasperg/wsdl2phpgenerator">https://github.com/kasperg/wsdl2phpgenerator</a>
+</li>
+</ul><p>This fork has been created in an attempt to merge changes in forks of wsdl2phpgenerator which has never made it back into the original repository.</p>
+
+<p>Pull requests are very welcome.</p>
+
+<h2>
+<a name="mailing-list" class="anchor" href="#mailing-list"><span class="octicon octicon-link"></span></a>Mailing list</h2>
+
+<p>There is a mailing list for the project at <a href="https://groups.google.com/forum/#!forum/wsdl2phpgenerator">https://groups.google.com/forum/#!forum/wsdl2phpgenerator</a></p>
+
+<h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>Use the executable or the Generator class directly.</p>
+
+<h3>
+<a name="executable" class="anchor" href="#executable"><span class="octicon octicon-link"></span></a>Executable</h3>
+
+<p><code>./wsdl2php -i input.wsdl -o /tmp/my/directory/wsdl</code></p>
+
+<p>The directory is created if possible.</p>
+
+<p>usage listed under <code>./wsdl2php -h</code></p>
+
+<h3>
+<a name="code" class="anchor" href="#code"><span class="octicon octicon-link"></span></a>Code</h3>
+
+<div class="highlight highlight-php"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="k">require_once</span> <span class="nx">__DIR__</span><span class="o">.</span><span class="s2">"/path/here/Generator.php"</span><span class="p">;</span>
+
+<span class="nv">$generator</span> <span class="o">=</span> <span class="nx">Generator</span><span class="o">::</span><span class="na">instance</span><span class="p">();</span>
+<span class="nv">$generator</span><span class="o">-&gt;</span><span class="na">setDisplayCallback</span><span class="p">(</span> <span class="k">function</span><span class="p">(</span> <span class="nv">$msg</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"</span><span class="si">{</span><span class="nv">$msg</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="p">});</span>
+<span class="nv">$generator</span><span class="o">-&gt;</span><span class="na">generate</span><span class="p">(</span> 
+    <span class="k">new</span> <span class="nx">Config</span><span class="p">(</span> <span class="nx">SOAPSERVICE</span><span class="p">,</span> <span class="nx">SOAPDIR</span> <span class="p">)</span> 
+<span class="p">);</span>
+<span class="cp">?&gt;</span><span class="x"></span>
+</pre></div>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-10800077-11");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
