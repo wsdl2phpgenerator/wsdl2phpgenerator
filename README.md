@@ -21,6 +21,10 @@ This fork has been created in an attempt to merge changes in forks of wsdl2phpge
 
 Pull requests are very welcome.
 
+## Mailing list
+
+There is a mailing list for the project at [https://groups.google.com/forum/#!forum/wsdl2phpgenerator](https://groups.google.com/forum/#!forum/wsdl2phpgenerator)
+
 ## Usage
 Use the executable or the Generator class directly.
 
