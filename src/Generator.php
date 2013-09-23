@@ -186,8 +186,8 @@ class Generator
     XsdInspectorService::instance()->loadWsdlDom($this->dom, $this->config);
     
     $this->documentation->loadDocumentation($this->dom);
-    $this->loadTypes();
     $this->types[] = new BasicClassTemplate();
+    $this->loadTypes();
     $this->loadService();
   }
 

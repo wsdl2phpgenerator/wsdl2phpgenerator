@@ -134,7 +134,7 @@ class XsdInspectorService {
 			foreach ($tag->getElementsByTagName('choice') as $node) {
 				$aChoice = array();
 				foreach ($node->getElementsByTagName('element') as $element) {
-					$aChoice[] = $element->getAttribute('name');
+					$aChoice[] = '"' . $element->getAttribute('name') . '"';
 				}
 				if (0 < count($aChoice) ) {
 					$aComplexType['CHOICE'] = $aChoice;
@@ -199,7 +199,19 @@ class XsdInspectorService {
 		return null;
 	}
 	
-	
+	/**
+	 * returns an array of strings if class has choice else null
+	 * @param string $className
+	 * @return NULL|multitype:string
+	 */
+	public function getChoice($className) {
+		if ($this->isInElementList($className)) {
+			if (array_key_exists('CHOICE', $this->elementList[$className])) {
+				return $this->elementList[$className]['CHOICE'];
+			}
+		}
+		return null;
+	}
 	
 }
 

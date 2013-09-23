@@ -87,6 +87,7 @@ class ComplexType extends Type
       
       $enumVars = XsdInspectorService::instance()->getEnumeration($type);
       
+      
       // add getter
       $getterComment = new PhpDocComment();
       $getterComment->setAccess(PhpDocElementFactory::getPublicAccess());
@@ -123,7 +124,16 @@ class ComplexType extends Type
 		$setterFunctionSrc .= '	return $this;'.PHP_EOL;
       }
       
-      
+      //check choice
+     
+      $choiceVars = XsdInspectorService::instance()->getChoice($class->getIdentifier());
+      if (null !== $choiceVars) {
+      	$setterComment->setDescription('Choice of <' . implode(',', $choiceVars) . '>');
+      	$setterFunctionSrc = '	$this->unsetDefinedVarsInArray(array('.implode(',', $choiceVars).'));'.PHP_EOL;
+      	$setterFunctionSrc .= '	$this->'.$name.' = $'.$name.';'.PHP_EOL;
+      	$setterFunctionSrc .= '	return $this;'.PHP_EOL;
+      	
+      }
       
       
       
