@@ -4,20 +4,10 @@
 
 Simple WSDL to PHP classes converter. Takes a WSDL file and outputs class files ready to use.
 
-Uses the [MIT licence](http://www.opensource.org/licenses/mit-license.php)
+Uses the [MIT licence](http://www.opensource.org/licenses/mit-license.php).
 
 ## Contributors
-Originally developed by Fredrik Wallgren, https://github.com/walle/wsdl2phpgenerator
-
-Includes bugfixes and improvements from:
-
-* Vardan Akopian, https://github.com/vakopian/wsdl2phpgenerator
-* http://www.statik.be, https://github.com/statikbe/wsdl2phpgenerator
-* Eric Colinet, https://github.com/ecolinet/wsdl2phpgenerator
-* Nuth, https://github.com/nuth/wsdl2phpgenerator
-* Kasper Garnæs, https://github.com/kasperg/wsdl2phpgenerator
-
-This fork has been created in an attempt to merge changes in forks of wsdl2phpgenerator which has never made it back into the original repository.
+Originally developed by [@walle](https://github.com/walle) and includes bugfixes and improvements from [@vakopian](https://github.com/vakopian), [@statikbe](https://github.com/statikbe/), [@ecolinet](https://github.com/ecolinet), [@nuth](https://github.com/nuth/) and [@kasperg](https://github.com/kasperg/).
 
 Pull requests are very welcome.
 
