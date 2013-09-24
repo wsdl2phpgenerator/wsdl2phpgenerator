@@ -137,11 +137,16 @@ class Service
     $comment->setVar(PhpDocElementFactory::getVar('array', $name, 'The defined classes'));
 
     $init = 'array('.PHP_EOL;
+    
+    $nameSpace = (null != $config->getNamespaceName())?$config->getNamespaceName() . '\\':'';
+    
     foreach ($this->types as $type)
     {
       if($type instanceof ComplexType)
       {
-        $init .= "  '".$type->getIdentifier()."' => '".$type->getPhpIdentifier()."',".PHP_EOL;
+      	
+      	
+        $init .= "  '".$type->getIdentifier()."' => '".$nameSpace.$type->getPhpIdentifier()."',".PHP_EOL;
       }
     }
     $init = substr($init, 0, strrpos($init, ','));
