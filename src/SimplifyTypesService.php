@@ -2,9 +2,11 @@
 
 
 /**
- * @package Wsdl2PhpGenerator
  * service for searching simple data types (simpleTypes)
  * @example stringLength0to32 -> string 
+ * @package Wsdl2PhpGenerator
+ * @author georg palischek <georg.palischek@it-treuhand.eu>
+ * @license http://www.opensource.org/licenses/mit-license.php MIT License
  *
  */
 class SimplifyTypesService {

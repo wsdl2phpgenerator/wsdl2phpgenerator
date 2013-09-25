@@ -2,6 +2,8 @@
 
 /**
  * @package Wsdl2PhpGenerator
+ * @author georg palischek <georg.palischek@it-treuhand.eu>
+ * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
 /**

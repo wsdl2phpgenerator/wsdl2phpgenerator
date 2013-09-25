@@ -5,6 +5,9 @@ require_once dirname(__FILE__).'/Config.php';
  * service class for inheritance, enum, choices in xsd description
  * implemented as singelton helper
  * @uses config.php
+ * @package Wsdl2PhpGenerator
+ * @author georg palischek <georg.palischek@it-treuhand.eu>
+ * @license http://www.opensource.org/licenses/mit-license.php MIT License
  *
  */
 class XsdInspectorService {
