@@ -6,6 +6,7 @@
 namespace Wsdl2PhpGenerator;
 use \Exception;
 use \SoapFault;
+use \DOMDocument;
 use \DOMException;
 
 /**
