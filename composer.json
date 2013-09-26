@@ -1,6 +1,16 @@
 {
+    "name": "wsdl2phpgenerator/wsdl2phpgenerator",
+    "description": "Simple utility and class library for generating php classes from a wsdl file.",
+    "keywords": ["soap", "wsdl"],
+    "autoload": {
+        "psr-0": {
+            "Wsdl2PhpGenerator\\": ["src/", "lib/cli/", "lib/config/", "lib/phpSource/"]
+        }
+    },
+    "bin": ["wsdl2php"],
     "require": {
-        "php": ">=5.3.0"
+        "php": ">=5.3.0",
+        "ext-soap": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*",
