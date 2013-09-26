@@ -4,7 +4,7 @@
     "keywords": ["soap", "wsdl"],
     "autoload": {
         "psr-0": {
-            "Wsdl2PhpGenerator\\": ["src/"]
+            "Wsdl2PhpGenerator\\": ["src/", "lib/cli/", "lib/config/", "lib/phpSource/"]
         }
     },
     "bin": ["wsdl2php"],
