@@ -3,6 +3,7 @@
  * @package cli
  */
 namespace Wsdl2PhpGenerator;
+use \Exception;
 
 /**
  * Include the needed files

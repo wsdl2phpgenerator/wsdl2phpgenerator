@@ -3,6 +3,7 @@
  * @package cli
  */
 namespace Wsdl2PhpGenerator;
+use \Exception;
 
 /**
  * Class that represents a flag in the cli, can have aliases and a description

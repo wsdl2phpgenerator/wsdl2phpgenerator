@@ -2,6 +2,7 @@
 /**
  * @package wsdl2phpTest
  */
+use Wsdl2PhpGenerator\Config;
 
 /**
  * Test class for Config.

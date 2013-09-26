@@ -3,6 +3,7 @@
  * @package config
  */
 namespace Wsdl2PhpGenerator;
+use \Exception;
 
 /**
  * Include the interface
