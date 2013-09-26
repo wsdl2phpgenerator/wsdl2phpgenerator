@@ -3,6 +3,8 @@
  * @package Wsdl2PhpGenerator
  */
 
+namespace Wsdl2PhpGenerator;
+
 /**
  * Include the needed files
  */
@@ -36,7 +38,7 @@ class Generator
 
     /**
      * A SoapClient for loading the WSDL
-     * @var SoapClient
+     * @var \SoapClient
      * @access private
      */
     private $client = null;
@@ -170,13 +172,13 @@ class Generator
     {
         try {
             $this->log($this->display('Loading the wsdl'));
-            $this->client = new SoapClient($wsdl, array('cache_wsdl' => WSDL_CACHE_NONE));
-        } catch (SoapFault $e) {
+            $this->client = new \SoapClient($wsdl, array('cache_wsdl' => WSDL_CACHE_NONE));
+        } catch (\SoapFault $e) {
             throw new Exception('Error connecting to to the wsdl. Error: ' . $e->getMessage());
         }
 
         $this->log($this->display('Loading the DOM'));
-        $this->dom[0] = new DOMDocument();
+        $this->dom[0] = new \DOMDocument();
         $this->dom[0]->load($wsdl);
 
         $this->documentation->loadDocumentation($this->dom[0]);
@@ -184,7 +186,7 @@ class Generator
         $sxml = simplexml_import_dom($this->dom[0]);
 
         foreach ($sxml->xpath('//wsdl:import/@location') as $wsdl_file) {
-            $dom = new DOMDocument();
+            $dom = new \DOMDocument();
             $dom->load($wsdl_file);
             $this->documentation->loadDocumentation($dom);
             $this->dom[] = $dom;

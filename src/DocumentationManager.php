@@ -3,6 +3,7 @@
 /**
  * @package Wsdl2PhpGenerator
  */
+namespace Wsdl2PhpGenerator;
 
 /**
  * Very stupid datatype to use instead of array
@@ -35,9 +36,9 @@ class DocumentationManager
     /**
      * Loads all documentation into the instance
      *
-     * @param DOMDocument $dom The wsdl file dom document
+     * @param \DOMDocument $dom The wsdl file dom document
      */
-    public function loadDocumentation(DOMDocument $dom)
+    public function loadDocumentation(\DOMDocument $dom)
     {
         $docList = $dom->getElementsByTagName('documentation');
 

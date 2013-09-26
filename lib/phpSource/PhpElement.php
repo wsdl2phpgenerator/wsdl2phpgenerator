@@ -2,6 +2,7 @@
 /**
  * @package phpSource
  */
+namespace Wsdl2PhpGenerator;
 
 /**
  * Abstract base class for all PHP elements, variables, functions and classes etc.

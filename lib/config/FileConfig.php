@@ -2,6 +2,7 @@
 /**
  * @package config
  */
+namespace Wsdl2PhpGenerator;
 
 /**
  * Include the interface
@@ -136,7 +137,7 @@ class FileConfig implements IConfig
         if ($this->exists($key)) {
             return $this->data[$key];
         } else {
-            throw new Exception('Trying to get a nonexisting value!');
+            throw new \Exception('Trying to get a nonexisting value!');
         }
     }
 

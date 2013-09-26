@@ -2,6 +2,7 @@
 /**
  * @package cli
  */
+namespace Wsdl2PhpGenerator;
 
 /**
  * Class that represents a flag in the cli, can have aliases and a description

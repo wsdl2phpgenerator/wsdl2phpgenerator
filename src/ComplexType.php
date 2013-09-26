@@ -3,6 +3,7 @@
 /**
  * @package Generator
  */
+namespace Wsdl2PhpGenerator;
 
 /**
  * @see Type
