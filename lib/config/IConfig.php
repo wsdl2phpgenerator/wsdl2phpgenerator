@@ -3,6 +3,7 @@
 /**
  * @package config
  */
+namespace Wsdl2PhpGenerator;
 
 /**
  * Interface of all config classes using key value setup

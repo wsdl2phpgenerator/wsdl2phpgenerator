@@ -2,6 +2,7 @@
 /**
  * @package Wsdl2PhpGenerator
  */
+namespace Wsdl2PhpGenerator;
 
 /**
  * Class that contains all the settings possible for the Wsdl2PhpGenerator
