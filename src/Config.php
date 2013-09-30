@@ -48,6 +48,7 @@ class Config
     private $inputFile;
 
     /**
+<<<<<<< HEAD
      * @var string the dir for xsd files to generate classes with extends hirarchy
      */
     private $inputXsdDir;
@@ -58,6 +59,8 @@ class Config
     private $basicClassName;
 
     /**
+=======
+>>>>>>> origin/master
      * The array should contain the strings for the options to enable
      *
      * @var array containing all features in the options for the client
