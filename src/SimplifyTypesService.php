@@ -71,7 +71,7 @@ class SimplifyTypesService {
 	
 	/**
 	 * @param SoapClient $client
-	 * @return multitype:string
+	 * @return array:string
 	 */
 	public function loadTypes(SoapClient $client){
 		
@@ -108,14 +108,14 @@ class SimplifyTypesService {
 	}
 
 	/**
-	 * @return multitype: the $extendetSimpleTypes
+	 * @return array: the $extendetSimpleTypes
 	 */
 	public function getExtendetSimpleTypes() {
 		return $this->extendetSimpleTypes;
 	}
 
 	/**
-	 * @return multitype: the $typesArray
+	 * @return array: the $typesArray
 	 */
 	public function getTypesArray() {
 		return $this->typesArray;

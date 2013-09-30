@@ -175,7 +175,7 @@ class XsdInspectorService {
 	
 	
 	/**
-	 * returns basis class (Wsdl2PhpGeneratorBasicClass) or extension class if avail
+	 * returns basic class (Wsdl2PhpGeneratorBasicClass) or extension class if avail
 	 * @param string $className
 	 * @return string
 	 */
@@ -191,7 +191,7 @@ class XsdInspectorService {
 	/**
 	 * returns an array of strings if var is enumeration else null
 	 * @param string $varType
-	 * @return NULL|multitype:string
+	 * @return NULL|array:string
 	 */
 	public function getEnumeration($varType) {
 		if ($this->isInElementList($varType)) {
@@ -205,7 +205,7 @@ class XsdInspectorService {
 	/**
 	 * returns an array of strings if class has choice else null
 	 * @param string $className
-	 * @return NULL|multitype:string
+	 * @return NULL|array:string
 	 */
 	public function getChoice($className) {
 		if ($this->isInElementList($className)) {

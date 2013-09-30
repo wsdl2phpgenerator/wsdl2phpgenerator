@@ -21,7 +21,6 @@ interface IConfig
      */
     public function set($key, $value);
 
-
     /**
      * Returns the value bound to the key
      *
@@ -29,13 +28,11 @@ interface IConfig
      */
     public function get($key);
 
-
     /**
      * Checks if the key is used
      *
-     * @param string $key
+     * @param  string $key
      * @return bool
      */
     public function exists($key);
 }
-

@@ -6,9 +6,9 @@
 /**
  * Include the needed files
  */
-require_once dirname(__FILE__).'/PhpElement.php';
-require_once dirname(__FILE__).'/PhpDocComment.php';
-require_once dirname(__FILE__).'/PhpFunction.php';
+require_once dirname(__FILE__) . '/PhpElement.php';
+require_once dirname(__FILE__) . '/PhpDocComment.php';
+require_once dirname(__FILE__) . '/PhpFunction.php';
 
 /**
  * Class that represents the source code for a class in php
@@ -19,341 +19,329 @@ require_once dirname(__FILE__).'/PhpFunction.php';
  */
 class PhpClass extends PhpElement
 {
-  /**
-   *
-   * @var array An array of strings, contains all the filenames to include for the class
-   * @access private
-   */
-  private $dependencies;
-  
-  /**
-   * @var array An array of strings, use classesnames and namespace to include for the class
-   */
-  private $use;
+    /**
+     *
+     * @var array An array of strings, contains all the filenames to include for the class
+     * @access private
+     */
+    private $dependencies;
 
-  /**
-   *
-   * @var bool If the class should be protected by a if(!class_exists() statement
-   * @access private
-   */
-  private $classExists;
+    /**
+     * @var array An array of strings, use classesnames and namespace to include for the class
+     */
+    private $use;
 
-  /**
-   *
-   * @var bool If the class is final
-   * @access private
-   */
-  private $final;
+    /**
+     *
+     * @var bool If the class should be protected by a if(!class_exists() statement
+     * @access private
+     */
+    private $classExists;
 
-  /**
-   * @var bool if the class is abstract
-   */
-  private $abstract;
-  
-  /**
-   *
-   * @var string
-   * @access private
-   */
-  private $extends;
+    /**
+     *
+     * @var bool If the class is final
+     * @access private
+     */
+    private $final;
 
-  /**
-   *
-   * @var array Array of constants key = name of constant value = value of constant
-   */
-  private $constants;
+    /**
+     *
+     * @var string
+     * @access private
+     */
+    private $extends;
 
-  /**
-   *
-   * @var array Array of PhpVariable objects
-   * @access private
-   */
-  private $variables;
+    /**
+     *
+     * @var const
+     * @access private
+     */
+    private $default;
 
-  /**
-   *
-   * @var array Array of PhpFunction objects
-   * @access private
-   */
-  private $functions;
+    /**
+     *
+     * @var array Array of constants key = name of constant value = value of constant
+     */
+    private $constants;
 
-  /**
-   *
-   * @var PhpDocComment A description of the class in phpdoc format
-   * @access private
-   */
-  private $comment;
+    /**
+     *
+     * @var array Array of PhpVariable objects
+     * @access private
+     */
+    private $variables;
 
-  /**
-   *
-   * @param string $identifier
-   * @param bool $classExists
-   * @param string $extends A string of the class that this class extends
-   * @param PhpDocComment $comment
-   * @param bool $final
-   */
-  public function __construct($identifier, $classExists = false, $extends = '', PhpDocComment $comment = null, $final = false, $abstract = false)
-  {
-    $this->dependencies = array();
-    $this->use = array();
-    $this->classExists = $classExists;
-    $this->comment = $comment;
-    $this->final = $final;
-    $this->abstract = $abstract;
-    $this->identifier = $identifier;
-    $this->access = '';
-    $this->extends = $extends;
-    $this->constants = array();
-    $this->variables = array();
-    $this->functions = array();
-    $this->indentionStr = '	'; // Use one tabs as indention
-  }
+    /**
+     *
+     * @var array Array of PhpFunction objects
+     * @access private
+     */
+    private $functions;
 
-  /**
-	 * @return string the $extends
-	 */
-	public function getExtends() {
-		return $this->extends;
-	}
+    /**
+     *
+     * @var PhpDocComment A description of the class in phpdoc format
+     * @access private
+     */
+    private $comment;
 
-/**
-	 * @return multitype: the $constants
-	 */
-	public function getConstants() {
-		return $this->constants;
-	}
-
-/**
-	 * @param string $extends
-	 * @return PhpClass
-	 */
-	public function setExtends($extends) {
-		$this->extends = $extends;
-		return $this;
-	}
-
-/**
-	 * @param multitype: $constants
-	 * @return PhpClass
-	 */
-	public function setConstants($constants) {
-		$this->constants = $constants;
-		return $this;
-	}
-
-/**
-   *
-   * @return string Returns the compete source code for the class
-   */
-  public function getSource()
-  {
-    $ret = '';
-
-    if ($this->classExists)
+    /**
+     *
+     * @param string $identifier
+     * @param bool $classExists
+     * @param string $extends A string of the class that this class extends
+     * @param PhpDocComment $comment
+     * @param bool $final
+     */
+    public function __construct($identifier, $classExists = false, $extends = '', PhpDocComment $comment = null, $final = false)
     {
-      $ret .= 'if (!class_exists("'.$this->identifier.'", false)) '.' {'.PHP_EOL;
+        $this->dependencies = array();
+        $this->use = array();
+        $this->classExists = $classExists;
+        $this->comment = $comment;
+        $this->final = $final;
+        $this->identifier = $identifier;
+        $this->access = '';
+        $this->extends = $extends;
+        $this->constants = array();
+        $this->variables = array();
+        $this->functions = array();
+        $this->indentionStr = '  '; // Use two spaces as indention
     }
 
-  if (count($this->dependencies) > 0)
-    {
-      foreach ($this->dependencies as $file)
-      {
-        $ret .= 'include_once(\''.$file.'\');'.PHP_EOL;
-      }
-      $ret .= PHP_EOL;
+    /**
+     * @return string the $extends
+     */
+    public function getExtends() {
+        return $this->extends;
     }
 
-  if (count($this->use) > 0)
-    {
-      foreach ($this->use as $file)
-      {
-        $ret .= 'use ' .$file.';'.PHP_EOL;
-      }
-      $ret .= PHP_EOL;
+    /**
+     * @return multitype: the $constants
+     */
+    public function getConstants() {
+        return $this->constants;
     }
 
-    if ($this->comment !== null)
-    {
-      $ret .= $this->comment->getSource();
+    /**
+     * @param string $extends
+     * @return PhpClass
+     */
+    public function setExtends($extends) {
+        $this->extends = $extends;
+        return $this;
     }
 
-    if ($this->final)
-    {
-    	$ret .= 'final ';
+    /**
+     * @param multitype: $constants
+     * @return PhpClass
+     */
+    public function setConstants($constants) {
+        $this->constants = $constants;
+        return $this;
     }
 
-    if ($this->abstract)
+
+    /**
+     *
+     * @return string Returns the compete source code for the class
+     */
+    public function getSource()
     {
-    	$ret .= 'abstract ';
-    }
-    
-    $ret .= 'class '.$this->identifier;
+        $ret = '';
 
-    if (strlen($this->extends) > 0)
-    {
-      $ret .= ' extends '.$this->extends;
-    }
+        if ($this->classExists) {
+            $ret .= 'if (!class_exists("' . $this->identifier . '", false)) ' . PHP_EOL . '{' . PHP_EOL;
+        }
 
-    $ret .= ' {'.PHP_EOL;
+        if (count($this->dependencies) > 0) {
+            foreach ($this->dependencies as $file) {
+                $ret .= 'include_once(\'' . $file . '\');' . PHP_EOL;
+            }
+            $ret .= PHP_EOL;
+        }
 
-    if (count($this->constants) > 0)
-    {
-      foreach ($this->constants as $name => $value)
-      {
-        $ret .= $this->getIndentionStr().'const '.$name.' = \''.$value.'\';'.PHP_EOL;
-      }
-      $ret .= PHP_EOL;
-    }
+        if (count($this->use) > 0)
+        {
+            foreach ($this->use as $file)
+            {
+                $ret .= 'use ' .$file.';'.PHP_EOL;
+            }
+            $ret .= PHP_EOL;
+        }
 
-    if (count($this->variables) > 0)
-    {
-      foreach ($this->variables as $variable)
-      {
-        $variable->setIndentionStr($this->getIndentionStr());
-        $ret .= $variable->getSource();
-      }
-    }
+        if ($this->comment !== null) {
+            $ret .= $this->comment->getSource();
+        }
 
-    if (count($this->functions) > 0)
-    {
-      foreach ($this->functions as $function)
-      {
-        $function->setIndentionStr($this->getIndentionStr());
-        $ret .= $function->getSource();
-      }
-    }
+        if ($this->final) {
+            $ret .= 'final ';
+        }
 
-    $ret .= PHP_EOL.'}'.PHP_EOL;
+        $ret .= 'class ' . $this->identifier;
 
-    if ($this->classExists)
-    {
-      $ret .= PHP_EOL.'}'.PHP_EOL;
-    }
+        if (strlen($this->extends) > 0) {
+            $ret .= ' extends ' . $this->extends;
+        }
 
-    return $ret;
-  }
+        $ret .= PHP_EOL . '{' . PHP_EOL;
 
-  /**
-   * Adds a dependency to be loaded for the class to use
-   * Only adds it if it does not already exist
-   *
-   * @param string $filename
-   */
-  public function addDependency($filename)
-  {
-    if (in_array($filename, $this->dependencies) == false)
-    {
-      $this->dependencies[] = $filename;
-    }
-  }
-  
-  /**
-   * Adds uses to be loaded for the class to use
-   * Only adds it if it does not already exist
-   *
-   * @param string $className
-   */
-  public function addUse($className)
-  {
-  	if (in_array($className, $this->use) == false)
-  	{
-  		$this->use[] = $className;
-  	}
-  }
-  
-  /**
-   * Adds a constant to the class. If no name is supplied and the value is a string the value is used as name otherwise exception is raised
-   *
-   * @param mixed $value
-   * @param string $name
-   * @throws Exception
-   */
-  public function addConstant($value, $name = '')
-  {
-    if (strlen($value) == 0)
-    {
-      throw new Exception('No value supplied');
+        if (isset($this->default)) {
+            $ret .= $this->getIndentionStr() . 'const __default = ' . $this->default . ';' . PHP_EOL;
+        }
+
+        if (count($this->constants) > 0) {
+            foreach ($this->constants as $name => $value) {
+                $ret .= $this->getIndentionStr() . 'const ' . $name . ' = \'' . $value . '\';' . PHP_EOL;
+            }
+            $ret .= PHP_EOL;
+        }
+
+        if (count($this->variables) > 0) {
+            foreach ($this->variables as $variable) {
+                $variable->setIndentionStr($this->getIndentionStr());
+                $ret .= $variable->getSource();
+            }
+        }
+
+        if (count($this->functions) > 0) {
+            foreach ($this->functions as $function) {
+                $function->setIndentionStr($this->getIndentionStr());
+                $ret .= $function->getSource();
+            }
+        }
+
+        $ret .= PHP_EOL . '}' . PHP_EOL;
+
+        if ($this->classExists) {
+            $ret .= PHP_EOL . '}' . PHP_EOL;
+        }
+
+        return $ret;
     }
 
-    // If no name is supplied use the value as name
-    if (strlen($name) == 0)
+    /**
+     * Adds a dependency to be loaded for the class to use
+     * Only adds it if it does not already exist
+     *
+     * @param string $filename
+     */
+    public function addDependency($filename)
     {
-      if (is_string($value))
-      {
-        $name = $value;
-      }
-      else
-      {
-        throw new Exception('No name supplied');
-      }
+        if (in_array($filename, $this->dependencies) == false) {
+            $this->dependencies[] = $filename;
+        }
     }
 
-    if (array_key_exists($name, $this->constants))
+    /**
+     * Adds uses to be loaded for the class to use
+     * Only adds it if it does not already exist
+     *
+     * @param string $className
+     */
+    public function addUse($className)
     {
-      throw new Exception('A constant of the name ('.$name.') does already exist.');
+        if (in_array($className, $this->use) == false)
+        {
+            $this->use[] = $className;
+        }
     }
 
-    $this->constants[$name] = $value;
-  }
-
-  /**
-   * Adds a variable to the class
-   * Throws Exception if the variable does already exist
-   *
-   * @param PhpVariable $variable The variable object to add
-   * @access public
-   * @throws Exception If the variable name already exists
-   */
-  public function addVariable(PhpVariable $variable)
-  {
-    if ($this->variableExists($variable->getIdentifier()))
+    /**
+     * Set default value
+     *
+     * @param $const
+     */
+    public function setDefault($const)
     {
-      throw new Exception('A variable of the name ('.$variable->getIdentifier().') does already exist.');
+        $this->default = $const;
     }
 
-    $this->variables[$variable->getIdentifier()] = $variable;
-  }
-
-  /**
-   * Adds a function to the class
-   * Overwrites
-   *
-   * @param PhpFunction $function The function object to add
-   * @access public
-   * @throws Exception If the function name already exists
-   */
-  public function addFunction(PhpFunction $function)
-  {
-    if ($this->functionExists($function->getIdentifier()))
+    /**
+     * Adds a constant to the class. If no name is supplied and the value is a string the value is used as name otherwise exception is raised
+     *
+     * @param mixed $value
+     * @param string $name
+     * @throws Exception
+     */
+    public function addConstant($value, $name = '')
     {
-      throw new Exception('A function of the name ('.$function->getIdentifier().') does already exist.');
+        if (strlen($value) == 0) {
+            throw new Exception('No value supplied');
+        }
+
+        // If no name is supplied use the value as name
+        if (strlen($name) == 0) {
+            if (is_string($value)) {
+                $name = $value;
+            } else {
+                throw new Exception('No name supplied');
+            }
+        }
+
+        if (array_key_exists($name, $this->constants)) {
+            throw new Exception('A constant of the name (' . $name . ') does already exist.');
+        }
+
+        $this->constants[$name] = $value;
     }
 
-    $this->functions[$function->getIdentifier()] = $function;
-  }
+    /**
+     * Adds a variable to the class
+     * Throws Exception if the variable does already exist
+     *
+     * @param PhpVariable $variable The variable object to add
+     * @access public
+     * @throws Exception If the variable name already exists
+     */
+    public function addVariable(PhpVariable $variable)
+    {
+        if ($this->variableExists($variable->getIdentifier())) {
+            throw new Exception('A variable of the name (' . $variable->getIdentifier() . ') does already exist.');
+        }
 
-  /**
-   * Checks if a variable with the same name does already exist
-   *
-   * @access public
-   * @param string $identifier
-   * @return bool
-   */
-  public function variableExists($identifier)
-  {
-    return array_key_exists($identifier, $this->variables);
-  }
+        $this->variables[$variable->getIdentifier()] = $variable;
+    }
 
-  /**
-   * Checks if a function with the same name does already exist
-   *
-   * @access public
-   * @param string $identifier
-   * @return bool
-   */
-  public function functionExists($identifier)
-  {
-    return array_key_exists($identifier, $this->functions);
-  }
+    /**
+     * Adds a function to the class
+     * Overwrites
+     *
+     * @param PhpFunction $function The function object to add
+     * @access public
+     * @throws Exception If the function name already exists
+     */
+    public function addFunction(PhpFunction $function)
+    {
+        if ($this->functionExists($function->getIdentifier())) {
+            throw new Exception('A function of the name (' . $function->getIdentifier() . ') does already exist.');
+        }
+
+        $this->functions[$function->getIdentifier()] = $function;
+    }
+
+    /**
+     * Checks if a variable with the same name does already exist
+     *
+     * @access public
+     * @param string $identifier
+     * @return bool
+     */
+    public function variableExists($identifier)
+    {
+        return array_key_exists($identifier, $this->variables);
+    }
+
+    /**
+     * Checks if a function with the same name does already exist
+     *
+     * @access public
+     * @param string $identifier
+     * @return bool
+     */
+    public function functionExists($identifier)
+    {
+        return array_key_exists($identifier, $this->functions);
+    }
 }
-

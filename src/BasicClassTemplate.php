@@ -23,7 +23,6 @@ class BasicClassTemplate extends ComplexType {
 	 * Construct the object
 	 *
 	 * @param string $name The identifier for the class
-	 * @param string $restriction The restriction(datatype) of the values
 	 */
 	public function __construct($name = 'Wsdl2PhpGeneratorBasicClass') {
 		parent::__construct($name, null);

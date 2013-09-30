@@ -1,6 +1,10 @@
+.gitignore
+.project
 .buildpath
 .settings
-.project
-logs
+.idea
 input
 output
+dump
+README.md
+
