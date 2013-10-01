@@ -194,6 +194,7 @@ class Generator
         }
 
         $this->loadSchema();
+        $this->types[] = new BasicClassTemplate();
         $this->loadTypes();
         $this->loadService();
     }
