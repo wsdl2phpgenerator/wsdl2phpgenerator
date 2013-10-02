@@ -1,3 +1,4 @@
+.gitignore
 .project
 .buildpath
 .settings
@@ -5,3 +6,5 @@
 input
 output
 dump
+README.md
+
