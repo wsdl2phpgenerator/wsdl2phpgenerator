@@ -139,5 +139,4 @@ class SimplifyTypesService {
 		return (array_key_exists($className, $this->extendetSimpleTypes))?true:false;
 	}
 }
-
 ?>

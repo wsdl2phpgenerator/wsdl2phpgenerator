@@ -367,27 +367,5 @@ class BasicClassTemplate extends ComplexType {
 		$this->generateClass();
 		return parent::getClass();
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
-
 ?>
