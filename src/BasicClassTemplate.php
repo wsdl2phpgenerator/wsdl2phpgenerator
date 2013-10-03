@@ -63,7 +63,7 @@ class BasicClassTemplate extends ComplexType {
 		$param1Comment = PhpDocElementFactory::getVar('string', 'name', 'the var name');
 		$param2Comment = PhpDocElementFactory::getVar('unknown', 'value', 'the value');
 		
-		$use = array('Exception');
+		$use = null;
 		$functionBlock = '	if(method_exists($this, \'set\'.ucfirst($name))){' . PHP_EOL;
 		$functionBlock .= '		$this->{\'set\'.ucfirst($name)}($value);' . PHP_EOL;
 		$functionBlock .= '	} else {' . PHP_EOL;
@@ -83,7 +83,7 @@ class BasicClassTemplate extends ComplexType {
 		$param1 = 'name';
 		$return = PhpDocElementFactory::getReturn('unknown', '');
 		
-		$use = array('Exception');
+		$use = null;
 		$functionBlock = '	if(method_exists($this, \'get\'.ucfirst($name))){' . PHP_EOL;
 		$functionBlock .= '		return $this->{\'get\'.ucfirst($name)}();' . PHP_EOL;
 		$functionBlock .= '	} else {' . PHP_EOL;
@@ -291,9 +291,10 @@ class BasicClassTemplate extends ComplexType {
 		$return = null;
 		$param1Comment = PhpDocElementFactory::getVar('string', 'varName', '');
 		$param2Comment = PhpDocElementFactory::getVar('string', 'value', '');
-	
-		$use = array('Exception');
-		$functionBlock = '$enumArray = $varName . "Enum";' . PHP_EOL;
+
+        $use = null;
+
+        $functionBlock = '$enumArray = $varName . "Enum";' . PHP_EOL;
 		$functionBlock .= '	if(in_array($value, self::$$enumArray)){' . PHP_EOL;
 		$functionBlock .= '		$this->$varName = $value;' . PHP_EOL;
 		$functionBlock .= '	} else {' . PHP_EOL;
