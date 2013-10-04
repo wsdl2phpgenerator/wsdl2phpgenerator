@@ -35,13 +35,11 @@ abstract class Wsdl2PhpGeneratorFunctionalTestCase extends PHPUnit_Framework_Tes
 
         // We do not execute the code generation here to allow individual test cases
         // to update the configuration further before generating.
-    }
 
-    protected function tearDown()
-    {
+        // Clear output dir before starting.
         if (is_dir($this->outputDir)) {
             // Remove any generated code.
-//            $this->deleteDir($this->outputDir);
+            $this->deleteDir($this->outputDir);
         }
     }
 
