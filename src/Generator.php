@@ -5,9 +5,11 @@
 
 namespace Wsdl2PhpGenerator;
 use \Exception;
+use \SoapClient;
 use \SoapFault;
 use \DOMDocument;
 use \DOMException;
+use \DOMElement;
 
 /**
  * Include the needed files
@@ -42,7 +44,7 @@ class Generator
 
     /**
      * A SoapClient for loading the WSDL
-     * @var \SoapClient
+     * @var SoapClient
      * @access private
      */
     private $client = null;
@@ -176,7 +178,7 @@ class Generator
     {
         try {
             $this->log($this->display('Loading the wsdl'));
-            $this->client = new \SoapClient($wsdl, array('cache_wsdl' => WSDL_CACHE_NONE));
+            $this->client = new SoapClient($wsdl, array('cache_wsdl' => WSDL_CACHE_NONE));
         } catch (SoapFault $e) {
             throw new Exception('Error connecting to to the wsdl. Error: ' . $e->getMessage());
         }
