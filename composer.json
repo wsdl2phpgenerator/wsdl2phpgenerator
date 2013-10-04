@@ -9,6 +9,7 @@
     },
     "bin": ["wsdl2php"],
     "require": {
+        "php": ">=5.3.0",
         "ext-soap": "*"
     },
     "require-dev": {
