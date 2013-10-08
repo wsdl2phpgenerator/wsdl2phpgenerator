@@ -2,6 +2,7 @@
 /**
  * @package phpSource
  */
+namespace Wsdl2PhpGenerator;
 
 /**
  * Class that represents a element (var, param, throws etc.) in a comment in php

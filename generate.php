@@ -2,6 +2,11 @@
 /**
  * @package Wsdl2PhpGenerator
  */
+use Wsdl2PhpGenerator\Generator;
+use Wsdl2PhpGenerator\FileConfig;
+use Wsdl2PhpGenerator\Cli;
+use Wsdl2PhpGenerator\Config;
+use \Exception;
 
 /**
  * Gettext should not be required - Thanks jeichhor

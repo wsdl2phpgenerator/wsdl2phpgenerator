@@ -2,6 +2,7 @@
 /**
  * @package wsdl2phpTest
  */
+use Wsdl2PhpGenerator\Validator;
 
 /**
  * Test class for Validator.
@@ -43,10 +44,10 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Foo', Validator::validateClass('Foo'));
         $this->assertEquals('foo523', Validator::validateClass('foo523'));
 
-        $this->setExpectedException('ValidationException');
+        $this->setExpectedException('Wsdl2PhpGenerator\\ValidationException');
         Validator::validateClass('SoapClient');
 
-        $this->setExpectedException('ValidationException');
+        $this->setExpectedException('Wsdl2PhpGenerator\\ValidationException');
         $this->assertEquals('for', Validator::validateClass('for')); // for is reserved keyword
     }
 
@@ -55,7 +56,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
      */
     public function testValidateClassReservedKeyword()
     {
-        $this->setExpectedException('ValidationException');
+        $this->setExpectedException('Wsdl2PhpGenerator\\ValidationException');
         $this->assertEquals('for', Validator::validateClass('for')); // for is reserved keyword
         $this->assertEquals('List', Validator::validateClass('List')); // for is reserved keyword
     }
@@ -65,7 +66,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
      */
     public function testValidateClassReservedKeyword2()
     {
-        $this->setExpectedException('ValidationException');
+        $this->setExpectedException('Wsdl2PhpGenerator\\ValidationException');
         $this->assertEquals('List', Validator::validateClass('List')); // list is reserved keyword. PHP is not case sensitive in keywords
     }
 
@@ -89,7 +90,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Foo[]', Validator::validateType('ArrayOfFoo'));
         $this->assertEquals('Foo[]', Validator::validateType('Foo[]'));
 
-        $this->setExpectedException('ValidationException');
+        $this->setExpectedException('Wsdl2PhpGenerator\\ValidationException');
         $this->assertEquals('and', Validator::validateType('and')); // and is reserved keyword
     }
 

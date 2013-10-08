@@ -2,6 +2,7 @@
 /**
  * @package configTest
  */
+use Wsdl2PhpGenerator\FileConfig;
 
 /**
  * Test class for FileConfig.

@@ -2,6 +2,7 @@
 /**
  * @package Wsdl2PhpGenerator
  */
+namespace Wsdl2PhpGenerator;
 
 /**
  * Very stupid datatype to use instead of array
