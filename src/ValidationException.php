@@ -3,6 +3,7 @@
  * @package Wsdl2PhpGenerator
  */
 namespace Wsdl2PhpGenerator;
+use \Exception;
 
 /**
  * Wrapper class for exception, only use is to collect functionality in one namespace
@@ -14,6 +15,6 @@ namespace Wsdl2PhpGenerator;
  * @see Exception
  * @see Validator
  */
-class ValidationException extends \Exception
+class ValidationException extends Exception
 {
 }

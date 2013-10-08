@@ -6,6 +6,7 @@ use Wsdl2PhpGenerator\Generator;
 use Wsdl2PhpGenerator\FileConfig;
 use Wsdl2PhpGenerator\Cli;
 use Wsdl2PhpGenerator\Config;
+use \Exception;
 
 /**
  * Gettext should not be required - Thanks jeichhor
@@ -44,13 +45,13 @@ try {
     $file = $path . '/' . $loc . '/' . $lcDir . '/' . $domain . '.mo';
 
     if (file_exists($file) == false) {
-        throw new \Exception('The selected language file (' . $file . ') does not exist!');
+        throw new Exception('The selected language file (' . $file . ') does not exist!');
     }
 
     bindtextdomain($domain, $path);
     textdomain($domain);
     setlocale(LC_ALL, $locale);
-} catch (\Exception $e) {
+} catch (Exception $e) {
     // This should be the no file exception, then use the default settings
 }
 
