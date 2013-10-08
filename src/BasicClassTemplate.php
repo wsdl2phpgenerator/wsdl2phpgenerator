@@ -295,7 +295,7 @@ class BasicClassTemplate extends ComplexType {
         $use = null;
 
         $functionBlock = '$enumArray = $varName . "Enum";' . PHP_EOL;
-		$functionBlock .= '	if(in_array($value, self::$$enumArray)){' . PHP_EOL;
+		$functionBlock .= '	if(in_array($value, static::$$enumArray)){' . PHP_EOL;
 		$functionBlock .= '		$this->$varName = $value;' . PHP_EOL;
 		$functionBlock .= '	} else {' . PHP_EOL;
 		$functionBlock .= '		throw new Exception($value . "is not in Enumeration " . $enumArray . "!");' . PHP_EOL;
@@ -306,18 +306,6 @@ class BasicClassTemplate extends ComplexType {
 
     /**
      * add getAsArray
-     *
-    public function getAsArray() {
-    $a = array();
-    foreach($this as $var => $value){
-    if ($value instanceof Wsdl2PhpGeneratorBasicClass ){
-    $a[$var] = $value->getAsArray();
-    } else {
-    $a[$var] = $value;
-    }
-    }
-    return $a;
-    }
      */
     final private function addMethode_12() {
         $methodeName = 'getAsArray';
@@ -334,9 +322,9 @@ class BasicClassTemplate extends ComplexType {
         $functionBlock .= ' foreach($this as $var => $value){' . PHP_EOL;
         $functionBlock .= '		if ($value instanceof Wsdl2PhpGeneratorBasicClass ){' . PHP_EOL;
         $functionBlock .= '		    $a[$var] = $value->getAsArray();' . PHP_EOL;
+        $functionBlock .= '	    } elseif($value != NULL) {' . PHP_EOL;
+        $functionBlock .= '		    $a[$var] = $value;' . PHP_EOL;
         $functionBlock .= '	    }' . PHP_EOL;
-        $functionBlock .= '	} else {' . PHP_EOL;
-        $functionBlock .= '		$a[$var] = $value;' . PHP_EOL;
         $functionBlock .= '	}' . PHP_EOL;
         $functionBlock .= ' return $a;' . PHP_EOL;
 
