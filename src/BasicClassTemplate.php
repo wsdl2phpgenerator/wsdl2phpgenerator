@@ -303,7 +303,46 @@ class BasicClassTemplate extends ComplexType {
 		
 		$this->addClassMethode($methodeName, $use, $functionBlock, $description, $return, $param1, $param1Comment,$param2,$param2Comment);
 	}
-	
+
+    /**
+     * add getAsArray
+     *
+    public function getAsArray() {
+    $a = array();
+    foreach($this as $var => $value){
+    if ($value instanceof Wsdl2PhpGeneratorBasicClass ){
+    $a[$var] = $value->getAsArray();
+    } else {
+    $a[$var] = $value;
+    }
+    }
+    return $a;
+    }
+     */
+    final private function addMethode_12() {
+        $methodeName = 'getAsArray';
+        $description = 'getObject as Array';
+        $param1 = null;
+        $param2 = null;
+        $return = PhpDocElementFactory::getReturn('array', '');;
+        $param1Comment = null;
+        $param2Comment = null;
+
+        $use = null;
+
+        $functionBlock = '  $a = array();' . PHP_EOL;
+        $functionBlock .= ' foreach($this as $var => $value){' . PHP_EOL;
+        $functionBlock .= '		if ($value instanceof Wsdl2PhpGeneratorBasicClass ){' . PHP_EOL;
+        $functionBlock .= '		    $a[$var] = $value->getAsArray();' . PHP_EOL;
+        $functionBlock .= '	    }' . PHP_EOL;
+        $functionBlock .= '	} else {' . PHP_EOL;
+        $functionBlock .= '		$a[$var] = $value;' . PHP_EOL;
+        $functionBlock .= '	}' . PHP_EOL;
+        $functionBlock .= ' return $a;' . PHP_EOL;
+
+        $this->addClassMethode($methodeName, $use, $functionBlock, $description, $return, $param1, $param1Comment,$param2,$param2Comment);
+
+    }
 	
 	/**
 	 * add class methode (access public)

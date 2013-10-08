@@ -133,7 +133,7 @@ class ComplexType extends Type
                     $choiceVars = XsdInspectorService::instance()->getChoice($class->getIdentifier());
                     if (null !== $choiceVars) {
                         $setterComment->setDescription('Choice of <' . implode(',', $choiceVars) . '>');
-                        $setterFunctionSrc = '	$this->unsetDefinedVarsInArray(array('.implode(',', $choiceVars).'));'.PHP_EOL;
+                        $setterFunctionSrc = '	$this->resetDefinedVarsInArray(array('.implode(',', $choiceVars).'));'.PHP_EOL;
                         $setterFunctionSrc .= '	$this->'.$name.' = $'.$name.';'.PHP_EOL;
                         $setterFunctionSrc .= '	return $this;'.PHP_EOL;
                     }
