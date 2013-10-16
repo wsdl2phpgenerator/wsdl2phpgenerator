@@ -27,6 +27,11 @@ class PhpClass extends PhpElement
     private $dependencies;
 
     /**
+     * @var array An array of strings, use classesnames and namespace to include for the class
+     */
+    private $use;
+
+    /**
      *
      * @var bool If the class should be protected by a if(!class_exists() statement
      * @access private
@@ -92,6 +97,7 @@ class PhpClass extends PhpElement
     public function __construct($identifier, $classExists = false, $extends = '', PhpDocComment $comment = null, $final = false)
     {
         $this->dependencies = array();
+        $this->use = array();
         $this->classExists = $classExists;
         $this->comment = $comment;
         $this->final = $final;
@@ -103,6 +109,39 @@ class PhpClass extends PhpElement
         $this->functions = array();
         $this->indentionStr = '  '; // Use two spaces as indention
     }
+
+    /**
+     * @return string the $extends
+     */
+    public function getExtends() {
+        return $this->extends;
+    }
+
+    /**
+     * @return multitype: the $constants
+     */
+    public function getConstants() {
+        return $this->constants;
+    }
+
+    /**
+     * @param string $extends
+     * @return PhpClass
+     */
+    public function setExtends($extends) {
+        $this->extends = $extends;
+        return $this;
+    }
+
+    /**
+     * @param multitype: $constants
+     * @return PhpClass
+     */
+    public function setConstants($constants) {
+        $this->constants = $constants;
+        return $this;
+    }
+
 
     /**
      *
@@ -119,6 +158,15 @@ class PhpClass extends PhpElement
         if (count($this->dependencies) > 0) {
             foreach ($this->dependencies as $file) {
                 $ret .= 'include_once(\'' . $file . '\');' . PHP_EOL;
+            }
+            $ret .= PHP_EOL;
+        }
+
+        if (count($this->use) > 0)
+        {
+            foreach ($this->use as $file)
+            {
+                $ret .= 'use ' .$file.';'.PHP_EOL;
             }
             $ret .= PHP_EOL;
         }
@@ -183,6 +231,20 @@ class PhpClass extends PhpElement
     {
         if (in_array($filename, $this->dependencies) == false) {
             $this->dependencies[] = $filename;
+        }
+    }
+
+    /**
+     * Adds uses to be loaded for the class to use
+     * Only adds it if it does not already exist
+     *
+     * @param string $className
+     */
+    public function addUse($className)
+    {
+        if (in_array($className, $this->use) == false)
+        {
+            $this->use[] = $className;
         }
     }
 

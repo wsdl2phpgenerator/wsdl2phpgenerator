@@ -54,9 +54,13 @@ try {
 $cli = new Cli('wsdl2php', '[OPTIONS] -i wsdlfile -o directory', '1.5.2');
 $cli->addFlag('-e', _('If all classes should be guarded with if(!class_exists) statements'), true, false);
 $cli->addFlag('-t', _('If no type constructor should be generated'), true, false);
+
 $cli->addFlag('-s', _('If the output should be a single file'), true, false);
 $cli->addFlag('-v', _('If the output to the console should be verbose'), true, false);
 $cli->addFlag('-i', _('The input wsdl file'), false, true);
+$cli->addFlag('-x', _('The input dir for xsd files'), false, false);
+$cli->addFlag('-b', _('The base class name for inheritance'), false, false);
+
 $cli->addFlag('-o', _('The output directory or file if -s is used (in that case, .php will be appened to file name)'), false, true);
 $cli->addFlag('-n', _('Use namespace with the name'), false, false);
 $cli->addFlag('-c', _("A comma separated list of classnames to generate.\nIf this is used only classes that exist in the list will be generated.\nIf the service is not in this list and the -s flag is used\nthe filename will be the name of the first class that is generated"), false, false);
@@ -82,6 +86,9 @@ $cli->addAlias('-t', '--noTypeConstructor');
 $cli->addAlias('-s', '--singleFile');
 $cli->addAlias('-v', '--verbose');
 $cli->addAlias('-i', '--input');
+$cli->addAlias('-x', '--inputXsdDir');
+$cli->addAlias('-b', '--basicClass');
+
 $cli->addAlias('-o', '--output');
 $cli->addAlias('-n', '--namespace');
 $cli->addAlias('-c', '--classes');
@@ -125,6 +132,8 @@ $classExists = $cli->getValue('-e');
 $verbose = $cli->getValue('-v');
 $noTypeConstructor = $cli->getValue('-t');
 $inputFile = $cli->getValue('-i');
+$inputXsdDir = $cli->getValue('-x');
+$basicClassName = $cli->getValue('-b');
 $outputDir = $cli->getValue('-o');
 $namespaceName = $cli->getValue('-n');
 $prefix = $cli->getValue('-p');
@@ -159,7 +168,7 @@ if ($cli->getValue('--gzip')) {
     $gzip = 'SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP';
 }
 
-$config = new Config($inputFile, $outputDir, $verbose, $singleFile, $classExists, $noTypeConstructor, $namespaceName, $optionsArray, $wsdlCache, $gzip, $classNames, $prefix, $suffix, $sharedTypes, $createAccessors, $constructorDefaultsToNull, $noIncludes);
+$config = new Config($inputFile, $outputDir, $verbose, $singleFile, $classExists, $noTypeConstructor, $namespaceName, $optionsArray, $wsdlCache, $gzip, $classNames, $prefix, $suffix, $sharedTypes, $createAccessors, $constructorDefaultsToNull, $noIncludes, $inputXsdDir, $basicClassName);
 
 $generator = Generator::instance();
 $generator->generate($config);

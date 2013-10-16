@@ -64,19 +64,27 @@ class ComplexType extends Type
         // Add member variables
         foreach ($this->members as $member) {
             $type = '';
+            $simplyfiedType = '';
 
             try {
                 $type = Validator::validateType($member->getType());
+                $simplyfiedType = SimplifyTypesService::instance()->getRootType($type);
             } catch (ValidationException $e) {
                 $type .= 'Custom';
+                $simplyfiedType .= 'Custom';
             }
 
             $name = Validator::validateNamingConvention($member->getName());
             $comment = new PhpDocComment();
-            $comment->setVar(PhpDocElementFactory::getVar($type, $name, ''));
-            $comment->setAccess(PhpDocElementFactory::getPublicAccess());
-            $var = new PhpVariable('public', $name, 'null', $comment);
+            $comment->setVar(PhpDocElementFactory::getParam($simplyfiedType, $name, ''));
+
+            $comment->setAccess(($config->getCreateAccessors())?PhpDocElementFactory::getProtectedAccess()
+                                                                :PhpDocElementFactory::getPublicAccess());
+            $varAccess = ($config->getCreateAccessors())?'protected':'public';
+            $var = new PhpVariable($varAccess, $name, 'null', $comment);
             $class->addVariable($var);
+
+            $enumVars = XsdInspectorService::instance()->getEnumeration($type);
 
             if (!$member->getNillable()) {
                 $constructorSource .= '  $this->' . $name . ' = $' . $name . ';' . PHP_EOL;
@@ -89,13 +97,54 @@ class ComplexType extends Type
 
                 if ($config->getCreateAccessors()) {
                     $getterComment = new PhpDocComment();
-                    $getterComment->setReturn(PhpDocElementFactory::getReturn($type, ''));
+                    $getterComment->setAccess(PhpDocElementFactory::getPublicAccess());
+                    $getterReturnDescription = '';
+                    if (null !== $enumVars) {
+                        $getterReturnDescription .= ' <'.implode(',', $enumVars).'>';
+                    }
+                    $getterComment->setReturn(PhpDocElementFactory::getReturn($simplyfiedType, $getterReturnDescription));
                     $getter = new PhpFunction('public', 'get' . ucfirst($name), '', '  return $this->' . $name . ';' . PHP_EOL, $getterComment);
                     $accessors[] = $getter;
 
+
+
+
                     $setterComment = new PhpDocComment();
-                    $setterComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
-                    $setter = new PhpFunction('public', 'set' . ucfirst($name), '$' . $name, '  $this->' . $name . ' = $' . $name . ';' . PHP_EOL, $setterComment);
+                    $setterComment->setAccess(PhpDocElementFactory::getPublicAccess());
+                    $setterComment->addParam(PhpDocElementFactory::getParam($simplyfiedType, $name, ''));
+                    $setterReturnDescription = '';
+                    $setterFunctionSrc = '	$this->'.$name.' = $'.$name.';'.PHP_EOL.'	return $this;'.PHP_EOL;
+
+
+                    //check enums
+                    if (null !== $enumVars) {
+                        $comment = new PhpDocComment();
+                        $comment->setVar(PhpDocElementFactory::getParam('multitype:string', $name.'Enum', ''));
+                        $comment->setAccess(PhpDocElementFactory::getPublicAccess());
+
+                        $var = new PhpVariable('public static', $name.'Enum', 'array('.implode(',', $enumVars).')', $comment);
+                        $class->addVariable($var);
+                        $setterComment->setDescription('Enumeration of <' . implode(',', $enumVars) . '>');
+                        $setterFunctionSrc = '	$this->enumSet(\''.$name.'\', $'.$name.');'.PHP_EOL;
+                        $setterFunctionSrc .= '	return $this;'.PHP_EOL;
+                    }
+
+                    //check choice
+                    $choiceVars = XsdInspectorService::instance()->getChoice($class->getIdentifier());
+                    if (null !== $choiceVars) {
+                        $setterComment->setDescription('Choice of <' . implode(',', $choiceVars) . '>');
+                        $setterFunctionSrc = '	$this->resetDefinedVarsInArray(array('.implode(',', $choiceVars).'));'.PHP_EOL;
+                        $setterFunctionSrc .= '	$this->'.$name.' = $'.$name.';'.PHP_EOL;
+                        $setterFunctionSrc .= '	return $this;'.PHP_EOL;
+                    }
+
+                    $setterComment->setReturn(PhpDocElementFactory::getReturn($this->phpIdentifier, $setterReturnDescription));
+
+                    $setter = new PhpFunction('public'
+                                            , 'set' . ucfirst($name)
+                                            , '$'.$name
+                                            , $setterFunctionSrc
+                                            , $setterComment);
                     $accessors[] = $setter;
                 }
             }
@@ -112,6 +161,9 @@ class ComplexType extends Type
         foreach ($accessors as $accessor) {
             $class->addFunction($accessor);
         }
+
+        //add extends
+        $class->setExtends(XsdInspectorService::instance()->getExtensionClassName($class->getIdentifier()));
 
         $this->class = $class;
     }

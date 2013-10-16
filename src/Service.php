@@ -159,7 +159,14 @@ class Service
                 $comment->addParam(PhpDocElementFactory::getParam($arr['type'], $arr['name'], $arr['desc']));
             }
 
-            $source = '  return $this->__soapCall(\'' . $name . '\', array(' . $operation->getParamStringNoTypeHints() . '));' . PHP_EOL;
+            // if you have a  choice you need an array ->getAsArray()
+            $asArray = '';
+            if($config->getCreateAccessors()) {
+                $asArray = '->getAsArray()';
+            }
+
+
+            $source = '  return $this->__soapCall(\'' . $name . '\', array(' . $operation->getParamStringNoTypeHints() . $asArray . '));' . PHP_EOL;
 
             $paramStr = $operation->getParamString($this->types);
 

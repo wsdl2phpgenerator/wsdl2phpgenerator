@@ -12,9 +12,12 @@ require_once dirname(__FILE__) . '/Variable.php';
 require_once dirname(__FILE__) . '/Enum.php';
 require_once dirname(__FILE__) . '/ComplexType.php';
 require_once dirname(__FILE__) . '/Pattern.php';
+require_once dirname(__FILE__) . '/BasicClassTemplate.php';
 require_once dirname(__FILE__) . '/DocumentationManager.php';
 require_once dirname(__FILE__) . '/Service.php';
 require_once dirname(__FILE__) . '/OutputManager.php';
+require_once dirname(__FILE__) . '/SimplifyTypesService.php';
+require_once dirname(__FILE__) . '/XsdInspectorService.php';
 
 // Php code classes
 require_once dirname(__FILE__) . '/../lib/phpSource/PhpFile.php';
@@ -178,7 +181,7 @@ class Generator
         $this->log($this->display('Loading the DOM'));
         $this->dom[0] = new DOMDocument();
         $this->dom[0]->load($wsdl);
-
+        XsdInspectorService::instance()->loadWsdlDom($this->dom[0], $this->config);
         $this->documentation->loadDocumentation($this->dom[0]);
 
         $sxml = simplexml_import_dom($this->dom[0]);
@@ -191,6 +194,7 @@ class Generator
         }
 
         $this->loadSchema();
+        $this->types[] = new BasicClassTemplate();
         $this->loadTypes();
         $this->loadService();
     }
@@ -259,6 +263,7 @@ class Generator
         $this->log($this->display('Loading types'));
 
         $types = $this->client->__getTypes();
+        SimplifyTypesService::instance()->loadTypes($this->client);
 
         foreach ($types as $typeStr) {
             $wsdlNewline = (strpos($typeStr, "\r\n") ? "\r\n" : "\n");
