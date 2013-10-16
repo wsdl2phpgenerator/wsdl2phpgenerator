@@ -322,7 +322,7 @@ class BasicClassTemplate extends ComplexType {
         $functionBlock .= ' foreach($this as $var => $value){' . PHP_EOL;
         $functionBlock .= '		if ($value instanceof Wsdl2PhpGeneratorBasicClass ){' . PHP_EOL;
         $functionBlock .= '		    $a[$var] = $value->getAsArray();' . PHP_EOL;
-        $functionBlock .= '	    } elseif($value != NULL) {' . PHP_EOL;
+        $functionBlock .= '	    } elseif($value !== NULL) {' . PHP_EOL;
         $functionBlock .= '		    $a[$var] = $value;' . PHP_EOL;
         $functionBlock .= '	    }' . PHP_EOL;
         $functionBlock .= '	}' . PHP_EOL;
