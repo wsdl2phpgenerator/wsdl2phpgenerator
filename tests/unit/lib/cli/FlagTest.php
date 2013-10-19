@@ -2,6 +2,7 @@
 /**
  * @package cliTest
  */
+use Wsdl2PhpGenerator\Flag;
 
 /**
  * Test class for Flag.

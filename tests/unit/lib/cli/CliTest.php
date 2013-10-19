@@ -2,6 +2,7 @@
 /**
  * @package cliTest
  */
+use Wsdl2PhpGenerator\Cli;
 
 /**
  * Test class for Cli.

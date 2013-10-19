@@ -3,6 +3,14 @@
  * @package Wsdl2PhpGenerator
  */
 
+namespace Wsdl2PhpGenerator;
+use \Exception;
+use \SoapClient;
+use \SoapFault;
+use \DOMDocument;
+use \DOMException;
+use \DOMElement;
+
 /**
  * Include the needed files
  */

@@ -2,6 +2,7 @@
 /**
  * @package phpSource
  */
+namespace Wsdl2PhpGenerator;
 
 /**
  * Include the needed files

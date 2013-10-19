@@ -3,6 +3,8 @@
 /**
  * @package Generator
  */
+namespace Wsdl2PhpGenerator;
+use \Exception;
 
 /**
  * @see Type
