@@ -29,7 +29,8 @@ usage listed under `./wsdl2php -h`
 
 ```php
 <?php
-require_once __DIR__."/path/here/Generator.php";
+// Map `src`and `lib` folders to the Wsdl2PhpGenerator namespace in your
+// favorite PSR-0 compatible classloader or require the files manually.
 
 $generator = Wsdl2PhpGenerator\Generator::instance();
 $generator->generate(

@@ -2,18 +2,17 @@
 /**
  * @package Wsdl2PhpGenerator
  */
+use Symfony\Component\ClassLoader\UniversalClassLoader;
+use Wsdl2PhpGenerator\Cli\Cli;
+use Wsdl2PhpGenerator\Config\FileConfig;
 use Wsdl2PhpGenerator\Generator;
-use Wsdl2PhpGenerator\FileConfig;
-use Wsdl2PhpGenerator\Cli;
 use Wsdl2PhpGenerator\Config;
 use \Exception;
 
-/**
- * Include the needed files
- */
-require_once dirname(__FILE__) . '/lib/cli/Cli.php';
-
-require_once dirname(__FILE__) . '/src/Generator.php';
+require __DIR__ . '/vendor/symfony/class-loader/Symfony/Component/ClassLoader/UniversalClassLoader.php';
+$classloader = new UniversalClassLoader();
+$classloader->registerNamespace('Wsdl2PhpGenerator', array('src', 'lib'));
+$classloader->register();
 
 // Start
 $cli = new Cli('wsdl2php', '[OPTIONS] -i wsdlfile -o directory', '1.5.2');
@@ -70,7 +69,7 @@ if ($singleFile && strlen($classNames) > 0) {
         print 'You have selected to only generate one class and save it to a single file. If you have selected the service class and outputs this file to a directory where you previosly have generated the classes the file will be overwritten. Continue? [Y/n]' . PHP_EOL;
     }
 
-    //TODO: Refactor this to cli class?
+    //TODO: Refactor this to Cli class?
 
     // Force the user to supply a valid input
     while (true) {

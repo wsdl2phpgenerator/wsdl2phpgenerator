@@ -1,4 +1,4 @@
 build
 vendor
-tests/functional/CurrencyConverterTestCode
-tests/functional/NaicsTestCode
+tests/Wsdl2PhpGenerator/Tests/Functional/CurrencyConverterTestCode
+tests/Wsdl2PhpGenerator/Tests/Functional/NaicsTestCode
