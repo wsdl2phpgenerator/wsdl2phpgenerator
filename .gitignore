@@ -1,0 +1,5 @@
+build
+vendor
+tests/functional/CurrencyConverterTestCode
+tests/functional/NaicsTestCode
+composer.phar

@@ -2,6 +2,7 @@
 /**
  * @package cli
  */
+namespace Wsdl2PhpGenerator;
 
 /**
  * Class that contains functions for parsing a array, based on the $argv array

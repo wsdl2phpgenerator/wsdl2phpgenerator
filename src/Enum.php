@@ -3,6 +3,8 @@
 /**
  * @package Wsdl2PhpGenerator
  */
+namespace Wsdl2PhpGenerator;
+use \InvalidArgumentException;
 
 /**
  * @see Type

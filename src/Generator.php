@@ -3,6 +3,14 @@
  * @package Wsdl2PhpGenerator
  */
 
+namespace Wsdl2PhpGenerator;
+use \Exception;
+use \SoapClient;
+use \SoapFault;
+use \DOMDocument;
+use \DOMException;
+use \DOMElement;
+
 /**
  * Include the needed files
  */
@@ -28,6 +36,12 @@ require_once dirname(__FILE__) . '/../lib/phpSource/PhpFile.php';
  */
 class Generator
 {
+
+    /**
+     * WSDL namespace
+     * @var string
+     */
+    const WSDL_NS = 'http://schemas.xmlsoap.org/wsdl/';
 
     /**
      * Schema in simplexml format
@@ -183,7 +197,23 @@ class Generator
 
         $sxml = simplexml_import_dom($this->dom[0]);
 
-        foreach ($sxml->xpath('//wsdl:import/@location') as $wsdl_file) {
+        // Find wsdl namespace prefix
+        $xnss = $sxml->getDocNamespaces();
+        $wsdlPrefix = null;
+        foreach ($xnss as $prefix => $xns) {
+            if ($xns == self::WSDL_NS) {
+                $wsdlPrefix = $prefix;
+                break;
+            }
+        }
+        if ($wsdlPrefix === null) {
+            throw new Exception(sprintf("No WSDL namespace found: %s", self::WSDL_NS));
+        }
+        else if ($wsdlPrefix != '') {
+            $wsdlPrefix .= ':';
+        }
+
+        foreach ($sxml->xpath("//{$wsdlPrefix}import/@location") as $wsdl_file) {
             $dom = new DOMDocument();
             $dom->load($wsdl_file);
             $this->documentation->loadDocumentation($dom);

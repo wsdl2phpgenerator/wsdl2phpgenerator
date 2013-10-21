@@ -2,6 +2,7 @@
 /**
  * @package configTest
  */
+use Wsdl2PhpGenerator\FileConfig;
 
 /**
  * Test class for FileConfig.
@@ -24,7 +25,7 @@ class FileConfigTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         // Add the file fixture
-        $this->fileName = '/tmp/' . md5(time() . mt_rand(0, 1000));
+        $this->fileName = tempnam(sys_get_temp_dir(), 'CFG');
         $contents = '#Comment' . PHP_EOL . 'foo=bar';
         file_put_contents($this->fileName, $contents);
 
