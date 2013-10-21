@@ -25,7 +25,7 @@ class FileConfigTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         // Add the file fixture
-        $this->file = tempnam(sys_get_temp_dir(), 'CFG');exit;
+        $this->fileName = tempnam(sys_get_temp_dir(), 'CFG');
         $contents = '#Comment' . PHP_EOL . 'foo=bar';
         file_put_contents($this->fileName, $contents);
 
