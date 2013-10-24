@@ -4,14 +4,7 @@
  */
 namespace Wsdl2PhpGenerator;
 
-/**
- * Class that contains all the settings possible for the Wsdl2PhpGenerator
- *
- * @package Wsdl2PhpGenerator
- * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
- * @license http://www.opensource.org/licenses/mit-license.php MIT License
- */
-class Config
+class Config implements ConfigInterface
 {
     /**
      *
@@ -175,101 +168,56 @@ class Config
         $this->noIncludes = $noIncludes;
     }
 
-    /**
-     * @return string Returns the namespace name the output should use
-     * @access public
-     */
     public function getNamespaceName()
     {
         return $this->namespaceName;
     }
 
-    /**
-     * @return bool Returns if the output should be gathered to one file
-     * @access public
-     */
     public function getOneFile()
     {
         return $this->oneFile;
     }
 
-    /**
-     * @return bool Returns if the output should be protected with class_exists statements
-     * @access public
-     */
     public function getClassExists()
     {
         return $this->classExists;
     }
 
-    /**
-     *
-     * @return bool Returns true if no type constructor should be used
-     * @access public
-     */
     public function getNoTypeConstructor()
     {
         return $this->noTypeConstructor;
     }
 
-    /**
-     * @return string Returns the path of the output directory
-     * @access public
-     */
     public function getOutputDir()
     {
         return $this->outputDir;
     }
 
-    /**
-     * @return string Returns the path of the input file
-     * @access public
-     */
     public function getInputFile()
     {
         return $this->inputFile;
     }
 
-    /**
-     *
-     * @return array An array of strings of all the features to enable
-     */
     public function getOptionFeatures()
     {
         return $this->optionFeatures;
     }
 
-    /**
-     *
-     * @return string Returns the string with the constant to use for wsdl cache
-     */
     public function getWsdlCache()
     {
         return $this->wsdlCache;
     }
 
-    /**
-     *
-     * @return string The compression value to use for the client
-     */
     public function getCompression()
     {
         return $this->compression;
     }
 
-    /**
-     *
-     * @return string The list of classes
-     */
     public function getClassNames()
     {
         return $this->classNames;
     }
 
-    /**
-     *
-     * @return array Returns an array with all classnames to generate
-     */
     public function getClassNamesArray()
     {
         if (strpos($this->classNames, ',') !== false) {
@@ -281,28 +229,16 @@ class Config
         return array();
     }
 
-    /**
-     *
-     * @return bool Returns true if verbose output is selected
-     */
     public function getVerbose()
     {
         return $this->verbose;
     }
 
-    /**
-     *
-     * @return string Returns the prefix if any
-     */
     public function getPrefix()
     {
         return $this->prefix;
     }
 
-    /**
-     *
-     * @return string Returns the suffix if any
-     */
     public function getSuffix()
     {
         return $this->suffix;
@@ -317,26 +253,16 @@ class Config
         return $this->sharedTypes;
     }
 
-    /**
-     * @return boolean Returns if getter and setter methods should be created for member variables
-     */
     public function getCreateAccessors()
     {
         return $this->createAccessors;
     }
 
-    /**
-     * @return boolean Returns if the constructor parameters should have null default values
-     */
     public function getConstructorParamsDefaultToNull()
     {
         return $this->constructorParamsDefaultToNull;
     }
 
-    /**
-     *
-     * @return string Returns whether include statements should be generated
-     */
     public function getNoIncludes()
     {
         return $this->noIncludes;
@@ -358,9 +284,6 @@ class Config
         $this->classNames = $classNames;
     }
 
-    /**
-     * @param string $compression
-     */
     public function setCompression($compression)
     {
         $this->compression = $compression;
@@ -374,25 +297,16 @@ class Config
         $this->inputFile = $inputFile;
     }
 
-    /**
-     * @param string $namespaceName
-     */
     public function setNamespaceName($namespaceName)
     {
         $this->namespaceName = $namespaceName;
     }
 
-    /**
-     * @param boolean $noTypeConstructor
-     */
     public function setNoTypeConstructor($noTypeConstructor)
     {
         $this->noTypeConstructor = $noTypeConstructor;
     }
 
-    /**
-     * @param boolean $oneFile
-     */
     public function setOneFile($oneFile)
     {
         $this->oneFile = $oneFile;
@@ -422,9 +336,6 @@ class Config
         $this->prefix = $prefix;
     }
 
-    /**
-     * @param string $sharedTypes
-     */
     public function setSharedTypes($sharedTypes)
     {
         $this->sharedTypes = $sharedTypes;
@@ -438,9 +349,6 @@ class Config
         $this->suffix = $suffix;
     }
 
-    /**
-     * @param boolean $verbose
-     */
     public function setVerbose($verbose)
     {
         $this->verbose = $verbose;
@@ -454,17 +362,11 @@ class Config
         $this->wsdlCache = $wsdlCache;
     }
 
-    /**
-     * @param boolean $createAccessors
-     */
     public function setCreateAccessors($createAccessors)
     {
         $this->createAccessors = $createAccessors;
     }
 
-    /**
-     * @param boolean $constructorParamsDefaultToNull
-     */
     public function setConstructorParamsDefaultToNull($constructorParamsDefaultToNull)
     {
         $this->constructorParamsDefaultToNull = $constructorParamsDefaultToNull;

@@ -18,7 +18,7 @@ use \DOMElement;
  * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
-class Generator
+class Generator implements GeneratorInterface
 {
 
     /**
@@ -102,11 +102,9 @@ class Generator
     /**
      * Generates php source code from a wsdl file
      *
-     * @see Config
-     * @param Config $config The config to use for generation
-     * @access public
+     * @param ConfigInterface $config The config to use for generation
      */
-    public function generate(Config $config)
+    public function generate(ConfigInterface $config)
     {
         $this->config = $config;
 

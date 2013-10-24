@@ -39,3 +39,12 @@ $generator->generate(
 );
 ?>
 ```
+
+## Versioning
+
+This project aims to use [semantic versioning](http://semver.org/). The following consitutes the public API: 
+
+  * `\Wsdl2PhpGenerator\GeneratorInterface`
+  * `\Wsdl2PhpGenerator\ConfigInterface`
+
+Changes to these means that the major version will be increased. Additional features and bug fixes increate minor and patch versions.
