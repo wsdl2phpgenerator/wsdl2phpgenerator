@@ -32,10 +32,7 @@ usage listed under `./wsdl2php -h`
 require_once __DIR__."/path/here/Generator.php";
 
 $generator = Wsdl2PhpGenerator\Generator::instance();
-$generator->setDisplayCallback( function( $msg ) {
-	echo "{$msg}\n";
-});
-$generator->generate( 
+$generator->generate(
 	new Wsdl2PhpGenerator\Config( SOAPSERVICE, SOAPDIR ) 
 );
 ?>
