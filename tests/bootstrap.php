@@ -1,8 +1,9 @@
 <?php
 
-require_once 'PHPUnit/Framework/TestCase.php';
+use Symfony\Component\ClassLoader\UniversalClassLoader;
 
-require_once dirname(__FILE__) . '/../src/Generator.php';
-require_once dirname(__FILE__) . '/../lib/cli/Cli.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
-require_once 'functional/Wsdl2PhpGeneratorFunctionalTestCase.php';
+$classloader = new UniversalClassLoader();
+$classloader->registerNamespace('Wsdl2PhpGenerator', array('src', 'lib', 'tests'));
+$classloader->register();

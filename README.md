@@ -1,6 +1,7 @@
 # wsdl2phpgenerator
 [![Build Status](https://travis-ci.org/wsdl2phpgenerator/wsdl2phpgenerator.png?branch=master)](https://travis-ci.org/wsdl2phpgenerator/wsdl2phpgenerator)
 [![Coverage Status](https://coveralls.io/repos/wsdl2phpgenerator/wsdl2phpgenerator/badge.png)](https://coveralls.io/r/wsdl2phpgenerator/wsdl2phpgenerator)
+[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/wsdl2phpgenerator/wsdl2phpgenerator/badges/quality-score.png?s=23e602a86f75a79a2f1013caac99558f2464ce74)](https://scrutinizer-ci.com/g/wsdl2phpgenerator/wsdl2phpgenerator/)
 
 Simple WSDL to PHP classes converter. Takes a WSDL file and outputs class files ready to use.
 
@@ -29,7 +30,8 @@ usage listed under `./wsdl2php -h`
 
 ```php
 <?php
-require_once __DIR__."/path/here/Generator.php";
+// Map `src`and `lib` folders to the Wsdl2PhpGenerator namespace in your
+// favorite PSR-0 compatible classloader or require the files manually.
 
 $generator = Wsdl2PhpGenerator\Generator::instance();
 $generator->generate(
