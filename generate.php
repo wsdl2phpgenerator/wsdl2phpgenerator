@@ -15,7 +15,7 @@ $classloader->registerNamespace('Wsdl2PhpGenerator', array('src', 'lib'));
 $classloader->register();
 
 // Start
-$cli = new Cli('wsdl2php', '[OPTIONS] -i wsdlfile -o directory', '1.5.2');
+$cli = new Cli('wsdl2php', '[OPTIONS] -i wsdlfile -o directory', '2.0.0');
 $cli->addFlag('-e', 'If all classes should be guarded with if(!class_exists) statements', true, false);
 $cli->addFlag('-t', 'If no type constructor should be generated', true, false);
 $cli->addFlag('-s', 'If the output should be a single file', true, false);
