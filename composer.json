@@ -2,6 +2,7 @@
     "name": "wsdl2phpgenerator/wsdl2phpgenerator",
     "description": "Simple utility and class library for generating php classes from a wsdl file.",
     "keywords": ["soap", "wsdl"],
+    "license": "MIT",
     "autoload": {
         "psr-0": {
             "Wsdl2PhpGenerator\\": ["src/", "lib/"]
