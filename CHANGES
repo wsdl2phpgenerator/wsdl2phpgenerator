@@ -1,26 +1,38 @@
-CHANGES
+Version 2.0.0 / 2013-10-26 
+==================
+
+ * Extract interfaces to define public API.
+ * Improve PSR2 compatability. Remove side effects/requires from classes.
+ * Remove translation support.
+ * Allow project to be packaged by Composer.
+ * PHP 5.5 support. Move entire library to namespaces to avoid conflict with new Generator class. Thanks to chriskl.
 
 Version 1.4.2
-* The generator's soap client doesn't use caching any more
+==================
+
+ * The generator's soap client doesn't use caching any more
 
 Version 1.4.1
+==================
 
-* Fixed issue #20 with the generation of classes not working if simple type is not enum or pattern. Thanks to rc.poison
-* Fixed issue #21 with the classmap listing the classnames in the wrong way. Thanks to rc.poison
-* Fixed issue #22 with the php classname being used as comparison instead of the real classname. Thanks to rc.poison
+ * Fixed issue #20 with the generation of classes not working if simple type is not enum or pattern. Thanks to rc.poison
+ * Fixed issue #21 with the classmap listing the classnames in the wrong way. Thanks to rc.poison
+ * Fixed issue #22 with the php classname being used as comparison instead of the real classname. Thanks to rc.poison
 
 Version 1.4
+==================
 
-* Improved the phpdoc generated
-* Added support for enumerated values issue #13
-* Added support for generating phpdoc from the documentation blocks in the wsdl issue #18
+ * Improved the phpdoc generated
+ * Added support for enumerated values issue #13
+ * Added support for generating phpdoc from the documentation blocks in the wsdl issue #18
 
 Version 1.3
+==================
 
-* Adding the -v verbose flag
-* Adding the -p prefix and -q suffix flags
-* Improving code coverage with tests
-* Improving tests
-* Fixing fatal error in 5.3 version issue #14
-* Added the autoload parameter to class_exists calls issue #10
+ * Adding the -v verbose flag
+ * Adding the -p prefix and -q suffix flags
+ * Improving code coverage with tests
+ * Improving tests
+ * Fixing fatal error in 5.3 version issue #14
+ * Added the autoload parameter to class_exists calls issue #10
 
