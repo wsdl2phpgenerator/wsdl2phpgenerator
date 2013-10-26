@@ -1,0 +1,18 @@
+filter:
+    excluded_paths:
+        - 'vendor/*'
+        - 'app/*'
+        - 'web/*'
+before_commands:
+    - 'composer install --dev'
+tools:
+    php_mess_detector:
+        config:
+            code_size_rules: { cyclomatic_complexity: false, npath_complexity: false }
+    php_code_sniffer:
+        config:
+            standard: PSR2
+    php_code_coverage:
+        test_command: vendor/bin/phpunit
+    php_cpd: true
+    php_pdepend: true

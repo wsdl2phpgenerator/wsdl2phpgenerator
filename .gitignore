@@ -1,0 +1,4 @@
+build
+vendor
+tests/Wsdl2PhpGenerator/Tests/Functional/CurrencyConverterTestCode
+tests/Wsdl2PhpGenerator/Tests/Functional/NaicsTestCode
