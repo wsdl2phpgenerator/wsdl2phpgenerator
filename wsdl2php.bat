@@ -3,4 +3,4 @@ REM wsdl2phpgenerator
 REM
 
 set PHPBIN="@php_bin@"
-%PHPBIN% "generate.php" %*
+%PHPBIN% "wsdl2php.php" %*
