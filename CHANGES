@@ -1,3 +1,9 @@
+
+2.0.1 / 2013-10-28
+==================
+
+ * Remove conf dir as it's not used anymore.
+
 Version 2.0.0 / 2013-10-26 
 ==================
 
