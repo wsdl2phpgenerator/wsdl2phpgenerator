@@ -1,4 +1,5 @@
 # wsdl2phpgenerator
+[![Latest Stable Version](https://poser.pugx.org/wsdl2phpgenerator/wsdl2phpgenerator/v/stable.png)](https://packagist.org/packages/wsdl2phpgenerator/wsdl2phpgenerator)
 [![Build Status](https://travis-ci.org/wsdl2phpgenerator/wsdl2phpgenerator.png?branch=master)](https://travis-ci.org/wsdl2phpgenerator/wsdl2phpgenerator)
 [![Coverage Status](https://coveralls.io/repos/wsdl2phpgenerator/wsdl2phpgenerator/badge.png)](https://coveralls.io/r/wsdl2phpgenerator/wsdl2phpgenerator)
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/wsdl2phpgenerator/wsdl2phpgenerator/badges/quality-score.png?s=23e602a86f75a79a2f1013caac99558f2464ce74)](https://scrutinizer-ci.com/g/wsdl2phpgenerator/wsdl2phpgenerator/)
