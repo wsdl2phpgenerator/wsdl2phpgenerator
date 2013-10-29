@@ -143,12 +143,12 @@ class Operation
             if ($paramType == $type->getIdentifier()) {
                 if ($type instanceof Pattern) {
                     $ret['type'] = $type->getDatatype();
-                    $ret['desc'] = _('Restriction pattern: ') . $type->getValue();
+                    $ret['desc'] = 'Restriction pattern: ' . $type->getValue();
                 } else {
                     $ret['type'] = $type->getPhpIdentifier();
 
                     if ($type instanceof Enum) {
-                        $ret['desc'] = _('Constant: ') . $type->getDatatype() . ' - ' . _('Valid values: ') . $type->getValidValues();
+                        $ret['desc'] = 'Constant: ' . $type->getDatatype() . ' - ' . 'Valid values: ' . $type->getValidValues();
                     }
                 }
             }
