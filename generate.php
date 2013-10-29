@@ -9,10 +9,7 @@ use Wsdl2PhpGenerator\Generator;
 use Wsdl2PhpGenerator\Config;
 use \Exception;
 
-require __DIR__ . '/vendor/symfony/class-loader/Symfony/Component/ClassLoader/UniversalClassLoader.php';
-$classloader = new UniversalClassLoader();
-$classloader->registerNamespace('Wsdl2PhpGenerator', array('src', 'lib'));
-$classloader->register();
+require 'vendor/autoload.php';
 
 // Start
 $cli = new Cli('wsdl2php', '[OPTIONS] -i wsdlfile -o directory', '2.0.0');
