@@ -1,15 +1,20 @@
 
+2.0.3 / 2013-10-30 
+==================
+
+ * Remove leftover usage of gettext functions.
+
 2.0.2 / 2013-10-29 
 ==================
 
- * Correct way to use composer autoloader
+ * Correct way to use composer autoloader.
 
 2.0.1 / 2013-10-28
 ==================
 
  * Remove conf dir as it's not used anymore.
 
-Version 2.0.0 / 2013-10-26 
+2.0.0 / 2013-10-26
 ==================
 
  * Extract interfaces to define public API.
