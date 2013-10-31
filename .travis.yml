@@ -6,7 +6,11 @@ php:
 
 before_script:
   - curl -s http://getcomposer.org/installer | php
-  - php composer.phar install --dev --no-interaction
+  # Use --prefer-source to download dependencies via git and avoid GitHub API
+  # rate limits resulting in 502 HTTP responses, build errors and
+  # Composer\Downloader\TransportException.
+  # https://github.com/symfony/symfony/issues/4687
+  - php composer.phar install --dev --no-interaction --prefer-source
 
 script:
   - mkdir -p build/logs
