@@ -1,10 +1,12 @@
 filter:
     excluded_paths:
         - 'vendor/*'
-        - 'app/*'
-        - 'web/*'
 before_commands:
-    - 'composer install --dev'
+    # Use --prefer-source to download dependencies via git and avoid GitHub API
+    # rate limits resulting in 502 HTTP responses, build errors and
+    # Composer\Downloader\TransportException.
+    # https://github.com/symfony/symfony/issues/4687
+    - 'composer install --dev --no-interaction --prefer-source'
 tools:
     php_mess_detector:
         config:
