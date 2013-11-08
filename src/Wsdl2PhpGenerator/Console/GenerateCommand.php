@@ -102,7 +102,7 @@ class GenerateCommand extends Command
             )
             ->addConfigOption(
                 'namespace',
-                'a',
+                'n',
                 InputOption::VALUE_REQUIRED,
                 'Use namespace with the name',
                 null,
@@ -150,7 +150,7 @@ class GenerateCommand extends Command
             )
             ->addConfigOption(
                 'suffix',
-                'x',
+                'q',
                 InputOption::VALUE_REQUIRED,
                 'The suffix to use for the generated classes',
                 null,

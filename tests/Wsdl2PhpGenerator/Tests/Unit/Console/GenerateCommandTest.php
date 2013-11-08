@@ -72,13 +72,13 @@ class GenerateCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertConfig('--createAccessors', true, 'createAccessors');
         $this->assertConfig('--constructorNull', true, 'constructorParamsDefaultToNull');
         $this->assertConfig('--gzip', true, 'compression');
-        $this->assertConfig(array('--namespace', '-a'), 'SomeNamespace', 'namespaceName');
+        $this->assertConfig(array('--namespace', '-n'), 'SomeNamespace', 'namespaceName');
         $this->assertConfig('--noIncludes', true, 'noIncludes');
         $this->assertConfig(array('--noTypeConstructor', '-t'), true, 'noTypeConstructor');
         $this->assertConfig(array('--prefix', '-p'), 'SomePrefix', 'prefix');
         $this->assertConfig('--sharedTypes', true, 'sharedTypes');
         $this->assertConfig('--singleFile', true, 'oneFile');
-        $this->assertConfig(array('--suffix', '-x'), 'SomeSuffix', 'suffix');
+        $this->assertConfig(array('--suffix', '-q'), 'SomeSuffix', 'suffix');
 
         $this->assertConfig('--cacheNone', true, function (ConfigInterface $config) {
                 return $config->getWsdlCache() == WSDL_CACHE_NONE;
