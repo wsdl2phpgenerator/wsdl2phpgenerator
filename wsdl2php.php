@@ -2,7 +2,6 @@
 /**
  * @package Wsdl2PhpGenerator
  */
-use Symfony\Component\ClassLoader\UniversalClassLoader;
 use Symfony\Component\Console\Application;
 use Wsdl2PhpGenerator\Console\GenerateCommand;
 use Wsdl2PhpGenerator\Generator;
