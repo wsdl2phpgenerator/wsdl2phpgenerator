@@ -19,7 +19,20 @@ Pull requests are very welcome.
 There is a mailing list for the project at [https://groups.google.com/forum/#!forum/wsdl2phpgenerator](https://groups.google.com/forum/#!forum/wsdl2phpgenerator)
 
 ## Usage
-Use the executable or the Generator class directly.
+
+### Install from repo
+
+1. Clone this repo `git clone git@github.com:wsdl2phpgenerator/wsdl2phpgenerator.git`
+
+1. Install composer:
+    * [Installation - *nix](http://getcomposer.org/doc/00-intro.md#installation-nix)
+    * [Installation - Windows](http://getcomposer.org/doc/00-intro.md#installation-windows)
+
+1. Run `composer install`
+
+### Install from packagist
+
+Add `"wsdl2phpgenerator/wsdl2phpgenerator": "dev-master"` and run `composer update`
 
 ### Executable
 `./wsdl2php -i input.wsdl -o /tmp/my/directory/wsdl`
