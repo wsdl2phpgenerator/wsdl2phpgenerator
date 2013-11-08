@@ -106,13 +106,13 @@ class Service
         $comment->addParam(PhpDocElementFactory::getParam('string', 'wsdl', 'The wsdl file to use'));
         $comment->setAccess(PhpDocElementFactory::getPublicAccess());
 
-        $source = '  foreach (self::$classmap as $key => $value) {
-    if (!isset($options[\'classmap\'][$key])) {
-      $options[\'classmap\'][$key] = $value;
-    }
-  }
-  ' . $this->generateServiceOptions($config) . '
-  parent::__construct($wsdl, $options);' . PHP_EOL;
+        $source = '  foreach (self::$classmap as $key => $value) {' . PHP_EOL;
+        $source .= '    if (!isset($options[\'classmap\'][$key])) {' . PHP_EOL;
+        $source .= '      $options[\'classmap\'][$key] = $value;' . PHP_EOL;
+        $source .= '    }' . PHP_EOL;
+        $source .= '  }' . PHP_EOL;
+        $source .= '  ' . $this->generateServiceOptions($config) . '' . PHP_EOL;
+        $source .= '  parent::__construct($wsdl, $options);' . PHP_EOL;
 
         $function = new PhpFunction('public', '__construct', 'array $options = array(), $wsdl = \'' . $config->getInputFile() . '\'', $source, $comment);
 
@@ -125,15 +125,13 @@ class Service
         $comment->setAccess(PhpDocElementFactory::getPrivateAccess());
         $comment->setVar(PhpDocElementFactory::getVar('array', $name, 'The defined classes'));
 
-        $init = 'array(' . PHP_EOL;
+        $classmapArray = array();
         foreach ($this->types as $type) {
             if ($type instanceof ComplexType) {
-                $init .= "  '" . $type->getIdentifier() . "' => '\\" . $config->getNamespaceName() . "\\" . $type->getPhpIdentifier() . "'," . PHP_EOL;
+                $classmapArray[] =  "  '" . $type->getIdentifier() . "' => '\\" . $config->getNamespaceName() . "\\" . $type->getPhpIdentifier() . "'";
             }
         }
-        $init = substr($init, 0, strrpos($init, ','));
-        $init .= ')';
-        $var = new PhpVariable('private static', $name, $init, $comment);
+        $var = new PhpVariable('private static', $name, 'array(' . PHP_EOL . implode(','. PHP_EOL, $classmapArray) . PHP_EOL . ')', $comment);
 
         // Add the classmap variable
         $this->class->addVariable($var);
@@ -184,41 +182,28 @@ class Service
      */
     private function generateServiceOptions(Config $config)
     {
-        $ret = '';
+        $return = PHP_EOL;
 
         if (count($config->getOptionFeatures()) > 0) {
-            $i = 0;
-            $ret .= "
-  if (isset(\$options['features']) == false) {
-    \$options['features'] = ";
-            foreach ($config->getOptionFeatures() as $option) {
-                if ($i++ > 0) {
-                    $ret .= ' | ';
-                }
-
-                $ret .= $option;
-            }
-
-            $ret .= ";
-  }" . PHP_EOL;
+            $return .= '  if (isset($options[\'features\']) == false) {' . PHP_EOL;
+            $return .= '    $options[\'features\'] = ' . implode(' | ', $config->getOptionFeatures()) . ';' . PHP_EOL;
+            $return .= '  }' . PHP_EOL;
         }
 
         if (strlen($config->getWsdlCache()) > 0) {
-            $ret .= "
-  if (isset(\$options['wsdl_cache']) == false) {
-    \$options['wsdl_cache'] = " . $config->getWsdlCache();
-            $ret .= ";
-  }" . PHP_EOL;
+            $return .= PHP_EOL;
+            $return .= '  if (isset($options[\'wsdl_cache\']) == false) {' . PHP_EOL;
+            $return .= '    $options[\'wsdl_cache\'] = ' . $config->getWsdlCache() . ';' . PHP_EOL;
+            $return .= '  }' . PHP_EOL;
         }
 
         if (strlen($config->getCompression()) > 0) {
-            $ret .= "
-  if (isset(\$options['compression']) == false) {
-    \$options['compression'] = " . $config->getCompression();
-            $ret .= ";
-  }" . PHP_EOL;
+            $return .= PHP_EOL;
+            $return .= '  if (isset($options[\'compression\']) == false) {';
+            $return .= '    \$options[\'compression\'] = ' . $config->getCompression() . ';' . PHP_EOL;
+            $return .= '  }' . PHP_EOL;
         }
 
-        return $ret;
+        return $return;
     }
 }
