@@ -41,33 +41,20 @@
         <h1>
 <a name="wsdl2phpgenerator" class="anchor" href="#wsdl2phpgenerator"><span class="octicon octicon-link"></span></a>wsdl2phpgenerator</h1>
 
-<p><a href="https://travis-ci.org/reload/wsdl2phpgenerator"><img src="https://travis-ci.org/reload/wsdl2phpgenerator.png?branch=master" alt="Build Status"></a>
-<a href="https://coveralls.io/r/reload/wsdl2phpgenerator?branch=code-coverage-coveralls"><img src="https://coveralls.io/repos/reload/wsdl2phpgenerator/badge.png?branch=code-coverage-coveralls" alt="Coverage Status"></a></p>
+<p><a href="https://packagist.org/packages/wsdl2phpgenerator/wsdl2phpgenerator"><img src="https://poser.pugx.org/wsdl2phpgenerator/wsdl2phpgenerator/v/stable.png" alt="Latest Stable Version"></a>
+<a href="https://travis-ci.org/wsdl2phpgenerator/wsdl2phpgenerator"><img src="https://travis-ci.org/wsdl2phpgenerator/wsdl2phpgenerator.png?branch=master" alt="Build Status"></a>
+<a href="https://coveralls.io/r/wsdl2phpgenerator/wsdl2phpgenerator"><img src="https://coveralls.io/repos/wsdl2phpgenerator/wsdl2phpgenerator/badge.png" alt="Coverage Status"></a>
+<a href="https://scrutinizer-ci.com/g/wsdl2phpgenerator/wsdl2phpgenerator/"><img src="https://scrutinizer-ci.com/g/wsdl2phpgenerator/wsdl2phpgenerator/badges/quality-score.png?s=23e602a86f75a79a2f1013caac99558f2464ce74" alt="Scrutinizer Quality Score"></a>
+<a href="https://www.versioneye.com/user/projects/52697615632bac67b2002e93"><img src="https://www.versioneye.com/user/projects/52697615632bac67b2002e93/badge.png" alt="Dependency Status"></a></p>
 
 <p>Simple WSDL to PHP classes converter. Takes a WSDL file and outputs class files ready to use.</p>
 
-<p>Uses the <a href="http://www.opensource.org/licenses/mit-license.php">MIT licence</a></p>
+<p>Uses the <a href="http://www.opensource.org/licenses/mit-license.php">MIT licence</a>.</p>
 
 <h2>
 <a name="contributors" class="anchor" href="#contributors"><span class="octicon octicon-link"></span></a>Contributors</h2>
 
-<p>Originally developed by Fredrik Wallgren, <a href="https://github.com/walle/wsdl2phpgenerator">https://github.com/walle/wsdl2phpgenerator</a></p>
-
-<p>Includes bugfixes and improvements from:</p>
-
-<ul>
-<li>Vardan Akopian, <a href="https://github.com/vakopian/wsdl2phpgenerator">https://github.com/vakopian/wsdl2phpgenerator</a>
-</li>
-<li>
-<a href="http://www.statik.be">http://www.statik.be</a>, <a href="https://github.com/statikbe/wsdl2phpgenerator">https://github.com/statikbe/wsdl2phpgenerator</a>
-</li>
-<li>Eric Colinet, <a href="https://github.com/ecolinet/wsdl2phpgenerator">https://github.com/ecolinet/wsdl2phpgenerator</a>
-</li>
-<li>Nuth, <a href="https://github.com/nuth/wsdl2phpgenerator">https://github.com/nuth/wsdl2phpgenerator</a>
-</li>
-<li>Kasper Garnæs, <a href="https://github.com/kasperg/wsdl2phpgenerator">https://github.com/kasperg/wsdl2phpgenerator</a>
-</li>
-</ul><p>This fork has been created in an attempt to merge changes in forks of wsdl2phpgenerator which has never made it back into the original repository.</p>
+<p>Originally developed by <a href="https://github.com/walle">@walle</a> and includes bugfixes and improvements from <a href="https://github.com/vakopian">@vakopian</a>, <a href="https://github.com/statikbe/">@statikbe</a>, <a href="https://github.com/ecolinet">@ecolinet</a>, <a href="https://github.com/nuth/">@nuth</a>, <a href="https://github.com/chriskl/">@chriskl</a>, <a href="https://github.com/dypa/">@dypa</a> and <a href="https://github.com/kasperg/">@kasperg</a>.</p>
 
 <p>Pull requests are very welcome.</p>
 
@@ -79,7 +66,24 @@
 <h2>
 <a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
 
-<p>Use the executable or the Generator class directly.</p>
+<h3>
+<a name="install-from-repo" class="anchor" href="#install-from-repo"><span class="octicon octicon-link"></span></a>Install from repo</h3>
+
+<ol>
+<li><p>Clone this repo <code>git clone git@github.com:wsdl2phpgenerator/wsdl2phpgenerator.git</code></p></li>
+<li>
+<p>Install composer:</p>
+
+<ul>
+<li><a href="http://getcomposer.org/doc/00-intro.md#installation-nix">Installation - *nix</a></li>
+<li><a href="http://getcomposer.org/doc/00-intro.md#installation-windows">Installation - Windows</a></li>
+</ul>
+</li>
+<li><p>Run <code>composer install</code></p></li>
+</ol><h3>
+<a name="install-from-packagist" class="anchor" href="#install-from-packagist"><span class="octicon octicon-link"></span></a>Install from packagist</h3>
+
+<p>Add <code>"wsdl2phpgenerator/wsdl2phpgenerator": "dev-master"</code> and run <code>composer update</code></p>
 
 <h3>
 <a name="executable" class="anchor" href="#executable"><span class="octicon octicon-link"></span></a>Executable</h3>
@@ -94,17 +98,25 @@
 <a name="code" class="anchor" href="#code"><span class="octicon octicon-link"></span></a>Code</h3>
 
 <div class="highlight highlight-php"><pre><span class="o">&lt;?</span><span class="nx">php</span>
-<span class="k">require_once</span> <span class="nx">__DIR__</span><span class="o">.</span><span class="s2">"/path/here/Generator.php"</span><span class="p">;</span>
+<span class="c1">// Map `src`and `lib` folders to the Wsdl2PhpGenerator namespace in your</span>
+<span class="c1">// favorite PSR-0 compatible classloader or require the files manually.</span>
 
-<span class="nv">$generator</span> <span class="o">=</span> <span class="nx">Generator</span><span class="o">::</span><span class="na">instance</span><span class="p">();</span>
-<span class="nv">$generator</span><span class="o">-&gt;</span><span class="na">setDisplayCallback</span><span class="p">(</span> <span class="k">function</span><span class="p">(</span> <span class="nv">$msg</span> <span class="p">)</span> <span class="p">{</span>
-    <span class="k">echo</span> <span class="s2">"</span><span class="si">{</span><span class="nv">$msg</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
-<span class="p">});</span>
-<span class="nv">$generator</span><span class="o">-&gt;</span><span class="na">generate</span><span class="p">(</span> 
-    <span class="k">new</span> <span class="nx">Config</span><span class="p">(</span> <span class="nx">SOAPSERVICE</span><span class="p">,</span> <span class="nx">SOAPDIR</span> <span class="p">)</span> 
+<span class="nv">$generator</span> <span class="o">=</span> <span class="nx">Wsdl2PhpGenerator\Generator</span><span class="o">::</span><span class="na">instance</span><span class="p">();</span>
+<span class="nv">$generator</span><span class="o">-&gt;</span><span class="na">generate</span><span class="p">(</span>
+    <span class="k">new</span> <span class="nx">Wsdl2PhpGenerator\Config</span><span class="p">(</span> <span class="nx">SOAPSERVICE</span><span class="p">,</span> <span class="nx">SOAPDIR</span> <span class="p">)</span> 
 <span class="p">);</span>
 <span class="cp">?&gt;</span><span class="x"></span>
 </pre></div>
+
+<h2>
+<a name="versioning" class="anchor" href="#versioning"><span class="octicon octicon-link"></span></a>Versioning</h2>
+
+<p>This project aims to use <a href="http://semver.org/">semantic versioning</a>. The following consitutes the public API: </p>
+
+<ul>
+<li><code>\Wsdl2PhpGenerator\GeneratorInterface</code></li>
+<li><code>\Wsdl2PhpGenerator\ConfigInterface</code></li>
+</ul><p>Changes to these means that the major version will be increased. Additional features and bug fixes increate minor and patch versions.</p>
       </section>
 
     </div>
