@@ -14,6 +14,7 @@
         "ext-soap": "*"
     },
     "require-dev": {
+        "kherge/box": "2.4.*",
         "phpunit/phpunit": "3.7.*",
         "satooshi/php-coveralls": "dev-master"
     }

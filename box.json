@@ -1,0 +1,9 @@
+{
+    "alias": "wsdl2phpgenerator.phar",
+    "chmod": "0755",
+    "compression": "GZ",
+    "directories": ["vendor", "lib", "src"],
+    "output": "wsdl2phpgenerator.phar",
+    "main": "generate.php",
+    "stub": true
+}
