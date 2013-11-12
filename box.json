@@ -3,7 +3,8 @@
     "chmod": "0755",
     "compression": "GZ",
     "directories": ["vendor", "lib", "src"],
-    "output": "wsdl2phpgenerator.phar",
+    "git-version": "git_tag",
+    "output": "wsdl2phpgenerator-@git-version@.phar",
     "main": "generate.php",
     "stub": true
 }
