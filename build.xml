@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="wsdl2phpgenerator" default="release">
+
+    <target name="release" depends="update-app-version, update-changelog" description="Create a release">
+        <echo>Current code changes for release ${version}</echo>
+        <exec command="git diff HEAD" passthru="true" />
+
+        <!-- Commit changes? No pushing here. Changes should be reviewed again manually beforehand. -->
+        <propertyprompt propertyName="commit" useExistingValue="true" defaultValue="Y"
+                        promptText="Commit and tag changes? [Y/n]" />
+        <if>
+            <equals arg1="${commit}" arg2="Y" />
+            <then>
+                <echo>Committing and tagging release ${version}</echo>
+                <exec command="git add CHANGES generate.php" />
+                <exec command="git commit -m 'Release ${version}'" />
+                <exec command="git tag ${version}" />
+            </then>
+        </if>
+    </target>
+
+    <target name="update-app-version" depends="check-prerequites"
+            description="Updates references to the version in the application code">
+        <reflexive>
+            <fileset dir=".">
+                <filename name="generate.php" />
+            </fileset>
+            <filterchain>
+                <!-- Convert current version number to a token for subsequent replacement with actual value. -->
+                <replaceregexp>
+                    <regexp pattern="(Cli\(.*?)[\d\.]+(\'\);)" replace="\1@VERSION@\2"/>
+                </replaceregexp>
+                <replacetokens begintoken="@" endtoken="@">
+                    <token key="VERSION" value="${version}"/>
+                </replacetokens>
+            </filterchain>
+        </reflexive>
+    </target>
+
+    <target name="update-changelog" depends="check-prerequites"
+            description="Update the changelog with changes for a version.">
+        <exec command="git changelog --tag ${version}" />
+        <!-- Remove merge commits from changelog -->
+        <reflexive>
+            <fileset dir=".">
+                <filename name="CHANGES"/>
+            </fileset>
+            <filterchain>
+                <linecontainsregexp>
+                    <regexp pattern="^((?!\* merge).)*$" ignoreCase="true" />
+                </linecontainsregexp>
+            </filterchain>
+        </reflexive>
+    </target>
+
+    <target name="check-prerequites" description="Check that all required elements are available." hidden="true">
+        <propertyprompt propertyName="version" useExistingValue="true"
+                        promptText="Enter the verson/git tag to work with"  />
+
+        <exec command="git help changelog" outputProperty="git.changelog"/>
+        <condition property="git.changelog.missing" value="true">
+            <contains string="${git.changelog}" substring="no manual entry" casesensitive="false"/>
+        </condition>
+
+        <fail if="git.changelog.missing" message="git changelog must be installed to create a release. See https://github.com/visionmedia/git-extras."/>
+
+        <echo>git changelog: OK</echo>
+    </target>
+
+</project>
