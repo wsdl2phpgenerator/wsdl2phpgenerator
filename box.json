@@ -5,6 +5,6 @@
     "directories": ["vendor", "lib", "src"],
     "git-version": "git_tag",
     "output": "wsdl2phpgenerator-@git-version@.phar",
-    "main": "generate.php",
+    "main": "wsdl2php.php",
     "stub": true
 }
