@@ -17,6 +17,7 @@
     },
     "require-dev": {
         "kherge/box": "2.4.*",
+        "phing/phing": "2.6.*",
         "phpunit/phpunit": "3.7.*"
     }
 }
