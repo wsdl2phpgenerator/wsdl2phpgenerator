@@ -16,6 +16,7 @@
         "symfony/console": "2.3.*"
     },
     "require-dev": {
+        "kherge/box": "2.4.*",
         "phpunit/phpunit": "3.7.*"
     }
 }
