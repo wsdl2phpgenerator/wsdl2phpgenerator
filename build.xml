@@ -1,23 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name="wsdl2phpgenerator" default="release">
+<project name="wsdl2phpgenerator" default="prepare-release">
 
-    <target name="release" depends="update-app-version, update-changelog" description="Create a release">
+    <target name="prepare-release" depends="update-app-version, update-changelog, build-phar"
+            description="Create a release">
+        <!-- Generate message for tag -->
+        <delete file="TAG_MESSAGE" />
+        <exec command="git changelog -l > TAG_MESSAGE" escape="false" />
+        <reflexive>
+            <fileset dir=".">
+                <filename name="TAG_MESSAGE"/>
+            </fileset>
+            <filterchain>
+                <linecontainsregexp>
+                    <regexp pattern="^((?!\* merge).)*$" ignoreCase="true" />
+                </linecontainsregexp>
+            </filterchain>
+        </reflexive>
+
         <echo>Current code changes for release ${version}</echo>
         <exec command="git diff HEAD" passthru="true" />
+        <echo>Make last adjustments by hand and use vendor/bin/phing create-release to finalize it.</echo>
+    </target>
 
-        <!-- Commit changes? No pushing here. Changes should be reviewed again manually beforehand. -->
-        <propertyprompt propertyName="commit" useExistingValue="true" defaultValue="Y"
-                        promptText="Commit and tag changes? [Y/n]" />
-        <if>
-            <equals arg1="${commit}" arg2="Y" />
-            <then>
-                <echo>Committing and tagging release ${version}</echo>
-                <exec command="git add CHANGES wsdl2php.php" />
-                <exec command="git commit -m 'Release ${version}'" />
-                <exec command="git tag ${version}" />
-            </then>
-        </if>
+    <target name="create-release" depends="check-prerequites"
+            description="Finalize a release by committing, tagging and pushing changes.">
+        <echo>Committing and tagging release ${version}</echo>
+        <exec command="git add CHANGES wsdl2php.php" />
+        <exec command="git commit -m 'Release ${version}'" />
+
+        <loadfile file="TAG_MESSAGE" property="changes"/>
+        <exec command="git tag ${version} -m '${changes}'" />
+
+        <exec command="git push origin master ${version}" logoutput="true" />
     </target>
 
     <target name="update-app-version" depends="check-prerequites"
@@ -40,6 +55,7 @@
 
     <target name="update-changelog" depends="check-prerequites"
             description="Update the changelog with changes for a version.">
+        <exec command="git checkout CHANGES" />
         <exec command="git changelog --tag ${version}" />
         <!-- Remove merge commits from changelog -->
         <reflexive>
