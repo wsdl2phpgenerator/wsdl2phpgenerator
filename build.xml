@@ -54,6 +54,17 @@
         </reflexive>
     </target>
 
+    <target name="build-phar"
+            description="Build phar file">
+        <delete>
+            <fileset dir=".">
+                <include name="*.phar"/>
+            </fileset>
+        </delete>
+
+        <exec command="vendor/bin/box build" checkreturn="true" logoutput="true" />
+    </target>
+
     <target name="check-prerequites" description="Check that all required elements are available." hidden="true">
         <propertyprompt propertyName="version" useExistingValue="true"
                         promptText="Enter the verson/git tag to work with"  />
