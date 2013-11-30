@@ -2,49 +2,71 @@
 
 <project name="wsdl2phpgenerator" default="prepare-release">
 
-    <target name="prepare-release" depends="update-app-version, update-changelog, build-phar"
-            description="Create a release">
-        <!-- Generate message for tag -->
-        <delete file="TAG_MESSAGE" />
-        <exec command="git changelog -l > TAG_MESSAGE" escape="false" />
-        <reflexive>
-            <fileset dir=".">
-                <filename name="TAG_MESSAGE"/>
-            </fileset>
-            <filterchain>
-                <linecontainsregexp>
-                    <regexp pattern="^((?!\* merge).)*$" ignoreCase="true" />
-                </linecontainsregexp>
-            </filterchain>
-        </reflexive>
-
+    <target name="prepare-release" depends="check-prerequites, update-app-version, update-changelog, build-phar"
+            description="Prepare a release by performing all related changes to the code base.">
         <echo>Current code changes for release ${version}</echo>
         <exec command="git diff HEAD" passthru="true" />
         <echo>Make last adjustments by hand and use vendor/bin/phing create-release to finalize it.</echo>
     </target>
 
-    <target name="create-release" depends="check-prerequites"
-            description="Finalize a release by committing, tagging and pushing changes.">
+    <target name="create-release" depends="prepare-release, init-github"
+            description="Finalize a release by committing, tagging and pushing changes, creating a release, and upload phar file as an asset.">
         <echo>Committing and tagging release ${version}</echo>
-        <exec command="git add CHANGES wsdl2php.php" />
-        <exec command="git commit -m 'Release ${version}'" />
 
+        <!-- Extract a list of changes from the added lines to the changelog. These line will be prefixed by "+ *".
+             Drop the + but keep the *. -->
+        <exec command="git diff -U0 CHANGES > TAG_MESSAGE" />
+        <reflexive file="TAG_MESSAGE">
+            <filterchain>
+                <linecontainsregexp>
+                    <regexp pattern="^\+\s\*\s" ignoreCase="true" />
+                </linecontainsregexp>
+                <replaceregexp>
+                    <regexp pattern="\+\s" replace="" />
+                </replaceregexp>
+            </filterchain>
+        </reflexive>
         <loadfile file="TAG_MESSAGE" property="changes"/>
-        <exec command="git tag ${version} -m '${changes}'" />
+        <delete file="TAG_MESSAGE" />
 
-        <exec command="git push origin master ${version}" logoutput="true" />
+        <!-- Add, commit, tag and push changes. The tag message makes a nice release note on GitHub. -->
+        <exec command="git add CHANGES README.md wsdl2php.php" logoutput="true" checkreturn="true" />
+        <exec command="git commit -m 'Release ${version}'" logoutput="true" checkreturn="true" />
+        <exec command="git tag ${version} -f -m 'Release ${version}${line.separator}${changes}'" />
+        <exec command="git push origin master ${version}" logoutput="true" checkreturn="true" />
+
+        <!-- Rebuild the phar file as it will now have the proper name for the release as the tag has been created. -->
+        <phingcall target="build-phar"/>
+
+        <!-- Create a proper release for the tag as tags cannot have assets attached. -->
+        <githubcreaterelease username="${username}" password="${password}" authMethod="password"
+                             owner="wsdl2phpgenerator" repository="wsdl2phpgenerator" tagName="${version}"
+                             releaseId="release" />
+
+        <!-- Finally we can create the asset. -->
+        <githubcreateassets username="${username}" password="${password}" authMethod="password"
+                            owner="wsdl2phpgenerator" repository="wsdl2phpgenerator" releaseId="${release}">
+            <fileset dir=".">
+                <include name="wsdl2phpgenerator-*.phar"/>
+            </fileset>
+        </githubcreateassets>
+
     </target>
 
     <target name="update-app-version" depends="check-prerequites"
             description="Updates references to the version in the application code">
         <reflexive>
             <fileset dir=".">
-                <filename name="wsdl2php.php" />
+                <include name="wsdl2php.php" />
+                <include name="README.md" />
             </fileset>
             <filterchain>
                 <!-- Convert current version number to a token for subsequent replacement with actual value. -->
                 <replaceregexp>
                     <regexp pattern="(Cli\(.*?)[\d\.]+(\'\);)" replace="\1@VERSION@\2"/>
+                    <regexp pattern="(wsdl2phpgenerator-)[\d.]+(\.phar)" replace="\1@VERSION@\2"/>
+                    <regexp pattern="(\/releases\/download\/)[\d.]+" replace="\1@VERSION@"/>
+                    <regexp pattern='(wsdl2phpgenerator": ")[\d.]+(")' replace="\1@VERSION@\2"/>
                 </replaceregexp>
                 <replacetokens begintoken="@" endtoken="@">
                     <token key="VERSION" value="${version}"/>
@@ -55,9 +77,13 @@
 
     <target name="update-changelog" depends="check-prerequites"
             description="Update the changelog with changes for a version.">
+        <!-- Reset any changes made to the changelog. -->
         <exec command="git checkout CHANGES" />
+
+        <!-- Rebuild the changelog using git-changelog- -->
         <exec command="git changelog --tag ${version}" />
-        <!-- Remove merge commits from changelog -->
+
+        <!-- Remove merge commits from changelog. They are of little relevance here. -->
         <reflexive>
             <fileset dir=".">
                 <filename name="CHANGES"/>
@@ -70,14 +96,15 @@
         </reflexive>
     </target>
 
-    <target name="build-phar"
-            description="Build phar file">
+    <target name="build-phar" description="(Re)build phar file">
+        <!-- Remove any preexisting phar files. -->
         <delete>
             <fileset dir=".">
                 <include name="*.phar"/>
             </fileset>
         </delete>
 
+        <!-- Build a new phar file using https://github.com/kherge/Box -->
         <exec command="vendor/bin/box build" checkreturn="true" logoutput="true" />
     </target>
 
@@ -85,6 +112,7 @@
         <propertyprompt propertyName="version" useExistingValue="true"
                         promptText="Enter the verson/git tag to work with"  />
 
+        <!-- To detect whether git-changelog is available try checking the help section for the command. -->
         <exec command="git help changelog" outputProperty="git.changelog"/>
         <condition property="git.changelog.missing" value="true">
             <contains string="${git.changelog}" substring="no manual entry" casesensitive="false"/>
@@ -93,6 +121,16 @@
         <fail if="git.changelog.missing" message="git changelog must be installed to create a release. See https://github.com/visionmedia/git-extras."/>
 
         <echo>git changelog: OK</echo>
+    </target>
+
+    <target name="init-github" description="Initialize GitHub tasks and properties" hidden="true">
+        <!-- Load GitHub tasks. -->
+        <taskdef name="githubcreaterelease" classname="PhingGitHub\CreateReleaseTask" classpath="vendor/kasperg" />
+        <taskdef name="githubcreateassets" classname="PhingGitHub\CreateAssetsTask" classpath="vendor/kasperg" />
+
+        <!-- Initialize GitHub-related properties -->
+        <propertyprompt promptText="Enter your GitHub username?" propertyName="username" useExistingValue="true"/>
+        <propertyprompt promptText="Enter your GitHub password?" propertyName="password" useExistingValue="true"/>
     </target>
 
 </project>
