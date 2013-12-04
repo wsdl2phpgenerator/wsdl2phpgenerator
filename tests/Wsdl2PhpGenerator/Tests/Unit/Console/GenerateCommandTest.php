@@ -47,7 +47,7 @@ class GenerateCommandTest extends \PHPUnit_Framework_TestCase
     {
         $input = $this->generateInput(array('--waitOneWayCalls' => true));
         $config = $this->getConfigFromInput($input);
-        $this->assertEquals(array(SOAP_WAIT_ONE_WAY_CALLS), $config->getOptionFeatures());
+        $this->assertEquals(array('SOAP_WAIT_ONE_WAY_CALLS'), $config->getOptionFeatures());
     }
 
     /**
@@ -57,7 +57,7 @@ class GenerateCommandTest extends \PHPUnit_Framework_TestCase
     {
         $input = $this->generateInput(array('--cacheBoth' => true));
         $config = $this->getConfigFromInput($input);
-        $this->assertEquals(WSDL_CACHE_BOTH, $config->getWsdlCache());
+        $this->assertEquals('WSDL_CACHE_BOTH', $config->getWsdlCache());
     }
 
     /**
@@ -81,26 +81,26 @@ class GenerateCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertConfig(array('--suffix', '-q'), 'SomeSuffix', 'suffix');
 
         $this->assertConfig('--cacheNone', true, function (ConfigInterface $config) {
-                return $config->getWsdlCache() == WSDL_CACHE_NONE;
+                return $config->getWsdlCache() == 'WSDL_CACHE_NONE';
         });
         $this->assertConfig('--cacheDisk', true, function (ConfigInterface $config) {
-                return $config->getWsdlCache() == WSDL_CACHE_DISK;
+                return $config->getWsdlCache() == 'WSDL_CACHE_DISK';
         });
         $this->assertConfig('--cacheMemory', true, function (ConfigInterface $config) {
-                return $config->getWsdlCache() == WSDL_CACHE_MEMORY;
+                return $config->getWsdlCache() == 'WSDL_CACHE_MEMORY';
         });
         $this->assertConfig('--cacheBoth', true, function (ConfigInterface $config) {
-                return $config->getWsdlCache() == WSDL_CACHE_BOTH;
+                return $config->getWsdlCache() == 'WSDL_CACHE_BOTH';
         });
 
         $this->assertConfig('--singleElementArrays', true, function (ConfigInterface $config) {
-                return in_array(SOAP_SINGLE_ELEMENT_ARRAYS, $config->getOptionFeatures());
+                return in_array('SOAP_SINGLE_ELEMENT_ARRAYS', $config->getOptionFeatures());
         });
         $this->assertConfig('--waitOneWayCalls', true, function (ConfigInterface $config) {
-                return in_array(SOAP_WAIT_ONE_WAY_CALLS, $config->getOptionFeatures());
+                return in_array('SOAP_WAIT_ONE_WAY_CALLS', $config->getOptionFeatures());
         });
         $this->assertConfig('--xsiArrayType', true, function (ConfigInterface $config) {
-                return in_array(SOAP_USE_XSI_ARRAY_TYPE, $config->getOptionFeatures());
+                return in_array('SOAP_USE_XSI_ARRAY_TYPE', $config->getOptionFeatures());
         });
     }
 

@@ -163,7 +163,7 @@ class GenerateCommand extends Command
                 InputOption::VALUE_NONE,
                 'Adds the option to not cache the wsdl to the client',
                 null,
-                WSDL_CACHE_NONE
+                'WSDL_CACHE_NONE'
             )
             ->addCacheOption(
                 'cacheDisk',
@@ -171,7 +171,7 @@ class GenerateCommand extends Command
                 InputOption::VALUE_NONE,
                 'Adds the option to cache the wsdl on disk to the client',
                 null,
-                WSDL_CACHE_DISK
+                'WSDL_CACHE_DISK'
             )
             ->addCacheOption(
                 'cacheMemory',
@@ -179,7 +179,7 @@ class GenerateCommand extends Command
                 InputOption::VALUE_NONE,
                 'Adds the option to cache the wsdl in memory to the client',
                 null,
-                WSDL_CACHE_MEMORY
+                'WSDL_CACHE_MEMORY'
             )
             ->addCacheOption(
                 'cacheBoth',
@@ -187,7 +187,7 @@ class GenerateCommand extends Command
                 InputOption::VALUE_NONE,
                 'Adds the option to cache the wsdl in memory and on disk to the client',
                 null,
-                WSDL_CACHE_BOTH
+                'WSDL_CACHE_BOTH'
             )
 
             ->addFeatureOption(
@@ -196,7 +196,7 @@ class GenerateCommand extends Command
                 InputOption::VALUE_NONE,
                 'Adds the option to use single element arrays to the client',
                 null,
-                SOAP_SINGLE_ELEMENT_ARRAYS
+                'SOAP_SINGLE_ELEMENT_ARRAYS'
             )
             ->addFeatureOption(
                 'waitOneWayCalls',
@@ -204,7 +204,7 @@ class GenerateCommand extends Command
                 InputOption::VALUE_NONE,
                 'Adds the option to use wait one way calls to the client',
                 null,
-                SOAP_WAIT_ONE_WAY_CALLS
+                'SOAP_WAIT_ONE_WAY_CALLS'
             )
             ->addFeatureOption(
                 'xsiArrayType',
@@ -212,7 +212,7 @@ class GenerateCommand extends Command
                 InputOption::VALUE_NONE,
                 'Adds the option to use xsi arrays to the client',
                 null,
-                SOAP_USE_XSI_ARRAY_TYPE
+                'SOAP_USE_XSI_ARRAY_TYPE'
             );
     }
 
