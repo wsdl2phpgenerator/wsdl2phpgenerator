@@ -1,4 +1,13 @@
 
+2.1.0 / 2013-12-09 
+==================
+
+ * Create a GitHub release and upload resulting phar file when releasing.
+ * Replace Coveralls with Scrutinizer for code coverage.
+ * Use box to build phar file of project.
+ * Add Phing build script to automate releases.
+ * Refactor to use Symfony Console component instead of custom CLI code.
+
 2.0.3 / 2013-10-30 
 ==================
 
