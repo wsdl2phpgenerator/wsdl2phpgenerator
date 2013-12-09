@@ -6,6 +6,7 @@
 namespace Wsdl2PhpGenerator;
 
 use \Exception;
+use Psr\Log\LoggerInterface;
 use \SoapClient;
 use \SoapFault;
 use \DOMDocument;
@@ -70,6 +71,11 @@ class Generator implements GeneratorInterface
     private $documentation;
 
     /**
+     * @var LoggerInterface The logger to use.
+     */
+    private $logger;
+
+    /**
      *
      * @var Generator The infamous singleton instance
      */
@@ -121,7 +127,12 @@ class Generator implements GeneratorInterface
 
         $this->savePhp();
 
-        $this->log('Generation complete');
+        $this->log('Generation complete', 'info');
+    }
+
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
     }
 
     /**
@@ -362,14 +373,14 @@ class Generator implements GeneratorInterface
     }
 
     /**
-     * Logs a message to the standard output
+     * Logs a message.
      *
      * @param string $message The message to log
      */
-    private function log($message)
+    private function log($message, $level = 'notice')
     {
-        if ($this->config->getVerbose() == true) {
-            print $message . PHP_EOL;
+        if (isset($this->logger)) {
+            $this->logger->log($level, $message);
         }
     }
 

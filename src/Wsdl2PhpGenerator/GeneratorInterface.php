@@ -30,4 +30,5 @@ interface GeneratorInterface
      * @param ConfigInterface $config The config to use for generation
      */
     public function generate(ConfigInterface $config);
+
 }

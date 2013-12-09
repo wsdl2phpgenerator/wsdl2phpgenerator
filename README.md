@@ -1,7 +1,7 @@
 # wsdl2phpgenerator
 [![Latest Stable Version](https://poser.pugx.org/wsdl2phpgenerator/wsdl2phpgenerator/v/stable.png)](https://packagist.org/packages/wsdl2phpgenerator/wsdl2phpgenerator)
 [![Build Status](https://travis-ci.org/wsdl2phpgenerator/wsdl2phpgenerator.png?branch=master)](https://travis-ci.org/wsdl2phpgenerator/wsdl2phpgenerator)
-[![Coverage Status](https://coveralls.io/repos/wsdl2phpgenerator/wsdl2phpgenerator/badge.png)](https://coveralls.io/r/wsdl2phpgenerator/wsdl2phpgenerator)
+[![Code Coverage](https://scrutinizer-ci.com/g/wsdl2phpgenerator/wsdl2phpgenerator/badges/coverage.png?s=91798255fd973950b1e2d7478f99d6f6f80cf6da)](https://scrutinizer-ci.com/g/wsdl2phpgenerator/wsdl2phpgenerator/)
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/wsdl2phpgenerator/wsdl2phpgenerator/badges/quality-score.png?s=23e602a86f75a79a2f1013caac99558f2464ce74)](https://scrutinizer-ci.com/g/wsdl2phpgenerator/wsdl2phpgenerator/)
 [![Dependency Status](https://www.versioneye.com/user/projects/52697615632bac67b2002e93/badge.png)](https://www.versioneye.com/user/projects/52697615632bac67b2002e93)
 
@@ -20,32 +20,31 @@ There is a mailing list for the project at [https://groups.google.com/forum/#!fo
 
 ## Usage
 
-### Install from repo
+### Standalone executable
 
-1. Clone this repo `git clone git@github.com:wsdl2phpgenerator/wsdl2phpgenerator.git`
-
-1. Install composer:
-    * [Installation - *nix](http://getcomposer.org/doc/00-intro.md#installation-nix)
-    * [Installation - Windows](http://getcomposer.org/doc/00-intro.md#installation-windows)
-
-1. Run `composer install`
-
-### Install from packagist
-
-Add `"wsdl2phpgenerator/wsdl2phpgenerator": "dev-master"` and run `composer update`
-
-### Executable
-`./wsdl2php -i input.wsdl -o /tmp/my/directory/wsdl`
+1. Download [wsdl2phpgenerator-2.1.0.phar](https://github.com/wsdl2phpgenerator/wsdl2phpgenerator/releases/download/2.1.0/wsdl2phpgenerator-2.1.0.phar) from [the latest release](https://github.com/wsdl2phpgenerator/wsdl2phpgenerator/releases/latest)
+1. Run `./wsdl2phpgenerator-2.1.0.phar -i input.wsdl -o tmp/my/directory/wsdl`
 
 The directory is created if possible.
 
-usage listed under `./wsdl2php -h`
+Usage is listed under `./wsdl2php -h`
+
+
+### Executable in Composer project
+
+1. Add `"wsdl2phpgenerator/wsdl2phpgenerator": "2.1.0"`  to the `require` or `require-dev` section of your `composer.json` file
+1. Run `composer update`
+1. Run `./vendor/bin/wsdl2php -i input.wsdl -o tmp/my/directory/wsdl`
+
+The directory is created if possible.
+
+Usage is listed under `./vendor/bin/wsdl2php -h`
 
 ### Code
 
 ```php
 <?php
-// Map `src`and `lib` folders to the Wsdl2PhpGenerator namespace in your
+// Map 'src' and 'lib' folders to the Wsdl2PhpGenerator namespace in your
 // favorite PSR-0 compatible classloader or require the files manually.
 
 $generator = Wsdl2PhpGenerator\Generator::instance();
