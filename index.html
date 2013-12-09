@@ -43,7 +43,7 @@
 
 <p><a href="https://packagist.org/packages/wsdl2phpgenerator/wsdl2phpgenerator"><img src="https://poser.pugx.org/wsdl2phpgenerator/wsdl2phpgenerator/v/stable.png" alt="Latest Stable Version"></a>
 <a href="https://travis-ci.org/wsdl2phpgenerator/wsdl2phpgenerator"><img src="https://travis-ci.org/wsdl2phpgenerator/wsdl2phpgenerator.png?branch=master" alt="Build Status"></a>
-<a href="https://coveralls.io/r/wsdl2phpgenerator/wsdl2phpgenerator"><img src="https://coveralls.io/repos/wsdl2phpgenerator/wsdl2phpgenerator/badge.png" alt="Coverage Status"></a>
+<a href="https://scrutinizer-ci.com/g/wsdl2phpgenerator/wsdl2phpgenerator/"><img src="https://scrutinizer-ci.com/g/wsdl2phpgenerator/wsdl2phpgenerator/badges/coverage.png?s=91798255fd973950b1e2d7478f99d6f6f80cf6da" alt="Code Coverage"></a>
 <a href="https://scrutinizer-ci.com/g/wsdl2phpgenerator/wsdl2phpgenerator/"><img src="https://scrutinizer-ci.com/g/wsdl2phpgenerator/wsdl2phpgenerator/badges/quality-score.png?s=23e602a86f75a79a2f1013caac99558f2464ce74" alt="Scrutinizer Quality Score"></a>
 <a href="https://www.versioneye.com/user/projects/52697615632bac67b2002e93"><img src="https://www.versioneye.com/user/projects/52697615632bac67b2002e93/badge.png" alt="Dependency Status"></a></p>
 
@@ -67,38 +67,35 @@
 <a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
 
 <h3>
-<a name="install-from-repo" class="anchor" href="#install-from-repo"><span class="octicon octicon-link"></span></a>Install from repo</h3>
+<a name="standalone-executable" class="anchor" href="#standalone-executable"><span class="octicon octicon-link"></span></a>Standalone executable</h3>
 
 <ol>
-<li><p>Clone this repo <code>git clone git@github.com:wsdl2phpgenerator/wsdl2phpgenerator.git</code></p></li>
-<li>
-<p>Install composer:</p>
-
-<ul>
-<li><a href="http://getcomposer.org/doc/00-intro.md#installation-nix">Installation - *nix</a></li>
-<li><a href="http://getcomposer.org/doc/00-intro.md#installation-windows">Installation - Windows</a></li>
-</ul>
+<li>Download <a href="https://github.com/wsdl2phpgenerator/wsdl2phpgenerator/releases/download/2.1.0/wsdl2phpgenerator-2.1.0.phar">wsdl2phpgenerator-2.1.0.phar</a> from <a href="https://github.com/wsdl2phpgenerator/wsdl2phpgenerator/releases/latest">the latest release</a>
 </li>
-<li><p>Run <code>composer install</code></p></li>
-</ol><h3>
-<a name="install-from-packagist" class="anchor" href="#install-from-packagist"><span class="octicon octicon-link"></span></a>Install from packagist</h3>
+<li>Run <code>./wsdl2phpgenerator-2.1.0.phar -i input.wsdl -o tmp/my/directory/wsdl</code>
+</li>
+</ol><p>The directory is created if possible.</p>
 
-<p>Add <code>"wsdl2phpgenerator/wsdl2phpgenerator": "dev-master"</code> and run <code>composer update</code></p>
+<p>Usage is listed under <code>./wsdl2php -h</code></p>
 
 <h3>
-<a name="executable" class="anchor" href="#executable"><span class="octicon octicon-link"></span></a>Executable</h3>
+<a name="executable-in-composer-project" class="anchor" href="#executable-in-composer-project"><span class="octicon octicon-link"></span></a>Executable in Composer project</h3>
 
-<p><code>./wsdl2php -i input.wsdl -o /tmp/my/directory/wsdl</code></p>
+<ol>
+<li>Add <code>"wsdl2phpgenerator/wsdl2phpgenerator": "2.1.0"</code>  to the <code>require</code> or <code>require-dev</code> section of your <code>composer.json</code> file</li>
+<li>Run <code>composer update</code>
+</li>
+<li>Run <code>./vendor/bin/wsdl2php -i input.wsdl -o tmp/my/directory/wsdl</code>
+</li>
+</ol><p>The directory is created if possible.</p>
 
-<p>The directory is created if possible.</p>
-
-<p>usage listed under <code>./wsdl2php -h</code></p>
+<p>Usage is listed under <code>./vendor/bin/wsdl2php -h</code></p>
 
 <h3>
 <a name="code" class="anchor" href="#code"><span class="octicon octicon-link"></span></a>Code</h3>
 
 <div class="highlight highlight-php"><pre><span class="o">&lt;?</span><span class="nx">php</span>
-<span class="c1">// Map `src`and `lib` folders to the Wsdl2PhpGenerator namespace in your</span>
+<span class="c1">// Map 'src' and 'lib' folders to the Wsdl2PhpGenerator namespace in your</span>
 <span class="c1">// favorite PSR-0 compatible classloader or require the files manually.</span>
 
 <span class="nv">$generator</span> <span class="o">=</span> <span class="nx">Wsdl2PhpGenerator\Generator</span><span class="o">::</span><span class="na">instance</span><span class="p">();</span>
