@@ -117,6 +117,16 @@ class Config implements ConfigInterface
     private $noIncludes;
 
     /**
+     * @var string For HTTP authentication, the login and password options can be used to supply credentials.
+     */
+    private $login;
+
+    /**
+     * @var string For HTTP authentication, the login and password options can be used to supply credentials.
+     */
+    private $password;
+
+    /**
      * Sets all variables
      *
      * @param string $inputFile
@@ -132,12 +142,14 @@ class Config implements ConfigInterface
      * @param string $classNames
      * @param string $prefix
      * @param string $suffix
-     * @param string $sharedTypes
+     * @param string|bool $sharedTypes
      * @param bool $createAccessors
      * @param bool $constructorParamsDefaultToNull
      * @param bool $noIncludes
+     * @param string $login
+     * @param string $password
      */
-    public function __construct($inputFile, $outputDir, $verbose = false, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '', $prefix = '', $suffix = '', $sharedTypes = false, $createAccessors = false, $constructorParamsDefaultToNull = false, $noIncludes = false)
+    public function __construct($inputFile, $outputDir, $verbose = false, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '', $prefix = '', $suffix = '', $sharedTypes = false, $createAccessors = false, $constructorParamsDefaultToNull = false, $noIncludes = false, $login = "", $password = "")
     {
         $this->namespaceName = trim($namespaceName);
         $this->oneFile = $oneFile;
@@ -378,5 +390,15 @@ class Config implements ConfigInterface
     public function setNoIncludes($noIncludes)
     {
         $this->noIncludes = $noIncludes;
+    }
+
+    public function getLogin()
+    {
+        return $this->login;
+    }
+
+    public function getPassword()
+    {
+        return $this->password;
     }
 }
