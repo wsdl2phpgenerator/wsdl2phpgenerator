@@ -142,13 +142,29 @@ class Generator implements GeneratorInterface
     {
         try {
             $this->log('Loading the wsdl');
-            $this->client = new SoapClient($wsdl, array('cache_wsdl' => WSDL_CACHE_NONE));
+
+            $options = array('cache_wsdl' => WSDL_CACHE_NONE);
+
+            if ($this->config->getLogin()) {
+                $options['login'] = $this->config->getLogin();
+            }
+
+            if ($this->config->getPassword()) {
+                $options['password'] = $this->config->getPassword();
+            }
+
+            $this->client = new SoapClient($wsdl, $options);
         } catch (SoapFault $e) {
             throw new Exception('Error connecting to to the wsdl. Error: ' . $e->getMessage());
         }
 
         $this->log('Loading the DOM');
         $this->dom[0] = new DOMDocument();
+
+        if ($this->config->getLogin() && $this->config->getPassword()) {
+            $wsdl = preg_replace("^(https?)://", "\$1{$this->config->getLogin()}:{$this->config->getPassword()}://", $wsdl);
+        }
+
         $this->dom[0]->load($wsdl);
 
         $this->documentation->loadDocumentation($this->dom[0]);
@@ -177,7 +193,15 @@ class Generator implements GeneratorInterface
             $namespaces = $sxml->getDocNamespaces();
             if (!empty($namespaces['xsd'])) {
                 foreach ($sxml->xpath('//xsd:import/@schemaLocation') as $schema_file) {
-                    $schema = simplexml_load_file($schema_file);
+
+                    if ($this->config->getLogin() && $this->config->getPassword()) {
+                        $schema_file = preg_replace("^(https?)://", "\$1{$this->config->getLogin()}:{$this->config->getPassword()}://", $schema_file);
+                    }
+
+                    /* simple_xml_load_file() does not support HTTP Basic Auth, use file_get_contents() */
+                    $schema_content = file_get_contents($schema_file);
+
+                    $schema = simplexml_load_string($schema_content);
                     $this->schema[] = $schema;
                 }
             }
