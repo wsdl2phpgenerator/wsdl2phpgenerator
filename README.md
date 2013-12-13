@@ -10,7 +10,7 @@ Simple WSDL to PHP classes converter. Takes a WSDL file and outputs class files 
 Uses the [MIT licence](http://www.opensource.org/licenses/mit-license.php).
 
 ## Contributors
-Originally developed by [@walle](https://github.com/walle) and includes bugfixes and improvements from [@vakopian](https://github.com/vakopian), [@statikbe](https://github.com/statikbe/), [@ecolinet](https://github.com/ecolinet), [@nuth](https://github.com/nuth/), [@chriskl](https://github.com/chriskl/), [@dypa](https://github.com/dypa/) and [@kasperg](https://github.com/kasperg/).
+Originally developed by [@walle](https://github.com/walle) and includes bugfixes and improvements from [@vakopian](https://github.com/vakopian), [@statikbe](https://github.com/statikbe/), [@ecolinet](https://github.com/ecolinet), [@nuth](https://github.com/nuth/), [@chriskl](https://github.com/chriskl/), [@RSully](https://github.com/RSully/), [@dypa](https://github.com/dypa/) and [@kasperg](https://github.com/kasperg/).
 
 Pull requests are very welcome.
 
@@ -22,8 +22,8 @@ There is a mailing list for the project at [https://groups.google.com/forum/#!fo
 
 ### Standalone executable
 
-1. Download [wsdl2phpgenerator-2.1.0.phar](https://github.com/wsdl2phpgenerator/wsdl2phpgenerator/releases/download/2.1.0/wsdl2phpgenerator-2.1.0.phar) from [the latest release](https://github.com/wsdl2phpgenerator/wsdl2phpgenerator/releases/latest)
-1. Run `./wsdl2phpgenerator-2.1.0.phar -i input.wsdl -o tmp/my/directory/wsdl`
+1. Download [wsdl2phpgenerator-2.2.0.phar](https://github.com/wsdl2phpgenerator/wsdl2phpgenerator/releases/download/2.2.0/wsdl2phpgenerator-2.2.0.phar) from [the latest release](https://github.com/wsdl2phpgenerator/wsdl2phpgenerator/releases/latest)
+1. Run `./wsdl2phpgenerator-2.2.0.phar -i input.wsdl -o tmp/my/directory/wsdl`
 
 The directory is created if possible.
 
@@ -32,7 +32,7 @@ Usage is listed under `./wsdl2php -h`
 
 ### Executable in Composer project
 
-1. Add `"wsdl2phpgenerator/wsdl2phpgenerator": "2.1.0"`  to the `require` or `require-dev` section of your `composer.json` file
+1. Add `"wsdl2phpgenerator/wsdl2phpgenerator": "2.2.0"`  to the `require` or `require-dev` section of your `composer.json` file
 1. Run `composer update`
 1. Run `./vendor/bin/wsdl2php -i input.wsdl -o tmp/my/directory/wsdl`
 
