@@ -13,7 +13,11 @@ namespace Wsdl2PhpGenerator\Tests\Functional;
  */
 class CurrencyConverterTest extends Wsdl2PhpGeneratorFunctionalTestCase
 {
-    protected $wsdl = 'http://www.webservicex.net/CurrencyConvertor.asmx?WSDL';
+
+    public function setup() {
+        $this->wsdl = $this->fixtureDir . '/CurrencyConvertor.wsdl';
+        parent::setup();
+    }
 
     /**
      * Perform a basic code generation/request/response scenario.

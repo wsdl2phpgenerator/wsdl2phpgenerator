@@ -27,12 +27,14 @@ abstract class Wsdl2PhpGeneratorFunctionalTestCase extends PHPUnit_Framework_Tes
     /**
      * @var Generator The generator which will execute the code generation.
      */
-
     protected $generator;
+
     /**
      * @var Config The configuration for the code generation.
      */
     protected $config;
+
+    protected $fixtureDir = 'tests/fixtures';
 
     protected function setup()
     {

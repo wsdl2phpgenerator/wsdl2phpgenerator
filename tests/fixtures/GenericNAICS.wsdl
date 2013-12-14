@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.webservicex.net/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://www.webservicex.net/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">The North American Industry Classification System (NAICS) has replaced the U.S. Standard Industrial Classification (SIC) system. NAICS will reshape the way we view our changing economy.NAICS was developed jointly by the U.S., Canada, and Mexico to provide new comparability in statistics about business activity across North America.</wsdl:documentation>
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.webservicex.net/">
+      <s:element name="GetNAICSByID">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="NAICSCode" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetNAICSByIDResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetNAICSByIDResult" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="NAICSData" type="tns:NAICSList" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="NAICSList">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Records" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="NAICSData" type="tns:ArrayOfNAICS" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfNAICS">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="NAICS" type="tns:NAICS" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="NAICS">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="NAICSCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Title" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Country" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="IndustryDescription" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetNAICSByIndustry">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="IndustryName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetNAICSByIndustryResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetNAICSByIndustryResult" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="NAICSData" type="tns:NAICSList" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetNAICSGroupByID">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="NAICSCode" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetNAICSGroupByIDResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetNAICSGroupByIDResult" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="NAICSData" type="tns:NAICSList" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetNAICSByIDSoapIn">
+    <wsdl:part name="parameters" element="tns:GetNAICSByID" />
+  </wsdl:message>
+  <wsdl:message name="GetNAICSByIDSoapOut">
+    <wsdl:part name="parameters" element="tns:GetNAICSByIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetNAICSByIndustrySoapIn">
+    <wsdl:part name="parameters" element="tns:GetNAICSByIndustry" />
+  </wsdl:message>
+  <wsdl:message name="GetNAICSByIndustrySoapOut">
+    <wsdl:part name="parameters" element="tns:GetNAICSByIndustryResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetNAICSGroupByIDSoapIn">
+    <wsdl:part name="parameters" element="tns:GetNAICSGroupByID" />
+  </wsdl:message>
+  <wsdl:message name="GetNAICSGroupByIDSoapOut">
+    <wsdl:part name="parameters" element="tns:GetNAICSGroupByIDResponse" />
+  </wsdl:message>
+  <wsdl:portType name="GenericNAICSSoap">
+    <wsdl:operation name="GetNAICSByID">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get NAICS details by NAICS code</wsdl:documentation>
+      <wsdl:input message="tns:GetNAICSByIDSoapIn" />
+      <wsdl:output message="tns:GetNAICSByIDSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetNAICSByIndustry">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get NAICS details by Industry Name</wsdl:documentation>
+      <wsdl:input message="tns:GetNAICSByIndustrySoapIn" />
+      <wsdl:output message="tns:GetNAICSByIndustrySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetNAICSGroupByID">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get NAICS details by NAICS group code</wsdl:documentation>
+      <wsdl:input message="tns:GetNAICSGroupByIDSoapIn" />
+      <wsdl:output message="tns:GetNAICSGroupByIDSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="GenericNAICSHttpGet" />
+  <wsdl:portType name="GenericNAICSHttpPost" />
+  <wsdl:binding name="GenericNAICSSoap" type="tns:GenericNAICSSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetNAICSByID">
+      <soap:operation soapAction="http://www.webservicex.net/GetNAICSByID" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetNAICSByIndustry">
+      <soap:operation soapAction="http://www.webservicex.net/GetNAICSByIndustry" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetNAICSGroupByID">
+      <soap:operation soapAction="http://www.webservicex.net/GetNAICSGroupByID" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="GenericNAICSSoap12" type="tns:GenericNAICSSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetNAICSByID">
+      <soap12:operation soapAction="http://www.webservicex.net/GetNAICSByID" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetNAICSByIndustry">
+      <soap12:operation soapAction="http://www.webservicex.net/GetNAICSByIndustry" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetNAICSGroupByID">
+      <soap12:operation soapAction="http://www.webservicex.net/GetNAICSGroupByID" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="GenericNAICSHttpGet" type="tns:GenericNAICSHttpGet">
+    <http:binding verb="GET" />
+  </wsdl:binding>
+  <wsdl:binding name="GenericNAICSHttpPost" type="tns:GenericNAICSHttpPost">
+    <http:binding verb="POST" />
+  </wsdl:binding>
+  <wsdl:service name="GenericNAICS">
+    <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">The North American Industry Classification System (NAICS) has replaced the U.S. Standard Industrial Classification (SIC) system. NAICS will reshape the way we view our changing economy.NAICS was developed jointly by the U.S., Canada, and Mexico to provide new comparability in statistics about business activity across North America.</wsdl:documentation>
+    <wsdl:port name="GenericNAICSSoap" binding="tns:GenericNAICSSoap">
+      <soap:address location="http://www.webservicex.net/GenericNAICS.asmx" />
+    </wsdl:port>
+    <wsdl:port name="GenericNAICSSoap12" binding="tns:GenericNAICSSoap12">
+      <soap12:address location="http://www.webservicex.net/GenericNAICS.asmx" />
+    </wsdl:port>
+    <wsdl:port name="GenericNAICSHttpGet" binding="tns:GenericNAICSHttpGet">
+      <http:address location="http://www.webservicex.net/GenericNAICS.asmx" />
+    </wsdl:port>
+    <wsdl:port name="GenericNAICSHttpPost" binding="tns:GenericNAICSHttpPost">
+      <http:address location="http://www.webservicex.net/GenericNAICS.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
