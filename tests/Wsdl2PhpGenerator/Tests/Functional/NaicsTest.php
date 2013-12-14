@@ -14,7 +14,8 @@ use SoapFault;
 class NaicsTest extends Wsdl2PhpGeneratorFunctionalTestCase
 {
 
-    public function setup() {
+    public function setup()
+    {
         $this->wsdl = $this->fixtureDir . '/GenericNAICS.wsdl';
         parent::setup();
     }

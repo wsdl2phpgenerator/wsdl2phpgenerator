@@ -16,7 +16,8 @@ use SoapFault;
 class CurrencyConverterTest extends Wsdl2PhpGeneratorFunctionalTestCase
 {
 
-    public function setup() {
+    public function setup()
+    {
         $this->wsdl = $this->fixtureDir . '/CurrencyConvertor.wsdl';
         parent::setup();
     }
