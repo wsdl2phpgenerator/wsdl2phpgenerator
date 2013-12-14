@@ -1,6 +1,8 @@
 <?php
 namespace Wsdl2PhpGenerator\Tests\Functional;
 
+use SoapFault;
+
 /**
  * Basic functional test which ensure that we are able to generate a code
  * for a simple WSDL and use the generated code to call the service and get
@@ -49,14 +51,21 @@ class CurrencyConverterTest extends Wsdl2PhpGeneratorFunctionalTestCase
         // Setup and execute the service call.
         $service = new \CurrencyConvertor();
         $request = new \ConversionRate(\Currency::USD, \Currency::EUR);
-        $response = $service->ConversionRate($request);
+        try {
+            $response = $service->ConversionRate($request);
 
-        // Test that the response is as expected.
-        $this->assertTrue(get_class($response) == 'ConversionRateResponse');
-        // In the end the conversion rate between USD and EUR should be a numeric.
-        // It is actually a double but this type does not seem to be supported by
-        // assertAttributeInternalType().
-        $this->assertAttributeInternalType('numeric', 'ConversionRateResult', $response);
+            // Test that the response is as expected.
+            $this->assertTrue(get_class($response) == 'ConversionRateResponse');
+            // In the end the conversion rate between USD and EUR should be a numeric.
+            // It is actually a double but this type does not seem to be supported by
+            // assertAttributeInternalType().
+            $this->assertAttributeInternalType('numeric', 'ConversionRateResult', $response);
+        } catch (SoapFault $e) {
+            // If an exception is thrown it should be due to a timeout. We cannot
+            // guard against this when calling an external service.
+            $this->assertContains('timeout', $e->getMessage());
+        }
+
     }
 
 }
