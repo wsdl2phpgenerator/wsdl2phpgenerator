@@ -172,8 +172,7 @@ class Generator implements GeneratorInterface
         }
         if ($wsdlPrefix === null) {
             throw new Exception(sprintf("No WSDL namespace found: %s", self::WSDL_NS));
-        }
-        else if ($wsdlPrefix != '') {
+        } elseif ($wsdlPrefix != '') {
             $wsdlPrefix .= ':';
         }
 
