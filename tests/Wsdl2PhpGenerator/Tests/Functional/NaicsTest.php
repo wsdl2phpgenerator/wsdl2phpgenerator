@@ -16,6 +16,7 @@ class NaicsTest extends Wsdl2PhpGeneratorFunctionalTestCase
 
     public function setup()
     {
+        // Source: http://www.webservicex.net/GenericNAICS.asmx?WSDL.
         $this->wsdl = $this->fixtureDir . '/GenericNAICS.wsdl';
         parent::setup();
     }

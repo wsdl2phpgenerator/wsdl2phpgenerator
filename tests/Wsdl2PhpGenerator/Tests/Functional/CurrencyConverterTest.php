@@ -18,6 +18,7 @@ class CurrencyConverterTest extends Wsdl2PhpGeneratorFunctionalTestCase
 
     public function setup()
     {
+        // Source: http://www.webservicex.net/CurrencyConvertor.asmx?WSDL.
         $this->wsdl = $this->fixtureDir . '/CurrencyConvertor.wsdl';
         parent::setup();
     }
