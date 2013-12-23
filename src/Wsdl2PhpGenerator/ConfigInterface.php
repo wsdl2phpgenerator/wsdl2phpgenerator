@@ -150,4 +150,14 @@ interface ConfigInterface
      * @return boolean Returns if the constructor parameters should have null default values
      */
     public function getConstructorParamsDefaultToNull();
+
+	/**
+	 * @return string Returns the username that should be used for HTTP Basic Authentication.
+	 */
+	public function getLogin();
+
+	/**
+	 * @return string Returns the password that should be used for HTTP Basic Authentication.
+	 */
+	public function getPassword();
 }
