@@ -57,9 +57,11 @@ class Enum extends Type
             } catch (ValidationException $e) {
                 $name = 'constant' . $name;
             }
-            try {
-                $name = Validator::validateType($name);
-            } catch (ValidationException $e) {
+            if (Validator::isKeyword($name)) {
+                // TODO: Custom seems like a poor prefix for constant names
+                // that collide with PHP keywords by default but is kept for
+                // backwards compatibility for generated code.
+                // Consider changing this for 3.x.
                 $name .= 'Custom';
             }
 

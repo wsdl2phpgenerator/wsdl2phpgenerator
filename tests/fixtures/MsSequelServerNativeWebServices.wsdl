@@ -1,0 +1,611 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:sqloptions="http://schemas.microsoft.com/sqlserver/2004/SOAP/Options" xmlns:s0="http://tempUri.org/"
+                  xmlns:tns="http://tempUri.org/" targetNamespace="http://tempUri.org/">
+    <wsdl:types>
+        <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://schemas.microsoft.com/sqlserver/2004/sqltypes"
+                    attributeFormDefault="qualified" xmlns:sqltypes="http://schemas.microsoft.com/sqlserver/2004/sqltypes">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+                    XML Schema describing the base types to which SQL Server types are being mapped. For more information, please consult the documentation.
+
+                    (c) Copyright 2004, Microsoft Corporation
+
+                    The following schema for Microsoft SQL Server is presented in XML format and is for informational purposes only. Microsoft Corporation ("Microsoft") may have trademarks, copyrights, or other intellectual property rights covering subject matter in the schema.
+
+                    Microsoft does not make any representation or warranty regarding the schema or any product or item developed based on the schema. The schema is provided to you on an AS IS basis.  Microsoft disclaims all express, implied and statutory warranties, including but not limited to the implied warranties of merchantability, fitness for a particular purpose, and freedom from infringement. Without limiting the generality of the foregoing, Microsoft does not make any warranty of any kind that any item developed based on the schema, or any portion of the schema, will not infringe any copyright, patent, trade secret, or other intellectual property right of any person or entity in any country. It is your responsibility to seek licenses for such intellectual property rights where appropriate.
+
+                    MICROSOFT SHALL NOT BE LIABLE FOR ANY DAMAGES OF ANY KIND ARISING OUT OF OR IN CONNECTION WITH THE USE OF THE SCHEMA, INCLUDING WITHOUT LIMITATION, ANY DIRECT, INDIRECT, INCIDENTAL, CONSEQUENTIAL (INCLUDING ANY LOST PROFITS), PUNITIVE OR SPECIAL DAMAGES, WHETHER OR NOT MICROSOFT HAS BEEN ADVISED OF SUCH DAMAGES.
+                </xsd:documentation>
+            </xsd:annotation> <!-- Global types and attributes that can be used for schema annotations. --><xsd:simpleType name="sqlDbTypeEnum"><xsd:restriction base="xsd:string"><xsd:enumeration value="BigInt" />
+            <xsd:enumeration value="Binary" />
+            <xsd:enumeration value="Bit" />
+            <xsd:enumeration value="Char" />
+            <xsd:enumeration value="DateTime" />
+            <xsd:enumeration value="Decimal" />
+            <xsd:enumeration value="Float" />
+            <xsd:enumeration value="Image" />
+            <xsd:enumeration value="Int" />
+            <xsd:enumeration value="Money" />
+            <xsd:enumeration value="NChar" />
+            <xsd:enumeration value="NText" />
+            <xsd:enumeration value="NVarChar" />
+            <xsd:enumeration value="Real" />
+            <xsd:enumeration value="SmallDateTime" />
+            <xsd:enumeration value="SmallInt" />
+            <xsd:enumeration value="SmallMoney" />
+            <xsd:enumeration value="Sql_Variant" />
+            <xsd:enumeration value="Text" />
+            <xsd:enumeration value="Timestamp" />
+            <xsd:enumeration value="TinyInt" />
+            <xsd:enumeration value="Udt" />
+            <xsd:enumeration value="UniqueIdentifier" />
+            <xsd:enumeration value="UtcDateTime" />
+            <xsd:enumeration value="VarBinary" />
+            <xsd:enumeration value="VarChar" />
+            <xsd:enumeration value="Xml" />
+        </xsd:restriction>
+        </xsd:simpleType>
+            <xsd:simpleType name="sqlCompareOptionsList">
+                <xsd:list>
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:enumeration value="Default" />
+                            <xsd:enumeration value="None" />
+                            <xsd:enumeration value="IgnoreCase" />
+                            <xsd:enumeration value="IgnoreNonSpace" />
+                            <xsd:enumeration value="IgnoreKanaType" />
+                            <xsd:enumeration value="IgnoreWidth" />
+                            <xsd:enumeration value="BinarySort" />
+                            <xsd:enumeration value="BinarySort2" />
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:list>
+            </xsd:simpleType>
+            <xsd:attribute default="NVarChar" name="sqlDbType" type="sqltypes:sqlDbTypeEnum" />
+            <xsd:attribute name="clrTypeName" type="xsd:string" />
+            <xsd:attribute default="1" name="maxLength" type="xsd:long" />
+            <xsd:attribute default="-1" name="localeId" type="xsd:int" />
+            <xsd:attribute default="Default" name="sqlCompareOptions" type="sqltypes:sqlCompareOptionsList" />
+            <xsd:attribute default="0" name="sqlCollationVersion" type="xsd:int" />
+            <xsd:attribute default="0" name="sqlSortId" type="xsd:int" />
+            <xsd:attribute default="0" name="scale" type="xsd:unsignedByte" />
+            <xsd:attribute default="18" name="precision" type="xsd:unsignedByte" />
+            <xsd:attribute name="xmlSchemaCollection" type="xsd:string" />
+            <xsd:attribute name="sqlTypeAlias" type="xsd:string" /> <!-- Global types that describe the base SQL types. --><xsd:simpleType name="char"><xsd:restriction base="xsd:string" />
+        </xsd:simpleType>
+            <xsd:simpleType name="nchar">
+                <xsd:restriction base="xsd:string" />
+            </xsd:simpleType>
+            <xsd:simpleType name="varchar">
+                <xsd:restriction base="xsd:string" />
+            </xsd:simpleType>
+            <xsd:simpleType name="nvarchar">
+                <xsd:restriction base="xsd:string" />
+            </xsd:simpleType>
+            <xsd:simpleType name="text">
+                <xsd:restriction base="xsd:string" />
+            </xsd:simpleType>
+            <xsd:simpleType name="ntext">
+                <xsd:restriction base="xsd:string" />
+            </xsd:simpleType>
+            <xsd:simpleType name="varbinary">
+                <xsd:restriction base="xsd:base64Binary" />
+            </xsd:simpleType>
+            <xsd:simpleType name="binary">
+                <xsd:restriction base="xsd:base64Binary" />
+            </xsd:simpleType>
+            <xsd:simpleType name="image">
+                <xsd:restriction base="xsd:base64Binary" />
+            </xsd:simpleType>
+            <xsd:simpleType name="timestamp">
+                <xsd:restriction base="xsd:base64Binary">
+                    <xsd:maxLength value="8" />
+                </xsd:restriction>
+            </xsd:simpleType>
+            <xsd:simpleType name="timestampNumeric"> <!-- The timestampNumeric type supports a legacy format of timestamp. --><xsd:restriction base="xsd:long" />
+            </xsd:simpleType>
+            <xsd:simpleType name="decimal">
+                <xsd:restriction base="xsd:decimal" />
+            </xsd:simpleType>
+            <xsd:simpleType name="numeric">
+                <xsd:restriction base="xsd:decimal" />
+            </xsd:simpleType>
+            <xsd:simpleType name="bigint">
+                <xsd:restriction base="xsd:long" />
+            </xsd:simpleType>
+            <xsd:simpleType name="int">
+                <xsd:restriction base="xsd:int" />
+            </xsd:simpleType>
+            <xsd:simpleType name="smallint">
+                <xsd:restriction base="xsd:short" />
+            </xsd:simpleType>
+            <xsd:simpleType name="tinyint">
+                <xsd:restriction base="xsd:unsignedByte" />
+            </xsd:simpleType>
+            <xsd:simpleType name="bit">
+                <xsd:restriction base="xsd:boolean" />
+            </xsd:simpleType>
+            <xsd:simpleType name="float">
+                <xsd:restriction base="xsd:double" />
+            </xsd:simpleType>
+            <xsd:simpleType name="real">
+                <xsd:restriction base="xsd:float" />
+            </xsd:simpleType>
+            <xsd:simpleType name="utcdatetime">
+                <xsd:restriction base="xsd:dateTime">
+                    <xsd:pattern value="((000[1-9])|(00[1-9][0-9])|(0[1-9][0-9]{2})|([1-9][0-9]{3}))-((0[1-9])|(1[0,1,2]))-((0[1-9])|([1,2][0-9])|(3[0,1]))T(([0,1][0-9])|(2[0-3]))(:[0-5][0-9]){2}\.[0-9]{7}(Z|(\-|\+)(((0[1-9])|(1[0-2])):[0-5][0-9]))" />
+                    <xsd:maxInclusive value="9999-12-31T23:59:59.9999999Z" />
+                    <xsd:minInclusive value="0001-01-01T00:00:00.0000000Z" />
+                </xsd:restriction>
+            </xsd:simpleType>
+            <xsd:simpleType name="datetime">
+                <xsd:restriction base="xsd:dateTime">
+                    <xsd:pattern value="((000[1-9])|(00[1-9][0-9])|(0[1-9][0-9]{2})|([1-9][0-9]{3}))-((0[1-9])|(1[0,1,2]))-((0[1-9])|([1,2][0-9])|(3[0,1]))T(([0,1][0-9])|(2[0-3]))(:[0-5][0-9]){2}(\.[0-9]{2}[0,3,7])?" />
+                    <xsd:maxInclusive value="9999-12-31T23:59:59.997" />
+                    <xsd:minInclusive value="1753-01-01T00:00:00.000" />
+                </xsd:restriction>
+            </xsd:simpleType>
+            <xsd:simpleType name="smalldatetime">
+                <xsd:restriction base="xsd:dateTime">
+                    <xsd:pattern value="((000[1-9])|(00[1-9][0-9])|(0[1-9][0-9]{2})|([1-9][0-9]{3}))-((0[1-9])|(1[0,1,2]))-((0[1-9])|([1,2][0-9])|(3[0,1]))T(([0,1][0-9])|(2[0-3]))(:[0-5][0-9])(:00)" />
+                    <xsd:maxInclusive value="2079-06-06T23:59:00" />
+                    <xsd:minInclusive value="1900-01-01T00:00:00" />
+                </xsd:restriction>
+            </xsd:simpleType>
+            <xsd:simpleType name="money">
+                <xsd:restriction base="xsd:decimal">
+                    <xsd:totalDigits value="19" />
+                    <xsd:fractionDigits value="4" />
+                    <xsd:maxInclusive value="922337203685477.5807" />
+                    <xsd:minInclusive value="-922337203685477.5808" />
+                </xsd:restriction>
+            </xsd:simpleType>
+            <xsd:simpleType name="smallmoney">
+                <xsd:restriction base="xsd:decimal">
+                    <xsd:totalDigits value="10" />
+                    <xsd:fractionDigits value="4" />
+                    <xsd:maxInclusive value="214748.3647" />
+                    <xsd:minInclusive value="-214748.3648" />
+                </xsd:restriction>
+            </xsd:simpleType>
+            <xsd:simpleType name="uniqueidentifier">
+                <xsd:restriction base="xsd:string">
+                    <xsd:pattern value="([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})|(\{[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\})" />
+                </xsd:restriction>
+            </xsd:simpleType> <!-- sql_variant directly maps to xsd:anyType --><xsd:complexType name="xml" mixed="true"><xsd:sequence><xsd:any minOccurs="0" maxOccurs="unbounded" processContents="skip" />
+        </xsd:sequence>
+        </xsd:complexType>
+            <xsd:simpleType name="dbobject">
+                <xsd:restriction base="xsd:anyURI" />
+            </xsd:simpleType>
+        </xsd:schema>
+        <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified"
+                    targetNamespace="http://schemas.microsoft.com/sqlserver/2004/SOAP/types">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+                    (c) Copyright 2004, Microsoft Corporation
+
+                    The following schema for Microsoft SQL Server is presented in XML format and is for informational purposes only. Microsoft Corporation ("Microsoft") may have trademarks, copyrights, or other intellectual property rights covering subject matter in the schema.
+
+                    Microsoft does not make any representation or warranty regarding the schema or any product or item developed based on the schema. The schema is provided to you on an AS IS basis.  Microsoft disclaims all express, implied and statutory warranties, including but not limited to the implied warranties of merchantability, fitness for a particular purpose, and freedom from infringement. Without limiting the generality of the foregoing, Microsoft does not make any warranty of any kind that any item developed based on the schema, or any portion of the schema, will not infringe any copyright, patent, trade secret, or other intellectual property right of any person or entity in any country. It is your responsibility to seek licenses for such intellectual property rights where appropriate.
+
+                    MICROSOFT SHALL NOT BE LIABLE FOR ANY DAMAGES OF ANY KIND ARISING OUT OF OR IN CONNECTION WITH THE USE OF THE SCHEMA, INCLUDING WITHOUT LIMITATION, ANY DIRECT, INDIRECT, INCIDENTAL, CONSEQUENTIAL (INCLUDING ANY LOST PROFITS), PUNITIVE OR SPECIAL DAMAGES, WHETHER OR NOT MICROSOFT HAS BEEN ADVISED OF SUCH DAMAGES.
+                </xsd:documentation>
+            </xsd:annotation>
+            <xsd:complexType name="SqlRowSet">
+                <xsd:sequence maxOccurs="unbounded">
+                    <xsd:element ref="xsd:schema" />
+                    <xsd:any />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="SqlXml" mixed="true">
+                <xsd:sequence>
+                    <xsd:any processContents="skip" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:simpleType name="SqlResultCode">
+                <xsd:restriction base="xsd:int">
+                    <xsd:minInclusive value="0" />
+                </xsd:restriction>
+            </xsd:simpleType>
+            <xsd:attribute name="IsDataSetWithSchema" type="xsd:boolean" />
+        </xsd:schema>
+        <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified"
+                    targetNamespace="http://schemas.microsoft.com/sqlserver/2004/SOAP/types/SqlTransaction">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+                    (c) Copyright 2004, Microsoft Corporation
+
+                    The following schema for Microsoft SQL Server is presented in XML format and is for informational purposes only. Microsoft Corporation ("Microsoft") may have trademarks, copyrights, or other intellectual property rights covering subject matter in the schema.
+
+                    Microsoft does not make any representation or warranty regarding the schema or any product or item developed based on the schema. The schema is provided to you on an AS IS basis.  Microsoft disclaims all express, implied and statutory warranties, including but not limited to the implied warranties of merchantability, fitness for a particular purpose, and freedom from infringement. Without limiting the generality of the foregoing, Microsoft does not make any warranty of any kind that any item developed based on the schema, or any portion of the schema, will not infringe any copyright, patent, trade secret, or other intellectual property right of any person or entity in any country. It is your responsibility to seek licenses for such intellectual property rights where appropriate.
+
+                    MICROSOFT SHALL NOT BE LIABLE FOR ANY DAMAGES OF ANY KIND ARISING OUT OF OR IN CONNECTION WITH THE USE OF THE SCHEMA, INCLUDING WITHOUT LIMITATION, ANY DIRECT, INDIRECT, INCIDENTAL, CONSEQUENTIAL (INCLUDING ANY LOST PROFITS), PUNITIVE OR SPECIAL DAMAGES, WHETHER OR NOT MICROSOFT HAS BEEN ADVISED OF SUCH DAMAGES.
+                </xsd:documentation>
+            </xsd:annotation>
+            <xsd:complexType name="SqlTransaction">
+                <xsd:sequence minOccurs="1" maxOccurs="1">
+                    <xsd:element name="Descriptor" type="xsd:base64Binary" />
+                    <xsd:element name="Type">
+                        <xsd:simpleType>
+                            <xsd:restriction base="xsd:string">
+                                <xsd:enumeration value="Begin" />
+                                <xsd:enumeration value="Commit" />
+                                <xsd:enumeration value="Rollback" />
+                                <xsd:enumeration value="EnlistDTC" />
+                                <xsd:enumeration value="Defect" />
+                            </xsd:restriction>
+                        </xsd:simpleType>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:schema>
+        <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified"
+                    targetNamespace="http://schemas.microsoft.com/sqlserver/2004/SOAP/types/SqlRowCount">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+                    (c) Copyright 2004, Microsoft Corporation
+
+                    The following schema for Microsoft SQL Server is presented in XML format and is for informational purposes only. Microsoft Corporation ("Microsoft") may have trademarks, copyrights, or other intellectual property rights covering subject matter in the schema.
+
+                    Microsoft does not make any representation or warranty regarding the schema or any product or item developed based on the schema. The schema is provided to you on an AS IS basis.  Microsoft disclaims all express, implied and statutory warranties, including but not limited to the implied warranties of merchantability, fitness for a particular purpose, and freedom from infringement. Without limiting the generality of the foregoing, Microsoft does not make any warranty of any kind that any item developed based on the schema, or any portion of the schema, will not infringe any copyright, patent, trade secret, or other intellectual property right of any person or entity in any country. It is your responsibility to seek licenses for such intellectual property rights where appropriate.
+
+                    MICROSOFT SHALL NOT BE LIABLE FOR ANY DAMAGES OF ANY KIND ARISING OUT OF OR IN CONNECTION WITH THE USE OF THE SCHEMA, INCLUDING WITHOUT LIMITATION, ANY DIRECT, INDIRECT, INCIDENTAL, CONSEQUENTIAL (INCLUDING ANY LOST PROFITS), PUNITIVE OR SPECIAL DAMAGES, WHETHER OR NOT MICROSOFT HAS BEEN ADVISED OF SUCH DAMAGES.
+                </xsd:documentation>
+            </xsd:annotation>
+            <xsd:complexType name="SqlRowCount">
+                <xsd:sequence minOccurs="1" maxOccurs="1">
+                    <xsd:element name="Count" type="xsd:long" />
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:schema>
+        <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:sqlmessage="http://schemas.microsoft.com/sqlserver/2004/SOAP/types/SqlMessage"
+                    attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/sqlserver/2004/SOAP/types/SqlMessage">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+                    (c) Copyright 2004, Microsoft Corporation
+
+                    The following schema for Microsoft SQL Server is presented in XML format and is for informational purposes only. Microsoft Corporation ("Microsoft") may have trademarks, copyrights, or other intellectual property rights covering subject matter in the schema.
+
+                    Microsoft does not make any representation or warranty regarding the schema or any product or item developed based on the schema. The schema is provided to you on an AS IS basis.  Microsoft disclaims all express, implied and statutory warranties, including but not limited to the implied warranties of merchantability, fitness for a particular purpose, and freedom from infringement. Without limiting the generality of the foregoing, Microsoft does not make any warranty of any kind that any item developed based on the schema, or any portion of the schema, will not infringe any copyright, patent, trade secret, or other intellectual property right of any person or entity in any country. It is your responsibility to seek licenses for such intellectual property rights where appropriate.
+
+                    MICROSOFT SHALL NOT BE LIABLE FOR ANY DAMAGES OF ANY KIND ARISING OUT OF OR IN CONNECTION WITH THE USE OF THE SCHEMA, INCLUDING WITHOUT LIMITATION, ANY DIRECT, INDIRECT, INCIDENTAL, CONSEQUENTIAL (INCLUDING ANY LOST PROFITS), PUNITIVE OR SPECIAL DAMAGES, WHETHER OR NOT MICROSOFT HAS BEEN ADVISED OF SUCH DAMAGES.
+                </xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType name="nonNegativeInteger">
+                <xsd:restriction base="xsd:int">
+                    <xsd:minInclusive value="0" />
+                </xsd:restriction>
+            </xsd:simpleType>
+            <xsd:complexType name="SqlMessage">
+                <xsd:sequence minOccurs="1" maxOccurs="1">
+                    <xsd:element name="Class" type="sqlmessage:nonNegativeInteger" />
+                    <xsd:element name="LineNumber" type="sqlmessage:nonNegativeInteger" />
+                    <xsd:element name="Message" type="xsd:string" />
+                    <xsd:element name="Number" type="sqlmessage:nonNegativeInteger" />
+                    <xsd:element name="Procedure" type="xsd:string" minOccurs="0" />
+                    <xsd:element name="Server" type="xsd:string" minOccurs="0" />
+                    <xsd:element name="Source" type="xsd:string" />
+                    <xsd:element name="State" type="sqlmessage:nonNegativeInteger" />
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:schema>
+        <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:sqlsoaptypes="http://schemas.microsoft.com/sqlserver/2004/SOAP/types"
+                    xmlns:sqlmessage="http://schemas.microsoft.com/sqlserver/2004/SOAP/types/SqlMessage" xmlns:sqlrowcount="http://schemas.microsoft.com/sqlserver/2004/SOAP/types/SqlRowCount"
+                    xmlns:sqltransaction="http://schemas.microsoft.com/sqlserver/2004/SOAP/types/SqlTransaction"
+                    attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/sqlserver/2004/SOAP/types/SqlResultStream">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+                    (c) Copyright 2004, Microsoft Corporation
+
+                    The following schema for Microsoft SQL Server is presented in XML format and is for informational purposes only. Microsoft Corporation ("Microsoft") may have trademarks, copyrights, or other intellectual property rights covering subject matter in the schema.
+
+                    Microsoft does not make any representation or warranty regarding the schema or any product or item developed based on the schema. The schema is provided to you on an AS IS basis.  Microsoft disclaims all express, implied and statutory warranties, including but not limited to the implied warranties of merchantability, fitness for a particular purpose, and freedom from infringement. Without limiting the generality of the foregoing, Microsoft does not make any warranty of any kind that any item developed based on the schema, or any portion of the schema, will not infringe any copyright, patent, trade secret, or other intellectual property right of any person or entity in any country. It is your responsibility to seek licenses for such intellectual property rights where appropriate.
+
+                    MICROSOFT SHALL NOT BE LIABLE FOR ANY DAMAGES OF ANY KIND ARISING OUT OF OR IN CONNECTION WITH THE USE OF THE SCHEMA, INCLUDING WITHOUT LIMITATION, ANY DIRECT, INDIRECT, INCIDENTAL, CONSEQUENTIAL (INCLUDING ANY LOST PROFITS), PUNITIVE OR SPECIAL DAMAGES, WHETHER OR NOT MICROSOFT HAS BEEN ADVISED OF SUCH DAMAGES.
+                </xsd:documentation>
+            </xsd:annotation>
+            <xsd:import namespace="http://schemas.microsoft.com/sqlserver/2004/SOAP/types" />
+            <xsd:import namespace="http://schemas.microsoft.com/sqlserver/2004/SOAP/types/SqlMessage" />
+            <xsd:import namespace="http://schemas.microsoft.com/sqlserver/2004/SOAP/types/SqlRowCount" />
+            <xsd:import namespace="http://schemas.microsoft.com/sqlserver/2004/SOAP/types/SqlTransaction" />
+            <xsd:complexType name="SqlResultStream">
+                <xsd:choice minOccurs="1" maxOccurs="unbounded">
+                    <xsd:element name="SqlRowSet" type="sqlsoaptypes:SqlRowSet" />
+                    <xsd:element name="SqlXml" type="sqlsoaptypes:SqlXml" />
+                    <xsd:element name="SqlMessage" type="sqlmessage:SqlMessage" />
+                    <xsd:element name="SqlRowCount" type="sqlrowcount:SqlRowCount" />
+                    <xsd:element name="SqlResultCode" type="sqlsoaptypes:SqlResultCode" />
+                    <xsd:element name="SqlTransaction" type="sqltransaction:SqlTransaction" />
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:schema>
+        <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified"
+                    targetNamespace="http://schemas.microsoft.com/sqlserver/2004/SOAP/Options">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+                    (c) Copyright 2004, Microsoft Corporation
+
+                    The following schema for Microsoft SQL Server is presented in XML format and is for informational purposes only. Microsoft Corporation ("Microsoft") may have trademarks, copyrights, or other intellectual property rights covering subject matter in the schema.
+
+                    Microsoft does not make any representation or warranty regarding the schema or any product or item developed based on the schema. The schema is provided to you on an AS IS basis.  Microsoft disclaims all express, implied and statutory warranties, including but not limited to the implied warranties of merchantability, fitness for a particular purpose, and freedom from infringement. Without limiting the generality of the foregoing, Microsoft does not make any warranty of any kind that any item developed based on the schema, or any portion of the schema, will not infringe any copyright, patent, trade secret, or other intellectual property right of any person or entity in any country. It is your responsibility to seek licenses for such intellectual property rights where appropriate.
+
+                    MICROSOFT SHALL NOT BE LIABLE FOR ANY DAMAGES OF ANY KIND ARISING OUT OF OR IN CONNECTION WITH THE USE OF THE SCHEMA, INCLUDING WITHOUT LIMITATION, ANY DIRECT, INDIRECT, INCIDENTAL, CONSEQUENTIAL (INCLUDING ANY LOST PROFITS), PUNITIVE OR SPECIAL DAMAGES, WHETHER OR NOT MICROSOFT HAS BEEN ADVISED OF SUCH DAMAGES.
+                </xsd:documentation>
+            </xsd:annotation>
+            <xsd:element name="initialDatabase">
+                <xsd:annotation>
+                    <xsd:documentation>Set initial database on login.</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                    <xsd:attribute name="value" type="xsd:string" form="unqualified" use="required">
+                        <xsd:annotation>
+                            <xsd:documentation>The name of the initial database to attach to.</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                    <xsd:attribute name="optional" default="false" type="xsd:boolean" form="unqualified">
+                        <xsd:annotation>
+                            <xsd:documentation>Whether the initial database is optional or not.</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                    <xsd:attribute name="filename" type="xsd:string" form="unqualified">
+                        <xsd:annotation>
+                            <xsd:documentation>The filename of the database to attach to.</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="initialLanguage">
+                <xsd:annotation>
+                    <xsd:documentation>Set initial language to set.</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                    <xsd:attribute name="value" type="xsd:string" form="unqualified" use="required">
+                        <xsd:annotation>
+                            <xsd:documentation>The name of the initial language to set.</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                    <xsd:attribute name="optional" default="false" type="xsd:boolean" form="unqualified">
+                        <xsd:annotation>
+                            <xsd:documentation>Whether the initial language is optional or not.</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="environmentChangeNotifications">
+                <xsd:annotation>
+                    <xsd:documentation>Receive environment change notifications.</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                    <xsd:attribute name="databaseChange" default="false" type="xsd:boolean" form="unqualified">
+                        <xsd:annotation>
+                            <xsd:documentation>Receive notifications of database changes.</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                    <xsd:attribute name="languageChange" default="false" type="xsd:boolean" form="unqualified">
+                        <xsd:annotation>
+                            <xsd:documentation>Receive notifications of language changes.</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                    <xsd:attribute name="transactionBoundary" default="false" type="xsd:boolean" form="unqualified">
+                        <xsd:annotation>
+                            <xsd:documentation>Receive notifications of transaction boundaries.</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="applicationName">
+                <xsd:annotation>
+                    <xsd:documentation>Set the application name for the login.</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                    <xsd:attribute name="value" type="xsd:string" form="unqualified" use="required">
+                        <xsd:annotation>
+                            <xsd:documentation>The application name to set for the login.</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="hostName">
+                <xsd:annotation>
+                    <xsd:documentation>Set the host name for the login.</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                    <xsd:attribute name="value" type="xsd:string" form="unqualified" use="required">
+                        <xsd:annotation>
+                            <xsd:documentation>The host name to set for the login.</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="clientPID">
+                <xsd:annotation>
+                    <xsd:documentation>Set the client process ID for the login.</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                    <xsd:attribute name="value" type="xsd:long" form="unqualified" use="required">
+                        <xsd:annotation>
+                            <xsd:documentation>The client process ID to set for the login.</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="clientNetworkID">
+                <xsd:annotation>
+                    <xsd:documentation>Set the client network ID for the login.</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                    <xsd:attribute name="value" type="xsd:base64Binary" form="unqualified" use="required">
+                        <xsd:annotation>
+                            <xsd:documentation>The client network ID to set for the login.</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="clientInterface">
+                <xsd:annotation>
+                    <xsd:documentation>Set the client interface for the login.</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                    <xsd:attribute name="value" type="xsd:string" form="unqualified" use="required">
+                        <xsd:annotation>
+                            <xsd:documentation>The client interface to set for the login.</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="notificationRequest">
+                <xsd:annotation>
+                    <xsd:documentation>Requests query notifications for the request.</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                    <xsd:attribute name="notificationId" type="xsd:string" form="unqualified" use="required">
+                        <xsd:annotation>
+                            <xsd:documentation>The notification identifier.</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                    <xsd:attribute name="deliveryService" type="xsd:string" form="unqualified" use="required">
+                        <xsd:annotation>
+                            <xsd:documentation>The delivery service.</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                    <xsd:attribute name="timeout" type="xsd:integer" form="unqualified">
+                        <xsd:annotation>
+                            <xsd:documentation>The timeout value.</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="sqlSession">
+                <xsd:annotation>
+                    <xsd:documentation>SQL Server SOAP Session</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                    <xsd:attribute name="initiate" default="false" type="xsd:boolean" form="unqualified">
+                        <xsd:annotation>
+                            <xsd:documentation>Set to 'true' to request to start a new session.</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                    <xsd:attribute name="terminate" default="false" type="xsd:boolean" form="unqualified">
+                        <xsd:annotation>
+                            <xsd:documentation>Set to 'true' to request to terminate an existing session.</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                    <xsd:attribute name="sessionId" type="xsd:base64Binary" form="unqualified">
+                        <xsd:annotation>
+                            <xsd:documentation>The ID of a session.</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                    <xsd:attribute name="timeout" type="xsd:int" form="unqualified">
+                        <xsd:annotation>
+                            <xsd:documentation>The timeout in seconds before the session expires.</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                    <xsd:attribute name="transactionDescriptor" type="xsd:base64Binary" form="unqualified">
+                        <xsd:annotation>
+                            <xsd:documentation>The descriptor of a transaction to enlist to.</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:schema>
+        <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:sqlparameter="http://schemas.microsoft.com/sqlserver/2004/SOAP/types/SqlParameter"
+                    xmlns:sqltypes="http://schemas.microsoft.com/sqlserver/2004/sqltypes" targetNamespace="http://schemas.microsoft.com/sqlserver/2004/SOAP/types/SqlParameter"
+                    elementFormDefault="qualified" attributeFormDefault="qualified">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+                    (c) Copyright 2004, Microsoft Corporation
+
+                    The following schema for Microsoft SQL Server is presented in XML format and is for informational purposes only. Microsoft Corporation ("Microsoft") may have trademarks, copyrights, or other intellectual property rights covering subject matter in the schema.
+
+                    Microsoft does not make any representation or warranty regarding the schema or any product or item developed based on the schema. The schema is provided to you on an AS IS basis.  Microsoft disclaims all express, implied and statutory warranties, including but not limited to the implied warranties of merchantability, fitness for a particular purpose, and freedom from infringement. Without limiting the generality of the foregoing, Microsoft does not make any warranty of any kind that any item developed based on the schema, or any portion of the schema, will not infringe any copyright, patent, trade secret, or other intellectual property right of any person or entity in any country. It is your responsibility to seek licenses for such intellectual property rights where appropriate.
+
+                    MICROSOFT SHALL NOT BE LIABLE FOR ANY DAMAGES OF ANY KIND ARISING OUT OF OR IN CONNECTION WITH THE USE OF THE SCHEMA, INCLUDING WITHOUT LIMITATION, ANY DIRECT, INDIRECT, INCIDENTAL, CONSEQUENTIAL (INCLUDING ANY LOST PROFITS), PUNITIVE OR SPECIAL DAMAGES, WHETHER OR NOT MICROSOFT HAS BEEN ADVISED OF SUCH DAMAGES.
+                </xsd:documentation>
+            </xsd:annotation>
+            <xsd:import namespace="http://schemas.microsoft.com/sqlserver/2004/sqltypes" />
+            <xsd:simpleType name="ParameterDirection">
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="Input" />
+                    <xsd:enumeration value="InputOutput" />
+                </xsd:restriction>
+            </xsd:simpleType>
+            <xsd:complexType name="ArrayOfSqlParameter">
+                <xsd:sequence>
+                    <xsd:element minOccurs="0" maxOccurs="unbounded" name="SqlParameter" type="sqlparameter:SqlParameter" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="SqlParameter">
+                <xsd:sequence>
+                    <xsd:element minOccurs="1" maxOccurs="1" name="Value" nillable="true" />
+                </xsd:sequence>
+                <xsd:attribute name="name" type="xsd:string" use="required" form="unqualified" />
+                <xsd:attribute default="NVarChar" name="sqlDbType" type="sqltypes:sqlDbTypeEnum" use="optional"
+                               form="unqualified" />
+                <xsd:attribute default="Input" name="direction" type="sqlparameter:ParameterDirection" use="optional"
+                               form="unqualified" />
+                <xsd:attribute default="1" name="maxLength" type="xsd:long" use="optional" form="unqualified" />
+                <xsd:attribute default="18" name="precision" type="xsd:unsignedByte" use="optional" form="unqualified" />
+                <xsd:attribute default="0" name="scale" type="xsd:unsignedByte" use="optional" form="unqualified" />
+                <xsd:attribute default="" name="clrTypeName" type="xsd:string" use="optional" form="unqualified" />
+                <xsd:attribute default="None" name="sqlCompareOptions" type="sqltypes:sqlCompareOptionsList" use="optional"
+                               form="unqualified" />
+                <xsd:attribute default="-1" name="localeId" type="xsd:int" use="optional" form="unqualified" />
+                <xsd:attribute default="0" name="sqlCollationVersion" type="xsd:int" use="optional" form="unqualified" />
+                <xsd:attribute default="0" name="sqlSortId" type="xsd:int" use="optional" form="unqualified" />
+            </xsd:complexType>
+        </xsd:schema>
+        <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified"
+                    targetNamespace="http://tempUri.org/" xmlns:sqltypes="http://schemas.microsoft.com/sqlserver/2004/sqltypes"
+                    xmlns:sqlsoaptypes="http://schemas.microsoft.com/sqlserver/2004/SOAP/types" xmlns:sqlrowcount="http://schemas.microsoft.com/sqlserver/2004/SOAP/types/SqlRowCount"
+                    xmlns:sqlmessage="http://schemas.microsoft.com/sqlserver/2004/SOAP/types/SqlMessage" xmlns:sqlresultstream="http://schemas.microsoft.com/sqlserver/2004/SOAP/types/SqlResultStream"
+                    xmlns:sqlparameter="http://schemas.microsoft.com/sqlserver/2004/SOAP/types/SqlParameter">
+            <xsd:import namespace="http://schemas.microsoft.com/sqlserver/2004/sqltypes" />
+            <xsd:import namespace="http://schemas.microsoft.com/sqlserver/2004/SOAP/types/SqlResultStream" />
+            <xsd:element name="DayAsNumber">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="1" maxOccurs="1" name="day" type="sqltypes:datetime" nillable="true"></xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="DayAsNumberResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="1" maxOccurs="1" name="DayAsNumberResult" type="sqltypes:int" nillable="true"></xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:schema>
+    </wsdl:types>
+    <wsdl:message name="s0MsgDayAsNumberSoapIn">
+        <wsdl:part name="parameters" element="s0:DayAsNumber"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="s0MsgDayAsNumberSoapOut">
+        <wsdl:part name="parameters" element="s0:DayAsNumberResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:portType name="sql_endpointSoap">
+        <wsdl:operation name="DayAsNumber">
+            <wsdl:input name="s0MsgDayAsNumberSoapIn" message="tns:s0MsgDayAsNumberSoapIn"></wsdl:input>
+            <wsdl:output name="s0MsgDayAsNumberSoapOut" message="tns:s0MsgDayAsNumberSoapOut"></wsdl:output>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="sql_endpointSoap" type="tns:sql_endpointSoap">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+        <wsdl:operation name="DayAsNumber">
+            <soap:operation soapAction="http://tempUri.org/DayAsNumber" style="document"></soap:operation>
+            <wsdl:input name="s0MsgDayAsNumberSoapIn">
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output name="s0MsgDayAsNumberSoapOut">
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="sql_endpoint">
+        <wsdl:port name="sql_endpoint" binding="tns:sql_endpointSoap">
+            <soap:address location="http:8080://localhost/sql"></soap:address>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

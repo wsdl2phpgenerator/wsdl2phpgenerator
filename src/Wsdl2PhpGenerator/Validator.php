@@ -235,7 +235,7 @@ class Validator
      * @param string $str
      * @return bool True if $str is a restricted keyword
      */
-    private static function isKeyword($str)
+    public static function isKeyword($str)
     {
         return in_array(strtolower($str), self::$keywords);
     }
