@@ -197,8 +197,13 @@ class Generator implements GeneratorInterface
             $sxml = simplexml_import_dom($dom);
             $namespaces = $sxml->getDocNamespaces();
             if (!empty($namespaces['xsd'])) {
-                foreach ($sxml->xpath('//xsd:import/@schemaLocation') as $schema_file) {
-                    $schema = simplexml_load_file($schema_file);
+                foreach ($sxml->xpath('//xsd:import/@schemaLocation') as $schemaUrl) {
+                    // If the URL is relative then try to do a simple
+                    // conversion to an absolute one.
+                    if (strpos($schemaUrl, '//') === false) {
+                        $schemaUrl = dirname($this->config->getInputFile()) . '/' . $schemaUrl;
+                    }
+                    $schema = simplexml_load_file($schemaUrl);
                     $this->schema[] = $schema;
                 }
             }
