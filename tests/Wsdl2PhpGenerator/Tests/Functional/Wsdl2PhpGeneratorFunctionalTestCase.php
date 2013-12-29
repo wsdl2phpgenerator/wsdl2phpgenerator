@@ -210,4 +210,18 @@ abstract class Wsdl2PhpGeneratorFunctionalTestCase extends PHPUnit_Framework_Tes
         return $docBlockType;
     }
 
+    /**
+     * Assertion that tests that a class with a specific name has been
+     * generated.
+     *
+     * @param string $className The name of the class to test for.
+     */
+    protected function assertGeneratedClassExists($className)
+    {
+        $file = $this->outputDir . '/' . $className . '.php';
+        $this->assertFileExists($file);
+        require_once $file;
+        $this->assertClassExists($className);
+    }
+
 }

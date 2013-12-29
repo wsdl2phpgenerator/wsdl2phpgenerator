@@ -39,10 +39,7 @@ class CurrencyConverterTest extends Wsdl2PhpGeneratorFunctionalTestCase
             'ConversionRateResponse',
         );
         foreach ($expected_classes as $class) {
-            $file = $this->outputDir . '/' . $class . '.php';
-            $this->assertFileExists($file);
-            require_once $file;
-            $this->assertClassExists($class);
+            $this->assertGeneratedClassExists($class);
         }
 
         // Make sure that we have expected constants and methods.
