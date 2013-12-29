@@ -355,9 +355,17 @@ class Generator implements GeneratorInterface
 
             foreach ($elements as $element) {
                 $name = $element->attributes->getNamedItem('name');
-                $maxOccurs = $element->attributes->getNamedItem('maxOccurs');
-                if ($maxOccurs && $maxOccurs->nodeValue === 'unbounded') {
-                    $arrayVars[$name->nodeValue] = $element;
+                if (!empty($name)) {
+                    $maxOccurs = $element->attributes->getNamedItem('maxOccurs');
+                    if ($maxOccurs && $maxOccurs->nodeValue === 'unbounded') {
+                        $arrayVars[$name->nodeValue] = $element;
+                    }
+                } else {
+                    // Whether this is actually an erroneous situation or not
+                    // is not certain. It has only been observed with the
+                    // PayPalSvc test and the classes seem to be generated
+                    // correctly regardless of this occuring.
+                    $this->log(sprintf('Unable to retrieve name attribute for element in type "%s"', $className), 'debug');
                 }
             }
         }
