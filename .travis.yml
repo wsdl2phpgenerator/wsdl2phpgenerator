@@ -4,13 +4,20 @@ php:
   - 5.4
   - 5.5
 
+env:
+  - SYMFONY_VERSION="~2.3"
+  # Test against previous minor releases of Symfony 2.x to ensure that we
+  # actually support the versions we specify in our requirements.
+  - SYMFONY_VERSION="2.3.*"
+
 before_script:
-  - curl -s http://getcomposer.org/installer | php
   # Use --prefer-source to download dependencies via git and avoid GitHub API
   # rate limits resulting in 502 HTTP responses, build errors and
   # Composer\Downloader\TransportException.
   # https://github.com/symfony/symfony/issues/4687
-  - php composer.phar install --dev --no-interaction --prefer-source
+  - composer install --dev --no-interaction --prefer-source
+  # Update the Symfony version to test against.
+  - composer require symfony/console:${SYMFONY_VERSION}
 
 script:
   - mkdir -p build/logs
