@@ -39,7 +39,7 @@ abstract class Wsdl2PhpGeneratorFunctionalTestCase extends PHPUnit_Framework_Tes
     protected function setup()
     {
         $class = new ReflectionClass($this);
-        $this->outputDir = __DIR__ . '/' . $class->getShortName() . 'Code';
+        $this->outputDir = 'tests/generated/' . $class->getShortName();
         $this->generator = Generator::getInstance();
         $this->config = new Config($this->wsdl, $this->outputDir);
 
