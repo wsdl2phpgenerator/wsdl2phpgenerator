@@ -4,6 +4,8 @@
  */
 namespace Wsdl2PhpGenerator\PhpSource;
 
+use Exception;
+
 /**
  * Class that represents the source code for a class in php
  *

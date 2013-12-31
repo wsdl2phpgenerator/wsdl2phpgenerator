@@ -3,4 +3,5 @@ wsdl2phpgenerator*.phar
 vendor
 tests/Wsdl2PhpGenerator/Tests/Functional/CurrencyConverterTestCode
 tests/Wsdl2PhpGenerator/Tests/Functional/NaicsTestCode
+tests/Wsdl2PhpGenerator/Tests/Functional/MsSequelServerNativeWebServicesTestCode
 TAG_MESSAGE
