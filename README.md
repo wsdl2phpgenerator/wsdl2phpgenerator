@@ -23,7 +23,7 @@ There is a mailing list for the project at [https://groups.google.com/forum/#!fo
 ### Standalone executable
 
 1. Download [wsdl2phpgenerator-2.2.0.phar](https://github.com/wsdl2phpgenerator/wsdl2phpgenerator/releases/download/2.2.0/wsdl2phpgenerator-2.2.0.phar) from [the latest release](https://github.com/wsdl2phpgenerator/wsdl2phpgenerator/releases/latest)
-1. Run `./wsdl2phpgenerator-2.2.0.phar -i input.wsdl -o tmp/my/directory/wsdl`
+1. Run `php wsdl2phpgenerator-2.2.0.phar -i input.wsdl -o tmp/my/directory/wsdl`
 
 The directory is created if possible.
 
