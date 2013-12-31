@@ -197,8 +197,13 @@ class Generator implements GeneratorInterface
             $sxml = simplexml_import_dom($dom);
             $namespaces = $sxml->getDocNamespaces();
             if (!empty($namespaces['xsd'])) {
-                foreach ($sxml->xpath('//xsd:import/@schemaLocation') as $schema_file) {
-                    $schema = simplexml_load_file($schema_file);
+                foreach ($sxml->xpath('//xsd:import/@schemaLocation') as $schemaUrl) {
+                    // If the URL is relative then try to do a simple
+                    // conversion to an absolute one.
+                    if (strpos($schemaUrl, '//') === false) {
+                        $schemaUrl = dirname($this->config->getInputFile()) . '/' . $schemaUrl;
+                    }
+                    $schema = simplexml_load_file($schemaUrl);
                     $this->schema[] = $schema;
                 }
             }
@@ -350,9 +355,17 @@ class Generator implements GeneratorInterface
 
             foreach ($elements as $element) {
                 $name = $element->attributes->getNamedItem('name');
-                $maxOccurs = $element->attributes->getNamedItem('maxOccurs');
-                if ($maxOccurs && $maxOccurs->nodeValue === 'unbounded') {
-                    $arrayVars[$name->nodeValue] = $element;
+                if (!empty($name)) {
+                    $maxOccurs = $element->attributes->getNamedItem('maxOccurs');
+                    if ($maxOccurs && $maxOccurs->nodeValue === 'unbounded') {
+                        $arrayVars[$name->nodeValue] = $element;
+                    }
+                } else {
+                    // Whether this is actually an erroneous situation or not
+                    // is not certain. It has only been observed with the
+                    // PayPalSvc test and the classes seem to be generated
+                    // correctly regardless of this occuring.
+                    $this->log(sprintf('Unable to retrieve name attribute for element in type "%s"', $className), 'debug');
                 }
             }
         }

@@ -4,5 +4,6 @@ vendor
 tests/Wsdl2PhpGenerator/Tests/Functional/CurrencyConverterTestCode
 tests/Wsdl2PhpGenerator/Tests/Functional/NaicsTestCode
 tests/Wsdl2PhpGenerator/Tests/Functional/MsSequelServerNativeWebServicesTestCode
+tests/Wsdl2PhpGenerator/Tests/Functional/PayPalSvcTestCode
 tests/Wsdl2PhpGenerator/Tests/Functional/AmazonEc2TestCode
 TAG_MESSAGE
