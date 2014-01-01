@@ -1,4 +1,12 @@
 
+2.2.1 / 2014-01-01 
+==================
+
+ * Fix imports with relative URLs.
+ * Fix generation of Enum constants which resolve to PHP primitives.
+ * Fix support for non-standard WSDL namespace aliases.
+ * Fix setting Symfony Console application version when releasing.
+
 2.2.0 / 2013-12-13 
 ==================
 
