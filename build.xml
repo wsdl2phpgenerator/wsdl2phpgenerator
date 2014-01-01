@@ -63,7 +63,7 @@
             <filterchain>
                 <!-- Convert current version number to a token for subsequent replacement with actual value. -->
                 <replaceregexp>
-                    <regexp pattern="(Cli\(.*?)[\d\.]+(\'\);)" replace="\1@VERSION@\2"/>
+                    <regexp pattern="(Application\(.*?)[\d\.]+(\'\);)" replace="\1@VERSION@\2"/>
                     <regexp pattern="(wsdl2phpgenerator-)[\d.]+(\.phar)" replace="\1@VERSION@\2"/>
                     <regexp pattern="(\/releases\/download\/)[\d.]+" replace="\1@VERSION@"/>
                     <regexp pattern='(wsdl2phpgenerator": ")[\d.]+(")' replace="\1@VERSION@\2"/>
