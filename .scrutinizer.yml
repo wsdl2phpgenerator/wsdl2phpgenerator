@@ -1,6 +1,7 @@
 filter:
     excluded_paths:
         - 'vendor/*'
+        - 'tests/generated/*'
 before_commands:
     # Use --prefer-source to download dependencies via git and avoid GitHub API
     # rate limits resulting in 502 HTTP responses, build errors and
@@ -11,10 +12,27 @@ tools:
     php_mess_detector:
         config:
             code_size_rules: { cyclomatic_complexity: false, npath_complexity: false }
+        filter:
+            excluded_paths: ['vendor/*']
     php_code_sniffer:
         config:
             standard: PSR2
+        filter:
+            excluded_paths: ['vendor/*']
     php_code_coverage:
         test_command: vendor/bin/phpunit
-    php_cpd: true
-    php_pdepend: true
+        filter:
+            excluded_paths: ['vendor/*']
+    php_cpd:
+        excluded_dirs:
+            - tests/generated
+        filter:
+            excluded_paths: ['vendor/*']
+    php_pdepend:
+        excluded_dirs:
+            1: vendor
+            2: tests/generated
+    php_loc:
+        excluded_dirs:
+            - vendor
+            - tests/generated
