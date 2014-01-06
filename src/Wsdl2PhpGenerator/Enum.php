@@ -50,6 +50,7 @@ class Enum extends Type
         $this->class = new PhpClass($this->phpIdentifier, $config->getClassExists());
 
         $first = true;
+        $name = '';
 
         foreach ($this->values as $value) {
             try {
@@ -57,6 +58,7 @@ class Enum extends Type
             } catch (ValidationException $e) {
                 $name = 'constant' . $name;
             }
+
             if (Validator::isKeyword($name)) {
                 // TODO: Custom seems like a poor prefix for constant names
                 // that collide with PHP keywords by default but is kept for
