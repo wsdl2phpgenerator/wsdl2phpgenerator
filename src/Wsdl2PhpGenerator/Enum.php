@@ -55,7 +55,7 @@ class Enum extends Type
             $name = Validator::validateNamingConvention($value);
 
             if (Validator::isKeyword($name)) {
-                // TODO: Custom seems like a poor prefix for constant names
+                // TODO: Custom seems like a poor suffix for constant names
                 // that collide with PHP keywords by default but is kept for
                 // backwards compatibility for generated code.
                 // Consider changing this for 3.x.
