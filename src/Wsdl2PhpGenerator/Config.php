@@ -137,7 +137,7 @@ class Config implements ConfigInterface
      * @param bool $constructorParamsDefaultToNull
      * @param bool $noIncludes
      */
-    public function __construct($inputFile, $outputDir, $verbose = false, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '', $prefix = '', $suffix = '', $sharedTypes = false, $createAccessors = false, $constructorParamsDefaultToNull = false, $noIncludes = false)
+    public function __construct($inputFile, $outputDir, $verbose = false, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '', $prefix = '', $suffix = '', $sharedTypes = null, $createAccessors = false, $constructorParamsDefaultToNull = false, $noIncludes = false)
     {
         $this->namespaceName = trim($namespaceName);
         $this->oneFile = $oneFile;

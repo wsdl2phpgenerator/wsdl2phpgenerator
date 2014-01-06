@@ -31,7 +31,6 @@ class ComplexType extends Type
      * Construct the object
      *
      * @param string $name The identifier for the class
-     * @param string $restriction The restriction(datatype) of the values
      */
     public function __construct($name)
     {
@@ -119,6 +118,7 @@ class ComplexType extends Type
      *
      * @param string $type
      * @param string $name
+     * @param bool $nillable
      */
     public function addMember($type, $name, $nillable)
     {

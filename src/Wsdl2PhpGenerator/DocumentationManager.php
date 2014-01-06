@@ -89,9 +89,9 @@ class DocumentationManager
      */
     public function getFunctionDescription($function)
     {
-        $ret = '';
-        $ret = @$this->functionDescriptions[$function];
-
-        return $ret;
+        if (isset($this->functionDescriptions[$function])) {
+            return $this->functionDescriptions[$function];
+        }
+        return '';
     }
 }

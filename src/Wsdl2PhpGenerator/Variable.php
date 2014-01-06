@@ -35,6 +35,7 @@ class Variable
      *
      * @param string $type
      * @param string $name
+     * @param bool $nillable
      */
     public function __construct($type, $name, $nillable)
     {

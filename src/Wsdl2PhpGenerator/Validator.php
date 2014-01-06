@@ -152,7 +152,8 @@ class Validator
      *
      * @param string $className the name of the class to test
      *
-     * @return string the validated version of the submitted class name
+     * @return string The validated version of the submitted class name
+     * @throws ValidationException
      *
      * @access private
      */
@@ -178,6 +179,7 @@ class Validator
      * @param string $type the type to test
      *
      * @return string the validated version of the submitted type
+     * @throws ValidationException
      *
      * @access private
      */
