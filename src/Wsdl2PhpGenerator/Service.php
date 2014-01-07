@@ -61,6 +61,8 @@ class Service
         $this->identifier = $identifier;
         $this->types = $types;
         $this->description = $description;
+
+        $this->operations = array();
     }
 
     /**
