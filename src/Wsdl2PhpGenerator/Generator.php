@@ -30,6 +30,7 @@ class Generator implements GeneratorInterface
 
     /**
      * Schema in simplexml format
+     * @var SimpleXMLElement[]
      */
     private $schema = array();
 
@@ -48,8 +49,6 @@ class Generator implements GeneratorInterface
     private $dom = null;
 
     /**
-     *
-     *
      * @var Service The service class
      */
     private $service;
@@ -57,8 +56,7 @@ class Generator implements GeneratorInterface
     /**
      * An array of Type objects that represents the types in the service
      *
-     * @var array Array of Type objects
-     * @see Type
+     * @var Type[] Array of Type objects
      */
     private $types;
 
@@ -71,7 +69,6 @@ class Generator implements GeneratorInterface
     private $config;
 
     /**
-     *
      * @var DocumentationManager A manager for the documentation
      */
     private $documentation;
@@ -82,7 +79,6 @@ class Generator implements GeneratorInterface
     private $logger;
 
     /**
-     *
      * @var Generator The infamous singleton instance
      */
     private static $instance = null;
@@ -410,6 +406,7 @@ class Generator implements GeneratorInterface
      * Logs a message.
      *
      * @param string $message The message to log
+     * @param string $level
      */
     private function log($message, $level = 'notice')
     {
