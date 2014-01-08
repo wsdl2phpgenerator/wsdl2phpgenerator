@@ -16,6 +16,12 @@ use Wsdl2PhpGenerator\PhpSource\PhpClass;
  */
 abstract class Type
 {
+
+    /**
+     * @var Generator
+     */
+    protected $generator;
+
     /**
      *
      * @var PhpClass The class used to create the type. This is not used by patterns
@@ -43,16 +49,18 @@ abstract class Type
     /**
      * The minimum construction
      *
+     * @param Generator $generator The generator object to use
      * @param string $name The identifier for the type
      * @param string $datatype The restriction(DataType)
      */
-    public function __construct($name, $datatype)
+    public function __construct(Generator $generator, $name, $datatype)
     {
+        $this->generator = $generator;
         $this->class = null;
         $this->datatype = $datatype;
         $this->identifier = $name;
 
-        $config = Generator::getInstance()->getConfig();
+        $config = $this->generator->getConfig();
 
         // Add prefix and suffix
         $name = $config->getPrefix() . $this->identifier . $config->getSuffix();

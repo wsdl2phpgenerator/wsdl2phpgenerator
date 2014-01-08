@@ -21,6 +21,7 @@ use Wsdl2PhpGenerator\PhpSource\PhpVariable;
  */
 class ComplexType extends Type
 {
+
     /**
      *
      * @var array The members in the type
@@ -30,11 +31,12 @@ class ComplexType extends Type
     /**
      * Construct the object
      *
+     * @param Generator $generator The generator object to use
      * @param string $name The identifier for the class
      */
-    public function __construct($name)
+    public function __construct(Generator $generator, $name)
     {
-        parent::__construct($name, null);
+        parent::__construct($generator, $name, null);
         $this->members = array();
     }
 
@@ -48,7 +50,7 @@ class ComplexType extends Type
             throw new Exception("The class has already been generated");
         }
 
-        $config = Generator::getInstance()->getConfig();
+        $config = $this->generator->getConfig();
 
         $class = new PhpClass($this->phpIdentifier, $config->getClassExists());
 

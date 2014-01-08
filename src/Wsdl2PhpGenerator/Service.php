@@ -20,6 +20,12 @@ use Wsdl2PhpGenerator\PhpSource\PhpVariable;
  */
 class Service
 {
+
+    /**
+     * @var Generator
+     */
+    private $generator;
+
     /**
      *
      * @var PhpClass The class used to create the service.
@@ -51,13 +57,14 @@ class Service
     private $types;
 
     /**
-     *
+     * @param Generator $generator The generator object to use
      * @param string $identifier The name of the service
      * @param array $types The types the service knows about
      * @param string $description The description of the service
      */
-    public function __construct($identifier, array $types, $description)
+    public function __construct(Generator $generator, $identifier, array $types, $description)
     {
+        $this->generator = $generator;
         $this->identifier = $identifier;
         $this->types = $types;
         $this->description = $description;
@@ -83,7 +90,7 @@ class Service
      */
     public function generateClass()
     {
-        $config = Generator::getInstance()->getConfig();
+        $config = $this->generator->getConfig();
 
         // Add prefix and suffix
         $name = $config->getPrefix() . $this->identifier . $config->getSuffix();

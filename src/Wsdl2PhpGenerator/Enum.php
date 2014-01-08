@@ -26,12 +26,13 @@ class Enum extends Type
     /**
      * Construct the object
      *
+     * @param Generator $generator The generator to use
      * @param string $name The identifier for the class
      * @param string $restriction The restriction(datatype) of the values
      */
-    public function __construct($name, $restriction)
+    public function __construct(Generator $generator, $name, $restriction)
     {
-        parent::__construct($name, $restriction);
+        parent::__construct($generator, $name, $restriction);
         $this->values = array();
     }
 
@@ -45,7 +46,7 @@ class Enum extends Type
             throw new Exception("The class has already been generated");
         }
 
-        $config = Generator::getInstance()->getConfig();
+        $config = $this->generator->getConfig();
 
         $this->class = new PhpClass($this->phpIdentifier, $config->getClassExists());
 
