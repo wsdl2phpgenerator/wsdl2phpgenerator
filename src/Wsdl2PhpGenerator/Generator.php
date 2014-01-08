@@ -473,6 +473,7 @@ class Generator implements GeneratorInterface
         return $typenode;
     }
 
+
     /*
      * Singleton logic for backwards compatibility
      * TODO: v3: remove
@@ -485,10 +486,10 @@ class Generator implements GeneratorInterface
      */
     public static function instance()
     {
-        if (self::$instance === null) {
-            self::$instance = new Generator;
+        if (static::$instance === null) {
+            static::$instance = new static;
         }
-        return self::$instance;
+        return static::$instance;
     }
 
     /**
@@ -499,7 +500,7 @@ class Generator implements GeneratorInterface
      */
     public static function getInstance()
     {
-        return self::instance();
+        return static::instance();
     }
 
 }
