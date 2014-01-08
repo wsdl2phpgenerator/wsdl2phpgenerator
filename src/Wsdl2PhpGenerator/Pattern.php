@@ -24,13 +24,13 @@ class Pattern extends Type
     /**
      * Construct the object
      *
-     * @param Generator $generator The generator object
+     * @param ConfigInterface $config The configuration
      * @param string $name The identifier for the class
      * @param string $restriction The restriction(datatype) of the values
      */
-    public function __construct(Generator $generator, $name, $restriction)
+    public function __construct(ConfigInterface $config, $name, $restriction)
     {
-        parent::__construct($generator, $name, $restriction);
+        parent::__construct($config, $name, $restriction);
         $this->value = '';
     }
 

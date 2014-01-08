@@ -63,7 +63,7 @@ class Generator implements GeneratorInterface
     /**
      * This is the object that holds the current config
      *
-     * @var Config
+     * @var ConfigInterface
      * @access private
      */
     private $config;
@@ -197,7 +197,7 @@ class Generator implements GeneratorInterface
 
         $this->log('Starting to load service ' . $name);
 
-        $this->service = new Service($this, $name, $this->types, $this->documentation->getServiceDescription());
+        $this->service = new Service($this->config, $name, $this->types, $this->documentation->getServiceDescription());
 
         $functions = $this->client->__getFunctions();
         foreach ($functions as $function) {
@@ -251,7 +251,7 @@ class Generator implements GeneratorInterface
             $numParts = count($parts);
             // ComplexType
             if ($numParts > 1) {
-                $type = new ComplexType($this, $className);
+                $type = new ComplexType($this->config, $className);
                 $this->log('Loading type ' . $type->getPhpIdentifier());
 
                 for ($i = 1; $i < $numParts - 1; $i++) {
@@ -282,13 +282,13 @@ class Generator implements GeneratorInterface
                     $enumerationList = $typenode->getElementsByTagName('enumeration');
                     $patternList = $typenode->getElementsByTagName('pattern');
                     if ($enumerationList->length > 0) {
-                        $type = new Enum($this, $className, $restriction);
+                        $type = new Enum($this->config, $className, $restriction);
                         $this->log('Loading enum ' . $type->getPhpIdentifier());
                         foreach ($enumerationList as $enum) {
                             $type->addValue($enum->attributes->getNamedItem('value')->nodeValue);
                         }
                     } elseif ($patternList->length > 0) { // If pattern
-                        $type = new Pattern($this, $className, $restriction);
+                        $type = new Pattern($this->config, $className, $restriction);
                         $this->log('Loading pattern ' . $type->getPhpIdentifier());
                         $type->setValue($patternList->item(0)->attributes->getNamedItem('value')->nodeValue);
                     } else {

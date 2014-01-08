@@ -19,40 +19,34 @@ use Wsdl2PhpGenerator\PhpSource\PhpFile;
 class OutputManager
 {
     /**
-     *
      * @var string The directory to save the files
      */
     private $dir;
 
     /**
-     *
      * @var bool If we should add a namespace to the files
      */
     private $useNamespace;
 
     /**
-     *
      * @var array An array with classnames to save
      */
     private $classesToSave;
 
     /**
-     *
-     * @var Config A reference to the config
+     * @var ConfigInterface A reference to the config
      */
     private $config;
 
     /**
-     *
      * @var PhpFile The file object to use for saving the files
      */
     private $file;
 
     /**
-     *
-     * @param Config $config The config to use
+     * @param ConfigInterface $config The config to use
      */
-    public function __construct(Config $config)
+    public function __construct(ConfigInterface $config)
     {
         $this->config = $config;
         $this->dir = '';

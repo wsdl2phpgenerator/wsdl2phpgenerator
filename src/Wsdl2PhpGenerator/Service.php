@@ -22,9 +22,9 @@ class Service
 {
 
     /**
-     * @var Generator
+     * @var ConfigInterface
      */
-    private $generator;
+    private $config;
 
     /**
      *
@@ -57,18 +57,17 @@ class Service
     private $types;
 
     /**
-     * @param Generator $generator The generator object to use
+     * @param ConfigInterface $config Configuration
      * @param string $identifier The name of the service
      * @param array $types The types the service knows about
      * @param string $description The description of the service
      */
-    public function __construct(Generator $generator, $identifier, array $types, $description)
+    public function __construct(ConfigInterface $config, $identifier, array $types, $description)
     {
-        $this->generator = $generator;
+        $this->config = $config;
         $this->identifier = $identifier;
         $this->types = $types;
         $this->description = $description;
-
         $this->operations = array();
     }
 
@@ -90,10 +89,9 @@ class Service
      */
     public function generateClass()
     {
-        $config = $this->generator->getConfig();
 
         // Add prefix and suffix
-        $name = $config->getPrefix() . $this->identifier . $config->getSuffix();
+        $name = $this->config->getPrefix() . $this->identifier . $this->config->getSuffix();
 
         // Generate a valid classname
         try {
@@ -107,7 +105,7 @@ class Service
 
         // Create the class object
         $comment = new PhpDocComment($this->description);
-        $this->class = new PhpClass($name, $config->getClassExists(), '\SoapClient', $comment);
+        $this->class = new PhpClass($name, $this->config->getClassExists(), '\SoapClient', $comment);
 
         // Create the constructor
         $comment = new PhpDocComment();
@@ -120,10 +118,10 @@ class Service
       $options[\'classmap\'][$key] = $value;
     }
   }
-  ' . $this->generateServiceOptions($config) . '
+  ' . $this->generateServiceOptions() . '
   parent::__construct($wsdl, $options);' . PHP_EOL;
 
-        $function = new PhpFunction('public', '__construct', 'array $options = array(), $wsdl = \'' . $config->getInputFile() . '\'', $source, $comment);
+        $function = new PhpFunction('public', '__construct', 'array $options = array(), $wsdl = \'' . $this->config->getInputFile() . '\'', $source, $comment);
 
         // Add the constructor
         $this->class->addFunction($function);
@@ -137,7 +135,7 @@ class Service
         $init = 'array(' . PHP_EOL;
         foreach ($this->types as $type) {
             if ($type instanceof ComplexType) {
-                $init .= "  '" . $type->getIdentifier() . "' => '\\" . $config->getNamespaceName() . "\\" . $type->getPhpIdentifier() . "'," . PHP_EOL;
+                $init .= "  '" . $type->getIdentifier() . "' => '\\" . $this->config->getNamespaceName() . "\\" . $type->getPhpIdentifier() . "'," . PHP_EOL;
             }
         }
         $init = substr($init, 0, strrpos($init, ','));
@@ -186,21 +184,18 @@ class Service
     }
 
     /**
-     *
-     * @param Config $config The config containing the values to use
-     *
      * @return string Returns the string for the options array
      */
-    private function generateServiceOptions(Config $config)
+    private function generateServiceOptions()
     {
         $ret = '';
 
-        if (count($config->getOptionFeatures()) > 0) {
+        if (count($this->config->getOptionFeatures()) > 0) {
             $i = 0;
             $ret .= "
   if (isset(\$options['features']) == false) {
     \$options['features'] = ";
-            foreach ($config->getOptionFeatures() as $option) {
+            foreach ($this->config->getOptionFeatures() as $option) {
                 if ($i++ > 0) {
                     $ret .= ' | ';
                 }
@@ -212,18 +207,18 @@ class Service
   }" . PHP_EOL;
         }
 
-        if (strlen($config->getWsdlCache()) > 0) {
+        if (strlen($this->config->getWsdlCache()) > 0) {
             $ret .= "
   if (isset(\$options['wsdl_cache']) == false) {
-    \$options['wsdl_cache'] = " . $config->getWsdlCache();
+    \$options['wsdl_cache'] = " . $this->config->getWsdlCache();
             $ret .= ";
   }" . PHP_EOL;
         }
 
-        if (strlen($config->getCompression()) > 0) {
+        if (strlen($this->config->getCompression()) > 0) {
             $ret .= "
   if (isset(\$options['compression']) == false) {
-    \$options['compression'] = " . $config->getCompression();
+    \$options['compression'] = " . $this->config->getCompression();
             $ret .= ";
   }" . PHP_EOL;
         }

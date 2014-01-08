@@ -31,12 +31,12 @@ class ComplexType extends Type
     /**
      * Construct the object
      *
-     * @param Generator $generator The generator object to use
+     * @param ConfigInterface $config The configuration
      * @param string $name The identifier for the class
      */
-    public function __construct(Generator $generator, $name)
+    public function __construct(ConfigInterface $config, $name)
     {
-        parent::__construct($generator, $name, null);
+        parent::__construct($config, $name, null);
         $this->members = array();
     }
 
@@ -50,9 +50,7 @@ class ComplexType extends Type
             throw new Exception("The class has already been generated");
         }
 
-        $config = $this->generator->getConfig();
-
-        $class = new PhpClass($this->phpIdentifier, $config->getClassExists());
+        $class = new PhpClass($this->phpIdentifier, $this->config->getClassExists());
 
         $constructorComment = new PhpDocComment();
         $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());
@@ -82,11 +80,11 @@ class ComplexType extends Type
                 $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
                 $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());
                 $constructorParameters .= ', $' . $name;
-                if ($config->getConstructorParamsDefaultToNull()) {
+                if ($this->config->getConstructorParamsDefaultToNull()) {
                     $constructorParameters .= ' = null';
                 }
 
-                if ($config->getCreateAccessors()) {
+                if ($this->config->getCreateAccessors()) {
                     $getterComment = new PhpDocComment();
                     $getterComment->setReturn(PhpDocElementFactory::getReturn($type, ''));
                     $getter = new PhpFunction('public', 'get' . ucfirst($name), '', '  return $this->' . $name . ';' . PHP_EOL, $getterComment);
@@ -104,7 +102,7 @@ class ComplexType extends Type
         $function = new PhpFunction('public', '__construct', $constructorParameters, $constructorSource, $constructorComment);
 
         // Only add the constructor if type constructor is selected
-        if ($config->getNoTypeConstructor() == false) {
+        if ($this->config->getNoTypeConstructor() == false) {
             $class->addFunction($function);
         }
 

@@ -18,9 +18,9 @@ abstract class Type
 {
 
     /**
-     * @var Generator
+     * @var ConfigInterface
      */
-    protected $generator;
+    protected $config;
 
     /**
      *
@@ -49,21 +49,19 @@ abstract class Type
     /**
      * The minimum construction
      *
-     * @param Generator $generator The generator object to use
+     * @param ConfigInterface $config The configuration
      * @param string $name The identifier for the type
      * @param string $datatype The restriction(DataType)
      */
-    public function __construct(Generator $generator, $name, $datatype)
+    public function __construct(ConfigInterface $config, $name, $datatype)
     {
-        $this->generator = $generator;
+        $this->config = $config;
         $this->class = null;
         $this->datatype = $datatype;
         $this->identifier = $name;
 
-        $config = $this->generator->getConfig();
-
         // Add prefix and suffix
-        $name = $config->getPrefix() . $this->identifier . $config->getSuffix();
+        $name = $this->config->getPrefix() . $this->identifier . $this->config->getSuffix();
 
         try {
             $name = Validator::validateClass($name);
@@ -77,7 +75,7 @@ abstract class Type
     /**
      * The abstract function for subclasses to implement
      * This should load the class data into $class
-     * This is called by getClass if not previosly called
+     * This is called by getClass if not previously called
      */
     abstract protected function generateClass();
 
