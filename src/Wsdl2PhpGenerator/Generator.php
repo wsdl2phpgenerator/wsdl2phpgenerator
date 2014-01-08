@@ -30,7 +30,7 @@ class Generator implements GeneratorInterface
 
     /**
      * Schema in simplexml format
-     * @var SimpleXMLElement[]
+     * @var \SimpleXMLElement[]
      */
     private $schema = array();
 
@@ -43,10 +43,10 @@ class Generator implements GeneratorInterface
 
     /**
      * DOM document used to load and parse the wsdl
-     * @var DOMDocument
+     * @var DOMDocument[]
      * @access private
      */
-    private $dom = null;
+    private $dom = array();
 
     /**
      * @var Service The service class
@@ -58,7 +58,7 @@ class Generator implements GeneratorInterface
      *
      * @var Type[] Array of Type objects
      */
-    private $types;
+    private $types = array();
 
     /**
      * This is the object that holds the current config
