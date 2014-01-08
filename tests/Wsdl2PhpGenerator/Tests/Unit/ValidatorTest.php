@@ -90,6 +90,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('int', Validator::validateType('nonNegativeInteger'));
         $this->assertEquals('float', Validator::validateType('float'));
         $this->assertEquals('string', Validator::validateType('normalizedString'));
+        $this->assertEquals('string', Validator::validateType('<anyXML>'));
         $this->assertEquals('Foo[]', Validator::validateType('ArrayOfFoo'));
         $this->assertEquals('Foo[]', Validator::validateType('Foo[]'));
 

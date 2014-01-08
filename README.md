@@ -22,8 +22,8 @@ There is a mailing list for the project at [https://groups.google.com/forum/#!fo
 
 ### Standalone executable
 
-1. Download [wsdl2phpgenerator-2.2.1.phar](https://github.com/wsdl2phpgenerator/wsdl2phpgenerator/releases/download/2.2.1/wsdl2phpgenerator-2.2.1.phar) from [the latest release](https://github.com/wsdl2phpgenerator/wsdl2phpgenerator/releases/latest)
-1. Run `php wsdl2phpgenerator-2.2.1.phar -i input.wsdl -o tmp/my/directory/wsdl`
+1. Download [wsdl2phpgenerator-2.2.2.phar](https://github.com/wsdl2phpgenerator/wsdl2phpgenerator/releases/download/2.2.2/wsdl2phpgenerator-2.2.2.phar) from [the latest release](https://github.com/wsdl2phpgenerator/wsdl2phpgenerator/releases/latest)
+1. Run `php wsdl2phpgenerator-2.2.2.phar -i input.wsdl -o tmp/my/directory/wsdl`
 
 The directory is created if possible.
 
@@ -32,7 +32,7 @@ Usage is listed under `./wsdl2php -h`
 
 ### Executable in Composer project
 
-1. Add `"wsdl2phpgenerator/wsdl2phpgenerator": "2.2.1"`  to the `require` or `require-dev` section of your `composer.json` file
+1. Add `"wsdl2phpgenerator/wsdl2phpgenerator": "2.2.2"`  to the `require` or `require-dev` section of your `composer.json` file
 1. Run `composer update`
 1. Run `./vendor/bin/wsdl2php -i input.wsdl -o tmp/my/directory/wsdl`
 

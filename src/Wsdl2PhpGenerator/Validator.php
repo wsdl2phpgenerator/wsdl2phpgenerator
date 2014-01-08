@@ -213,6 +213,7 @@ class Validator
             case "decimal":
                 return 'float';
                 break;
+            case "<anyxml>":
             case "string":
             case "token":
             case "normalizedstring":
