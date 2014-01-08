@@ -179,8 +179,7 @@ class Generator implements GeneratorInterface
                     if (strpos($schemaUrl, '//') === false) {
                         $schemaUrl = dirname($this->config->getInputFile()) . '/' . $schemaUrl;
                     }
-                    $schema = simplexml_load_file($schemaUrl);
-                    $this->schema[] = $schema;
+                    $this->schema[] = simplexml_load_file($schemaUrl);
                 }
             }
         }
