@@ -116,10 +116,6 @@ class Generator implements GeneratorInterface
         $this->log('Generation complete', 'info');
     }
 
-    public function setLogger(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
-    }
 
     /**
      * Load the wsdl file into php
@@ -400,16 +396,6 @@ class Generator implements GeneratorInterface
     }
 
     /**
-     * Returns the loaded config
-     *
-     * @return Config The loaded config
-     */
-    public function getConfig()
-    {
-        return $this->config;
-    }
-
-    /**
      * Takes a string and removes the xml namespace if any
      *
      * @param string $str
@@ -471,6 +457,29 @@ class Generator implements GeneratorInterface
         }
 
         return $typenode;
+    }
+
+
+    /*
+     * Setters/getters
+     */
+
+    /**
+     * @param LoggerInterface $logger
+     */
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
+    /**
+     * Returns the loaded config
+     *
+     * @return Config The loaded config
+     */
+    public function getConfig()
+    {
+        return $this->config;
     }
 
 
