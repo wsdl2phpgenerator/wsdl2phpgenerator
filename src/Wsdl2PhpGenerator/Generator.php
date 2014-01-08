@@ -78,33 +78,17 @@ class Generator implements GeneratorInterface
      */
     private $logger;
 
-    /**
-     * @var Generator The infamous singleton instance
-     */
-    private static $instance = null;
 
     /**
      * Construct the generator
      */
-    private function __construct()
+    public function __construct()
     {
         $this->service = null;
         $this->types = array();
         $this->enums = array();
         $this->simple = array();
         $this->documentation = new DocumentationManager();
-    }
-
-    /**
-     * Initializes the single instance if it hasn't been, and returns it if it has.
-     */
-    public static function instance()
-    {
-        if (self::$instance === null) {
-            self::$instance = new Generator();
-        }
-
-        return self::$instance;
     }
 
     /**
@@ -416,17 +400,6 @@ class Generator implements GeneratorInterface
     }
 
     /**
-     * Returns the singleton of the generator class. This may be changed to a "better" solution but I don't know any of the top of my head
-     * Used by different classes to get the loaded config
-     *
-     * @return Generator The dreaded singleton instance
-     */
-    public static function getInstance()
-    {
-        return self::instance();
-    }
-
-    /**
      * Returns the loaded config
      *
      * @return Config The loaded config
@@ -499,4 +472,34 @@ class Generator implements GeneratorInterface
 
         return $typenode;
     }
+
+    /*
+     * Singleton logic for backwards compatibility
+     * TODO: v3: remove
+     */
+
+    protected static $instance;
+
+    /**
+     * Initializes the single instance if it hasn't been, and returns it if it has.
+     */
+    public static function instance()
+    {
+        if (self::$instance === null) {
+            self::$instance = new Generator;
+        }
+        return self::$instance;
+    }
+
+    /**
+     * Returns the singleton of the generator class. This may be changed to a "better" solution but I don't know any of the top of my head
+     * Used by different classes to get the loaded config
+     *
+     * @return Generator The dreaded singleton instance
+     */
+    public static function getInstance()
+    {
+        return self::instance();
+    }
+
 }
