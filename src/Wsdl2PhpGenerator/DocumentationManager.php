@@ -17,15 +17,14 @@ use \DOMDocument;
 class DocumentationManager
 {
     /**
-     *
-     * @var string The documentation for the service
+     * @var string
      */
     private $serviceDescription;
 
     /**
-     * The key is the function name
+     * An array with function names (keys) and descriptions (values)
      *
-     * @var array An array with strings with function descriptions
+     * @var array
      */
     private $functionDescriptions;
 
@@ -55,8 +54,7 @@ class DocumentationManager
     }
 
     /**
-     *
-     * @return string The documentation for the service
+     * @return string
      */
     public function getServiceDescription()
     {
@@ -64,7 +62,6 @@ class DocumentationManager
     }
 
     /**
-     *
      * @param string $serviceDescription The new documentation
      */
     public function setServiceDescription($serviceDescription)
@@ -73,7 +70,6 @@ class DocumentationManager
     }
 
     /**
-     *
      * @param string $function The name of the function
      * @param string $description The documentation
      */
@@ -83,9 +79,8 @@ class DocumentationManager
     }
 
     /**
-     *
      * @param string $function
-     * @return string The description
+     * @return string
      */
     public function getFunctionDescription($function)
     {

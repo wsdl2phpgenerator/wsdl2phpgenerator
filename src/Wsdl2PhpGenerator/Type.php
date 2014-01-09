@@ -23,25 +23,21 @@ abstract class Type
     protected $config;
 
     /**
-     *
      * @var PhpClass The class used to create the type. This is not used by patterns
      */
     protected $class;
 
     /**
-     *
      * @var string The name of the type
      */
     protected $identifier;
 
     /**
-     *
      * @var string The name of the type used in php code ie. the validated name
      */
     protected $phpIdentifier;
 
     /**
-     *
      * @var string The datatype the simple type is of. This not used by complex types
      */
     protected $datatype;
@@ -114,7 +110,6 @@ abstract class Type
     }
 
     /**
-     *
      * @return string The validated name of the type
      */
     public function getPhpIdentifier()

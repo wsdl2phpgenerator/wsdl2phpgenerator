@@ -23,8 +23,9 @@ class ComplexType extends Type
 {
 
     /**
+     * The members in the type
      *
-     * @var array The members in the type
+     * @var array
      */
     private $members;
 
@@ -42,6 +43,7 @@ class ComplexType extends Type
 
     /**
      * Implements the loading of the class object
+     *
      * @throws Exception if the class is already generated(not null)
      */
     protected function generateClass()

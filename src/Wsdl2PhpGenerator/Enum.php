@@ -18,7 +18,6 @@ use Wsdl2PhpGenerator\PhpSource\PhpClass;
 class Enum extends Type
 {
     /**
-     *
      * @var array The values in the enum
      */
     private $values;
@@ -38,6 +37,7 @@ class Enum extends Type
 
     /**
      * Implements the loading of the class object
+     *
      * @throws Exception if the class is already generated(not null)
      */
     protected function generateClass()

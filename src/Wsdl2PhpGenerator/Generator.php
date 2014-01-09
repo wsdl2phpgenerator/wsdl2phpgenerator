@@ -24,39 +24,41 @@ class Generator implements GeneratorInterface
 
     /**
      * WSDL namespace
+     *
      * @var string
      */
     const WSDL_NS = 'http://schemas.xmlsoap.org/wsdl/';
 
     /**
      * Schema in simplexml format
+     *
      * @var \SimpleXMLElement[]
      */
     private $schema = array();
 
     /**
      * A SoapClient for loading the WSDL
+     *
      * @var SoapClient
-     * @access private
      */
     private $client = null;
 
     /**
      * DOM document used to load and parse the wsdl
+     *
      * @var DOMDocument[]
-     * @access private
      */
     private $dom = array();
 
     /**
-     * @var Service The service class
+     * @var Service
      */
     private $service;
 
     /**
      * An array of Type objects that represents the types in the service
      *
-     * @var Type[] Array of Type objects
+     * @var Type[]
      */
     private $types = array();
 
@@ -64,17 +66,16 @@ class Generator implements GeneratorInterface
      * This is the object that holds the current config
      *
      * @var ConfigInterface
-     * @access private
      */
     private $config;
 
     /**
-     * @var DocumentationManager A manager for the documentation
+     * @var DocumentationManager
      */
     private $documentation;
 
     /**
-     * @var LoggerInterface The logger to use.
+     * @var LoggerInterface
      */
     private $logger;
 
@@ -187,8 +188,6 @@ class Generator implements GeneratorInterface
 
     /**
      * Loads the service class
-     *
-     * @access private
      */
     private function loadService()
     {
@@ -224,8 +223,6 @@ class Generator implements GeneratorInterface
 
     /**
      * Loads all type classes
-     *
-     * @access private
      */
     private function loadTypes()
     {
@@ -317,9 +314,9 @@ class Generator implements GeneratorInterface
 
     /**
      * Find the elements with maxOccurs="unbounded"
+     *
      * @param $className
-     * @return array associative array where the key is the element name and the value is the element DOM node
-     * @access private
+     * @return array Associative array where the key is the element name and the value is the element DOM node
      */
     private function findArrayElements($className)
     {
@@ -352,8 +349,6 @@ class Generator implements GeneratorInterface
      * Save all the loaded classes to the configured output dir
      *
      * @throws Exception If no service is loaded
-     *
-     * @access private
      */
     private function savePhp()
     {
@@ -474,7 +469,7 @@ class Generator implements GeneratorInterface
     /**
      * Returns the loaded config
      *
-     * @return Config The loaded config
+     * @return ConfigInterface
      */
     public function getConfig()
     {

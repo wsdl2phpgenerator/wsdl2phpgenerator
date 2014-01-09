@@ -16,7 +16,6 @@ use \Exception;
 class Pattern extends Type
 {
     /**
-     *
      * @var string The pattern string
      */
     private $value;
@@ -51,7 +50,6 @@ class Pattern extends Type
     }
 
     /**
-     *
      * @return string The string pattern
      */
     public function getValue()
@@ -60,7 +58,6 @@ class Pattern extends Type
     }
 
     /**
-     *
      * @param string $value The string pattern
      */
     public function setValue($value)

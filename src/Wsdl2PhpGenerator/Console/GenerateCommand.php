@@ -13,7 +13,6 @@ use Wsdl2PhpGenerator\GeneratorInterface;
 
 /**
  * The console command which generates PHP code from a WSDL file.
- *
  * This maps input arguments and options to a configuration and launches the generator.
  *
  * @package Wsdl2PhpGenerator\Console
@@ -233,7 +232,6 @@ class GenerateCommand extends Command
      * @param string $description A description text
      * @param mixed $default The default value (for InputArgument::OPTIONAL mode only)
      * @param string|callable $configMapping The name of the configuration value to map the argument value to.
-     *
      * @return GenerateCommand The current instance
      */
     protected function addConfigArgument(
@@ -257,7 +255,6 @@ class GenerateCommand extends Command
      * @param mixed $default The default value (must be null for InputOption::VALUE_REQUIRED or InputOption::VALUE_NONE)
      * @param string|callable $configMapping The name of the configuration value to map the argument value to or an
      *  anonymous function which performs the mapping.
-     *
      * @return GenerateCommand The current instance
      */
     protected function addConfigOption(
@@ -272,6 +269,15 @@ class GenerateCommand extends Command
         return $this->addOption($name, $shortcut, $mode, $description, $default);
     }
 
+    /**
+     * @param string $name
+     * @param string $shortcut
+     * @param integer $mode
+     * @param string $description
+     * @param mixed $default
+     * @param string $cache
+     * @return GenerateCommand
+     */
     protected function addCacheOption(
         $name,
         $shortcut = null,
@@ -288,6 +294,15 @@ class GenerateCommand extends Command
         return $this->addConfigOption($name, $shortcut, $mode, $description, $default, $cacheMapping);
     }
 
+    /**
+     * @param string $name
+     * @param string $shortcut
+     * @param integer $mode
+     * @param string $description
+     * @param mixed $default
+     * @param string $feature
+     * @return GenerateCommand
+     */
     protected function addFeatureOption(
         $name,
         $shortcut = null,
@@ -306,6 +321,12 @@ class GenerateCommand extends Command
         return $this->addConfigOption($name, $shortcut, $mode, $description, $default, $featureMapping);
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|null|void
+     * @throws \RuntimeException
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         // Input and output options are in fact required so bail if they are not set.
@@ -337,7 +358,7 @@ class GenerateCommand extends Command
 
         // Only set the logger if the generator instance supports this.
         // setLogger() has not been added to GeneratorInterface for backwards compatibility reasons.
-        // @FIXME for 3.x.
+        // FIXME: v3
         if (method_exists($this->generator, 'setLogger')) {
             $this->generator->setLogger(new OutputLogger($output));
         }

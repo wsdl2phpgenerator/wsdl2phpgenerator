@@ -15,7 +15,6 @@ namespace Wsdl2PhpGenerator;
 class Validator
 {
     /**
-     *
      * @var array Array containing all keywords in php
      */
     private static $keywords = array(
@@ -83,7 +82,6 @@ class Validator
     );
 
     /**
-     *
      * @var array Array containing primitive types
      */
     private static $primitives = array(
@@ -107,7 +105,6 @@ class Validator
     }
 
     /**
-     *
      * @param string $name The name to validate
      * @return string The validated name
      */
@@ -120,10 +117,7 @@ class Validator
      * Validates a name against standard PHP naming conventions
      *
      * @param string $name the name to validate
-     *
      * @return string the validated version of the submitted name
-     *
-     * @access public
      */
     public static function validateNamingConvention($name)
     {
@@ -151,11 +145,8 @@ class Validator
      * classes, and optionally stores the class as a member of the interpreted classmap.
      *
      * @param string $className the name of the class to test
-     *
      * @return string The validated version of the submitted class name
      * @throws ValidationException
-     *
-     * @access private
      */
     private static function validateClassName($className)
     {
@@ -177,11 +168,8 @@ class Validator
      * validates the namespace of the type to PHP naming conventions
      *
      * @param string $type the type to test
-     *
      * @return string the validated version of the submitted type
      * @throws ValidationException
-     *
-     * @access private
      */
     private static function validateTypeName($type)
     {

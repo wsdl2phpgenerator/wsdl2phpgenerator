@@ -27,31 +27,26 @@ class Service
     private $config;
 
     /**
-     *
      * @var PhpClass The class used to create the service.
      */
     private $class;
 
     /**
-     *
      * @var string The name of the service
      */
     private $identifier;
 
     /**
-     *
      * @var Operation[] An array containing the operations of the service
      */
     private $operations;
 
     /**
-     *
      * @var string The description of the service used as description in the phpdoc of the class
      */
     private $description;
 
     /**
-     *
      * @var array An array of Types
      */
     private $types;
@@ -72,7 +67,6 @@ class Service
     }
 
     /**
-     *
      * @return PhpClass Returns the class, generates it if not done
      */
     public function getClass()

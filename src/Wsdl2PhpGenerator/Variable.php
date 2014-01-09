@@ -14,25 +14,21 @@ namespace Wsdl2PhpGenerator;
 class Variable
 {
     /**
-     *
      * @var string The type
      */
     private $type;
 
     /**
-     *
      * @var string The name
      */
     private $name;
 
     /**
-     *
      * @var boolean Nillable
      */
     private $nillable;
 
     /**
-     *
      * @param string $type
      * @param string $name
      * @param bool $nillable
@@ -45,7 +41,6 @@ class Variable
     }
 
     /**
-     *
      * @return string
      */
     public function getType()
@@ -54,7 +49,6 @@ class Variable
     }
 
     /**
-     *
      * @return string
      */
     public function getName()
@@ -63,7 +57,6 @@ class Variable
     }
 
     /**
-     *
      * @return boolean
      */
     public function getNillable()
