@@ -482,10 +482,15 @@ class Generator implements GeneratorInterface
      * TODO: v3: remove
      */
 
+    /**
+     * @var static
+     * @deprecated
+     */
     protected static $instance;
 
     /**
      * Initializes the single instance if it hasn't been, and returns it if it has.
+     * @deprecated
      */
     public static function instance()
     {
@@ -500,6 +505,7 @@ class Generator implements GeneratorInterface
      * Used by different classes to get the loaded config
      *
      * @return Generator The dreaded singleton instance
+     * @deprecated
      */
     public static function getInstance()
     {
