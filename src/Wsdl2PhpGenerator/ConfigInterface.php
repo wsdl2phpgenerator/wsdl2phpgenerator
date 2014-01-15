@@ -112,7 +112,7 @@ interface ConfigInterface
     public function setNoTypeConstructor($noTypeConstructor);
 
     /**
-     * @param string $sharedTypes
+     * @param bool $sharedTypes
      */
     public function setSharedTypes($sharedTypes);
 

@@ -143,12 +143,12 @@ class Config implements ConfigInterface
      * @param string $classNames
      * @param string $prefix
      * @param string $suffix
-     * @param string $sharedTypes
+     * @param bool $sharedTypes
      * @param bool $createAccessors
      * @param bool $constructorParamsDefaultToNull
      * @param bool $noIncludes
      */
-    public function __construct($inputFile, $outputDir, $verbose = false, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '', $prefix = '', $suffix = '', $sharedTypes = null, $createAccessors = false, $constructorParamsDefaultToNull = false, $noIncludes = false)
+    public function __construct($inputFile, $outputDir, $verbose = false, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '', $prefix = '', $suffix = '', $sharedTypes = false, $createAccessors = false, $constructorParamsDefaultToNull = false, $noIncludes = false)
     {
         $this->namespaceName = trim($namespaceName);
         $this->oneFile = $oneFile;
@@ -173,7 +173,7 @@ class Config implements ConfigInterface
         $this->classNames = trim($classNames);
         $this->prefix = trim($prefix);
         $this->suffix = trim($suffix);
-        $this->sharedTypes = trim($sharedTypes);
+        $this->sharedTypes = $sharedTypes;
         $this->createAccessors = $createAccessors;
         $this->constructorParamsDefaultToNull = $constructorParamsDefaultToNull;
         $this->noIncludes = $noIncludes;
@@ -410,7 +410,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @param string $sharedTypes
+     * @param bool $sharedTypes
      */
     public function setSharedTypes($sharedTypes)
     {
