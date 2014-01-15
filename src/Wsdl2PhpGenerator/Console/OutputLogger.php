@@ -22,9 +22,7 @@ class OutputLogger extends AbstractLogger
     private $output;
 
     /**
-     * The console output to log to.
-     *
-     * @param OutputInterface $output
+     * @param OutputInterface $output The console output to log to
      */
     public function __construct(OutputInterface $output)
     {
