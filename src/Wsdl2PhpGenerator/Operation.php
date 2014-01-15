@@ -76,7 +76,7 @@ class Operation
     }
 
     /**
-     * @param array $validTypes An array of Type objects with valid types for typehinting
+     * @param Type[] $validTypes An array of Type objects with valid types for typehinting
      * @return string A parameter string
      */
     public function getParamString(array $validTypes)
