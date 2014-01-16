@@ -501,8 +501,7 @@ class Generator implements GeneratorInterface
     }
 
     /**
-     * Returns the singleton of the generator class. This may be changed to a "better" solution but I don't know any of the top of my head
-     * Used by different classes to get the loaded config
+     * Returns the singleton of the generator class.
      *
      * @return Generator The dreaded singleton instance
      * @deprecated
