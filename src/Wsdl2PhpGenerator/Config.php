@@ -179,41 +179,26 @@ class Config implements ConfigInterface
         $this->noIncludes = $noIncludes;
     }
 
-    /**
-     * @return string
-     */
     public function getNamespaceName()
     {
         return $this->namespaceName;
     }
 
-    /**
-     * @return bool
-     */
     public function getOneFile()
     {
         return $this->oneFile;
     }
 
-    /**
-     * @return bool
-     */
     public function getClassExists()
     {
         return $this->classExists;
     }
 
-    /**
-     * @return bool
-     */
     public function getNoTypeConstructor()
     {
         return $this->noTypeConstructor;
     }
 
-    /**
-     * @return string
-     */
     public function getOutputDir()
     {
         return $this->outputDir;

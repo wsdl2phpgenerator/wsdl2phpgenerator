@@ -15,9 +15,6 @@ use Symfony\Component\Console\Input\InputOption;
 class Application extends SymfonyApplication
 {
 
-    /**
-     * @return \Symfony\Component\Console\Input\InputDefinition
-     */
     protected function getDefaultInputDefinition()
     {
         // To preserve backwards compatibility we strip shortcuts from default options as they overlap with the
@@ -52,19 +49,12 @@ class Application extends SymfonyApplication
     // See http://symfony.com/doc/current/components/console/single_command_tool.html.
     // TODO: Remove this for version 3.x where we might have multiple commands.
 
-    /**
-     * @param InputInterface $input
-     * @return string
-     */
     protected function getCommandName(InputInterface $input)
     {
         $command = new GenerateCommand();
         return $command->getName();
     }
 
-    /**
-     * @return \Symfony\Component\Console\Command\Command[]
-     */
     protected function getDefaultCommands()
     {
         // Keep the core default commands to have the HelpCommand
@@ -75,9 +65,6 @@ class Application extends SymfonyApplication
         return $defaultCommands;
     }
 
-    /**
-     * @return \Symfony\Component\Console\Input\InputDefinition
-     */
     public function getDefinition()
     {
         $inputDefinition = parent::getDefinition();

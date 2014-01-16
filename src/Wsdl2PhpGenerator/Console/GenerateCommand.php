@@ -321,12 +321,6 @@ class GenerateCommand extends Command
         return $this->addConfigOption($name, $shortcut, $mode, $description, $default, $featureMapping);
     }
 
-    /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     * @return int|null|void
-     * @throws \RuntimeException
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         // Input and output options are in fact required so bail if they are not set.
