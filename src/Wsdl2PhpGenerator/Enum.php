@@ -18,7 +18,6 @@ use Wsdl2PhpGenerator\PhpSource\PhpClass;
 class Enum extends Type
 {
     /**
-     *
      * @var array The values in the enum
      */
     private $values;
@@ -26,17 +25,19 @@ class Enum extends Type
     /**
      * Construct the object
      *
+     * @param ConfigInterface $config The configuration
      * @param string $name The identifier for the class
      * @param string $restriction The restriction(datatype) of the values
      */
-    public function __construct($name, $restriction)
+    public function __construct(ConfigInterface $config, $name, $restriction)
     {
-        parent::__construct($name, $restriction);
+        parent::__construct($config, $name, $restriction);
         $this->values = array();
     }
 
     /**
      * Implements the loading of the class object
+     *
      * @throws Exception if the class is already generated(not null)
      */
     protected function generateClass()
@@ -45,20 +46,15 @@ class Enum extends Type
             throw new Exception("The class has already been generated");
         }
 
-        $config = Generator::getInstance()->getConfig();
-
-        $this->class = new PhpClass($this->phpIdentifier, $config->getClassExists());
+        $this->class = new PhpClass($this->phpIdentifier, $this->config->getClassExists());
 
         $first = true;
 
         foreach ($this->values as $value) {
-            try {
-                $name = Validator::validateNamingConvention($value);
-            } catch (ValidationException $e) {
-                $name = 'constant' . $name;
-            }
+            $name = Validator::validateNamingConvention($value);
+
             if (Validator::isKeyword($name)) {
-                // TODO: Custom seems like a poor prefix for constant names
+                // TODO: Custom seems like a poor suffix for constant names
                 // that collide with PHP keywords by default but is kept for
                 // backwards compatibility for generated code.
                 // Consider changing this for 3.x.

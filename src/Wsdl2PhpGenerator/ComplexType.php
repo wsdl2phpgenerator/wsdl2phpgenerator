@@ -21,26 +21,29 @@ use Wsdl2PhpGenerator\PhpSource\PhpVariable;
  */
 class ComplexType extends Type
 {
+
     /**
+     * The members in the type
      *
-     * @var array The members in the type
+     * @var array
      */
     private $members;
 
     /**
      * Construct the object
      *
+     * @param ConfigInterface $config The configuration
      * @param string $name The identifier for the class
-     * @param string $restriction The restriction(datatype) of the values
      */
-    public function __construct($name)
+    public function __construct(ConfigInterface $config, $name)
     {
-        parent::__construct($name, null);
+        parent::__construct($config, $name, null);
         $this->members = array();
     }
 
     /**
      * Implements the loading of the class object
+     *
      * @throws Exception if the class is already generated(not null)
      */
     protected function generateClass()
@@ -49,9 +52,7 @@ class ComplexType extends Type
             throw new Exception("The class has already been generated");
         }
 
-        $config = Generator::getInstance()->getConfig();
-
-        $class = new PhpClass($this->phpIdentifier, $config->getClassExists());
+        $class = new PhpClass($this->phpIdentifier, $this->config->getClassExists());
 
         $constructorComment = new PhpDocComment();
         $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());
@@ -81,11 +82,11 @@ class ComplexType extends Type
                 $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
                 $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());
                 $constructorParameters .= ', $' . $name;
-                if ($config->getConstructorParamsDefaultToNull()) {
+                if ($this->config->getConstructorParamsDefaultToNull()) {
                     $constructorParameters .= ' = null';
                 }
 
-                if ($config->getCreateAccessors()) {
+                if ($this->config->getCreateAccessors()) {
                     $getterComment = new PhpDocComment();
                     $getterComment->setReturn(PhpDocElementFactory::getReturn($type, ''));
                     $getter = new PhpFunction('public', 'get' . ucfirst($name), '', '  return $this->' . $name . ';' . PHP_EOL, $getterComment);
@@ -103,7 +104,7 @@ class ComplexType extends Type
         $function = new PhpFunction('public', '__construct', $constructorParameters, $constructorSource, $constructorComment);
 
         // Only add the constructor if type constructor is selected
-        if ($config->getNoTypeConstructor() == false) {
+        if ($this->config->getNoTypeConstructor() == false) {
             $class->addFunction($function);
         }
 
@@ -119,6 +120,7 @@ class ComplexType extends Type
      *
      * @param string $type
      * @param string $name
+     * @param bool $nillable
      */
     public function addMember($type, $name, $nillable)
     {

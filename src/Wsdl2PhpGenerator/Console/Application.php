@@ -19,7 +19,7 @@ class Application extends SymfonyApplication
     {
         // To preserve backwards compatibility we strip shortcuts from default options as they overlap with the
         // shortcuts from previous versions of Wsdl2PhpGenerator.
-        // TODO: Remove this for version 3.x where we can break backwards compatibility.
+        // TODO: v3: Remove this for version 3.x where we can break backwards compatibility.
         $removeShortcuts = array('n', 'q');
 
         $updatedOptions = array();

@@ -24,91 +24,72 @@ class Generator implements GeneratorInterface
 
     /**
      * WSDL namespace
+     *
      * @var string
      */
     const WSDL_NS = 'http://schemas.xmlsoap.org/wsdl/';
 
     /**
      * Schema in simplexml format
+     *
+     * @var \SimpleXMLElement[]
      */
     private $schema = array();
 
     /**
      * A SoapClient for loading the WSDL
+     *
      * @var SoapClient
-     * @access private
      */
     private $client = null;
 
     /**
      * DOM document used to load and parse the wsdl
-     * @var DOMDocument
-     * @access private
+     *
+     * @var DOMDocument[]
      */
-    private $dom = null;
+    private $dom = array();
 
     /**
-     *
-     *
-     * @var Service The service class
+     * @var Service
      */
     private $service;
 
     /**
      * An array of Type objects that represents the types in the service
      *
-     * @var array Array of Type objects
-     * @see Type
+     * @var Type[]
      */
-    private $types;
+    private $types = array();
 
     /**
      * This is the object that holds the current config
      *
-     * @var Config
-     * @access private
+     * @var ConfigInterface
      */
     private $config;
 
     /**
-     *
-     * @var DocumentationManager A manager for the documentation
+     * @var DocumentationManager
      */
     private $documentation;
 
     /**
-     * @var LoggerInterface The logger to use.
+     * @var LoggerInterface
      */
     private $logger;
 
-    /**
-     *
-     * @var Generator The infamous singleton instance
-     */
-    private static $instance = null;
 
     /**
      * Construct the generator
      */
-    private function __construct()
+    public function __construct()
     {
         $this->service = null;
         $this->types = array();
         $this->enums = array();
         $this->simple = array();
         $this->documentation = new DocumentationManager();
-    }
-
-    /**
-     * Initializes the single instance if it hasn't been, and returns it if it has.
-     */
-    public static function instance()
-    {
-        if (self::$instance === null) {
-            self::$instance = new Generator();
-        }
-
-        return self::$instance;
     }
 
     /**
@@ -136,10 +117,6 @@ class Generator implements GeneratorInterface
         $this->log('Generation complete', 'info');
     }
 
-    public function setLogger(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
-    }
 
     /**
      * Load the wsdl file into php
@@ -203,8 +180,7 @@ class Generator implements GeneratorInterface
                     if (strpos($schemaUrl, '//') === false) {
                         $schemaUrl = dirname($this->config->getInputFile()) . '/' . $schemaUrl;
                     }
-                    $schema = simplexml_load_file($schemaUrl);
-                    $this->schema[] = $schema;
+                    $this->schema[] = simplexml_load_file($schemaUrl);
                 }
             }
         }
@@ -212,8 +188,6 @@ class Generator implements GeneratorInterface
 
     /**
      * Loads the service class
-     *
-     * @access private
      */
     private function loadService()
     {
@@ -221,7 +195,7 @@ class Generator implements GeneratorInterface
 
         $this->log('Starting to load service ' . $name);
 
-        $this->service = new Service($name, $this->types, $this->documentation->getServiceDescription());
+        $this->service = new Service($this->config, $name, $this->types, $this->documentation->getServiceDescription());
 
         $functions = $this->client->__getFunctions();
         foreach ($functions as $function) {
@@ -249,8 +223,6 @@ class Generator implements GeneratorInterface
 
     /**
      * Loads all type classes
-     *
-     * @access private
      */
     private function loadTypes()
     {
@@ -275,7 +247,7 @@ class Generator implements GeneratorInterface
             $numParts = count($parts);
             // ComplexType
             if ($numParts > 1) {
-                $type = new ComplexType($className);
+                $type = new ComplexType($this->config, $className);
                 $this->log('Loading type ' . $type->getPhpIdentifier());
 
                 for ($i = 1; $i < $numParts - 1; $i++) {
@@ -306,13 +278,13 @@ class Generator implements GeneratorInterface
                     $enumerationList = $typenode->getElementsByTagName('enumeration');
                     $patternList = $typenode->getElementsByTagName('pattern');
                     if ($enumerationList->length > 0) {
-                        $type = new Enum($className, $restriction);
+                        $type = new Enum($this->config, $className, $restriction);
                         $this->log('Loading enum ' . $type->getPhpIdentifier());
                         foreach ($enumerationList as $enum) {
                             $type->addValue($enum->attributes->getNamedItem('value')->nodeValue);
                         }
                     } elseif ($patternList->length > 0) { // If pattern
-                        $type = new Pattern($className, $restriction);
+                        $type = new Pattern($this->config, $className, $restriction);
                         $this->log('Loading pattern ' . $type->getPhpIdentifier());
                         $type->setValue($patternList->item(0)->attributes->getNamedItem('value')->nodeValue);
                     } else {
@@ -342,9 +314,9 @@ class Generator implements GeneratorInterface
 
     /**
      * Find the elements with maxOccurs="unbounded"
+     *
      * @param $className
-     * @return array associative array where the key is the element name and the value is the element DOM node
-     * @access private
+     * @return array Associative array where the key is the element name and the value is the element DOM node
      */
     private function findArrayElements($className)
     {
@@ -377,8 +349,6 @@ class Generator implements GeneratorInterface
      * Save all the loaded classes to the configured output dir
      *
      * @throws Exception If no service is loaded
-     *
-     * @access private
      */
     private function savePhp()
     {
@@ -410,33 +380,13 @@ class Generator implements GeneratorInterface
      * Logs a message.
      *
      * @param string $message The message to log
+     * @param string $level
      */
     private function log($message, $level = 'notice')
     {
         if (isset($this->logger)) {
             $this->logger->log($level, $message);
         }
-    }
-
-    /**
-     * Returns the singleton of the generator class. This may be changed to a "better" solution but I don't know any of the top of my head
-     * Used by different classes to get the loaded config
-     *
-     * @return Generator The dreaded singleton instance
-     */
-    public static function getInstance()
-    {
-        return self::instance();
-    }
-
-    /**
-     * Returns the loaded config
-     *
-     * @return Config The loaded config
-     */
-    public function getConfig()
-    {
-        return $this->config;
     }
 
     /**
@@ -502,4 +452,63 @@ class Generator implements GeneratorInterface
 
         return $typenode;
     }
+
+
+    /*
+     * Setters/getters
+     */
+
+    /**
+     * @param LoggerInterface $logger
+     */
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
+    /**
+     * Returns the loaded config
+     *
+     * @return ConfigInterface
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+
+    /*
+     * Singleton logic for backwards compatibility
+     * TODO: v3: remove
+     */
+
+    /**
+     * @var static
+     * @deprecated
+     */
+    protected static $instance;
+
+    /**
+     * Initializes the single instance if it hasn't been, and returns it if it has.
+     * @deprecated
+     */
+    public static function instance()
+    {
+        if (static::$instance === null) {
+            static::$instance = new static;
+        }
+        return static::$instance;
+    }
+
+    /**
+     * Returns the singleton of the generator class.
+     *
+     * @return Generator The dreaded singleton instance
+     * @deprecated
+     */
+    public static function getInstance()
+    {
+        return static::instance();
+    }
+
 }

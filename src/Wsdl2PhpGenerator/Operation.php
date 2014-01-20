@@ -14,26 +14,22 @@ namespace Wsdl2PhpGenerator;
 class Operation
 {
     /**
-     *
      * @var string The name of the operation
      */
     private $name;
 
     /**
-     *
      * @var array An array with Variables
      * @see Variable
      */
     private $params;
 
     /**
-     *
      * @var string A description of the operation
      */
     private $description;
 
     /**
-     *
      * @var string A description of the operation
      */
     private $returns;
@@ -56,7 +52,6 @@ class Operation
     }
 
     /**
-     *
      * @return string
      */
     public function getName()
@@ -65,7 +60,6 @@ class Operation
     }
 
     /**
-     *
      * @return string
      */
     public function getDescription()
@@ -74,7 +68,6 @@ class Operation
     }
 
     /**
-     *
      * @return string
      */
     public function getReturns()
@@ -83,8 +76,7 @@ class Operation
     }
 
     /**
-     *
-     * @param array An array of Type objects with valid types for typehinting
+     * @param Type[] $validTypes An array of Type objects with valid types for typehinting
      * @return string A parameter string
      */
     public function getParamString(array $validTypes)
@@ -169,7 +161,6 @@ class Operation
     }
 
     /**
-     *
      * @return array Returns the parameter array
      */
     public function getParams()

@@ -16,26 +16,28 @@ use Wsdl2PhpGenerator\PhpSource\PhpClass;
  */
 abstract class Type
 {
+
     /**
-     *
+     * @var ConfigInterface
+     */
+    protected $config;
+
+    /**
      * @var PhpClass The class used to create the type. This is not used by patterns
      */
     protected $class;
 
     /**
-     *
      * @var string The name of the type
      */
     protected $identifier;
 
     /**
-     *
      * @var string The name of the type used in php code ie. the validated name
      */
     protected $phpIdentifier;
 
     /**
-     *
      * @var string The datatype the simple type is of. This not used by complex types
      */
     protected $datatype;
@@ -43,19 +45,19 @@ abstract class Type
     /**
      * The minimum construction
      *
+     * @param ConfigInterface $config The configuration
      * @param string $name The identifier for the type
      * @param string $datatype The restriction(DataType)
      */
-    public function __construct($name, $datatype)
+    public function __construct(ConfigInterface $config, $name, $datatype)
     {
+        $this->config = $config;
         $this->class = null;
         $this->datatype = $datatype;
         $this->identifier = $name;
 
-        $config = Generator::getInstance()->getConfig();
-
         // Add prefix and suffix
-        $name = $config->getPrefix() . $this->identifier . $config->getSuffix();
+        $name = $this->config->getPrefix() . $this->identifier . $this->config->getSuffix();
 
         try {
             $name = Validator::validateClass($name);
@@ -69,7 +71,7 @@ abstract class Type
     /**
      * The abstract function for subclasses to implement
      * This should load the class data into $class
-     * This is called by getClass if not previosly called
+     * This is called by getClass if not previously called
      */
     abstract protected function generateClass();
 
@@ -108,7 +110,6 @@ abstract class Type
     }
 
     /**
-     *
      * @return string The validated name of the type
      */
     public function getPhpIdentifier()

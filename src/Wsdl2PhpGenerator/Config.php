@@ -7,68 +7,74 @@ namespace Wsdl2PhpGenerator;
 class Config implements ConfigInterface
 {
     /**
+     * The name to use as namespace in the new classes, no namespaces is used if empty
      *
-     * @var string The name to use as namespace in the new classes, no namespaces is used if empty
-     * @access private
+     * @var string
      */
     private $namespaceName;
 
     /**
+     * Decides if the output is collected to one file or spread over one file per class
      *
-     * @var bool Descides if the output is collected to one file or spread over one file per class
-     * @access private
+     * @var bool
      */
     private $oneFile;
 
     /**
+     * Decides if the output should protect all classes with if(!class_exists statements
      *
-     * @var bool Decides if the output should protect all classes with if(!class_exists statements
-     * @access private
+     * @var bool
      */
     private $classExists;
 
     /**
+     * The directory where to put the file(s)
      *
-     * @var string The directory where to put the file(s)
-     * @access private
+     * @var string
      */
     private $outputDir;
 
     /**
+     * The wsdl file to use to generate the classes
      *
-     * @var string The wsdl file to use to generate the classes
-     * @access private
+     * @var string
      */
     private $inputFile;
 
     /**
      * The array should contain the strings for the options to enable
      *
-     * @var array containing all features in the options for the client
+     * @var array
      */
     private $optionFeatures;
 
     /**
+     * The wsdl cache to use if any.
+     * Possible values WSDL_CACHE_NONE, WSDL_CACHE_DISK, WSDL_CACHE_MEMORY or WSDL_CACHE_BOTH
      *
-     * @var string The wsdl cache to use if any. Possible values WSDL_CACHE_NONE, WSDL_CACHE_DISK, WSDL_CACHE_MEMORY or WSDL_CACHE_BOTH
+     * @var string
      */
     private $wsdlCache;
 
     /**
+     * The compression string to use
      *
-     * @var string The compression string to use
+     * @var string
      */
     private $compression;
 
     /**
+     * A comma separated list of classes to generate.
+     * Used to specify the classes to generate if the user doesn't want to generate all
      *
-     * @var string A comma separated list of classes to generate. Used to specify the classes to generate if the user doesn't want to generate all
+     * @var string
      */
     private $classNames;
 
     /**
+     * If a type constructor should not be generated
      *
-     * @var bool If a type constructor should not be generated
+     * @var bool
      */
     private $noTypeConstructor;
 
@@ -79,40 +85,45 @@ class Config implements ConfigInterface
     private $verbose;
 
     /**
+     * The prefix to use for all classes
      *
-     * @var string The prefix to use for all classes
+     * @var string
      */
     private $prefix;
 
     /**
+     * The suffix to use for all classes
      *
-     * @var string The sufix to use for all classes
+     * @var string
      */
     private $suffix;
 
     /**
+     * If multiple class got the name, the first will be used, other will be ignored
      *
-     * @var string If multiple class got the name, the first will be used, other will be ignored
+     * @var string
      */
     private $sharedTypes;
 
     /**
+     * Decides if getter and setter methods should be created for member variables
      *
-     * @var bool Decides if getter and setter methods should be created for member variables
-     * @access private
+     * @var bool
      */
     private $createAccessors;
 
     /**
+     * Decides if the constructor parameters should have null default values
      *
-     * @var bool Decides if the constructor parameters should have null default values
-     * @access private
+     * @var bool
      */
     private $constructorParamsDefaultToNull;
 
     /**
-     * @var bool If the service class should explicitly include all other classes or not
-     *  Including may not be needed if using an autoloader etc.
+     * If the service class should explicitly include all other classes or not
+     * Including may not be needed if using an autoloader etc.
+     *
+     * @var bool
      */
     private $noIncludes;
 
@@ -132,7 +143,7 @@ class Config implements ConfigInterface
      * @param string $classNames
      * @param string $prefix
      * @param string $suffix
-     * @param string $sharedTypes
+     * @param bool $sharedTypes
      * @param bool $createAccessors
      * @param bool $constructorParamsDefaultToNull
      * @param bool $noIncludes
@@ -162,7 +173,7 @@ class Config implements ConfigInterface
         $this->classNames = trim($classNames);
         $this->prefix = trim($prefix);
         $this->suffix = trim($suffix);
-        $this->sharedTypes = trim($sharedTypes);
+        $this->sharedTypes = $sharedTypes;
         $this->createAccessors = $createAccessors;
         $this->constructorParamsDefaultToNull = $constructorParamsDefaultToNull;
         $this->noIncludes = $noIncludes;
@@ -193,31 +204,49 @@ class Config implements ConfigInterface
         return $this->outputDir;
     }
 
+    /**
+     * @return array|string
+     */
     public function getInputFile()
     {
         return $this->inputFile;
     }
 
+    /**
+     * @return array
+     */
     public function getOptionFeatures()
     {
         return $this->optionFeatures;
     }
 
+    /**
+     * @return string
+     */
     public function getWsdlCache()
     {
         return $this->wsdlCache;
     }
 
+    /**
+     * @return string
+     */
     public function getCompression()
     {
         return $this->compression;
     }
 
+    /**
+     * @return string
+     */
     public function getClassNames()
     {
         return $this->classNames;
     }
 
+    /**
+     * @return array
+     */
     public function getClassNamesArray()
     {
         if (strpos($this->classNames, ',') !== false) {
@@ -229,40 +258,57 @@ class Config implements ConfigInterface
         return array();
     }
 
+    /**
+     * @return bool
+     */
     public function getVerbose()
     {
         return $this->verbose;
     }
 
+    /**
+     * @return string
+     */
     public function getPrefix()
     {
         return $this->prefix;
     }
 
+    /**
+     * @return string
+     */
     public function getSuffix()
     {
         return $this->suffix;
     }
 
     /**
-     *
-     * @return string Returns the shared types
+     * @return string
      */
     public function getSharedTypes()
     {
         return $this->sharedTypes;
     }
 
+    /**
+     * @return bool
+     */
     public function getCreateAccessors()
     {
         return $this->createAccessors;
     }
 
+    /**
+     * @return bool
+     */
     public function getConstructorParamsDefaultToNull()
     {
         return $this->constructorParamsDefaultToNull;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getNoIncludes()
     {
         return $this->noIncludes;
@@ -284,6 +330,9 @@ class Config implements ConfigInterface
         $this->classNames = $classNames;
     }
 
+    /**
+     * @param string $compression
+     */
     public function setCompression($compression)
     {
         $this->compression = $compression;
@@ -297,16 +346,25 @@ class Config implements ConfigInterface
         $this->inputFile = $inputFile;
     }
 
+    /**
+     * @param string $namespaceName
+     */
     public function setNamespaceName($namespaceName)
     {
         $this->namespaceName = $namespaceName;
     }
 
+    /**
+     * @param bool $noTypeConstructor
+     */
     public function setNoTypeConstructor($noTypeConstructor)
     {
         $this->noTypeConstructor = $noTypeConstructor;
     }
 
+    /**
+     * @param bool $oneFile
+     */
     public function setOneFile($oneFile)
     {
         $this->oneFile = $oneFile;
@@ -336,6 +394,9 @@ class Config implements ConfigInterface
         $this->prefix = $prefix;
     }
 
+    /**
+     * @param bool $sharedTypes
+     */
     public function setSharedTypes($sharedTypes)
     {
         $this->sharedTypes = $sharedTypes;
@@ -349,6 +410,9 @@ class Config implements ConfigInterface
         $this->suffix = $suffix;
     }
 
+    /**
+     * @param bool $verbose
+     */
     public function setVerbose($verbose)
     {
         $this->verbose = $verbose;
@@ -362,11 +426,17 @@ class Config implements ConfigInterface
         $this->wsdlCache = $wsdlCache;
     }
 
+    /**
+     * @param bool $createAccessors
+     */
     public function setCreateAccessors($createAccessors)
     {
         $this->createAccessors = $createAccessors;
     }
 
+    /**
+     * @param bool $constructorParamsDefaultToNull
+     */
     public function setConstructorParamsDefaultToNull($constructorParamsDefaultToNull)
     {
         $this->constructorParamsDefaultToNull = $constructorParamsDefaultToNull;

@@ -16,7 +16,6 @@ use \Exception;
 class Pattern extends Type
 {
     /**
-     *
      * @var string The pattern string
      */
     private $value;
@@ -24,12 +23,13 @@ class Pattern extends Type
     /**
      * Construct the object
      *
+     * @param ConfigInterface $config The configuration
      * @param string $name The identifier for the class
      * @param string $restriction The restriction(datatype) of the values
      */
-    public function __construct($name, $restriction)
+    public function __construct(ConfigInterface $config, $name, $restriction)
     {
-        parent::__construct($name, $restriction);
+        parent::__construct($config, $name, $restriction);
         $this->value = '';
     }
 
@@ -50,7 +50,6 @@ class Pattern extends Type
     }
 
     /**
-     *
      * @return string The string pattern
      */
     public function getValue()
@@ -59,7 +58,6 @@ class Pattern extends Type
     }
 
     /**
-     *
      * @param string $value The string pattern
      */
     public function setValue($value)
