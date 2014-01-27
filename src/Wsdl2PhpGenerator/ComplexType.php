@@ -78,25 +78,56 @@ class ComplexType extends Type
             $class->addVariable($var);
 
             if (!$member->getNillable()) {
-                $constructorSource .= '  $this->' . $name . ' = $' . $name . ';' . PHP_EOL;
+                if ($type == 'dateTime') {
+                    $constructorSource .= '  if ($' . $name . ' instanceof \DateTime) {' . PHP_EOL
+                        . '    $this->' . $name . ' = $' . $name . '->format(\DateTime::ATOM);' . PHP_EOL
+                        . '  } else {' . PHP_EOL
+                        . '    $this->' . $name . ' = $' . $name . ';' . PHP_EOL
+                        . '  }' . PHP_EOL;
+                }
+                else {
+                    $constructorSource .= '  $this->' . $name . ' = $' . $name . ';' . PHP_EOL;
+                }
                 $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
                 $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());
                 $constructorParameters .= ', $' . $name;
                 if ($this->config->getConstructorParamsDefaultToNull()) {
                     $constructorParameters .= ' = null';
                 }
+            }
 
-                if ($this->config->getCreateAccessors()) {
-                    $getterComment = new PhpDocComment();
-                    $getterComment->setReturn(PhpDocElementFactory::getReturn($type, ''));
-                    $getter = new PhpFunction('public', 'get' . ucfirst($name), '', '  return $this->' . $name . ';' . PHP_EOL, $getterComment);
-                    $accessors[] = $getter;
-
-                    $setterComment = new PhpDocComment();
-                    $setterComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
-                    $setter = new PhpFunction('public', 'set' . ucfirst($name), '$' . $name, '  $this->' . $name . ' = $' . $name . ';' . PHP_EOL, $setterComment);
-                    $accessors[] = $setter;
+            if ($this->config->getCreateAccessors()) {
+                $getterComment = new PhpDocComment();
+                $getterComment->setReturn(PhpDocElementFactory::getReturn($type, ''));
+                $getterCode = '';
+                if ($type == 'dateTime') {
+                    $getterCode = '  if ($this->' . $name . ' == null) {' . PHP_EOL
+                        . '    return null;' . PHP_EOL
+                        . '  } else {' . PHP_EOL
+                        . '    return \DateTime::createFromFormat(\DateTime::ATOM, $this->' . $name . ');' . PHP_EOL
+                        . '  }' . PHP_EOL;
                 }
+                else {
+                    $getterCode = '  return $this->' . $name . ';' . PHP_EOL;
+                }
+                $getter = new PhpFunction('public', 'get' . ucfirst($name), '', $getterCode, $getterComment);
+                $accessors[] = $getter;
+
+                $setterComment = new PhpDocComment();
+                $setterComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
+                $setterCode = '';
+                if ($type == 'dateTime') {
+                    $setterCode = '  if ($' . $name . ' instanceof \DateTime) {' . PHP_EOL
+                        . '    $this->' . $name . ' = $' . $name . '->format(\DateTime::ATOM);' . PHP_EOL
+                        . '  } else {' . PHP_EOL
+                        . '    $this->' . $name . ' = $' . $name . ';' . PHP_EOL
+                        . '  }' . PHP_EOL;
+                }
+                else {
+                    $setterCode = '  $this->' . $name . ' = $' . $name . ';' . PHP_EOL;
+                }
+                $setter = new PhpFunction('public', 'set' . ucfirst($name), '$' . $name, $setterCode, $setterComment);
+                $accessors[] = $setter;
             }
         }
 
