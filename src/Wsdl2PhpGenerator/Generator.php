@@ -315,7 +315,8 @@ class Generator implements GeneratorInterface
                     $nillable = false;
                     foreach ($this->schema as $schema) {
                         $schemaPrefix = self::findPrefix($schema, self::SCHEMA_NS);
-                        $tmp = $schema->xpath('//' . $schemaPrefix . 'complexType[@name = "' . $className . '"]/descendant::' . $schemaPrefix . 'element[@name = "' . $name . '"]/@nillable');
+                        $tmp = $schema->xpath('//' . $schemaPrefix . 'complexType[@name = "' . $className . '"]/'
+                            . 'descendant::' . $schemaPrefix . 'element[@name = "' . $name . '"]/@nillable');
                         if (!empty($tmp) && (string) $tmp[0] == 'true') {
                             $nillable = true;
                             break;
