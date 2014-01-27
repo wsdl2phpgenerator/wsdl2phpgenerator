@@ -58,8 +58,11 @@ class ComplexType extends Type
             throw new Exception("The class has already been generated");
         }
 
-        $class = new PhpClass($this->phpIdentifier, $this->config->getClassExists(),
-                              $this->baseType !== null ? $this->baseType->getPhpIdentifier() : '');
+        $class = new PhpClass(
+            $this->phpIdentifier,
+            $this->config->getClassExists(),
+            $this->baseType !== null ? $this->baseType->getPhpIdentifier() : ''
+            );
 
         $constructorComment = new PhpDocComment();
         $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());
