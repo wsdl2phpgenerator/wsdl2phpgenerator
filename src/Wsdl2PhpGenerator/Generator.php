@@ -222,6 +222,21 @@ class Generator implements GeneratorInterface
     }
 
     /**
+     * Find already registered type by identifier
+     *
+     * @return Type|null Returns type with the specified identifier if it finds it. Null otherwise
+     */
+    private function findType($name)
+    {
+        foreach ($this->types as $registered_type) {
+            if ($registered_type->getIdentifier() == $name) {
+                return $registered_type;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Loads all type classes
      */
     private function loadTypes()
@@ -249,6 +264,17 @@ class Generator implements GeneratorInterface
             if ($numParts > 1) {
                 $type = new ComplexType($this->config, $className);
                 $this->log('Loading type ' . $type->getPhpIdentifier());
+
+                foreach ($this->schema as $schema) {
+                    $tmp = $schema->xpath('//xs:complexType[@name = "' . $className . '"]/xs:complexContent/xs:extension/@base');
+                    if (!empty($tmp)) {
+                        $baseType = $this->findType($this->cleanNamespace($tmp[0]->__toString()));
+                        // Extend only complex types and if already loaded (will not set if base type is defined later in wsdl)
+                        if ($baseType !== null && $baseType instanceof ComplexType)
+                            $type->setBaseType($baseType);
+                        break;
+                    }
+                }
 
                 for ($i = 1; $i < $numParts - 1; $i++) {
                     $parts[$i] = trim($parts[$i]);
