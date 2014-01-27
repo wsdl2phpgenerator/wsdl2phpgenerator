@@ -290,12 +290,15 @@ class Generator implements GeneratorInterface
 
                 foreach ($this->schema as $schema) {
                     $schemaPrefix = self::findPrefix($schema, self::SCHEMA_NS);
-                    $tmp = $schema->xpath('//' . $schemaPrefix . 'complexType[@name = "' . $className . '"]/' . $schemaPrefix . 'complexContent/' . $schemaPrefix . 'extension/@base');
+                    $tmp = $schema->xpath('//' . $schemaPrefix . 'complexType[@name = "' . $className . '"]/'
+                        . $schemaPrefix . 'complexContent/' . $schemaPrefix . 'extension/@base');
                     if (!empty($tmp)) {
                         $baseType = $this->findType($this->cleanNamespace($tmp[0]->__toString()));
-                        // Extend only complex types and if already loaded (will not set if base type is defined later in wsdl)
-                        if ($baseType !== null && $baseType instanceof ComplexType)
+                        // Extend only complex types and if already loaded
+                        // will not set if base type is defined later in wsdl
+                        if ($baseType !== null && $baseType instanceof ComplexType) {
                             $type->setBaseType($baseType);
+                        }
                         break;
                     }
                 }
