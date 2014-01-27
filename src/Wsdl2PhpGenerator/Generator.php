@@ -172,6 +172,8 @@ class Generator implements GeneratorInterface
     {
         foreach ($this->dom as $dom) {
             $sxml = simplexml_import_dom($dom);
+            // Add main schema to schema array
+            $this->schema[] = $sxml;
             $namespaces = $sxml->getDocNamespaces();
             if (!empty($namespaces['xsd'])) {
                 foreach ($sxml->xpath('//xsd:import/@schemaLocation') as $schemaUrl) {
