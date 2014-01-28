@@ -78,7 +78,7 @@ class ComplexType extends Type
             $class->addVariable($var);
 
             if (!$member->getNillable()) {
-                if ($type == 'dateTime') {
+                if ($this->config->getAutomaticallyConvertDateTime() && $type == 'dateTime') {
                     $constructorSource .= '  if ($' . $name . ' instanceof \DateTime) {' . PHP_EOL
                         . '    $this->' . $name . ' = $' . $name . '->format(\DateTime::ATOM);' . PHP_EOL
                         . '  } else {' . PHP_EOL
@@ -100,7 +100,7 @@ class ComplexType extends Type
                 $getterComment = new PhpDocComment();
                 $getterComment->setReturn(PhpDocElementFactory::getReturn($type, ''));
                 $getterCode = '';
-                if ($type == 'dateTime') {
+                if ($this->config->getAutomaticallyConvertDateTime() && $type == 'dateTime') {
                     $getterCode = '  if ($this->' . $name . ' == null) {' . PHP_EOL
                         . '    return null;' . PHP_EOL
                         . '  } else {' . PHP_EOL
@@ -116,7 +116,7 @@ class ComplexType extends Type
                 $setterComment = new PhpDocComment();
                 $setterComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
                 $setterCode = '';
-                if ($type == 'dateTime') {
+                if ($this->config->getAutomaticallyConvertDateTime() && $type == 'dateTime') {
                     $setterCode = '  if ($' . $name . ' instanceof \DateTime) {' . PHP_EOL
                         . '    $this->' . $name . ' = $' . $name . '->format(\DateTime::ATOM);' . PHP_EOL
                         . '  } else {' . PHP_EOL

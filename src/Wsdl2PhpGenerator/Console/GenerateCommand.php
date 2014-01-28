@@ -84,6 +84,14 @@ class GenerateCommand extends Command
                 'createAccessors'
             )
             ->addConfigOption(
+                'convertDateTime',
+                null,
+                InputOption::VALUE_NONE,
+                'Automatically convert DateTime object to string in constructor and getter/setter methods',
+                null,
+                'automaticallyConvertDateTime'
+            )
+            ->addConfigOption(
                 'constructorNull',
                 null,
                 InputOption::VALUE_NONE,

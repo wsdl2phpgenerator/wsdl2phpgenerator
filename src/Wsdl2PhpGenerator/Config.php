@@ -126,6 +126,14 @@ class Config implements ConfigInterface
      * @var bool
      */
     private $noIncludes;
+    
+    /**
+     * Automatically convert DateTime to correct string format in constructor
+     * and getters/setters
+     *
+     * @var bool
+     */
+    private $automaticallyConvertDateTime;
 
     /**
      * Sets all variables
@@ -147,8 +155,9 @@ class Config implements ConfigInterface
      * @param bool $createAccessors
      * @param bool $constructorParamsDefaultToNull
      * @param bool $noIncludes
+     * @param bool $automaticallyConvertDateTime
      */
-    public function __construct($inputFile, $outputDir, $verbose = false, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '', $prefix = '', $suffix = '', $sharedTypes = false, $createAccessors = false, $constructorParamsDefaultToNull = false, $noIncludes = false)
+    public function __construct($inputFile, $outputDir, $verbose = false, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '', $prefix = '', $suffix = '', $sharedTypes = false, $createAccessors = false, $constructorParamsDefaultToNull = false, $noIncludes = false, $automaticallyConvertDateTime = false)
     {
         $this->namespaceName = trim($namespaceName);
         $this->oneFile = $oneFile;
@@ -177,6 +186,7 @@ class Config implements ConfigInterface
         $this->createAccessors = $createAccessors;
         $this->constructorParamsDefaultToNull = $constructorParamsDefaultToNull;
         $this->noIncludes = $noIncludes;
+        $this->automaticallyConvertDateTime = $automaticallyConvertDateTime;
     }
 
     public function getNamespaceName()
@@ -315,6 +325,14 @@ class Config implements ConfigInterface
     }
 
     /**
+     * @return bool $automaticallyConvertDateTime
+     */
+    public function getAutomaticallyConvertDateTime()
+    {
+        return $this->automaticallyConvertDateTime;
+    }
+
+    /**
      * @param boolean $classExists
      */
     public function setClassExists($classExists)
@@ -448,5 +466,13 @@ class Config implements ConfigInterface
     public function setNoIncludes($noIncludes)
     {
         $this->noIncludes = $noIncludes;
+    }
+
+    /**
+     * @param boolean $automaticallyConvertDateTime
+     */
+    public function setAutomaticallyConvertDateTime($automaticallyConvertDateTime)
+    {
+        $this->automaticallyConvertDateTime = $automaticallyConvertDateTime;
     }
 }
