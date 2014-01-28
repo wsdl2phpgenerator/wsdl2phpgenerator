@@ -62,7 +62,7 @@ class ComplexType extends Type
             $this->phpIdentifier,
             $this->config->getClassExists(),
             $this->baseType !== null ? $this->baseType->getPhpIdentifier() : ''
-            );
+        );
 
         $constructorComment = new PhpDocComment();
         $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());

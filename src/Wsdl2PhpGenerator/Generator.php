@@ -290,8 +290,10 @@ class Generator implements GeneratorInterface
 
                 foreach ($this->schema as $schema) {
                     $schemaPrefix = self::findPrefix($schema, self::SCHEMA_NS);
-                    $tmp = $schema->xpath('//' . $schemaPrefix . 'complexType[@name = "' . $className . '"]/'
-                        . $schemaPrefix . 'complexContent/' . $schemaPrefix . 'extension/@base');
+                    $tmp = $schema->xpath(
+                        '//' . $schemaPrefix . 'complexType[@name = "' . $className . '"]/'
+                        . $schemaPrefix . 'complexContent/' . $schemaPrefix . 'extension/@base'
+                    );
                     if (!empty($tmp)) {
                         $baseType = $this->findType($this->cleanNamespace($tmp[0]->__toString()));
                         // Extend only complex types and if already loaded
@@ -315,8 +317,10 @@ class Generator implements GeneratorInterface
                     $nillable = false;
                     foreach ($this->schema as $schema) {
                         $schemaPrefix = self::findPrefix($schema, self::SCHEMA_NS);
-                        $tmp = $schema->xpath('//' . $schemaPrefix . 'complexType[@name = "' . $className . '"]/'
-                            . 'descendant::' . $schemaPrefix . 'element[@name = "' . $name . '"]/@nillable');
+                        $tmp = $schema->xpath(
+                            '//' . $schemaPrefix . 'complexType[@name = "' . $className . '"]/'
+                            . 'descendant::' . $schemaPrefix . 'element[@name = "' . $name . '"]/@nillable'
+                        );
                         if (!empty($tmp) && (string) $tmp[0] == 'true') {
                             $nillable = true;
                             break;
