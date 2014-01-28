@@ -47,9 +47,9 @@ Usage is listed under `./vendor/bin/wsdl2php -h`
 // Map 'src' and 'lib' folders to the Wsdl2PhpGenerator namespace in your
 // favorite PSR-0 compatible classloader or require the files manually.
 
-$generator = Wsdl2PhpGenerator\Generator::instance();
+$generator = new \Wsdl2PhpGenerator\Generator();
 $generator->generate(
-	new Wsdl2PhpGenerator\Config( SOAPSERVICE, SOAPDIR ) 
+	new \Wsdl2PhpGenerator\Config( SOAPSERVICE, SOAPDIR )
 );
 ?>
 ```

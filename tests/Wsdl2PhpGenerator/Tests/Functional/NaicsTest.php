@@ -21,6 +21,9 @@ class NaicsTest extends Wsdl2PhpGeneratorFunctionalTestCase
         parent::setup();
     }
 
+    /**
+     * @vcr NaicsTest_testNaics
+     */
     public function testNaics()
     {
         // Generate the code.

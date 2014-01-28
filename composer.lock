@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "ddca4a6e670676add6f39d439ed81fd0",
+    "hash": "316e1a887b2bd47c6fca3984503076e3",
     "packages": [
         {
             "name": "psr/log",
@@ -98,6 +98,47 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "beberlei/assert",
+            "version": "v1.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/beberlei/assert.git",
+                "reference": "6c0069d271323e441c47d2ff26cb18cf3b7cc695"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/beberlei/assert/zipball/6c0069d271323e441c47d2ff26cb18cf3b7cc695",
+                "reference": "6c0069d271323e441c47d2ff26cb18cf3b7cc695",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Assert": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Benjamin Eberlei",
+                    "email": "kontakt@beberlei.de"
+                }
+            ],
+            "description": "Thin assertion library for input validation in business models.",
+            "keywords": [
+                "assert",
+                "assertion",
+                "validation"
+            ],
+            "time": "2013-11-05 12:28:46"
+        },
         {
             "name": "doctrine/annotations",
             "version": "v1.1.2",
@@ -545,16 +586,16 @@
         },
         {
             "name": "herrera-io/version",
-            "version": "1.0.0",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/herrera-io/php-version.git",
-                "reference": "a381ffdbb342b97702042fae341da37e6f760635"
+                "reference": "e4ef0771b7d353777a7ef950a20eee269cabd323"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/herrera-io/php-version/zipball/a381ffdbb342b97702042fae341da37e6f760635",
-                "reference": "a381ffdbb342b97702042fae341da37e6f760635",
+                "url": "https://api.github.com/repos/herrera-io/php-version/zipball/e4ef0771b7d353777a7ef950a20eee269cabd323",
+                "reference": "e4ef0771b7d353777a7ef950a20eee269cabd323",
                 "shasum": ""
             },
             "require": {
@@ -592,7 +633,7 @@
                 "semantic",
                 "version"
             ],
-            "time": "2013-07-20 15:48:30"
+            "time": "2014-01-21 23:21:16"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -758,16 +799,16 @@
         },
         {
             "name": "kherge/box",
-            "version": "2.4.1",
+            "version": "2.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kherge/Box.git",
-                "reference": "cdcf6d79be91e9fd35f29f803178f435a647afb3"
+                "reference": "5b2e1d355e03ccb9783e3c58dc13bb4deb0a24b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kherge/Box/zipball/cdcf6d79be91e9fd35f29f803178f435a647afb3",
-                "reference": "cdcf6d79be91e9fd35f29f803178f435a647afb3",
+                "url": "https://api.github.com/repos/kherge/Box/zipball/5b2e1d355e03ccb9783e3c58dc13bb4deb0a24b8",
+                "reference": "5b2e1d355e03ccb9783e3c58dc13bb4deb0a24b8",
                 "shasum": ""
             },
             "require": {
@@ -821,7 +862,7 @@
             "keywords": [
                 "phar"
             ],
-            "time": "2013-11-09 22:21:03"
+            "time": "2014-01-17 18:58:10"
         },
         {
             "name": "knplabs/github-api",
@@ -829,12 +870,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/php-github-api.git",
-                "reference": "f88baacfa4104d61db76219b474417be990effd0"
+                "reference": "f0effe22daaf1b664ef2ed5be2b199ef7c61be17"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/php-github-api/zipball/f88baacfa4104d61db76219b474417be990effd0",
-                "reference": "f88baacfa4104d61db76219b474417be990effd0",
+                "url": "https://api.github.com/repos/KnpLabs/php-github-api/zipball/f0effe22daaf1b664ef2ed5be2b199ef7c61be17",
+                "reference": "f0effe22daaf1b664ef2ed5be2b199ef7c61be17",
                 "shasum": ""
             },
             "require": {
@@ -882,7 +923,7 @@
                 "gist",
                 "github"
             ],
-            "time": "2014-01-06 14:03:30"
+            "time": "2014-01-15 01:35:49"
         },
         {
             "name": "phine/exception",
@@ -1036,6 +1077,86 @@
                 "tool"
             ],
             "time": "2013-08-26 21:13:03"
+        },
+        {
+            "name": "php-vcr/php-vcr",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-vcr/php-vcr.git",
+                "reference": "2ac8177136544e3d7f15d13f0bc310cf43b2d978"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-vcr/php-vcr/zipball/2ac8177136544e3d7f15d13f0bc310cf43b2d978",
+                "reference": "2ac8177136544e3d7f15d13f0bc310cf43b2d978",
+                "shasum": ""
+            },
+            "require": {
+                "beberlei/assert": "1.*",
+                "ext-curl": "*",
+                "guzzle/http": "3.8.*",
+                "guzzle/plugin-backoff": "3.8.*",
+                "symfony/yaml": "2.*"
+            },
+            "require-dev": {
+                "guzzle/plugin-mock": "3.8.*",
+                "lapistano/proxy-object": "dev-master",
+                "mikey179/vfsstream": "dev-master",
+                "satooshi/php-coveralls": "dev-master"
+            },
+            "suggest": {
+                "ext-runkit": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Adrian Philipp",
+                    "email": "mail@adrian-philipp.com"
+                }
+            ],
+            "description": "Record your test suite's HTTP interactions and replay them during future test runs for fast, deterministic, accurate tests.",
+            "time": "2014-01-23 20:43:33"
+        },
+        {
+            "name": "php-vcr/phpunit-testlistener-vcr",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-vcr/phpunit-testlistener-vcr.git",
+                "reference": "be5415079693151cf156110234484664e7bfe39b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-vcr/phpunit-testlistener-vcr/zipball/be5415079693151cf156110234484664e7bfe39b",
+                "reference": "be5415079693151cf156110234484664e7bfe39b",
+                "shasum": ""
+            },
+            "require": {
+                "php-vcr/php-vcr": "dev-master"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Adrian Philipp",
+                    "email": "mail@adrian-philipp.com"
+                }
+            ],
+            "description": "Integrates PHPUnit with PHP-VCR.",
+            "time": "2013-11-02 10:38:42"
         },
         {
             "name": "phpseclib/phpseclib",
@@ -1357,16 +1478,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "3.7.28",
+            "version": "3.7.29",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "3b97c8492bcafbabe6b6fbd2ab35f2f04d932a8d"
+                "reference": "faeb2d9f15dc83830d2db5e4c67acf1d68c9b5ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3b97c8492bcafbabe6b6fbd2ab35f2f04d932a8d",
-                "reference": "3b97c8492bcafbabe6b6fbd2ab35f2f04d932a8d",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/faeb2d9f15dc83830d2db5e4c67acf1d68c9b5ac",
+                "reference": "faeb2d9f15dc83830d2db5e4c67acf1d68c9b5ac",
                 "shasum": ""
             },
             "require": {
@@ -1427,7 +1548,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2013-10-17 07:27:40"
+            "time": "2014-01-15 06:46:38"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -1725,9 +1846,9 @@
 
     ],
     "minimum-stability": "dev",
-    "stability-flags": [
-
-    ],
+    "stability-flags": {
+        "php-vcr/phpunit-testlistener-vcr": 20
+    },
     "platform": {
         "php": ">=5.3.0",
         "ext-soap": "*"
