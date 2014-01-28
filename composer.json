@@ -18,9 +18,10 @@
         "symfony/console": "~2.3"
     },
     "require-dev": {
+        "kasperg/phing-github": "0.2.*",
         "kherge/box": "2.4.*",
         "phing/phing": "2.6.*",
-        "kasperg/phing-github": "0.2.*",
+        "php-vcr/phpunit-testlistener-vcr": "dev-master",
         "phpunit/phpunit": "3.7.*"
     }
 }

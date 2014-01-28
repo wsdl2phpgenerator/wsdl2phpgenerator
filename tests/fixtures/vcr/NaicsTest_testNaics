@@ -1,0 +1,21 @@
+
+-
+    request:
+        method: POST
+        url: 'http://www.webservicex.net/GenericNAICS.asmx'
+        headers:
+            host: www.webservicex.net
+            content-type: 'text/xml; charset=utf-8; action="http://www.webservicex.net/GetNAICSByIndustry"'
+            content-length: 311
+        body: null
+    response:
+        status: 200
+        headers:
+            Cache-Control: 'private, max-age=0'
+            Content-Length: '1987'
+            Content-Type: 'text/xml; charset=utf-8'
+            Server: Microsoft-IIS/7.0
+            X-AspNet-Version: 4.0.30319
+            X-Powered-By: ASP.NET
+            Date: 'Thu, 16 Jan 2014 10:31:06 GMT'
+        body: '<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><GetNAICSByIndustryResponse xmlns="http://www.webservicex.net/"><GetNAICSByIndustryResult>true</GetNAICSByIndustryResult><NAICSData><Records>3</Records><NAICSData><NAICS><NAICSCode>5415</NAICSCode><Title>Computer Systems Design and Related Services</Title><Country /><IndustryDescription>See industry description for 54151 below.</IndustryDescription></NAICS><NAICS><NAICSCode>54151</NAICSCode><Title>Computer Systems Design and Related Services</Title><Country /><IndustryDescription>This industry comprises establishments primarily engaged in providing expertise in the field of information technologies through one or more of the following activities: (1) writing, modifying, testing, and supporting software to meet the needs of a particular customer; (2) planning and designing computer systems that integrate computer hardware, software, and communication technologies; (3) on-site management and operation of clients'' computer systems and/or data processing facilities; and (4) other professional and technical computer-related advice and services.</IndustryDescription></NAICS><NAICS><NAICSCode>541512</NAICSCode><Title>Computer Systems Design Services</Title><Country>US</Country><IndustryDescription>This U.S. industry comprises establishments primarily engaged in planning and designing computer systems that integrate computer hardware, software, and communication technologies. The hardware and software components of the system may be provided by this establishment or company as part of integrated services or may be provided by third parties or vendors. These establishments often install the system and train and support users of the system.</IndustryDescription></NAICS></NAICSData></NAICSData></GetNAICSByIndustryResponse></soap:Body></soap:Envelope>'
