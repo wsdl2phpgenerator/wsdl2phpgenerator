@@ -144,9 +144,7 @@ class Generator implements GeneratorInterface
                 break;
             }
         }
-        if ($prefix === null) {
-            $prefix = '';
-        } elseif ($prefix != '') {
+        if ($prefix !== null && $prefix !== '') {
             $prefix .= ':';
         }
         return $prefix;
@@ -173,6 +171,8 @@ class Generator implements GeneratorInterface
         $sxml = simplexml_import_dom($this->dom[0]);
 
         $wsdlPrefix = self::findPrefix($sxml, self::WSDL_NS);
+        if ($wsdlPrefix === null)
+            throw new Exception('No namespace found: ' . self::WSDL_NS);
 
         foreach ($sxml->xpath("//{$wsdlPrefix}import/@location") as $wsdl_file) {
             $dom = new DOMDocument();
@@ -197,17 +197,19 @@ class Generator implements GeneratorInterface
             $this->schema[] = $sxml;
 
             $schemaPrefix = self::findPrefix($sxml, self::SCHEMA_NS);
-            foreach ($sxml->xpath('//' . $schemaPrefix . 'import/@schemaLocation') as $schemaUrl) {
-                // If the URL is relative then try to do a simple
-                // conversion to an absolute one.
-                if (strpos($schemaUrl, '//') === false) {
-                    $schemaUrl = dirname($this->config->getInputFile()) . '/' . $schemaUrl;
+            if ($schemaPrefix !== null) {
+                foreach ($sxml->xpath('//' . $schemaPrefix . 'import/@schemaLocation') as $schemaUrl) {
+                    // If the URL is relative then try to do a simple
+                    // conversion to an absolute one.
+                    if (strpos($schemaUrl, '//') === false) {
+                        $schemaUrl = dirname($this->config->getInputFile()) . '/' . $schemaUrl;
+                    }
+                    $domi = new DOMDocument();
+                    $domi->load($schemaUrl);
+                    $this->documentation->loadDocumentation($domi);
+                    $this->dom[] = $domi;
+                    $this->schema[] = simplexml_import_dom($domi);
                 }
-                $domi = new DOMDocument();
-                $domi->load($schemaUrl);
-                $this->documentation->loadDocumentation($domi);
-                $this->dom[] = $domi;
-                $this->schema[] = simplexml_import_dom($domi);
             }
         }
     }
@@ -293,6 +295,9 @@ class Generator implements GeneratorInterface
 
                 foreach ($this->schema as $schema) {
                     $schemaPrefix = self::findPrefix($schema, self::SCHEMA_NS);
+                    if ($schemaPrefix === null) {
+                        continue;
+                    }
                     $tmp = $schema->xpath(
                         '//' . $schemaPrefix . 'complexType[@name = "' . $className . '"]/'
                         . $schemaPrefix . 'complexContent/' . $schemaPrefix . 'extension/@base'
@@ -320,6 +325,9 @@ class Generator implements GeneratorInterface
                     $nillable = false;
                     foreach ($this->schema as $schema) {
                         $schemaPrefix = self::findPrefix($schema, self::SCHEMA_NS);
+                        if ($schemaPrefix === null) {
+                            continue;
+                        }
                         $tmp = $schema->xpath(
                             '//' . $schemaPrefix . 'complexType[@name = "' . $className . '"]/'
                             . 'descendant::' . $schemaPrefix . 'element[@name = "' . $name . '"]/@nillable'
@@ -511,6 +519,9 @@ class Generator implements GeneratorInterface
 
         foreach ($this->schema as $schema) {
             $schemaPrefix = self::findPrefix($schema, self::SCHEMA_NS);
+            if ($schemaPrefix === null) {
+                continue;
+            }
             $tmp = $schema->xpath('/' . $schemaPrefix . 'schema/*[@name = "' . $name . '"]');
             if (count($tmp) != 0) {
                 return dom_import_simplexml($tmp[0]);
