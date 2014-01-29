@@ -145,7 +145,7 @@ class Generator implements GeneratorInterface
             }
         }
         if ($prefix === null) {
-            throw new Exception(sprintf("No namespace found: %s", $namespace));
+            $prefix = '';
         } elseif ($prefix != '') {
             $prefix .= ':';
         }
@@ -195,16 +195,19 @@ class Generator implements GeneratorInterface
             $sxml = simplexml_import_dom($dom);
             // Add main schema to schema array
             $this->schema[] = $sxml;
-            $namespaces = $sxml->getDocNamespaces();
-            if (!empty($namespaces['xsd'])) {
-                foreach ($sxml->xpath('//xsd:import/@schemaLocation') as $schemaUrl) {
-                    // If the URL is relative then try to do a simple
-                    // conversion to an absolute one.
-                    if (strpos($schemaUrl, '//') === false) {
-                        $schemaUrl = dirname($this->config->getInputFile()) . '/' . $schemaUrl;
-                    }
-                    $this->schema[] = simplexml_load_file($schemaUrl);
+
+            $schemaPrefix = self::findPrefix($sxml, self::SCHEMA_NS);
+            foreach ($sxml->xpath('//' . $schemaPrefix . 'import/@schemaLocation') as $schemaUrl) {
+                // If the URL is relative then try to do a simple
+                // conversion to an absolute one.
+                if (strpos($schemaUrl, '//') === false) {
+                    $schemaUrl = dirname($this->config->getInputFile()) . '/' . $schemaUrl;
                 }
+                $domi = new DOMDocument();
+                $domi->load($schemaUrl);
+                $this->documentation->loadDocumentation($domi);
+                $this->dom[] = $domi;
+                $this->schema[] = simplexml_import_dom($domi);
             }
         }
     }
@@ -475,11 +478,15 @@ class Generator implements GeneratorInterface
         $typenode = null;
 
         foreach ($this->dom as $dom) {
-            $types = $this->dom[0]->getElementsByTagName('types');
+            $types = $dom->getElementsByTagName('types');
+            $schemaList = null;
             if ($types->length > 0) {
                 $schemaList = $types->item(0)->getElementsByTagName('schema');
-                $schemaList = $this->dom[0]->getElementsByTagName('types')->item(0)->getElementsByTagName('schema');
-
+            }
+            else {
+                $schemaList = $dom->getElementsByTagName('schema');
+            }
+            if ($schemaList != null) {
                 foreach ($schemaList as $schema) {
                     foreach ($schema->childNodes as $node) {
                         if ($node instanceof DOMElement) {
@@ -503,7 +510,8 @@ class Generator implements GeneratorInterface
         }
 
         foreach ($this->schema as $schema) {
-            $tmp = $schema->xpath('/xs:schema/*[@name = "' . $name . '"]');
+            $schemaPrefix = self::findPrefix($schema, self::SCHEMA_NS);
+            $tmp = $schema->xpath('/' . $schemaPrefix . 'schema/*[@name = "' . $name . '"]');
             if (count($tmp) != 0) {
                 return dom_import_simplexml($tmp[0]);
             }
