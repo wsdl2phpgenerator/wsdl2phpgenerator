@@ -490,8 +490,7 @@ class Generator implements GeneratorInterface
             $schemaList = null;
             if ($types->length > 0) {
                 $schemaList = $types->item(0)->getElementsByTagName('schema');
-            }
-            else {
+            } else {
                 $schemaList = $dom->getElementsByTagName('schema');
             }
             if ($schemaList != null) {
