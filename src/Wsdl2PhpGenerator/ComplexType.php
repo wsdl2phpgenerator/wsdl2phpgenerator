@@ -112,7 +112,7 @@ class ComplexType extends Type
             $class->addFunction($accessor);
         }
 
-        $this->class = $class;
+        //$this->class = $class;
     }
 
     /**
