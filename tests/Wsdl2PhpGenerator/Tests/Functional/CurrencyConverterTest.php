@@ -16,11 +16,10 @@ use SoapFault;
 class CurrencyConverterTest extends Wsdl2PhpGeneratorFunctionalTestCase
 {
 
-    public function setup()
+    protected function getWsdlPath()
     {
         // Source: http://www.webservicex.net/CurrencyConvertor.asmx?WSDL.
-        $this->wsdl = $this->fixtureDir . '/CurrencyConvertor.wsdl';
-        parent::setup();
+        return $this->fixtureDir . '/currencyconvertor/CurrencyConvertor.wsdl';
     }
 
     /**
@@ -30,9 +29,6 @@ class CurrencyConverterTest extends Wsdl2PhpGeneratorFunctionalTestCase
      */
     public function testCurrencyConvertor()
     {
-        // Run the code generator.
-        $this->generator->generate($this->config);
-
         // Test that we have the expected files and classes.
         $expected_classes = array(
             'CurrencyConvertor',
@@ -47,7 +43,7 @@ class CurrencyConverterTest extends Wsdl2PhpGeneratorFunctionalTestCase
         // Make sure that we have expected constants and methods.
         $this->assertClassHasConst('USD', 'Currency');
         $this->assertClassHasConst('EUR', 'Currency');
-        $this->assertClassHasMethod('ConversionRate', 'CurrencyConvertor');
+        $this->assertClassHasMethod('CurrencyConvertor', 'ConversionRate');
 
         // Setup and execute the service call.
         $service = new \CurrencyConvertor();

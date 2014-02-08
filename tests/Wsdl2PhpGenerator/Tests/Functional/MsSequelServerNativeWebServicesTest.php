@@ -4,11 +4,10 @@ namespace Wsdl2PhpGenerator\Tests\Functional;
 class MsSequelServerNativeWebServicesTest extends Wsdl2PhpGeneratorFunctionalTestCase
 {
 
-    public function setup()
+    protected function getWsdlPath()
     {
         // Source: http://msdn.microsoft.com/en-us/library/ee320274(v=sql.105).aspx.
-        $this->wsdl = $this->fixtureDir . '/MsSequelServerNativeWebServices.wsdl';
-        parent::setup();
+        return $this->fixtureDir . '/mssqlns/MsSequelServerNativeWebServices.wsdl';
     }
 
     /**
@@ -19,9 +18,6 @@ class MsSequelServerNativeWebServicesTest extends Wsdl2PhpGeneratorFunctionalTes
      */
     public function testEnumConstants()
     {
-        // Generate the code.
-        $this->generator->generate($this->config);
-
         // Load the code. This ensures that the syntax of the generated code is
         // valid.
         // We do not call the service here. It is not necessary for the check
