@@ -269,10 +269,25 @@ abstract class Wsdl2PhpGeneratorFunctionalTestCase extends PHPUnit_Framework_Tes
     {
         $parameterNames = array();
         foreach ($method->getParameters() as $methodParameter) {
-            $parameterNames[] = $parameter->getName();
+            $parameterNames[] = $methodParameter->getName();
         }
         $message = (empty($message)) ? sprintf('Parameter "%s" not found among parameter for method "%s->%s" ("%s")', $parameter->getName(), $method->getDeclaringClass()->getName(), $method->getName(), implode('", "', $parameterNames)) : $message;
-        $this->assertContains($parameter, $method->getParameters(), $message);
+        $this->assertContains($parameter->getName(), $parameterNames, $message);
+    }
+
+    /**
+     * Assert that a class is a subclass of another class.
+     *
+     * @param ReflectionClass|string $class The subclass of the name of it.
+     * @param ReflectionClass|string $baseClass The parent class of the name of it.
+     * @param string $message The message to show if the assertion fails.
+     */
+    protected function assertClassSubclassOf($class, $baseClass, $message = '')
+    {
+        $class = (!$class instanceof ReflectionClass) ? new ReflectionClass($class) : $class;
+        $baseClass = (!$baseClass instanceof ReflectionClass) ? new ReflectionClass($baseClass) : $baseClass;
+
+        $this->assertTrue($class->isSubclassOf($baseClass->getName()), sprintf('Class "%s" is not subclass of "%s"', $class->getName(), $baseClass->getName()));
     }
 
 }
