@@ -44,6 +44,12 @@ class PhpFunction extends PhpElement
      */
     public function __construct($access, $identifier, $params, $source, PhpDocComment $comment = null)
     {
+        try {
+            $identifier = Validator::validateFunction($identifier);
+        } catch (ValidationException $e) {
+            $identifier .= 'Custom';
+        }
+
         $this->access = $access;
         $this->identifier = $identifier;
         $this->params = $params;
