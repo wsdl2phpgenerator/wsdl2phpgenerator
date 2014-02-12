@@ -4,6 +4,9 @@
  */
 namespace Wsdl2PhpGenerator\PhpSource;
 
+use Wsdl2PhpGenerator\Validator;
+use Wsdl2PhpGenerator\ValidationException;
+
 /**
  * Class that represents the source code for a function in php
  *
@@ -44,6 +47,12 @@ class PhpFunction extends PhpElement
      */
     public function __construct($access, $identifier, $params, $source, PhpDocComment $comment = null)
     {
+        try {
+            $identifier = Validator::validateFunction($identifier);
+        } catch (ValidationException $e) {
+            $identifier .= 'Custom';
+        }
+
         $this->access = $access;
         $this->identifier = $identifier;
         $this->params = $params;

@@ -99,6 +99,18 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test the function name
+     */
+    public function testValidateFunction()
+    {
+        $this->assertEquals('foo', Validator::validateFunction('foo'));
+        $this->assertEquals('foobar', Validator::validateFunction('foo-bar'));
+
+        $this->setExpectedException('Wsdl2PhpGenerator\\ValidationException');
+        Validator::validateFunction('list'); // and is reserved keyword
+    }
+
+    /**
      * test the name
      */
     public function testValidateNamingConvention()

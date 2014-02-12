@@ -114,6 +114,15 @@ class Validator
     }
 
     /**
+     * @param string $name The name to validate
+     * @return string The validated name
+     */
+    public static function validateFunction($name)
+    {
+        return self::validateFunctionName($name);
+    }
+
+    /**
      * Validates a name against standard PHP naming conventions
      *
      * @param string $name the name to validate
@@ -218,6 +227,24 @@ class Validator
         }
 
         return $validType;
+    }
+
+    /**
+     * Validates a function/method name against PHP naming conventions
+     *
+     * @param string $functionName the name of the function to test
+     * @return string The validated version of the submitted function name
+     * @throws ValidationException
+     */
+    private static function validateFunctionName($functionName)
+    {
+        $validFunctionName = self::validateNamingConvention($functionName);
+
+        if (self::isKeyword($validFunctionName)) {
+            throw new ValidationException($validFunctionName . ' is a restricted keyword.');
+        }
+
+        return $validFunctionName;
     }
 
     /**
