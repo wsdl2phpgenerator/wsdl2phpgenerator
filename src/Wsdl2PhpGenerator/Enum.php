@@ -66,7 +66,34 @@ class Enum extends Type
                 $first = false;
             }
 
-            $this->class->addConstant($value, $name);
+            $this->addClassConstant($value, $name);
+        }
+    }
+
+    /**
+     * Try to generate an alternative constant name in case of collision
+     *
+     * @param string $name
+     * @access protected
+     * @throws Exception
+     */
+    protected function addClassConstant($value, $name)
+    {
+        $i = 2;
+        $newName = $name;
+        $lastException = null;
+        do {
+            try {
+                $this->class->addConstant($value, $newName);
+                break;
+            } catch (Exception $e) {
+                $newName = $name . '_' . $i++;
+                $lastException = $e;
+            }
+        } while ($i <= 10);
+
+        if ($i > 10) {
+            throw $lastException;
         }
     }
 

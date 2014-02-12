@@ -215,34 +215,10 @@ class PhpClass extends PhpElement
         }
 
         if (array_key_exists($name, $this->constants)) {
-            $name = $this->generateNewConstantName($name);
+            throw new Exception('A constant of the name (' . $name . ') does already exist.');
         }
 
         $this->constants[$name] = $value;
-    }
-
-    /**
-     * Try to generate an alternative constant name in case of collision
-     *
-     * @param string $name
-     * @access protected
-     * @return string
-     * @throws Exception
-     */
-    protected function generateNewConstantName($name)
-    {
-        $i = 2;
-        while ($i <= 10) {
-            $newName = $name . '_' . $i++;
-            if (!array_key_exists($newName, $this->constants)) {
-                break;
-            }
-        }
-
-        if ($i > 10) {
-            throw new Exception('A constant of the name (' . $name . ') does already exist.');
-        }
-        return $newName;
     }
 
     /**
