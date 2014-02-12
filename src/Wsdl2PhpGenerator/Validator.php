@@ -16,23 +16,30 @@ class Validator
 {
     /**
      * @var array Array containing all keywords in php
+     * @link http://www.php.net/manual/en/reserved.keywords.php
      */
     private static $keywords = array(
+        '__halt_compiler',
+        'abstract',
         'and',
-        'or',
-        'xor',
+        'array',
         'as',
         'break',
+        'callable',
         'case',
-        'cfunction',
+        'catch',
         'class',
+        'clone',
+        'const',
         'continue',
         'declare',
-        'const',
         'default',
+        'die',
         'do',
+        'echo',
         'else',
         'elseif',
+        'empty',
         'enddeclare',
         'endfor',
         'endforeach',
@@ -40,45 +47,45 @@ class Validator
         'endswitch',
         'endwhile',
         'eval',
+        'exit',
         'extends',
+        'final',
+        'finally',
         'for',
         'foreach',
         'function',
         'global',
         'goto',
-        'namespace',
         'if',
-        'new',
-        'old_function',
-        'static',
-        'switch',
-        'use',
-        'var',
-        'while',
-        'array',
-        'die',
-        'echo',
-        'empty',
-        'exit',
+        'implements',
         'include',
         'include_once',
+        'instanceof',
+        'insteadof',
+        'interface',
         'isset',
         'list',
+        'namespace',
+        'new',
+        'or',
         'print',
+        'private',
+        'protected',
+        'public',
         'require',
         'require_once',
         'return',
-        'unset',
-        '__file__',
-        '__line__',
-        '__function__',
-        '__class__',
-        'abstract',
-        'private',
-        'public',
-        'protected',
+        'static',
+        'switch',
         'throw',
-        'try'
+        'trait',
+        'try',
+        'unset',
+        'use',
+        'var',
+        'while',
+        'xor',
+        'yield'
     );
 
     /**
@@ -102,6 +109,10 @@ class Validator
     public static function validateClass($name)
     {
         return self::validateClassName($name);
+    }
+
+    public static function validateOperation($name) {
+        return self::validateOperationName($name);
     }
 
     /**
@@ -161,6 +172,18 @@ class Validator
         }
 
         return $validClassName;
+    }
+
+    private static function validateOperationName($operationName) {
+        $operationName = self::validateNamingConvention($operationName);
+
+        // Operations cannot be called the same as restricted keywords. This results in syntax errors when loading the
+        // generated code.
+        if (self::isKeyword($operationName)) {
+            throw new ValidationException($operationName . ' is a restricted keyword.');
+        }
+
+        return $operationName;
     }
 
     /**
