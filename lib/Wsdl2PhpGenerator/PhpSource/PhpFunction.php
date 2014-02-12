@@ -4,6 +4,9 @@
  */
 namespace Wsdl2PhpGenerator\PhpSource;
 
+use Wsdl2PhpGenerator\Validator;
+use Wsdl2PhpGenerator\ValidationException;
+
 /**
  * Class that represents the source code for a function in php
  *
