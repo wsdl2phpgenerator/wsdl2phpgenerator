@@ -128,6 +128,13 @@ class Config implements ConfigInterface
     private $noIncludes;
 
     /**
+     * The class name of the soap client. Defaults to the standard \SoapClient.
+     *
+     * @var string
+     */
+    private $clientClass;
+
+    /**
      * Sets all variables
      *
      * @param string $inputFile
@@ -147,8 +154,9 @@ class Config implements ConfigInterface
      * @param bool $createAccessors
      * @param bool $constructorParamsDefaultToNull
      * @param bool $noIncludes
+     * @param string $clientClass
      */
-    public function __construct($inputFile, $outputDir, $verbose = false, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '', $prefix = '', $suffix = '', $sharedTypes = false, $createAccessors = false, $constructorParamsDefaultToNull = false, $noIncludes = false)
+    public function __construct($inputFile, $outputDir, $verbose = false, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '', $prefix = '', $suffix = '', $sharedTypes = false, $createAccessors = false, $constructorParamsDefaultToNull = false, $noIncludes = false, $clientClass = '\SoapClient')
     {
         $this->namespaceName = trim($namespaceName);
         $this->oneFile = $oneFile;
@@ -177,6 +185,7 @@ class Config implements ConfigInterface
         $this->createAccessors = $createAccessors;
         $this->constructorParamsDefaultToNull = $constructorParamsDefaultToNull;
         $this->noIncludes = $noIncludes;
+        $this->clientClass = $clientClass;
     }
 
     public function getNamespaceName()
@@ -314,6 +323,11 @@ class Config implements ConfigInterface
         return $this->noIncludes;
     }
 
+    public function getClientClass()
+    {
+        return $this->clientClass;
+    }
+
     /**
      * @param boolean $classExists
      */
@@ -448,5 +462,13 @@ class Config implements ConfigInterface
     public function setNoIncludes($noIncludes)
     {
         $this->noIncludes = $noIncludes;
+    }
+
+    /**
+     * @param string $clientClass
+     */
+    public function setClientClass($clientClass)
+    {
+        $this->clientClass = $clientClass;
     }
 }

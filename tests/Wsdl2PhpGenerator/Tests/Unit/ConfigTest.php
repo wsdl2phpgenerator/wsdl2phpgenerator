@@ -163,4 +163,16 @@ class ConfigTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals('suffix', $this->object->getSuffix());
     }
+
+    public function testGetDefaultClientClass()
+    {
+        $this->assertEquals('\SoapClient', $this->object->getClientClass());
+    }
+
+    public function testGetChangedClientClass()
+    {
+        // create a configuration with a non-default client class
+        $config = new Config('inputFile.xml', '/tmp/output', false, false, false, false, '', array(), '', '', '', '', '', false, false, false, false, 'Namespace\MySoapClient');
+        $this->assertEquals('Namespace\MySoapClient', $config->getClientClass());
+    }
 }
