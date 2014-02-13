@@ -129,7 +129,7 @@ class Service
         $init = 'array(' . PHP_EOL;
         foreach ($this->types as $type) {
             if ($type instanceof ComplexType) {
-                $init .= "  '" . $type->getIdentifier() . "' => '\\" . $this->config->getNamespaceName() . "\\" . $type->getPhpIdentifier() . "'," . PHP_EOL;
+                $init .= "  '" . $type->getIdentifier() . "' => '" . $this->config->getNamespaceName() . "\\" . $type->getPhpIdentifier() . "'," . PHP_EOL;
             }
         }
         $init = substr($init, 0, strrpos($init, ','));
