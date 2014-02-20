@@ -4,6 +4,8 @@
  */
 namespace Wsdl2PhpGenerator\PhpSource;
 
+use Exception;
+
 /**
  * Class that contains static methods to create preset doc elements
  *
