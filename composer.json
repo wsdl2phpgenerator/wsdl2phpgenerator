@@ -20,8 +20,8 @@
     "require-dev": {
         "kasperg/phing-github": "0.2.*",
         "kherge/box": "2.4.*",
-        "phing/phing": "2.6.*",
-        "php-vcr/phpunit-testlistener-vcr": "dev-master",
+        "phing/phing": "2.7.*",
+        "php-vcr/phpunit-testlistener-vcr": "1.1.*",
         "phpunit/phpunit": "3.7.*"
     }
 }
