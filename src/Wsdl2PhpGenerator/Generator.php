@@ -409,7 +409,7 @@ class Generator implements GeneratorInterface
      * Parses the type schema for a type with the name $name
      *
      * @param string $name
-     * @return DOMElement|null Returns the typenode with the name $name if it finds it. Null otherwise
+     * @return DOMElement|null Returns the type node with the name $name if it finds it. Null otherwise.
      */
     private function findTypenode($name)
     {
@@ -423,15 +423,12 @@ class Generator implements GeneratorInterface
 
                 foreach ($schemaList as $schema) {
                     foreach ($schema->childNodes as $node) {
-                        if ($node instanceof DOMElement) {
-                            if ($node->hasAttributes()) {
-                                $t = $node->attributes->getNamedItem('name');
-                                if ($t) {
-                                    if ($t->nodeValue == $name) {
-                                        $typenode = $node;
-                                    }
-                                }
-                            }
+                        // We are looking for a type with the correct name.
+                        $typeTags = array($node->prefix . ':simpleType', $node->prefix . ':complexType');
+                        if ($node instanceof DOMElement &&
+                            in_array($node->tagName, $typeTags) &&
+                            $node->getAttribute('name') == $name) {
+                                $typenode = $node;
                         }
                     }
                 }
