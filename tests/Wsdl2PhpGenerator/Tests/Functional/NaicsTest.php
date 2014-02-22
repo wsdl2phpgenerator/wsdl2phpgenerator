@@ -14,11 +14,10 @@ use SoapFault;
 class NaicsTest extends Wsdl2PhpGeneratorFunctionalTestCase
 {
 
-    public function setup()
+    protected function getWsdlPath()
     {
         // Source: http://www.webservicex.net/GenericNAICS.asmx?WSDL.
-        $this->wsdl = $this->fixtureDir . '/GenericNAICS.wsdl';
-        parent::setup();
+        return $this->fixtureDir . '/naics/GenericNAICS.wsdl';
     }
 
     /**
@@ -26,9 +25,6 @@ class NaicsTest extends Wsdl2PhpGeneratorFunctionalTestCase
      */
     public function testNaics()
     {
-        // Generate the code.
-        $this->generator->generate($this->config);
-
         // Perform the request.
         require_once $this->outputDir . '/GenericNAICS.php';
         $service = new \GenericNAICS();
