@@ -1,3 +1,14 @@
+2.3.0 / 2014-02-23
+==================
+
+ * Configuration is no longer a singleton
+ * Fix XML generation due to namespace backslash
+ * Fix missing namespace for PHP code generation
+ * Fix handling of operations named after PHP keywords.
+ * Fix element/type nameclash
+ * Fix operations initialization for services
+ * Use PHP VCR for mocking HTTP requests.
+ * Code and documentation cleanup
 
 2.2.2 / 2014-01-08 
 ==================
