@@ -41,7 +41,10 @@ abstract class Wsdl2PhpGeneratorFunctionalTestCase extends PHPUnit_Framework_Tes
         $class = new ReflectionClass($this);
         $this->outputDir = 'tests/generated/' . $class->getShortName();
         $this->generator = new Generator();
-        $this->config = new Config($this->wsdl, $this->outputDir);
+        $this->config = new Config(array(
+            'inputFile' => $this->wsdl,
+            'outputDir' =>$this->outputDir
+        ));
 
         // We do not execute the code generation here to allow individual test cases
         // to update the configuration further before generating.

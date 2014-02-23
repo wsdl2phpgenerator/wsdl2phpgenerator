@@ -46,7 +46,7 @@ class Enum extends Type
             throw new Exception("The class has already been generated");
         }
 
-        $this->class = new PhpClass($this->phpIdentifier, $this->config->getClassExists());
+        $this->class = new PhpClass($this->phpIdentifier, $this->config->get('classExists'));
 
         $first = true;
 

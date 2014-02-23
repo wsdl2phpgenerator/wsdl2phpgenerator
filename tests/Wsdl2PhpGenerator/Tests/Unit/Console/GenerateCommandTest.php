@@ -24,8 +24,8 @@ class GenerateCommandTest extends \PHPUnit_Framework_TestCase
     {
         $input = $this->generateInput();
         $config = $this->getConfigFromInput($input);
-        $this->assertEquals($input['--input'], $config->getInputFile());
-        $this->assertEquals($input['--output'], $config->getOutputDir());
+        $this->assertEquals($input['--input'], $config->get('inputFile'));
+        $this->assertEquals($input['--output'], $config->get('outputDir'));
     }
 
     /**
@@ -47,7 +47,7 @@ class GenerateCommandTest extends \PHPUnit_Framework_TestCase
     {
         $input = $this->generateInput(array('--waitOneWayCalls' => true));
         $config = $this->getConfigFromInput($input);
-        $this->assertEquals(array('SOAP_WAIT_ONE_WAY_CALLS'), $config->getOptionFeatures());
+        $this->assertEquals(array('SOAP_WAIT_ONE_WAY_CALLS'), $config->get('optionsFeature'));
     }
 
     /**
@@ -57,7 +57,7 @@ class GenerateCommandTest extends \PHPUnit_Framework_TestCase
     {
         $input = $this->generateInput(array('--cacheBoth' => true));
         $config = $this->getConfigFromInput($input);
-        $this->assertEquals('WSDL_CACHE_BOTH', $config->getWsdlCache());
+        $this->assertEquals('WSDL_CACHE_BOTH', $config->get('wsdlCache'));
     }
 
     /**
@@ -81,26 +81,26 @@ class GenerateCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertConfig(array('--suffix', '-q'), 'SomeSuffix', 'suffix');
 
         $this->assertConfig('--cacheNone', true, function (ConfigInterface $config) {
-                return $config->getWsdlCache() == 'WSDL_CACHE_NONE';
+                return $config->get('wsdlCache') == 'WSDL_CACHE_NONE';
         });
         $this->assertConfig('--cacheDisk', true, function (ConfigInterface $config) {
-                return $config->getWsdlCache() == 'WSDL_CACHE_DISK';
+                return $config->get('wsdlCache') == 'WSDL_CACHE_DISK';
         });
         $this->assertConfig('--cacheMemory', true, function (ConfigInterface $config) {
-                return $config->getWsdlCache() == 'WSDL_CACHE_MEMORY';
+                return $config->get('wsdlCache') == 'WSDL_CACHE_MEMORY';
         });
         $this->assertConfig('--cacheBoth', true, function (ConfigInterface $config) {
-                return $config->getWsdlCache() == 'WSDL_CACHE_BOTH';
+                return $config->get('wsdlCache') == 'WSDL_CACHE_BOTH';
         });
 
         $this->assertConfig('--singleElementArrays', true, function (ConfigInterface $config) {
-                return in_array('SOAP_SINGLE_ELEMENT_ARRAYS', $config->getOptionFeatures());
+                return in_array('SOAP_SINGLE_ELEMENT_ARRAYS', $config->get('optionsFeature'));
         });
         $this->assertConfig('--waitOneWayCalls', true, function (ConfigInterface $config) {
-                return in_array('SOAP_WAIT_ONE_WAY_CALLS', $config->getOptionFeatures());
+                return in_array('SOAP_WAIT_ONE_WAY_CALLS', $config->get('optionsFeature'));
         });
         $this->assertConfig('--xsiArrayType', true, function (ConfigInterface $config) {
-                return in_array('SOAP_USE_XSI_ARRAY_TYPE', $config->getOptionFeatures());
+                return in_array('SOAP_USE_XSI_ARRAY_TYPE', $config->get('optionsFeature'));
         });
     }
 
@@ -155,9 +155,7 @@ class GenerateCommandTest extends \PHPUnit_Framework_TestCase
 
             if (!is_callable($configMapping)) {
                 $configMapping = function (ConfigInterface $config) use ($configMapping) {
-                    $configClass = new \ReflectionClass($config);
-                    $getter = $configClass->getMethod('get' . ucfirst($configMapping));
-                    return $getter->invoke($config);
+                    return $config->get($configMapping);
                 };
             }
 

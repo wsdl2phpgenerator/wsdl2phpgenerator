@@ -85,7 +85,7 @@ class Service
     {
 
         // Add prefix and suffix
-        $name = $this->config->getPrefix() . $this->identifier . $this->config->getSuffix();
+        $name = $this->config->get('prefix') . $this->identifier . $this->config->get('suffix');
 
         // Generate a valid classname
         try {
@@ -99,7 +99,7 @@ class Service
 
         // Create the class object
         $comment = new PhpDocComment($this->description);
-        $this->class = new PhpClass($name, $this->config->getClassExists(), '\SoapClient', $comment);
+        $this->class = new PhpClass($name, $this->config->get('classExists'), '\SoapClient', $comment);
 
         // Create the constructor
         $comment = new PhpDocComment();
@@ -115,7 +115,7 @@ class Service
   ' . $this->generateServiceOptions() . '
   parent::__construct($wsdl, $options);' . PHP_EOL;
 
-        $function = new PhpFunction('public', '__construct', 'array $options = array(), $wsdl = \'' . $this->config->getInputFile() . '\'', $source, $comment);
+        $function = new PhpFunction('public', '__construct', 'array $options = array(), $wsdl = \'' . $this->config->get('inputFile') . '\'', $source, $comment);
 
         // Add the constructor
         $this->class->addFunction($function);
@@ -129,7 +129,7 @@ class Service
         $init = 'array(' . PHP_EOL;
         foreach ($this->types as $type) {
             if ($type instanceof ComplexType) {
-                $init .= "  '" . $type->getIdentifier() . "' => '\\" . $this->config->getNamespaceName() . "\\" . $type->getPhpIdentifier() . "'," . PHP_EOL;
+                $init .= "  '" . $type->getIdentifier() . "' => '\\" . $this->config->get('namespaceName') . "\\" . $type->getPhpIdentifier() . "'," . PHP_EOL;
             }
         }
         $init = substr($init, 0, strrpos($init, ','));
@@ -184,12 +184,12 @@ class Service
     {
         $ret = '';
 
-        if (count($this->config->getOptionFeatures()) > 0) {
+        if (count($this->config->get('optionsFeature')) > 0) {
             $i = 0;
             $ret .= "
   if (isset(\$options['features']) == false) {
     \$options['features'] = ";
-            foreach ($this->config->getOptionFeatures() as $option) {
+            foreach ($this->config->get('optionsFeature') as $option) {
                 if ($i++ > 0) {
                     $ret .= ' | ';
                 }
@@ -201,18 +201,18 @@ class Service
   }" . PHP_EOL;
         }
 
-        if (strlen($this->config->getWsdlCache()) > 0) {
+        if (strlen($this->config->get('wsdlCache')) > 0) {
             $ret .= "
   if (isset(\$options['wsdl_cache']) == false) {
-    \$options['wsdl_cache'] = " . $this->config->getWsdlCache();
+    \$options['wsdl_cache'] = " . $this->config->get('wsdlCache');
             $ret .= ";
   }" . PHP_EOL;
         }
 
-        if (strlen($this->config->getCompression()) > 0) {
+        if (strlen($this->config->get('compression')) > 0) {
             $ret .= "
   if (isset(\$options['compression']) == false) {
-    \$options['compression'] = " . $this->config->getCompression();
+    \$options['compression'] = " . $this->config->get('compression');
             $ret .= ";
   }" . PHP_EOL;
         }
