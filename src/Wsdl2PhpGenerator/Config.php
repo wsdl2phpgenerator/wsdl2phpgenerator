@@ -13,10 +13,10 @@ class Config implements ConfigInterface
 
     public function __construct(array $options)
     {
-            $resolver = new OptionsResolver();
-            $this->configureOptions($resolver);
+        $resolver = new OptionsResolver();
+        $this->configureOptions($resolver);
 
-            $this->options = $resolver->resolve($options);
+        $this->options = $resolver->resolve($options);
     }
 
     public function get($key)
