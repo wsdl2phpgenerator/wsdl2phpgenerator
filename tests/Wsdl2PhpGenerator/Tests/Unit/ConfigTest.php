@@ -35,7 +35,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
         $this->object = new Config($this->options);
     }
 
-    public function testGetValues()
+    public function testGetSimpleValues()
     {
         $options = array(
             'inputFile'                      => 'inputFile.xml',
@@ -58,6 +58,50 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 
         foreach ($options as $key => $value) {
             $this->assertEquals($this->object->get($key), $value);
+        }
+    }
+    /**
+     * @expectedException Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
+     */
+    public function testSetWsdlCacheToNotAllowedValue()
+    {
+        $config = new Config(array(
+            'inputFile' => null,
+            'outputDir' => null,
+            'wsdlCache' => 'NOT_ALLOWED'
+        ));
+    }
+
+    public function testSetWsdlCacheToAllowedValues()
+    {
+        $allowed = array('', 'WSDL_CACHE_NONE', 'WSDL_CACHE_DISK', 'WSDL_CACHE_MEMORY', 'WSDL_CACHE_BOTH');
+
+        foreach ($allowed as $value) {
+            $this->assertInstanceOf('Wsdl2PhpGenerator\ConfigInterface', new Config(array(
+                'inputFile' => null,
+                'outputDir' => null,
+                'wsdlCache' => $value
+            )));
+        }
+    }
+
+    public function testClassNamesNormalizer()
+    {
+        $toTest = array(
+            ''                   => array(),
+            'test1'              => array('test1'),
+            'test1,test2'        => array('test1', 'test2'),
+            'test1,test2, test3' => array('test1', 'test2', 'test3')
+        );
+
+        foreach ($toTest as $value => $expected) {
+            $config = new Config(array(
+                'inputFile'  => null,
+                'outputDir'  => null,
+                'classNames' => $value
+            ));
+
+            $this->assertEquals($config->get('classNames'), $expected);
         }
     }
 }
