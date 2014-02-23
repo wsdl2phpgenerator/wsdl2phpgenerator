@@ -1,43 +1,36 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
+
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Wsdl2phpgenerator by wsdl2phpgenerator</title>
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="javascripts/respond.js"></script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <!--[if lt IE 8]>
-    <link rel="stylesheet" href="stylesheets/ie.css">
-    <![endif]-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Wsdl2phpgenerator : Simple utility and class library for generating php classes from a wsdl file." />
 
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Wsdl2phpgenerator</title>
   </head>
+
   <body>
-      <div id="header">
-        <nav>
-          <li class="fork"><a href="https://github.com/wsdl2phpgenerator/wsdl2phpgenerator">View On GitHub</a></li>
-          <li class="downloads"><a href="https://github.com/wsdl2phpgenerator/wsdl2phpgenerator/zipball/master">ZIP</a></li>
-          <li class="downloads"><a href="https://github.com/wsdl2phpgenerator/wsdl2phpgenerator/tarball/master">TAR</a></li>
-          <li class="title">DOWNLOADS</li>
-        </nav>
-      </div><!-- end header -->
 
-    <div class="wrapper">
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/wsdl2phpgenerator/wsdl2phpgenerator">View on GitHub</a>
 
-      <section>
-        <div id="title">
-          <h1>Wsdl2phpgenerator</h1>
-          <p>Simple utility and class library for generating php classes from a wsdl file.</p>
-          <hr>
-          <span class="credits left">Project maintained by <a href="https://github.com/wsdl2phpgenerator">wsdl2phpgenerator</a></span>
-          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
-        </div>
+          <h1 id="project_title">Wsdl2phpgenerator</h1>
+          <h2 id="project_tagline">Simple utility and class library for generating php classes from a wsdl file.</h2>
 
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/wsdl2phpgenerator/wsdl2phpgenerator/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/wsdl2phpgenerator/wsdl2phpgenerator/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
         <h1>
 <a name="wsdl2phpgenerator" class="anchor" href="#wsdl2phpgenerator"><span class="octicon octicon-link"></span></a>wsdl2phpgenerator</h1>
 
@@ -54,7 +47,7 @@
 <h2>
 <a name="contributors" class="anchor" href="#contributors"><span class="octicon octicon-link"></span></a>Contributors</h2>
 
-<p>Originally developed by <a href="https://github.com/walle">@walle</a> and includes bugfixes and improvements from <a href="https://github.com/vakopian">@vakopian</a>, <a href="https://github.com/statikbe/">@statikbe</a>, <a href="https://github.com/ecolinet">@ecolinet</a>, <a href="https://github.com/nuth/">@nuth</a>, <a href="https://github.com/chriskl/">@chriskl</a>, <a href="https://github.com/dypa/">@dypa</a> and <a href="https://github.com/kasperg/">@kasperg</a>.</p>
+<p>Originally developed by <a href="https://github.com/walle">@walle</a> and includes bugfixes and improvements from <a href="https://github.com/vakopian">@vakopian</a>, <a href="https://github.com/statikbe/">@statikbe</a>, <a href="https://github.com/ecolinet">@ecolinet</a>, <a href="https://github.com/nuth/">@nuth</a>, <a href="https://github.com/chriskl/">@chriskl</a>, <a href="https://github.com/RSully/">@RSully</a>, <a href="https://github.com/jrbasso/">@jrbasso</a>, <a href="https://github.com/dypa/">@dypa</a> and <a href="https://github.com/kasperg/">@kasperg</a>.</p>
 
 <p>Pull requests are very welcome.</p>
 
@@ -70,9 +63,9 @@
 <a name="standalone-executable" class="anchor" href="#standalone-executable"><span class="octicon octicon-link"></span></a>Standalone executable</h3>
 
 <ol>
-<li>Download <a href="https://github.com/wsdl2phpgenerator/wsdl2phpgenerator/releases/download/2.1.0/wsdl2phpgenerator-2.1.0.phar">wsdl2phpgenerator-2.1.0.phar</a> from <a href="https://github.com/wsdl2phpgenerator/wsdl2phpgenerator/releases/latest">the latest release</a>
+<li>Download <a href="https://github.com/wsdl2phpgenerator/wsdl2phpgenerator/releases/download/2.3.0/wsdl2phpgenerator-2.3.0.phar">wsdl2phpgenerator-2.3.0.phar</a> from <a href="https://github.com/wsdl2phpgenerator/wsdl2phpgenerator/releases/latest">the latest release</a>
 </li>
-<li>Run <code>./wsdl2phpgenerator-2.1.0.phar -i input.wsdl -o tmp/my/directory/wsdl</code>
+<li>Run <code>php wsdl2phpgenerator-2.3.0.phar -i input.wsdl -o tmp/my/directory/wsdl</code>
 </li>
 </ol><p>The directory is created if possible.</p>
 
@@ -82,7 +75,7 @@
 <a name="executable-in-composer-project" class="anchor" href="#executable-in-composer-project"><span class="octicon octicon-link"></span></a>Executable in Composer project</h3>
 
 <ol>
-<li>Add <code>"wsdl2phpgenerator/wsdl2phpgenerator": "2.1.0"</code>  to the <code>require</code> or <code>require-dev</code> section of your <code>composer.json</code> file</li>
+<li>Add <code>"wsdl2phpgenerator/wsdl2phpgenerator": "2.3.0"</code>  to the <code>require</code> or <code>require-dev</code> section of your <code>composer.json</code> file</li>
 <li>Run <code>composer update</code>
 </li>
 <li>Run <code>./vendor/bin/wsdl2php -i input.wsdl -o tmp/my/directory/wsdl</code>
@@ -98,9 +91,9 @@
 <span class="c1">// Map 'src' and 'lib' folders to the Wsdl2PhpGenerator namespace in your</span>
 <span class="c1">// favorite PSR-0 compatible classloader or require the files manually.</span>
 
-<span class="nv">$generator</span> <span class="o">=</span> <span class="nx">Wsdl2PhpGenerator\Generator</span><span class="o">::</span><span class="na">instance</span><span class="p">();</span>
+<span class="nv">$generator</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Wsdl2PhpGenerator\Generator</span><span class="p">();</span>
 <span class="nv">$generator</span><span class="o">-&gt;</span><span class="na">generate</span><span class="p">(</span>
-    <span class="k">new</span> <span class="nx">Wsdl2PhpGenerator\Config</span><span class="p">(</span> <span class="nx">SOAPSERVICE</span><span class="p">,</span> <span class="nx">SOAPDIR</span> <span class="p">)</span> 
+    <span class="k">new</span> <span class="nx">\Wsdl2PhpGenerator\Config</span><span class="p">(</span> <span class="nx">SOAPSERVICE</span><span class="p">,</span> <span class="nx">SOAPDIR</span> <span class="p">)</span>
 <span class="p">);</span>
 <span class="cp">?&gt;</span><span class="x"></span>
 </pre></div>
@@ -115,9 +108,16 @@
 <li><code>\Wsdl2PhpGenerator\ConfigInterface</code></li>
 </ul><p>Changes to these means that the major version will be increased. Additional features and bug fixes increate minor and patch versions.</p>
       </section>
-
     </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Wsdl2phpgenerator maintained by <a href="https://github.com/wsdl2phpgenerator">wsdl2phpgenerator</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
               <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
@@ -128,6 +128,7 @@
             pageTracker._trackPageview();
             } catch(err) {}
           </script>
+
 
   </body>
 </html>
