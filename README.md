@@ -10,7 +10,7 @@ Simple WSDL to PHP classes converter. Takes a WSDL file and outputs class files 
 Uses the [MIT licence](http://www.opensource.org/licenses/mit-license.php).
 
 ## Contributors
-Originally developed by [@walle](https://github.com/walle) and includes bugfixes and improvements from [@vakopian](https://github.com/vakopian), [@statikbe](https://github.com/statikbe/), [@ecolinet](https://github.com/ecolinet), [@nuth](https://github.com/nuth/), [@chriskl](https://github.com/chriskl/), [@RSully](https://github.com/RSully/), [@dypa](https://github.com/dypa/) and [@kasperg](https://github.com/kasperg/).
+Originally developed by [@walle](https://github.com/walle) and includes bugfixes and improvements from [@vakopian](https://github.com/vakopian), [@statikbe](https://github.com/statikbe/), [@ecolinet](https://github.com/ecolinet), [@nuth](https://github.com/nuth/), [@chriskl](https://github.com/chriskl/), [@RSully](https://github.com/RSully/), [@jrbasso](https://github.com/jrbasso/), [@dypa](https://github.com/dypa/) and [@kasperg](https://github.com/kasperg/).
 
 Pull requests are very welcome.
 
