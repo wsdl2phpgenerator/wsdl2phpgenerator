@@ -61,12 +61,12 @@ class ComplexType extends Type
 
         $class = new PhpClass(
             $this->phpIdentifier,
-            $this->config->getClassExists(),
+            $this->config->get('classExists'),
             $this->baseType !== null ? $this->baseType->getPhpIdentifier() : ''
         );
 
         // Add the base class as a dependency. Otherwise we risk referencing an undefined class.
-        if (!empty($this->baseType) && !$this->config->getOneFile() && !$this->config->getNoIncludes()) {
+        if (!empty($this->baseType) && !$this->config->get('oneFile') && !$this->config->getNoIncludes()) {
             $class->addDependency($this->baseType->getIdentifier() . '.php');
         }
 
@@ -107,11 +107,11 @@ class ComplexType extends Type
                 $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
                 $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());
                 $constructorParameters .= ', $' . $name;
-                if ($this->config->getConstructorParamsDefaultToNull()) {
+                if ($this->config->get('constructorParamsDefaultToNull')) {
                     $constructorParameters .= ' = null';
                 }
 
-                if ($this->config->getCreateAccessors()) {
+                if ($this->config->get('createAccessors')) {
                     $getterComment = new PhpDocComment();
                     $getterComment->setReturn(PhpDocElementFactory::getReturn($type, ''));
                     $getter = new PhpFunction('public', 'get' . ucfirst($name), '', '  return $this->' . $name . ';' . PHP_EOL, $getterComment);
@@ -129,7 +129,7 @@ class ComplexType extends Type
         $function = new PhpFunction('public', '__construct', $constructorParameters, $constructorSource, $constructorComment);
 
         // Only add the constructor if type constructor is selected
-        if ($this->config->getNoTypeConstructor() == false) {
+        if ($this->config->get('noTypeConstructor') == false) {
             $class->addFunction($function);
         }
 
