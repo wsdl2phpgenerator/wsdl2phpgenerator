@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "de15de13d1b9cb6f5a36fb07caac4aa5",
+    "hash": "5836a99af9def689e3bef67dc6535c8e",
     "packages": [
         {
             "name": "psr/log",
@@ -513,7 +513,7 @@
                 {
                     "name": "Kevin Herrera",
                     "email": "kevin@herrera.io",
-                    "homepage": "http://kevin.herrera.io/"
+                    "homepage": "http://kevin.herrera.io"
                 }
             ],
             "description": "A library for simplifying the PHAR build process.",
@@ -803,12 +803,12 @@
             "version": "3.0.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/kherge/Amend.git",
+                "url": "https://github.com/kherge-archive/Amend.git",
                 "reference": "d191de606b3b76a28f09d97ddc04014426116965"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kherge/Amend/zipball/d191de606b3b76a28f09d97ddc04014426116965",
+                "url": "https://api.github.com/repos/kherge-archive/Amend/zipball/d191de606b3b76a28f09d97ddc04014426116965",
                 "reference": "d191de606b3b76a28f09d97ddc04014426116965",
                 "shasum": ""
             },
@@ -1306,16 +1306,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "1.2.15",
+            "version": "1.2.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "6ba4ed2895d538a039d5d5866edc4ec0424c7852"
+                "reference": "69e55e68481cf708a6db43aff0b504e31402fe27"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/6ba4ed2895d538a039d5d5866edc4ec0424c7852",
-                "reference": "6ba4ed2895d538a039d5d5866edc4ec0424c7852",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/69e55e68481cf708a6db43aff0b504e31402fe27",
+                "reference": "69e55e68481cf708a6db43aff0b504e31402fe27",
                 "shasum": ""
             },
             "require": {
@@ -1363,7 +1363,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2014-02-03 07:44:47"
+            "time": "2014-02-25 03:34:05"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -1550,16 +1550,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "3.7.31",
+            "version": "3.7.32",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "d24e9877331039582497052cc3c4d9f465b88210"
+                "reference": "2752cbb9ea5bd84c2811b34b6953f76965ec7a2f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/d24e9877331039582497052cc3c4d9f465b88210",
-                "reference": "d24e9877331039582497052cc3c4d9f465b88210",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/2752cbb9ea5bd84c2811b34b6953f76965ec7a2f",
+                "reference": "2752cbb9ea5bd84c2811b34b6953f76965ec7a2f",
                 "shasum": ""
             },
             "require": {
@@ -1576,7 +1576,7 @@
                 "symfony/yaml": "~2.0"
             },
             "require-dev": {
-                "pear-pear/pear": "1.9.4"
+                "pear-pear.php.net/pear": "1.9.4"
             },
             "suggest": {
                 "ext-json": "*",
@@ -1620,7 +1620,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2014-02-03 07:46:27"
+            "time": "2014-02-25 03:47:29"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
