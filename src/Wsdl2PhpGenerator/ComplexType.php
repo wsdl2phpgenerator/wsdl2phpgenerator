@@ -52,7 +52,7 @@ class ComplexType extends Type
             throw new Exception("The class has already been generated");
         }
 
-        $class = new PhpClass($this->phpIdentifier, $this->config->getClassExists());
+        $class = new PhpClass($this->phpIdentifier, $this->config->get('classExists'));
 
         $constructorComment = new PhpDocComment();
         $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());
@@ -82,11 +82,11 @@ class ComplexType extends Type
                 $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
                 $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());
                 $constructorParameters .= ', $' . $name;
-                if ($this->config->getConstructorParamsDefaultToNull()) {
+                if ($this->config->get('constructorParamsDefaultToNull')) {
                     $constructorParameters .= ' = null';
                 }
 
-                if ($this->config->getCreateAccessors()) {
+                if ($this->config->get('createAccessors')) {
                     $getterComment = new PhpDocComment();
                     $getterComment->setReturn(PhpDocElementFactory::getReturn($type, ''));
                     $getter = new PhpFunction('public', 'get' . ucfirst($name), '', '  return $this->' . $name . ';' . PHP_EOL, $getterComment);
@@ -104,7 +104,7 @@ class ComplexType extends Type
         $function = new PhpFunction('public', '__construct', $constructorParameters, $constructorSource, $constructorComment);
 
         // Only add the constructor if type constructor is selected
-        if ($this->config->getNoTypeConstructor() == false) {
+        if ($this->config->get('noTypeConstructor') == false) {
             $class->addFunction($function);
         }
 
