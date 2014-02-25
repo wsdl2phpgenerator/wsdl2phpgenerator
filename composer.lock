@@ -513,7 +513,7 @@
                 {
                     "name": "Kevin Herrera",
                     "email": "kevin@herrera.io",
-                    "homepage": "http://kevin.herrera.io"
+                    "homepage": "http://kevin.herrera.io/"
                 }
             ],
             "description": "A library for simplifying the PHAR build process.",
@@ -858,12 +858,12 @@
             "version": "2.4.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/kherge/Box.git",
+                "url": "https://github.com/kherge-archive/Box.git",
                 "reference": "15a762f822c8d72ad91306e1058d4af05420b633"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kherge/Box/zipball/15a762f822c8d72ad91306e1058d4af05420b633",
+                "url": "https://api.github.com/repos/kherge-archive/Box/zipball/15a762f822c8d72ad91306e1058d4af05420b633",
                 "reference": "15a762f822c8d72ad91306e1058d4af05420b633",
                 "shasum": ""
             },
@@ -1084,16 +1084,16 @@
         },
         {
             "name": "phing/phing",
-            "version": "2.6.1",
+            "version": "2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phingofficial/phing.git",
-                "reference": "3f7d71bf561bafea39087250f777b349438cc32e"
+                "reference": "bd2689790c620ac745b3ad29765c641a0dd5d007"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phingofficial/phing/zipball/3f7d71bf561bafea39087250f777b349438cc32e",
-                "reference": "3f7d71bf561bafea39087250f777b349438cc32e",
+                "url": "https://api.github.com/repos/phingofficial/phing/zipball/bd2689790c620ac745b3ad29765c641a0dd5d007",
+                "reference": "bd2689790c620ac745b3ad29765c641a0dd5d007",
                 "shasum": ""
             },
             "require": {
@@ -1132,7 +1132,7 @@
                 "task",
                 "tool"
             ],
-            "time": "2013-08-26 21:13:03"
+            "time": "2014-02-13 13:17:59"
         },
         {
             "name": "php-vcr/php-vcr",
@@ -1181,16 +1181,16 @@
         },
         {
             "name": "php-vcr/phpunit-testlistener-vcr",
-            "version": "dev-master",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-vcr/phpunit-testlistener-vcr.git",
-                "reference": "04e352a56abed8fa7fbdb8d1bc22e1f7ce9d86b9"
+                "reference": "36ce80378f6e647e2375050c8c882b795d2f3211"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-vcr/phpunit-testlistener-vcr/zipball/04e352a56abed8fa7fbdb8d1bc22e1f7ce9d86b9",
-                "reference": "04e352a56abed8fa7fbdb8d1bc22e1f7ce9d86b9",
+                "url": "https://api.github.com/repos/php-vcr/phpunit-testlistener-vcr/zipball/36ce80378f6e647e2375050c8c882b795d2f3211",
+                "reference": "36ce80378f6e647e2375050c8c882b795d2f3211",
                 "shasum": ""
             },
             "require": {
@@ -1208,7 +1208,7 @@
                 }
             ],
             "description": "Integrates PHPUnit with PHP-VCR.",
-            "time": "2014-02-19 18:29:42"
+            "time": "2014-02-22 12:58:29"
         },
         {
             "name": "phpseclib/phpseclib",
@@ -1926,9 +1926,9 @@
 
     ],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "php-vcr/phpunit-testlistener-vcr": 20
-    },
+    "stability-flags": [
+
+    ],
     "platform": {
         "php": ">=5.3.0",
         "ext-soap": "*"

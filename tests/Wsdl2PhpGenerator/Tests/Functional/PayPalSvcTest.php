@@ -6,11 +6,10 @@ use SoapFault;
 class PayPalSvcTest extends Wsdl2PhpGeneratorFunctionalTestCase
 {
 
-    public function setup()
+    protected function getWsdlPath()
     {
         // Source: https://www.paypalobjects.com/wsdl/PayPalSvc.wsdl.
-        $this->wsdl = $this->fixtureDir . '/PayPalSvc.wsdl';
-        parent::setup();
+        return $this->fixtureDir . '/paypal/PayPalSvc.wsdl';
     }
 
     /**
@@ -21,9 +20,6 @@ class PayPalSvcTest extends Wsdl2PhpGeneratorFunctionalTestCase
      */
     public function testRelativeImportPaths()
     {
-        // Run the code generator.
-        $this->generator->generate($this->config);
-
         // Ensure that classes have been generated for the main WSDL file as
         // well as the three includes.
         $this->assertGeneratedClassExists('PayPalAPIInterfaceService');

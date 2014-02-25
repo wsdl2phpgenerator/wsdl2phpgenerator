@@ -129,7 +129,7 @@ class Service
         $init = 'array(' . PHP_EOL;
         foreach ($this->types as $type) {
             if ($type instanceof ComplexType) {
-                $init .= "  '" . $type->getIdentifier() . "' => '\\" . $this->config->get('namespaceName') . "\\" . $type->getPhpIdentifier() . "'," . PHP_EOL;
+                $init .= "  '" . $type->getIdentifier() . "' => '" . $this->config->getNamespaceName() . "\\" . $type->getPhpIdentifier() . "'," . PHP_EOL;
             }
         }
         $init = substr($init, 0, strrpos($init, ','));
@@ -141,7 +141,11 @@ class Service
 
         // Add all methods
         foreach ($this->operations as $operation) {
-            $name = Validator::validateNamingConvention($operation->getName());
+            try {
+                $name = Validator::validateOperation($operation->getName());
+            } catch (ValidationException $e) {
+                $name =  'a' . ucfirst($operation->getName());
+            }
 
             $comment = new PhpDocComment($operation->getDescription());
             $comment->setAccess(PhpDocElementFactory::getPublicAccess());
@@ -152,7 +156,7 @@ class Service
                 $comment->addParam(PhpDocElementFactory::getParam($arr['type'], $arr['name'], $arr['desc']));
             }
 
-            $source = '  return $this->__soapCall(\'' . $name . '\', array(' . $operation->getParamStringNoTypeHints() . '));' . PHP_EOL;
+            $source = '  return $this->__soapCall(\'' . $operation->getName() . '\', array(' . $operation->getParamStringNoTypeHints() . '));' . PHP_EOL;
 
             $paramStr = $operation->getParamString($this->types);
 
