@@ -459,7 +459,7 @@
                 {
                     "name": "Kevin Herrera",
                     "email": "kevin@herrera.io",
-                    "homepage": "http://kevin.herrera.io/"
+                    "homepage": "http://kevin.herrera.io"
                 }
             ],
             "description": "A library for simplifying the PHAR build process.",
@@ -749,12 +749,12 @@
             "version": "3.0.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/kherge/Amend.git",
+                "url": "https://github.com/kherge-archive/Amend.git",
                 "reference": "d191de606b3b76a28f09d97ddc04014426116965"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kherge/Amend/zipball/d191de606b3b76a28f09d97ddc04014426116965",
+                "url": "https://api.github.com/repos/kherge-archive/Amend/zipball/d191de606b3b76a28f09d97ddc04014426116965",
                 "reference": "d191de606b3b76a28f09d97ddc04014426116965",
                 "shasum": ""
             },
@@ -1232,16 +1232,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "1.2.15",
+            "version": "1.2.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "6ba4ed2895d538a039d5d5866edc4ec0424c7852"
+                "reference": "69e55e68481cf708a6db43aff0b504e31402fe27"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/6ba4ed2895d538a039d5d5866edc4ec0424c7852",
-                "reference": "6ba4ed2895d538a039d5d5866edc4ec0424c7852",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/69e55e68481cf708a6db43aff0b504e31402fe27",
+                "reference": "69e55e68481cf708a6db43aff0b504e31402fe27",
                 "shasum": ""
             },
             "require": {
@@ -1289,7 +1289,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2014-02-03 07:44:47"
+            "time": "2014-02-25 03:34:05"
         },
         {
             "name": "phpunit/php-file-iterator",
