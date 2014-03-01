@@ -87,7 +87,7 @@ class GenerateCommand extends Command
                 'constructorNull',
                 null,
                 InputOption::VALUE_NONE,
-                'Create getter and setter methods for member variables',
+                'Set the default value for constructor parameters to null',
                 null,
                 'constructorParamsDefaultToNull'
             )
