@@ -5,6 +5,8 @@ use PHPUnit_Framework_TestCase;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ReflectionClass;
+use ReflectionMethod;
+use ReflectionParameter;
 use ReflectionProperty;
 use Wsdl2PhpGenerator\Config;
 use Wsdl2PhpGenerator\Generator;
@@ -14,10 +16,6 @@ use Wsdl2PhpGenerator\Generator;
  */
 abstract class Wsdl2PhpGeneratorFunctionalTestCase extends PHPUnit_Framework_TestCase
 {
-    /**
-     * @var string Path to the WSDL to use for generating code.
-     */
-    protected $wsdl;
 
     /**
      * @var string Path to the directory which will contain the generated code.
@@ -34,14 +32,19 @@ abstract class Wsdl2PhpGeneratorFunctionalTestCase extends PHPUnit_Framework_Tes
      */
     protected $config;
 
-    protected $fixtureDir = 'tests/fixtures';
+    protected $fixtureDir = 'tests/fixtures/wsdl';
+
+    /**
+     * @return string The path to the WSDL to generate code from.
+     */
+    protected abstract function getWsdlPath();
 
     protected function setup()
     {
         $class = new ReflectionClass($this);
         $this->outputDir = 'tests/generated/' . $class->getShortName();
         $this->generator = new Generator();
-        $this->config = new Config($this->wsdl, $this->outputDir);
+        $this->config = new Config($this->getWsdlPath(), $this->outputDir);
 
         // We do not execute the code generation here to allow individual test cases
         // to update the configuration further before generating.
@@ -51,6 +54,10 @@ abstract class Wsdl2PhpGeneratorFunctionalTestCase extends PHPUnit_Framework_Tes
             // Remove any generated code.
             $this->deleteDir($this->outputDir);
         }
+
+        // Generate the code.
+        $this->generator->generate($this->config);
+
     }
 
     /**
@@ -86,32 +93,6 @@ abstract class Wsdl2PhpGeneratorFunctionalTestCase extends PHPUnit_Framework_Tes
     }
 
     /**
-     * Assert that a class has a constant defined.
-     *
-     * @param string $constName The name of the constant.
-     * @param string $className The name of the class.
-     * @param string $message The message to show if the assertion fails.
-     */
-    protected function assertClassHasConst($constName, $className, $message = '')
-    {
-        $class = new ReflectionClass($className);
-        $this->assertTrue($class->hasConstant($constName), $message);
-    }
-
-    /**
-     * Assert that a class has a method defined.
-     *
-     * @param string $methodName The name of the constant.
-     * @param string $className The name of the class.
-     * @param string $message The message to show if the assertion fails.
-     */
-    protected function assertClassHasMethod($methodName, $className, $message = '')
-    {
-        $class = new ReflectionClass($className);
-        $this->assertTrue($class->hasMethod($methodName), $message);
-    }
-
-    /**
      * Assert that a class is defined.
      *
      * @param string $className The name of the class.
@@ -120,6 +101,20 @@ abstract class Wsdl2PhpGeneratorFunctionalTestCase extends PHPUnit_Framework_Tes
     protected function assertClassExists($className, $message = '')
     {
         $this->assertTrue(class_exists($className), $message);
+    }
+
+    /**
+     * Assertion that tests that a class with a specific name has been
+     * generated.
+     *
+     * @param string $className The name of the class to test for.
+     */
+    protected function assertGeneratedClassExists($className)
+    {
+        $file = $this->outputDir . '/' . $className . '.php';
+        $this->assertFileExists($file);
+        require_once $file;
+        $this->assertClassExists($className);
     }
 
     /**
@@ -211,17 +206,88 @@ abstract class Wsdl2PhpGeneratorFunctionalTestCase extends PHPUnit_Framework_Tes
     }
 
     /**
-     * Assertion that tests that a class with a specific name has been
-     * generated.
+     * Assert that a class has a constant defined.
      *
-     * @param string $className The name of the class to test for.
+     * @param string $constName The name of the constant.
+     * @param string $className The name of the class.
+     * @param string $message The message to show if the assertion fails.
      */
-    protected function assertGeneratedClassExists($className)
+    protected function assertClassHasConst($constName, $className, $message = '')
     {
-        $file = $this->outputDir . '/' . $className . '.php';
-        $this->assertFileExists($file);
-        require_once $file;
-        $this->assertClassExists($className);
+        $class = new ReflectionClass($className);
+        $this->assertTrue($class->hasConstant($constName), $message);
+    }
+
+    /**
+     * Assert that a class has a property defined.
+     *
+     * @param ReflectionClass|string $class The class or the name of it.
+     * @param ReflectionProperty|string $property The property or the name of it.
+     * @param string $message The message to show if the assertion fails.
+     */
+    protected function assertClassHasProperty($class, $property, $message = '')
+    {
+        $class = (!$class instanceof ReflectionClass) ? new ReflectionClass($class) : $class;
+        $property = ($property instanceof ReflectionProperty) ? $property->getName() : $property;
+
+        $classPropertyNames = array();
+        foreach ($class->getProperties() as $classProperty) {
+            $classPropertyNames[] = $classProperty->getName();
+        }
+
+        $this->assertContains($property, $classPropertyNames, sprintf('Property "%s" not found among properties for class "%s" ("%s")', $property, $class->getName(), implode('", "', $classPropertyNames)));
+    }
+
+    /**
+     * Assert that a class has a method defined.
+     *
+     * @param ReflectionClass|string $class The class or the name of it.
+     * @param ReflectionMethod|string $method The method or the name of it.
+     * @param string $message The message to show if the assertion fails.
+     */
+    protected function assertClassHasMethod($class, $method, $message = '')
+    {
+        $class = (!$class instanceof ReflectionClass) ? new ReflectionClass($class) : $class;
+        $method = ($method instanceof ReflectionMethod) ? $method->getName() : $method;
+
+        $classMethodNames = array();
+        foreach ($class->getMethods() as $classMethod) {
+            $classMethodNames[] = $classMethod->getName();
+        }
+        $message = (empty($message)) ? sprintf('Method "%s" not found among methods for class "%s" ("%s")', $method, $class->getName(), implode('", "', $classMethodNames)) : $message;
+        $this->assertContains($method, $classMethodNames, $message);
+    }
+
+    /**
+     * Assert that a method has a property defined.
+     *
+     * @param ReflectionMethod $method The method.
+     * @param ReflectionParameter $parameter The parameter.
+     * @param string $message The message to show if the assertion fails.
+     */
+    protected function assertMethodHasParameter(\ReflectionMethod $method, ReflectionParameter $parameter)
+    {
+        $parameterNames = array();
+        foreach ($method->getParameters() as $methodParameter) {
+            $parameterNames[] = $methodParameter->getName();
+        }
+        $message = (empty($message)) ? sprintf('Parameter "%s" not found among parameter for method "%s->%s" ("%s")', $parameter->getName(), $method->getDeclaringClass()->getName(), $method->getName(), implode('", "', $parameterNames)) : $message;
+        $this->assertContains($parameter->getName(), $parameterNames, $message);
+    }
+
+    /**
+     * Assert that a class is a subclass of another class.
+     *
+     * @param ReflectionClass|string $class The subclass of the name of it.
+     * @param ReflectionClass|string $baseClass The parent class of the name of it.
+     * @param string $message The message to show if the assertion fails.
+     */
+    protected function assertClassSubclassOf($class, $baseClass, $message = '')
+    {
+        $class = (!$class instanceof ReflectionClass) ? new ReflectionClass($class) : $class;
+        $baseClass = (!$baseClass instanceof ReflectionClass) ? new ReflectionClass($baseClass) : $baseClass;
+
+        $this->assertTrue($class->isSubclassOf($baseClass->getName()), sprintf('Class "%s" is not subclass of "%s"', $class->getName(), $baseClass->getName()));
     }
 
 }
