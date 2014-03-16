@@ -14,8 +14,6 @@ class AbstractTest extends Wsdl2PhpGeneratorFunctionalTestCase {
 
     public function testAbstract()
     {
-        $this->markTestIncomplete('Handling of abstract types is not implemented yet.');
-
         // The base service class should be available. This also loads all other generated classes.
         $this->assertGeneratedClassExists('AbstractServiceService');
 
@@ -27,10 +25,6 @@ class AbstractTest extends Wsdl2PhpGeneratorFunctionalTestCase {
         }, $serviceClass->getMethods());
         $this->assertNotContains('echo', $methods, 'Class should not contain a method called echo. It is a reserved keyword');
         $this->assertContains('aEcho', $methods, 'Class should contain a method with a derived name for echo since it is a reserved keyword');
-
-        // The complex type Author is abstract in the WSDL and should thus also abstract when generated.
-        $abstractClass = new \ReflectionClass('Author');
-        $this->assertTrue($abstractClass->isAbstract(), 'A class representing a type with abstract="true" should be abstract');
 
         // Complex types UserAuthor and NonUserAuthor extends the User type. That relationship should be converted to
         // subclasses in the generated code.
@@ -50,5 +44,11 @@ class AbstractTest extends Wsdl2PhpGeneratorFunctionalTestCase {
         foreach ($baseConstructor->getParameters() as $parameter) {
             $this->assertMethodHasParameter($subClassConstructor, $parameter);
         }
+
+        $this->markTestIncomplete('Handling of abstract types is not implemented yet.');
+        // The complex type Author is abstract in the WSDL and should thus also abstract when generated.
+        $abstractClass = new \ReflectionClass('Author');
+        $this->assertTrue($abstractClass->isAbstract(), 'A class representing a type with abstract="true" should be abstract');
+
     }
 }

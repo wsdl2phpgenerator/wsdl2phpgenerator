@@ -50,22 +50,23 @@
         </complexContent>
       </complexType>
 
+      <!-- This type is intentionally declared before the type it extends. -->
+      <complexType name="DerivedClass1">
+          <complexContent>
+              <extension base="tns:BaseClass">
+                  <sequence>
+                      <element name="someVar1" type="xsd:string"
+                               minOccurs="0" maxOccurs="unbounded"/>
+                  </sequence>
+              </extension>
+          </complexContent>
+      </complexType>
+
       <complexType name="BaseClass">
         <sequence>
           <element name="id" type="xsd:unsignedInt" minOccurs="1"
             maxOccurs="1"/>
         </sequence>
-      </complexType>
-
-      <complexType name="DerivedClass1">
-        <complexContent>
-          <extension base="tns:BaseClass">
-            <sequence>
-              <element name="someVar1" type="xsd:string"
-                minOccurs="0" maxOccurs="unbounded"/>
-            </sequence>
-          </extension>
-        </complexContent>
       </complexType>
 
       <complexType name="DerivedClass2">

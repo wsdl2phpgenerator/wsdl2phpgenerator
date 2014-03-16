@@ -293,26 +293,6 @@ class Generator implements GeneratorInterface
                 $type = new ComplexType($this->config, $className);
                 $this->log('Loading type ' . $type->getPhpIdentifier());
 
-                foreach ($this->schema as $schema) {
-                    $schemaPrefix = self::findPrefix($schema, self::SCHEMA_NS);
-                    if ($schemaPrefix === null) {
-                        continue;
-                    }
-                    $tmp = $schema->xpath(
-                        '//' . $schemaPrefix . 'complexType[@name = "' . $className . '"]/'
-                        . $schemaPrefix . 'complexContent/' . $schemaPrefix . 'extension/@base'
-                    );
-                    if (!empty($tmp)) {
-                        $baseType = $this->findType($this->cleanNamespace($tmp[0]->__toString()));
-                        // Extend only complex types and if already loaded
-                        // will not set if base type is defined later in wsdl
-                        if ($baseType !== null && $baseType instanceof ComplexType) {
-                            $type->setBaseType($baseType);
-                        }
-                        break;
-                    }
-                }
-
                 for ($i = 1; $i < $numParts - 1; $i++) {
                     $parts[$i] = trim($parts[$i]);
                     list($typename, $name) = explode(" ", substr($parts[$i], 0, strlen($parts[$i]) - 1));
@@ -375,6 +355,29 @@ class Generator implements GeneratorInterface
                 }
                 if (!$already_registered) {
                     $this->types[] = $type;
+                }
+            }
+        }
+
+        // Loop through all types again to setup class inheritance.
+        // We can only do this once all types have been loaded. Otherwise we risk referencing types which have not been
+        // loaded yet.
+        foreach ($this->types as &$type) {
+            foreach ($this->schema as $schema) {
+                $schemaPrefix = self::findPrefix($schema, self::SCHEMA_NS);
+                if ($schemaPrefix === null) {
+                    continue;
+                }
+                $tmp = $schema->xpath(
+                  '//' . $schemaPrefix . 'complexType[@name = "' . $type->getIdentifier() . '"]/'
+                  . $schemaPrefix . 'complexContent/' . $schemaPrefix . 'extension/@base'
+                );
+                if (!empty($tmp)) {
+                    $baseType = $this->findType($this->cleanNamespace($tmp[0]->__toString()));
+                    if ($baseType !== null && $baseType instanceof ComplexType) {
+                        $type->setBaseType($baseType);
+                    }
+                    break;
                 }
             }
         }
