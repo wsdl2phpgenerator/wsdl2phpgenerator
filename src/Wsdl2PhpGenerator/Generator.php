@@ -11,6 +11,7 @@ use \SoapClient;
 use \SoapFault;
 use \DOMDocument;
 use \DOMElement;
+use \SimpleXMLElement;
 
 /**
  * Class that contains functionality for generating classes from a wsdl file
@@ -28,6 +29,13 @@ class Generator implements GeneratorInterface
      * @var string
      */
     const WSDL_NS = 'http://schemas.xmlsoap.org/wsdl/';
+
+    /**
+     * XML Schema namespace
+     *
+     * @var string
+     */
+    const SCHEMA_NS = 'http://www.w3.org/2001/XMLSchema';
 
     /**
      * Schema in simplexml format
@@ -119,6 +127,30 @@ class Generator implements GeneratorInterface
 
 
     /**
+     * Find namespace prefix in schema
+     *
+     * @param SimpleXMLElement $schema Schema where to look for prefix
+     * @param string $namespace Namespace to look for
+     * @return string prefix
+     */
+    private static function findPrefix(SimpleXMLElement $schema, $namespace)
+    {
+        // Find wsdl namespace prefix
+        $xnss = $schema->getDocNamespaces();
+        $prefix = null;
+        foreach ($xnss as $p => $xns) {
+            if ($xns == $namespace) {
+                $prefix = $p;
+                break;
+            }
+        }
+        if ($prefix !== null && $prefix !== '') {
+            $prefix .= ':';
+        }
+        return $prefix;
+    }
+
+    /**
      * Load the wsdl file into php
      */
     private function load($wsdl)
@@ -138,20 +170,9 @@ class Generator implements GeneratorInterface
 
         $sxml = simplexml_import_dom($this->dom[0]);
 
-        // Find wsdl namespace prefix
-        $xnss = $sxml->getDocNamespaces();
-        $wsdlPrefix = null;
-        foreach ($xnss as $prefix => $xns) {
-            if ($xns == self::WSDL_NS) {
-                $wsdlPrefix = $prefix;
-                break;
-            }
-        }
-        if ($wsdlPrefix === null) {
-            throw new Exception(sprintf("No WSDL namespace found: %s", self::WSDL_NS));
-        } elseif ($wsdlPrefix != '') {
-            $wsdlPrefix .= ':';
-        }
+        $wsdlPrefix = self::findPrefix($sxml, self::WSDL_NS);
+        if ($wsdlPrefix === null)
+            throw new Exception('No namespace found: ' . self::WSDL_NS);
 
         foreach ($sxml->xpath("//{$wsdlPrefix}import/@location") as $wsdl_file) {
             $dom = new DOMDocument();
@@ -172,15 +193,22 @@ class Generator implements GeneratorInterface
     {
         foreach ($this->dom as $dom) {
             $sxml = simplexml_import_dom($dom);
-            $namespaces = $sxml->getDocNamespaces();
-            if (!empty($namespaces['xsd'])) {
-                foreach ($sxml->xpath('//xsd:import/@schemaLocation') as $schemaUrl) {
+            // Add main schema to schema array
+            $this->schema[] = $sxml;
+
+            $schemaPrefix = self::findPrefix($sxml, self::SCHEMA_NS);
+            if ($schemaPrefix !== null) {
+                foreach ($sxml->xpath('//' . $schemaPrefix . 'import/@schemaLocation') as $schemaUrl) {
                     // If the URL is relative then try to do a simple
                     // conversion to an absolute one.
                     if (strpos($schemaUrl, '//') === false) {
                         $schemaUrl = dirname($this->config->getInputFile()) . '/' . $schemaUrl;
                     }
-                    $this->schema[] = simplexml_load_file($schemaUrl);
+                    $domi = new DOMDocument();
+                    $domi->load($schemaUrl);
+                    $this->documentation->loadDocumentation($domi);
+                    $this->dom[] = $domi;
+                    $this->schema[] = simplexml_import_dom($domi);
                 }
             }
         }
@@ -222,6 +250,21 @@ class Generator implements GeneratorInterface
     }
 
     /**
+     * Find already registered type by identifier
+     *
+     * @return Type|null Returns type with the specified identifier if it finds it. Null otherwise
+     */
+    private function findType($name)
+    {
+        foreach ($this->types as $registered_type) {
+            if ($registered_type->getIdentifier() == $name) {
+                return $registered_type;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Loads all type classes
      */
     private function loadTypes()
@@ -250,6 +293,26 @@ class Generator implements GeneratorInterface
                 $type = new ComplexType($this->config, $className);
                 $this->log('Loading type ' . $type->getPhpIdentifier());
 
+                foreach ($this->schema as $schema) {
+                    $schemaPrefix = self::findPrefix($schema, self::SCHEMA_NS);
+                    if ($schemaPrefix === null) {
+                        continue;
+                    }
+                    $tmp = $schema->xpath(
+                        '//' . $schemaPrefix . 'complexType[@name = "' . $className . '"]/'
+                        . $schemaPrefix . 'complexContent/' . $schemaPrefix . 'extension/@base'
+                    );
+                    if (!empty($tmp)) {
+                        $baseType = $this->findType($this->cleanNamespace($tmp[0]->__toString()));
+                        // Extend only complex types and if already loaded
+                        // will not set if base type is defined later in wsdl
+                        if ($baseType !== null && $baseType instanceof ComplexType) {
+                            $type->setBaseType($baseType);
+                        }
+                        break;
+                    }
+                }
+
                 for ($i = 1; $i < $numParts - 1; $i++) {
                     $parts[$i] = trim($parts[$i]);
                     list($typename, $name) = explode(" ", substr($parts[$i], 0, strlen($parts[$i]) - 1));
@@ -261,7 +324,14 @@ class Generator implements GeneratorInterface
 
                     $nillable = false;
                     foreach ($this->schema as $schema) {
-                        $tmp = $schema->xpath('//xs:complexType[@name = "' . $className . '"]/descendant::xs:element[@name = "' . $name . '"]/@nillable');
+                        $schemaPrefix = self::findPrefix($schema, self::SCHEMA_NS);
+                        if ($schemaPrefix === null) {
+                            continue;
+                        }
+                        $tmp = $schema->xpath(
+                            '//' . $schemaPrefix . 'complexType[@name = "' . $className . '"]/'
+                            . 'descendant::' . $schemaPrefix . 'element[@name = "' . $name . '"]/@nillable'
+                        );
                         if (!empty($tmp) && (string) $tmp[0] == 'true') {
                             $nillable = true;
                             break;
@@ -416,11 +486,14 @@ class Generator implements GeneratorInterface
         $typenode = null;
 
         foreach ($this->dom as $dom) {
-            $types = $this->dom[0]->getElementsByTagName('types');
+            $types = $dom->getElementsByTagName('types');
+            $schemaList = null;
             if ($types->length > 0) {
                 $schemaList = $types->item(0)->getElementsByTagName('schema');
-                $schemaList = $this->dom[0]->getElementsByTagName('types')->item(0)->getElementsByTagName('schema');
-
+            } else {
+                $schemaList = $dom->getElementsByTagName('schema');
+            }
+            if ($schemaList != null) {
                 foreach ($schemaList as $schema) {
                     foreach ($schema->childNodes as $node) {
                         // We are looking for a type with the correct name.
@@ -441,7 +514,11 @@ class Generator implements GeneratorInterface
         }
 
         foreach ($this->schema as $schema) {
-            $tmp = $schema->xpath('/xs:schema/*[@name = "' . $name . '"]');
+            $schemaPrefix = self::findPrefix($schema, self::SCHEMA_NS);
+            if ($schemaPrefix === null) {
+                continue;
+            }
+            $tmp = $schema->xpath('/' . $schemaPrefix . 'schema/*[@name = "' . $name . '"]');
             if (count($tmp) != 0) {
                 return dom_import_simplexml($tmp[0]);
             }
