@@ -1,9 +1,27 @@
 Contributing
 ============
 
-First of all, **thank you** for contributing, **you are awesome**!
+First of all, **thank you** for your interest in `wsdl2phpgenerator`, **you are awesome**!
 
-Here are a few rules to follow in order to ease code reviews, and discussions before
+
+Issues
+------
+
+If you experience problems, have questions or want to propose changes please provide as much information as possible regarding your usage.
+
+You MUST provide the version of `wsdl2phpgenerator` and PHP you use.
+
+You MUST provide all configuration arguments passed to `wsdl2phpgenerator`.
+
+You SHOULD provide as much of the WSDL as possible if if the WSDL is not publicly available.
+
+Questions can also be posted on [our mailing list](https://groups.google.com/forum/#!forum/wsdl2phpgenerator).
+
+
+Pull requests
+-------------
+
+We have few rules to follow in order to ease code reviews, and discussions before
 maintainers accept and merge your work.
 
 You MUST follow the [PSR-1](http://www.php-fig.org/psr/1/) and
