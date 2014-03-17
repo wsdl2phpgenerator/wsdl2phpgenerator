@@ -33,6 +33,8 @@ class Generator implements GeneratorInterface
     /**
      * XML Schema namespace
      *
+     * @see http://www.w3.org/TR/soap12-part1/#notation
+     *
      * @var string
      */
     const SCHEMA_NS = 'http://www.w3.org/2001/XMLSchema';
@@ -40,7 +42,7 @@ class Generator implements GeneratorInterface
     /**
      * Schema in simplexml format
      *
-     * @var \SimpleXMLElement[]
+     * @var SimpleXMLElement[]
      */
     private $schema = array();
 
@@ -144,7 +146,7 @@ class Generator implements GeneratorInterface
                 break;
             }
         }
-        if ($prefix !== null && $prefix !== '') {
+        if (!empty($prefix)) {
             $prefix .= ':';
         }
         return $prefix;
@@ -171,8 +173,9 @@ class Generator implements GeneratorInterface
         $sxml = simplexml_import_dom($this->dom[0]);
 
         $wsdlPrefix = self::findPrefix($sxml, self::WSDL_NS);
-        if ($wsdlPrefix === null)
+        if ($wsdlPrefix === null) {
             throw new Exception('No namespace found: ' . self::WSDL_NS);
+        }
 
         foreach ($sxml->xpath("//{$wsdlPrefix}import/@location") as $wsdl_file) {
             $dom = new DOMDocument();
@@ -308,11 +311,11 @@ class Generator implements GeneratorInterface
                         if ($schemaPrefix === null) {
                             continue;
                         }
-                        $tmp = $schema->xpath(
+                        $nillableAttributes = $schema->xpath(
                             '//' . $schemaPrefix . 'complexType[@name = "' . $className . '"]/'
                             . 'descendant::' . $schemaPrefix . 'element[@name = "' . $name . '"]/@nillable'
                         );
-                        if (!empty($tmp) && (string) $tmp[0] == 'true') {
+                        if (!empty($nillableAttributes) && (string) $nillableAttributes[0] == 'true') {
                             $nillable = true;
                             break;
                         }
@@ -524,9 +527,9 @@ class Generator implements GeneratorInterface
             if ($schemaPrefix === null) {
                 continue;
             }
-            $tmp = $schema->xpath('/' . $schemaPrefix . 'schema/*[@name = "' . $name . '"]');
-            if (count($tmp) != 0) {
-                return dom_import_simplexml($tmp[0]);
+            $typeElements = $schema->xpath('/' . $schemaPrefix . 'schema/*[@name = "' . $name . '"]');
+            if (count($typeElements) != 0) {
+                return dom_import_simplexml($typeElements[0]);
             }
         }
 

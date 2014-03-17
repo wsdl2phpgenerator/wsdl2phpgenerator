@@ -22,15 +22,16 @@ use Wsdl2PhpGenerator\PhpSource\PhpVariable;
 class ComplexType extends Type
 {
     /**
+     * Base type that the type extends
      *
-     * @var ComplexType  Base type that the type extends
+     * @var ComplexType
      */
     private $baseType;
 
     /**
      * The members in the type
      *
-     * @var array
+     * @var Variable[]
      */
     private $members;
 
@@ -175,7 +176,7 @@ class ComplexType extends Type
     /**
      * Get type member list
      *
-     * @return array
+     * @return Variable[]
      */
     public function getMembers()
     {
