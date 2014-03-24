@@ -79,14 +79,9 @@ class ComplexType extends Type
         // Add base type members to constructor parameter list first and call base class constructor
         if ($this->baseType !== null) {
             foreach ($this->baseType->getMembers() as $member) {
-                $type = '';
+                $type = Validator::validateType($member->getType());
+                $name = Validator::validateAttribute($member->getName());
 
-                try {
-                    $type = Validator::validateType($member->getType());
-                } catch (ValidationException $e) {
-                    $type .= 'Custom';
-                }
-                $name = Validator::validateNamingConvention($member->getName());
                 if (!$member->getNillable()) {
                     $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
                     $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());
@@ -98,15 +93,9 @@ class ComplexType extends Type
 
         // Add member variables
         foreach ($this->members as $member) {
-            $type = '';
+            $type = Validator::validateType($member->getType());
+            $name = Validator::validateAttribute($member->getName());
 
-            try {
-                $type = Validator::validateType($member->getType());
-            } catch (ValidationException $e) {
-                $type .= 'Custom';
-            }
-
-            $name = Validator::validateNamingConvention($member->getName());
             $comment = new PhpDocComment();
             $comment->setVar(PhpDocElementFactory::getVar($type, $name, ''));
             $comment->setAccess(PhpDocElementFactory::getPublicAccess());

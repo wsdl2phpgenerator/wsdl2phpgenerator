@@ -15,7 +15,24 @@ namespace Wsdl2PhpGenerator;
 class Validator
 {
     /**
-     * @var array Array containing all keywords in php
+     * The prefix to prepend to invalid names.
+     *
+     * @var string
+     */
+
+    const NAME_PREFIX = 'a';
+
+    /**
+     * The suffix to append to invalid names.
+     *
+     * @var string
+     */
+    const NAME_SUFFIX = 'Custom';
+
+    /**
+     * Array containing all PHP keywords.
+     *
+     * @var array
      * @link http://www.php.net/manual/en/reserved.keywords.php
      */
     private static $keywords = array(
@@ -89,130 +106,86 @@ class Validator
     );
 
     /**
-     * @var array Array containing primitive types
-     */
-    private static $primitives = array(
-        'string',
-        'int',
-        'float',
-        'double',
-        'bool',
-        'boolean'
-    );
-
-    /**
-     * Changes the name if it is invalid to a valid name
+     * Validates a class name against PHP naming conventions and already defined classes.
      *
-     * @param string $name The name to validate
-     * @return string Returns the validated name
+     * @param string $name the name of the class to test
+     * @return string The validated version of the submitted class name
      */
     public static function validateClass($name)
     {
-        return self::validateClassName($name);
+        $name = self::validateNamingConvention($name);
+        if (self::isKeyword($name) || class_exists($name)) {
+            $name .= self::NAME_SUFFIX;
+        }
+
+        // In case of continued name clashes append numbering.
+        $newName = $name;
+        $i = 1;
+        while (class_exists($newName)) {
+            $newName = $name . $i++;
+        }
+
+        return $newName;
     }
 
+    /**
+     * Validates an operation name against PHP naming conventions.
+     *
+     * @param string $name the name of the operation to test
+     * @return string The validated version of the submitted operation name
+     */
     public static function validateOperation($name)
     {
-        return self::validateOperationName($name);
-    }
-
-    /**
-     * @param string $name The name to validate
-     * @return string The validated name
-     */
-    public static function validateType($name)
-    {
-        return self::validateTypeName($name);
-    }
-
-    /**
-     * Validates a name against standard PHP naming conventions
-     *
-     * @param string $name the name to validate
-     * @return string the validated version of the submitted name
-     */
-    public static function validateNamingConvention($name)
-    {
-        // Prepend the string a to names that begin with anything but a-z This is to make a valid name
-        if (preg_match('/^[A-Za-z_]/', $name) == false) {
-            $name = 'a' . $name;
+        $name = self::validateNamingConvention($name);
+        if (self::isKeyword($name)) {
+            $name = self::NAME_PREFIX . ucfirst($name);
         }
-
-        return preg_replace('/[^a-zA-Z0-9_x7f-xff]*/', '', preg_replace('/^[^a-zA-Z_x7f-xff]*/', '', $name));
+        return $name;
     }
 
     /**
-     * Checks if $str is a primitive datatype
+     * Validates an attribute name against PHP naming conventions.
      *
-     * @param string $str
-     * @return bool True if $str is a primitive
+     * @param string $name the name of the attribute to test
+     * @return string The validated version of the submitted attribute name
      */
-    public static function isPrimitive($str)
-    {
-        return in_array(strtolower($str), self::$primitives);
+    public static function validateAttribute($name) {
+        // Contrary to other validations attributes can have names which are also keywords. Thus no need to check for
+        // this here.
+        return self::validateNamingConvention($name);
     }
 
     /**
-     * Validates a class name against PHP naming conventions and already defined
-     * classes, and optionally stores the class as a member of the interpreted classmap.
+     * Validates a constant name against PHP naming conventions.
      *
-     * @param string $className the name of the class to test
-     * @return string The validated version of the submitted class name
-     * @throws ValidationException
+     * @param string $name the name of the constant to test
+     * @return string The validated version of the submitted constant name
      */
-    private static function validateClassName($className)
-    {
-        $validClassName = self::validateNamingConvention($className);
-
-        if (class_exists($validClassName)) {
-            throw new ValidationException("Class " . $validClassName . " already defined. Cannot redefine class with class loaded.");
+    public static function validateConstant($name) {
+        $name = self::validateNamingConvention($name);
+        if (self::isKeyword($name)) {
+            $name = self::NAME_PREFIX . ucfirst($name);
         }
-
-        if (self::isKeyword($validClassName)) {
-            throw new ValidationException($validClassName . ' is a restricted keyword.');
-        }
-
-        return $validClassName;
-    }
-
-    /**
-     * Validates an operation against PHP naming conventions for methods.
-     *
-     * @param $operationName The operation name to validate.
-     * @return string The validated version of the operation name.
-     * @throws ValidationException
-     */
-    private static function validateOperationName($operationName)
-    {
-        $operationName = self::validateNamingConvention($operationName);
-
-        // Operations cannot be called the same as restricted keywords. This results in syntax errors when loading the
-        // generated code.
-        if (self::isKeyword($operationName)) {
-            throw new ValidationException($operationName . ' is a restricted keyword.');
-        }
-
-        return $operationName;
+        return $name;
     }
 
     /**
      * Validates a wsdl type against known PHP primitive types, or otherwise
      * validates the namespace of the type to PHP naming conventions
      *
-     * @param string $type the type to test
+     * @param string $typeName the type to test
      * @return string the validated version of the submitted type
-     * @throws ValidationException
      */
-    private static function validateTypeName($type)
+    public static function validateType($typeName)
     {
-        if (substr($type, -2) == "[]") {
-            return $type;
+        if (substr($typeName, -2) == "[]") {
+            return $typeName;
         }
-        if (strtolower(substr($type, 0, 7)) == "arrayof") {
-            return substr($type, 7) . '[]';
+        if (strtolower(substr($typeName, 0, 7)) == "arrayof") {
+            return substr($typeName, 7) . '[]';
         }
 
-        switch (strtolower($type)) {
+        switch (strtolower($typeName)) {
             case "int":
             case "integer":
             case "long":
@@ -241,25 +214,42 @@ class Validator
                 return 'string';
                 break;
             default:
-                $validType = self::validateNamingConvention($type);
+                $typeName = self::validateNamingConvention($typeName);
                 break;
         }
 
-        if (self::isKeyword($validType)) {
-            throw new ValidationException($validType . ' is a restricted keyword.');
+        if (self::isKeyword($typeName)) {
+            $typeName .= self::NAME_SUFFIX;
         }
 
-        return $validType;
+        return $typeName;
     }
 
     /**
-     * Checks if $str is a restricted keyword
+     * Validates a name against standard PHP naming conventions
      *
-     * @param string $str
-     * @return bool True if $str is a restricted keyword
+     * @param string $name the name to validate
+     * @return string the validated version of the submitted name
      */
-    public static function isKeyword($str)
+    private static function validateNamingConvention($name)
     {
-        return in_array(strtolower($str), self::$keywords);
+        // Prepend the string a to names that begin with anything but a-z This is to make a valid name
+        if (preg_match('/^[A-Za-z_]/', $name) == false) {
+            $name = self::NAME_PREFIX . ucfirst($name);
+        }
+
+        return preg_replace('/[^a-zA-Z0-9_x7f-xff]*/', '', preg_replace('/^[^a-zA-Z_x7f-xff]*/', '', $name));
     }
+
+    /**
+     * Checks if a string is a restricted keyword.
+     *
+     * @param string $string the string to check..
+     * @return boolean Whether the string is a restricted keyword.
+     */
+    private static function isKeyword($string)
+    {
+        return in_array(strtolower($string), self::$keywords);
+    }
+
 }
