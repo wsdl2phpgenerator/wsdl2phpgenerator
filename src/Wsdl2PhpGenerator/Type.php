@@ -59,11 +59,7 @@ abstract class Type
         // Add prefix and suffix
         $name = $this->config->getPrefix() . $this->identifier . $this->config->getSuffix();
 
-        try {
-            $name = Validator::validateClass($name);
-        } catch (ValidationException $e) {
-            $name .= 'Custom';
-        }
+        $name = Validator::validateClass($name);
 
         $this->phpIdentifier = $name;
     }

@@ -88,11 +88,7 @@ class Service
         $name = $this->config->getPrefix() . $this->identifier . $this->config->getSuffix();
 
         // Generate a valid classname
-        try {
-            $name = Validator::validateClass($name);
-        } catch (ValidationException $e) {
-            $name .= 'Custom';
-        }
+        $name = Validator::validateClass($name);
 
         // uppercase the name
         $name = ucfirst($name);
@@ -141,11 +137,7 @@ class Service
 
         // Add all methods
         foreach ($this->operations as $operation) {
-            try {
-                $name = Validator::validateOperation($operation->getName());
-            } catch (ValidationException $e) {
-                $name =  'a' . ucfirst($operation->getName());
-            }
+            $name = Validator::validateOperation($operation->getName());
 
             $comment = new PhpDocComment($operation->getDescription());
             $comment->setAccess(PhpDocElementFactory::getPublicAccess());
