@@ -502,8 +502,11 @@ class Generator implements GeneratorInterface
             if ($schemaList != null) {
                 foreach ($schemaList as $schema) {
                     foreach ($schema->childNodes as $node) {
-                        // We are looking for a type with the correct name.
-                        $typeTags = array($node->prefix . ':simpleType', $node->prefix . ':complexType');
+                        // We are looking for element with the correct type and name.
+                        // The correct type may or may not be prefixed. If prefixed remember the separator.
+                        $prefix = (!empty($node->prefix)) ? $node->prefix . ':' : '';
+                        $typeTags = array($prefix . 'simpleType', $prefix . 'complexType');
+
                         if ($node instanceof DOMElement &&
                             in_array($node->tagName, $typeTags) &&
                             $node->getAttribute('name') == $name) {
