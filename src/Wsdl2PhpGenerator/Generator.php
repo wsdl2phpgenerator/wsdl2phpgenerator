@@ -7,11 +7,7 @@ namespace Wsdl2PhpGenerator;
 
 use \Exception;
 use Psr\Log\LoggerInterface;
-use \SoapClient;
-use \SoapFault;
-use \DOMDocument;
-use \DOMElement;
-use \SimpleXMLElement;
+use Wsdl2PhpGenerator\Xml\WsdlDocument;
 
 /**
  * Class that contains functionality for generating classes from a wsdl file
@@ -24,41 +20,9 @@ class Generator implements GeneratorInterface
 {
 
     /**
-     * WSDL namespace
-     *
-     * @var string
+     * @var WsdlDocument
      */
-    const WSDL_NS = 'http://schemas.xmlsoap.org/wsdl/';
-
-    /**
-     * XML Schema namespace
-     *
-     * @see http://www.w3.org/TR/soap12-part1/#notation
-     *
-     * @var string
-     */
-    const SCHEMA_NS = 'http://www.w3.org/2001/XMLSchema';
-
-    /**
-     * Schema in simplexml format
-     *
-     * @var SimpleXMLElement[]
-     */
-    private $schema = array();
-
-    /**
-     * A SoapClient for loading the WSDL
-     *
-     * @var SoapClient
-     */
-    private $client = null;
-
-    /**
-     * DOM document used to load and parse the wsdl
-     *
-     * @var DOMDocument[]
-     */
-    private $dom = array();
+    private $wsdl;
 
     /**
      * @var Service
@@ -80,11 +44,6 @@ class Generator implements GeneratorInterface
     private $config;
 
     /**
-     * @var DocumentationManager
-     */
-    private $documentation;
-
-    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -97,9 +56,6 @@ class Generator implements GeneratorInterface
     {
         $this->service = null;
         $this->types = array();
-        $this->enums = array();
-        $this->simple = array();
-        $this->documentation = new DocumentationManager();
     }
 
     /**
@@ -127,94 +83,17 @@ class Generator implements GeneratorInterface
         $this->log('Generation complete', 'info');
     }
 
-
-    /**
-     * Find namespace prefix in schema
-     *
-     * @param SimpleXMLElement $schema Schema where to look for prefix
-     * @param string $namespace Namespace to look for
-     * @return string prefix
-     */
-    private static function findPrefix(SimpleXMLElement $schema, $namespace)
-    {
-        // Find wsdl namespace prefix
-        $xnss = $schema->getDocNamespaces();
-        $prefix = null;
-        foreach ($xnss as $p => $xns) {
-            if ($xns == $namespace) {
-                $prefix = $p;
-                break;
-            }
-        }
-        if (!empty($prefix)) {
-            $prefix .= ':';
-        }
-        return $prefix;
-    }
-
     /**
      * Load the wsdl file into php
      */
     private function load($wsdl)
     {
-        try {
-            $this->log('Loading the wsdl');
-            $this->client = new SoapClient($wsdl, array('cache_wsdl' => WSDL_CACHE_NONE));
-        } catch (SoapFault $e) {
-            throw new Exception('Error connecting to to the wsdl. Error: ' . $e->getMessage());
-        }
+        $this->log('Loading the WSDL');
 
-        $this->log('Loading the DOM');
-        $this->dom[0] = new DOMDocument();
-        $this->dom[0]->load($wsdl);
+        $this->wsdl = new WsdlDocument($this->config, $wsdl);
 
-        $this->documentation->loadDocumentation($this->dom[0]);
-
-        $sxml = simplexml_import_dom($this->dom[0]);
-
-        $wsdlPrefix = self::findPrefix($sxml, self::WSDL_NS);
-        if ($wsdlPrefix === null) {
-            throw new Exception('No namespace found: ' . self::WSDL_NS);
-        }
-
-        foreach ($sxml->xpath("//{$wsdlPrefix}import/@location") as $wsdl_file) {
-            $dom = new DOMDocument();
-            $dom->load($wsdl_file);
-            $this->documentation->loadDocumentation($dom);
-            $this->dom[] = $dom;
-        }
-
-        $this->loadSchema();
         $this->loadTypes();
         $this->loadService();
-    }
-
-    /**
-     * Load schemas
-     */
-    private function loadSchema()
-    {
-        foreach ($this->dom as $dom) {
-            $sxml = simplexml_import_dom($dom);
-            // Add main schema to schema array
-            $this->schema[] = $sxml;
-
-            $schemaPrefix = self::findPrefix($sxml, self::SCHEMA_NS);
-            if ($schemaPrefix !== null) {
-                foreach ($sxml->xpath('//' . $schemaPrefix . 'import/@schemaLocation') as $schemaUrl) {
-                    // If the URL is relative then try to do a simple
-                    // conversion to an absolute one.
-                    if (strpos($schemaUrl, '//') === false) {
-                        $schemaUrl = dirname($this->config->getInputFile()) . '/' . $schemaUrl;
-                    }
-                    $domi = new DOMDocument();
-                    $domi->load($schemaUrl);
-                    $this->documentation->loadDocumentation($domi);
-                    $this->dom[] = $domi;
-                    $this->schema[] = simplexml_import_dom($domi);
-                }
-            }
-        }
     }
 
     /**
@@ -222,49 +101,18 @@ class Generator implements GeneratorInterface
      */
     private function loadService()
     {
-        $name = $this->dom[0]->getElementsByTagNameNS('*', 'service')->item(0)->getAttribute('name');
+        $service = $this->wsdl->getService();
+        $this->log('Starting to load service ' . $service->getName());
 
-        $this->log('Starting to load service ' . $name);
+        $this->service = new Service($this->config, $service->getName(), $this->types, $service->getDocumentation());
 
-        $this->service = new Service($this->config, $name, $this->types, $this->documentation->getServiceDescription());
+        foreach ($this->wsdl->getOperations() as $function) {
+            $this->log('Loading function ' . $function->getName());
 
-        $functions = $this->client->__getFunctions();
-        foreach ($functions as $function) {
-            $matches = array();
-            if (preg_match('/^(\w[\w\d_]*) (\w[\w\d_]*)\(([\w\$\d,_ ]*)\)$/', $function, $matches)) {
-                $returns = $matches[1];
-                $function = $matches[2];
-                $params = $matches[3];
-            } elseif (preg_match('/^(list\([\w\$\d,_ ]*\)) (\w[\w\d_]*)\(([\w\$\d,_ ]*)\)$/', $function, $matches)) {
-                $returns = $matches[1];
-                $function = $matches[2];
-                $params = $matches[3];
-            } else {
-                // invalid function call
-                throw new Exception('Invalid function call: ' . $function);
-            }
-
-            $this->log('Loading function ' . $function);
-
-            $this->service->addOperation($function, $params, $this->documentation->getFunctionDescription($function), $returns);
+            $this->service->addOperation($function->getName(), $function->getParams(), $function->getDocumentation(), $function->getReturns());
         }
 
-        $this->log('Done loading service ' . $name);
-    }
-
-    /**
-     * Find already registered type by identifier
-     *
-     * @return Type|null Returns type with the specified identifier if it finds it. Null otherwise
-     */
-    private function findType($name)
-    {
-        foreach ($this->types as $registered_type) {
-            if ($registered_type->getIdentifier() == $name) {
-                return $registered_type;
-            }
-        }
-        return null;
+        $this->log('Done loading service ' . $service->getName());
     }
 
     /**
@@ -274,76 +122,31 @@ class Generator implements GeneratorInterface
     {
         $this->log('Loading types');
 
-        $types = $this->client->__getTypes();
+        $types = $this->wsdl->getTypes();
 
-        foreach ($types as $typeStr) {
-            $wsdlNewline = (strpos($typeStr, "\r\n") ? "\r\n" : "\n");
-            $parts = explode($wsdlNewline, $typeStr);
-            $tArr = explode(" ", $parts[0]);
-            $restriction = $tArr[0];
-            $className = $tArr[1];
-
-            if (substr($className, -2, 2) == '[]' || substr($className, 0, 7) == 'ArrayOf') {
+        foreach ($types as $typeNode) {
+            if ($typeNode->isArray()) {
                 // skip arrays
                 continue;
             }
 
-            $arrayVars = $this->findArrayElements($className);
             $type = null;
-            $numParts = count($parts);
-            // ComplexType
-            if ($numParts > 1) {
-                $type = new ComplexType($this->config, $className);
+
+            if ($typeNode->isComplex()) {
+                $type = new ComplexType($this->config, $typeNode->getName());
                 $this->log('Loading type ' . $type->getPhpIdentifier());
 
-                for ($i = 1; $i < $numParts - 1; $i++) {
-                    $parts[$i] = trim($parts[$i]);
-                    list($typename, $name) = explode(" ", substr($parts[$i], 0, strlen($parts[$i]) - 1));
-
-                    $name = $this->cleanNamespace($name);
-                    if (array_key_exists($name, $arrayVars)) {
-                        $typename .= '[]';
-                    }
-
-                    $nillable = false;
-                    foreach ($this->schema as $schema) {
-                        $schemaPrefix = self::findPrefix($schema, self::SCHEMA_NS);
-                        if ($schemaPrefix === null) {
-                            continue;
-                        }
-                        $nillableAttributes = $schema->xpath(
-                            '//' . $schemaPrefix . 'complexType[@name = "' . $className . '"]/'
-                            . 'descendant::' . $schemaPrefix . 'element[@name = "' . $name . '"]/@nillable'
-                        );
-                        if (!empty($nillableAttributes) && (string) $nillableAttributes[0] == 'true') {
-                            $nillable = true;
-                            break;
-                        }
-                    }
-
-                    $type->addMember($typename, $name, $nillable);
+                foreach ($typeNode->getParts() as $name => $typeName) {
+                    $type->addMember($typeName, $name, $typeNode->isElementNillable($name));
                 }
-            } else { // Enum or Pattern
-                $typenode = $this->findTypenode($className);
-
-                if ($typenode) {
-                    // If enum
-                    $enumerationList = $typenode->getElementsByTagName('enumeration');
-                    $patternList = $typenode->getElementsByTagName('pattern');
-                    if ($enumerationList->length > 0) {
-                        $type = new Enum($this->config, $className, $restriction);
-                        $this->log('Loading enum ' . $type->getPhpIdentifier());
-                        foreach ($enumerationList as $enum) {
-                            $type->addValue($enum->attributes->getNamedItem('value')->nodeValue);
-                        }
-                    } elseif ($patternList->length > 0) { // If pattern
-                        $type = new Pattern($this->config, $className, $restriction);
-                        $this->log('Loading pattern ' . $type->getPhpIdentifier());
-                        $type->setValue($patternList->item(0)->attributes->getNamedItem('value')->nodeValue);
-                    } else {
-                        continue; // Don't load the type if we don't know what it is
-                    }
-                }
+            } elseif ($enumValues = $typeNode->getEnumerations()) {
+                $type = new Enum($this->config, $typeNode->getName(), $typeNode->getRestriction());
+                array_walk($enumValues, function ($value) use ($type) {
+                      $type->addValue($value);
+                });
+            } elseif ($pattern = $typeNode->getPattern()) {
+                $type = new Pattern($this->config, $typeNode->getName(), $typeNode->getRestriction());
+                $type->setValue($pattern);
             }
 
             if ($type != null) {
@@ -357,7 +160,7 @@ class Generator implements GeneratorInterface
                     }
                 }
                 if (!$already_registered) {
-                    $this->types[] = $type;
+                    $this->types[$typeNode->getName()] = $type;
                 }
             }
         }
@@ -365,60 +168,13 @@ class Generator implements GeneratorInterface
         // Loop through all types again to setup class inheritance.
         // We can only do this once all types have been loaded. Otherwise we risk referencing types which have not been
         // loaded yet.
-        foreach ($this->types as &$type) {
-            foreach ($this->schema as $schema) {
-                $schemaPrefix = self::findPrefix($schema, self::SCHEMA_NS);
-                if ($schemaPrefix === null) {
-                    continue;
-                }
-                $tmp = $schema->xpath(
-                  '//' . $schemaPrefix . 'complexType[@name = "' . $type->getIdentifier() . '"]/'
-                  . $schemaPrefix . 'complexContent/' . $schemaPrefix . 'extension/@base'
-                );
-                if (!empty($tmp)) {
-                    $baseType = $this->findType($this->cleanNamespace($tmp[0]->__toString()));
-                    if ($baseType !== null && $baseType instanceof ComplexType) {
-                        $type->setBaseType($baseType);
-                    }
-                    break;
-                }
+        foreach ($types as $type) {
+            if (($baseType = $type->getBase()) && isset($this->types[$baseType])) {
+                $this->types[$type->getName()]->setBaseType($this->types[$baseType]);
             }
         }
 
         $this->log('Done loading types');
-    }
-
-    /**
-     * Find the elements with maxOccurs="unbounded"
-     *
-     * @param $className
-     * @return array Associative array where the key is the element name and the value is the element DOM node
-     */
-    private function findArrayElements($className)
-    {
-        $typenode = $this->findTypenode($className);
-        $arrayVars = array();
-        if ($typenode) {
-            $elements = $typenode->getElementsByTagName('element');
-
-            foreach ($elements as $element) {
-                $name = $element->attributes->getNamedItem('name');
-                if (!empty($name)) {
-                    $maxOccurs = $element->attributes->getNamedItem('maxOccurs');
-                    if ($maxOccurs && $maxOccurs->nodeValue === 'unbounded') {
-                        $arrayVars[$name->nodeValue] = $element;
-                    }
-                } else {
-                    // Whether this is actually an erroneous situation or not
-                    // is not certain. It has only been observed with the
-                    // PayPalSvc test and the classes seem to be generated
-                    // correctly regardless of this occuring.
-                    $this->log(sprintf('Unable to retrieve name attribute for element in type "%s"', $className), 'debug');
-                }
-            }
-        }
-
-        return $arrayVars;
     }
 
     /**
@@ -464,78 +220,6 @@ class Generator implements GeneratorInterface
             $this->logger->log($level, $message);
         }
     }
-
-    /**
-     * Takes a string and removes the xml namespace if any
-     *
-     * @param string $str
-     * @return string The string without namespace
-     */
-    private function cleanNamespace($str)
-    {
-        if (strpos($str, ':')) {
-            $arr = explode(':', $str);
-            $str = $arr[1];
-        }
-
-        return $str;
-    }
-
-    /**
-     * Parses the type schema for a type with the name $name
-     *
-     * @param string $name
-     * @return DOMElement|null Returns the type node with the name $name if it finds it. Null otherwise.
-     */
-    private function findTypenode($name)
-    {
-        $typenode = null;
-
-        foreach ($this->dom as $dom) {
-            $types = $dom->getElementsByTagName('types');
-            $schemaList = null;
-            if ($types->length > 0) {
-                $schemaList = $types->item(0)->getElementsByTagName('schema');
-            } else {
-                $schemaList = $dom->getElementsByTagName('schema');
-            }
-            if ($schemaList != null) {
-                foreach ($schemaList as $schema) {
-                    foreach ($schema->childNodes as $node) {
-                        // We are looking for element with the correct type and name.
-                        // The correct type may or may not be prefixed. If prefixed remember the separator.
-                        $prefix = (!empty($node->prefix)) ? $node->prefix . ':' : '';
-                        $typeTags = array($prefix . 'simpleType', $prefix . 'complexType');
-
-                        if ($node instanceof DOMElement &&
-                            in_array($node->tagName, $typeTags) &&
-                            $node->getAttribute('name') == $name) {
-                                $typenode = $node;
-                        }
-                    }
-                }
-
-                if ($typenode != null) {
-                    return $typenode;
-                }
-
-            }
-        }
-
-        foreach ($this->schema as $schema) {
-            $schemaPrefix = self::findPrefix($schema, self::SCHEMA_NS);
-            if ($schemaPrefix === null) {
-                continue;
-            }
-            $typeElements = $schema->xpath('/' . $schemaPrefix . 'schema/*[@name = "' . $name . '"]');
-            if (count($typeElements) != 0) {
-                return dom_import_simplexml($typeElements[0]);
-            }
-        }
-
-        return $typenode;
-    }
-
 
     /*
      * Setters/getters
@@ -593,5 +277,4 @@ class Generator implements GeneratorInterface
     {
         return static::instance();
     }
-
 }
