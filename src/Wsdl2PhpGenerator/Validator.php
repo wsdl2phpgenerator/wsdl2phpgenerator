@@ -149,7 +149,8 @@ class Validator
      * @param string $name the name of the attribute to test
      * @return string The validated version of the submitted attribute name
      */
-    public static function validateAttribute($name) {
+    public static function validateAttribute($name)
+    {
         // Contrary to other validations attributes can have names which are also keywords. Thus no need to check for
         // this here.
         return self::validateNamingConvention($name);
@@ -161,7 +162,8 @@ class Validator
      * @param string $name the name of the constant to test
      * @return string The validated version of the submitted constant name
      */
-    public static function validateConstant($name) {
+    public static function validateConstant($name)
+    {
         $name = self::validateNamingConvention($name);
         if (self::isKeyword($name)) {
             $name = self::NAME_PREFIX . ucfirst($name);
@@ -251,5 +253,4 @@ class Validator
     {
         return in_array(strtolower($string), self::$keywords);
     }
-
 }

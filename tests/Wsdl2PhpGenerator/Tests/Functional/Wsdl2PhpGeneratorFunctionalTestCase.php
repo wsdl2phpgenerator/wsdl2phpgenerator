@@ -37,7 +37,7 @@ abstract class Wsdl2PhpGeneratorFunctionalTestCase extends PHPUnit_Framework_Tes
     /**
      * @return string The path to the WSDL to generate code from.
      */
-    protected abstract function getWsdlPath();
+    abstract protected function getWsdlPath();
 
     protected function setup()
     {

@@ -5,7 +5,8 @@ namespace Wsdl2PhpGenerator\Tests\Functional;
 /**
  * Test handling of abstract types and extensions.
  */
-class AbstractTest extends Wsdl2PhpGeneratorFunctionalTestCase {
+class AbstractTest extends Wsdl2PhpGeneratorFunctionalTestCase
+{
 
     protected function getWsdlPath()
     {
@@ -22,7 +23,7 @@ class AbstractTest extends Wsdl2PhpGeneratorFunctionalTestCase {
         // AbstractServiceService contains an operation called echo. This is a PHP keyword and should thus have been
         // renamed in the generation process to avoid conflicts.
         $serviceClass = new \ReflectionClass('AbstractServiceService');
-        $methods = array_map(function(\ReflectionMethod $method) {
+        $methods = array_map(function (\ReflectionMethod $method) {
             return $method->getName();
         }, $serviceClass->getMethods());
         $this->assertNotContains('echo', $methods, 'Class should not contain a method called echo. It is a reserved keyword');
