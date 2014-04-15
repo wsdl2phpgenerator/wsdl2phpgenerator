@@ -6,6 +6,7 @@ namespace Wsdl2PhpGenerator\Xml;
 
 use Exception;
 use SoapClient;
+use SoapFault;
 use Wsdl2PhpGenerator\ConfigInterface;
 
 /**
@@ -38,7 +39,7 @@ class WsdlDocument extends SchemaDocument
         try {
             $this->soapClient = new SoapClient($wsdlUrl, $this->config->getOptionFeatures());
             parent::__construct($wsdlUrl);
-        } catch (\SoapFault $e) {
+        } catch (SoapFault $e) {
             throw new Exception('Unable to load WSDL: ' . $e->getMessage(), $e->getCode(), $e);
         }
     }
