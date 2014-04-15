@@ -46,6 +46,8 @@ class OperationNode extends DocumentedNode
         $this->wsdlFunction = $wsdlFunction;
         $matches = array();
         if (preg_match(
+            // Look for definitions in the format:
+            // return_type method_name(param_type1 param1, param_type2 param2)
             '/^(\w[\w\d_]*) (\w[\w\d_]*)\(([\w\$\d,_ ]*)\)$/',
             $this->wsdlFunction,
             $matches
@@ -54,6 +56,7 @@ class OperationNode extends DocumentedNode
             $this->name = $matches[2];
             $this->params = $matches[3];
         } elseif (preg_match(
+            // @TODO Document when this case is triggered and what the difference is to the case above.
             '/^(list\([\w\$\d,_ ]*\)) (\w[\w\d_]*)\(([\w\$\d,_ ]*)\)$/',
             $this->wsdlFunction,
             $matches
