@@ -37,11 +37,11 @@ class TypeNode extends XmlNode
     {
         $this->wsdlType = $wsdlType;
 
-        $wsdlNewline = (strpos($wsdlType, "\r\n") ? "\r\n" : "\n");
-        $parts = explode($wsdlNewline, $wsdlType);
-        $tArr = explode(" ", $parts[0]);
-        $this->restriction = $tArr[0];
-        $this->name = $tArr[1];
+        // The first line of the WSDL type contains the type name and restriction. Extract them.
+        $lines = $this->getWsdlLines();
+        $firstLineElements = explode(" ", $lines[0]);
+        $this->restriction = $firstLineElements[0];
+        $this->name = $firstLineElements[1];
 
         parent::__construct();
     }
@@ -115,8 +115,7 @@ class TypeNode extends XmlNode
      */
     public function getParts()
     {
-        $wsdlNewline = (strpos($this->wsdlType, "\r\n") ? "\r\n" : "\n");
-        $wsdlLines = explode($wsdlNewline, $this->wsdlType);
+        $wsdlLines = $this->getWsdlLines();
 
         $parts = array();
         for ($i = 1; $i < sizeof($wsdlLines) - 1; $i++) {
@@ -192,11 +191,20 @@ class TypeNode extends XmlNode
      */
     public function isComplex()
     {
-        // Checking the size of parts filters out simple types, enumerations and patterns.
+        // Checking the number of lines in the type filters out simple types, enumerations and patterns.
         // There might be a better way to go about this but this approach was used in previous versions so we keep it
         // that way for now.
-        $wsdlNewline = (strpos($this->wsdlType, "\r\n")) ? "\r\n" : "\n";
-        $parts = explode($wsdlNewline, $this->wsdlType);
-        return sizeof($parts) > 1;
+        return sizeof($this->getWsdlLines()) > 1;
+    }
+
+    /**
+     * Returns the lines of WSDL type.
+     *
+     * @return string[] The lines of the WSDL type.
+     */
+    protected function getWsdlLines()
+    {
+        $newline = (strpos($this->wsdlType, "\r\n") ? "\r\n" : "\n");
+        return explode($newline, $this->wsdlType);
     }
 }
