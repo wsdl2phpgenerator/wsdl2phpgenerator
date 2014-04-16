@@ -86,7 +86,7 @@ abstract class XmlNode
      * @param mixed $args A variable number of arguments used in the query
      * @return DOMNodeList The result of the query.
      */
-    protected function xpath($query, $args = NULL)
+    protected function xpath($query, $args = null)
     {
         $xpath = new DOMXPath($this->document);
         // Preregister namespaces.
