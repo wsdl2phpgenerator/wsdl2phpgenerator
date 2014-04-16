@@ -7,10 +7,23 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Wsdl2PhpGenerator\ConfigInterface;
 
+/**
+ * This class contains configurable key/value pairs.
+ *
+ * @package Wsdl2PhpGenerator
+ * @author Jim Schmid <js@1up.com>
+ * @license http://www.opensource.org/licenses/mit-license.php MIT License
+ */
 class Config implements ConfigInterface
 {
+    /**
+     * @var array The actual key/value pairs.
+     */
     protected $options;
 
+    /**
+     * @param array $options
+     */
     public function __construct(array $options)
     {
         $resolver = new OptionsResolver();
