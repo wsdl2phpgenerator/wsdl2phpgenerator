@@ -57,7 +57,7 @@ abstract class Type
         $this->identifier = $name;
 
         // Add prefix and suffix
-        $name = $this->config->getPrefix() . $this->identifier . $this->config->getSuffix();
+        $name = $this->config->get('prefix') . $this->identifier . $this->config->get('suffix');
 
         try {
             $name = Validator::validateClass($name);
