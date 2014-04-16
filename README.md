@@ -49,14 +49,17 @@ Usage is listed under `./vendor/bin/wsdl2php -h`
 
 $generator = new \Wsdl2PhpGenerator\Generator();
 $generator->generate(
-	new \Wsdl2PhpGenerator\Config( SOAPSERVICE, SOAPDIR )
+	new \Wsdl2PhpGenerator\Config(array(
+        'inputFile' => 'input.xml',
+        'outputDir' => '/tmp/output'
+    ));
 );
 ?>
 ```
 
 ## Versioning
 
-This project aims to use [semantic versioning](http://semver.org/). The following consitutes the public API: 
+This project aims to use [semantic versioning](http://semver.org/). The following consitutes the public API:
 
   * `\Wsdl2PhpGenerator\GeneratorInterface`
   * `\Wsdl2PhpGenerator\ConfigInterface`
