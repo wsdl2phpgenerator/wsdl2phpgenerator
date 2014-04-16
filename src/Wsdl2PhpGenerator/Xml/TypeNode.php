@@ -194,7 +194,7 @@ class TypeNode extends XmlNode
         // Checking the number of lines in the type filters out simple types, enumerations and patterns.
         // There might be a better way to go about this but this approach was used in previous versions so we keep it
         // that way for now.
-        return sizeof($this->getWsdlLines()) > 1;
+        return count($this->getWsdlLines()) > 1;
     }
 
     /**
