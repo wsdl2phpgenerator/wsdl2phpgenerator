@@ -91,7 +91,7 @@ class WsdlDocument extends SchemaDocument
         $functions = array();
         foreach ($this->soapClient->__getFunctions() as $functionString) {
             $function = new OperationNode($functionString);
-            $functionNodes = $this->xpath('//wsdl:operation[@name="' . $function->getName() . '"]');
+            $functionNodes = $this->xpath('//wsdl:operation[@name=%s]', $function->getName());
             if ($functionNodes->length > 0) {
                 $function->setElement($this->document, $functionNodes->item(0));
                 $functions[] = $function;

@@ -77,7 +77,7 @@ class SchemaDocument extends XmlNode
     {
         $type = null;
 
-        $elements = $this->xpath('//s:simpleType[@name="' . $name . '"]|//s:complexType[@name="' . $name . '"]');
+        $elements = $this->xpath('//s:simpleType[@name=%s]|//s:complexType[@name=%s]', $name, $name);
         if ($elements->length > 0) {
             $type = $elements->item(0);
         }

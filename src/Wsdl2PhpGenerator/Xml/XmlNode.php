@@ -76,20 +76,40 @@ abstract class XmlNode
     }
 
     /**
-     * Make an XPath query against the element.
+     * Make an XPath query against the element with escaped variables if necessary.
      *
      * Two namespaces are preregistered with the following prefixes for ease of use:
-     * - WSDL: wsdl
-     * - Schema: s
+     * - http://schemas.xmlsoap.org/wsdl/: wsdl
+     * - http://www.w3.org/2001/XMLSchema: s
      *
-     * @param string $query The XPath query.
+     * @param string $query The XPath query. The query should contain placeholders for arguments sprintf-style.
+     * @param mixed $args A variable number of arguments used in the query
      * @return DOMNodeList The result of the query.
      */
-    protected function xpath($query)
+    protected function xpath($query, $args = NULL)
     {
         $xpath = new DOMXPath($this->document);
+        // Preregister namespaces.
         $xpath->registerNamespace('wsdl', self::WSDL_NS);
         $xpath->registerNamespace('s', self::SCHEMA_NS);
+
+        // Arguments containing ' and " needs escaping.
+        // Inspired by https://gist.github.com/jaywilliams/2883026/#comment-813400.
+        $args = func_get_args();
+        array_shift($args);
+        foreach ($args as &$arg) {
+            if (strpos($arg, "'") === false) {
+                $arg = sprintf("'%s'", $arg);
+            } elseif (strpos($arg, '"') === false) {
+                $arg = sprintf('"%s"', $arg);
+            } else {
+                $arg = sprintf("concat('%s')", str_replace("'", "',\"'\",'", $arg));
+            }
+        }
+
+        // Generate XPath query with esacped arguments.
+        $query = call_user_func_array('sprintf', array_merge(array($query), $args));
+
         return $xpath->query($query, $this->element);
     }
 
