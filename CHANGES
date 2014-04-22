@@ -1,3 +1,13 @@
+
+2.4.0 / 2014-04-22 
+==================
+
+ * Add support for base types
+ * Updated PHPUnit to 4.0.x and other dependencies.
+ * Fix location of type nodes if no prefix is used.
+ * Fix description for CLI option to set default value of construction parameters to null.
+ * Fix kherge/Amend dependency
+ 
 2.3.0 / 2014-02-23
 ==================
 
