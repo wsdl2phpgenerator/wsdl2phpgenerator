@@ -15,27 +15,6 @@ use Wsdl2PhpGenerator\Validator;
  */
 class ValidatorTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * @var Wsdl2PhpValidator
-     */
-    protected $object;
-
-    /**
-     * Sets up the fixture, for example, opens a network connection.
-     * This method is called before a test is executed.
-     */
-    protected function setUp()
-    {
-        $this->object = null;
-    }
-
-    /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     */
-    protected function tearDown()
-    {
-    }
 
     /**
      * Testing the validate class function
@@ -46,31 +25,24 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('foobar', Validator::validateClass('foo-bar'));
         $this->assertEquals('Foo', Validator::validateClass('Foo'));
         $this->assertEquals('foo523', Validator::validateClass('foo523'));
-
-        $this->setExpectedException('Wsdl2PhpGenerator\\ValidationException');
-        Validator::validateClass('SoapClient');
-
-        $this->setExpectedException('Wsdl2PhpGenerator\\ValidationException');
-        $this->assertEquals('for', Validator::validateClass('for')); // for is reserved keyword
     }
 
     /**
-     * Testing the validate class function with a reserved keyword
+     * Testing the validate class function with a reserved keyword.
      */
     public function testValidateClassReservedKeyword()
     {
-        $this->setExpectedException('Wsdl2PhpGenerator\\ValidationException');
-        $this->assertEquals('for', Validator::validateClass('for')); // for is reserved keyword
-        $this->assertEquals('List', Validator::validateClass('List')); // for is reserved keyword
+        // for is reserved keyword
+        $this->assertEquals('forCustom', Validator::validateClass('for'));
+        // list is reserved keyword. PHP is not case sensitive in keywords
+        $this->assertEquals('ListCustom', Validator::validateClass('List'));
     }
 
     /**
-     * Testing the validate class function with another reserved keyword
+     * Testing the validate class function with an existing class.
      */
-    public function testValidateClassReservedKeyword2()
-    {
-        $this->setExpectedException('Wsdl2PhpGenerator\\ValidationException');
-        $this->assertEquals('List', Validator::validateClass('List')); // list is reserved keyword. PHP is not case sensitive in keywords
+    public function testValidateClassExists() {
+        $this->assertEquals('SoapClientCustom', Validator::validateClass(Validator::validateClass('SoapClient')));
     }
 
     /**
@@ -94,21 +66,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Foo[]', Validator::validateType('ArrayOfFoo'));
         $this->assertEquals('Foo[]', Validator::validateType('Foo[]'));
 
-        $this->setExpectedException('Wsdl2PhpGenerator\\ValidationException');
-        $this->assertEquals('and', Validator::validateType('and')); // and is reserved keyword
+        $this->assertEquals('andCustom', Validator::validateType('and')); // and is reserved keyword
     }
 
-    /**
-     * test the name
-     */
-    public function testValidateNamingConvention()
-    {
-        $this->assertEquals('foo', Validator::validateNamingConvention('foo'));
-        $this->assertEquals('foobar', Validator::validateNamingConvention('foo-bar'));
-        $this->assertEquals('Foo', Validator::validateNamingConvention('Foo'));
-        $this->assertEquals('foo523', Validator::validateNamingConvention('foo523'));
-        $this->assertEquals('a123foo', Validator::validateNamingConvention('123foo'));
-        $this->assertEquals('a123foo123', Validator::validateNamingConvention('123foo$123'));
-        $this->assertEquals('a123foo', Validator::validateNamingConvention('123f|o|o'));
-    }
 }

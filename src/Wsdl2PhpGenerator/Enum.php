@@ -51,15 +51,7 @@ class Enum extends Type
         $first = true;
 
         foreach ($this->values as $value) {
-            $name = Validator::validateNamingConvention($value);
-
-            if (Validator::isKeyword($name)) {
-                // TODO: Custom seems like a poor suffix for constant names
-                // that collide with PHP keywords by default but is kept for
-                // backwards compatibility for generated code.
-                // Consider changing this for 3.x.
-                $name .= 'Custom';
-            }
+            $name = Validator::validateConstant($value);
 
             if ($first) {
                 $this->class->addConstant($name, '__default');
