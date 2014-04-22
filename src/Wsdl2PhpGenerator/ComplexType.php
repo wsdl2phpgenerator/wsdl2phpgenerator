@@ -21,11 +21,17 @@ use Wsdl2PhpGenerator\PhpSource\PhpVariable;
  */
 class ComplexType extends Type
 {
+    /**
+     * Base type that the type extends
+     *
+     * @var ComplexType
+     */
+    private $baseType;
 
     /**
      * The members in the type
      *
-     * @var array
+     * @var Variable[]
      */
     private $members;
 
@@ -39,6 +45,7 @@ class ComplexType extends Type
     {
         parent::__construct($config, $name, null);
         $this->members = array();
+        $this->baseType = null;
     }
 
     /**
@@ -52,7 +59,16 @@ class ComplexType extends Type
             throw new Exception("The class has already been generated");
         }
 
-        $class = new PhpClass($this->phpIdentifier, $this->config->getClassExists());
+        $class = new PhpClass(
+            $this->phpIdentifier,
+            $this->config->getClassExists(),
+            $this->baseType !== null ? $this->baseType->getPhpIdentifier() : ''
+        );
+
+        // Add the base class as a dependency. Otherwise we risk referencing an undefined class.
+        if (!empty($this->baseType) && !$this->config->getOneFile() && !$this->config->getNoIncludes()) {
+            $class->addDependency($this->baseType->getIdentifier() . '.php');
+        }
 
         $constructorComment = new PhpDocComment();
         $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());
@@ -60,17 +76,26 @@ class ComplexType extends Type
         $constructorParameters = '';
         $accessors = array();
 
+        // Add base type members to constructor parameter list first and call base class constructor
+        if ($this->baseType !== null) {
+            foreach ($this->baseType->getMembers() as $member) {
+                $type = Validator::validateType($member->getType());
+                $name = Validator::validateAttribute($member->getName());
+
+                if (!$member->getNillable()) {
+                    $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
+                    $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());
+                    $constructorParameters .= ', $' . $name;
+                }
+            }
+            $constructorSource .= '  parent::__construct(' . substr($constructorParameters, 2) . ');' . PHP_EOL;
+        }
+
         // Add member variables
         foreach ($this->members as $member) {
-            $type = '';
+            $type = Validator::validateType($member->getType());
+            $name = Validator::validateAttribute($member->getName());
 
-            try {
-                $type = Validator::validateType($member->getType());
-            } catch (ValidationException $e) {
-                $type .= 'Custom';
-            }
-
-            $name = Validator::validateNamingConvention($member->getName());
             $comment = new PhpDocComment();
             $comment->setVar(PhpDocElementFactory::getVar($type, $name, ''));
             $comment->setAccess(PhpDocElementFactory::getPublicAccess());
@@ -116,6 +141,16 @@ class ComplexType extends Type
     }
 
     /**
+     * Set the base type
+     *
+     * @param ComplexType $type
+     */
+    public function setBaseType(ComplexType $type)
+    {
+        $this->baseType = $type;
+    }
+
+    /**
      * Adds the member. Owerwrites members with same name
      *
      * @param string $type
@@ -125,5 +160,15 @@ class ComplexType extends Type
     public function addMember($type, $name, $nillable)
     {
         $this->members[$name] = new Variable($type, $name, $nillable);
+    }
+
+    /**
+     * Get type member list
+     *
+     * @return Variable[]
+     */
+    public function getMembers()
+    {
+        return $this->members;
     }
 }
