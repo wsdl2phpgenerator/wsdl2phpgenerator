@@ -22,6 +22,6 @@
         "kherge/box": "2.4.*",
         "phing/phing": "2.7.*",
         "php-vcr/phpunit-testlistener-vcr": "1.1.*",
-        "phpunit/phpunit": "4.0.*"
+        "phpunit/phpunit": "~4.0"
     }
 }
