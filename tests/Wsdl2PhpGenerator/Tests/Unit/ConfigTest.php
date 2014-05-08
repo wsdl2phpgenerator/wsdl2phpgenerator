@@ -8,7 +8,7 @@ use Wsdl2PhpGenerator\Config;
 class ConfigTest extends PHPUnit_Framework_TestCase
 {
     protected $options;
-    protected $object;
+    protected $config;
 
     protected function setUp()
     {
@@ -32,12 +32,18 @@ class ConfigTest extends PHPUnit_Framework_TestCase
             'noIncludes'                     => false
         );
 
-        $this->object = new Config($this->options);
+        $this->config = new Config($this->options);
     }
 
+    /**
+     * Test non-normalized configuration fields against pre defined
+     * expected values.
+     *
+     * This method uses the config object created while setting up this test.
+     */
     public function testGetSimpleValues()
     {
-        $options = array(
+        $expectedValues = array(
             'inputFile'                      => 'inputFile.xml',
             'outputDir'                      => '/tmp/output',
             'verbose'                        => false,
@@ -56,11 +62,32 @@ class ConfigTest extends PHPUnit_Framework_TestCase
             'noIncludes'                     => false
         );
 
-        foreach ($options as $key => $value) {
-            $this->assertEquals($this->object->get($key), $value);
+        foreach ($expectedValues as $key => $expectedValue) {
+            $this->assertEquals($this->config->get($key), $expectedValue);
         }
     }
+
     /**
+     * Test normalized configuration fields against pre defined
+     * expected values.
+     *
+     * This method uses the config object created while setting up this test.
+     */
+    public function testNormalizedValues()
+    {
+        $expectedValues = array(
+            'classNames' => array('test', 'test2', 'test3')
+        );
+
+        foreach ($expectedValues as $key => $expectedValue) {
+            $this->assertEquals($this->config->get($key), $expectedValue);
+        }
+    }
+
+    /**
+     * Check if the wsdlCache field in the configuration object throws an exception
+     * if one tries to fill it with a non-allowed value.
+     *
      * @expectedException Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
      */
     public function testSetWsdlCacheToNotAllowedValue()
@@ -72,6 +99,10 @@ class ConfigTest extends PHPUnit_Framework_TestCase
         ));
     }
 
+    /**
+     * Create a config object for each allowed value for the wsdlCache field in the
+     * configuration object to be sure it won't throw an exception.
+     */
     public function testSetWsdlCacheToAllowedValues()
     {
         $allowed = array('', 'WSDL_CACHE_NONE', 'WSDL_CACHE_DISK', 'WSDL_CACHE_MEMORY', 'WSDL_CACHE_BOTH');
@@ -85,6 +116,9 @@ class ConfigTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * Test the classNames normalizer against various form of input values.
+     */
     public function testClassNamesNormalizer()
     {
         $toTest = array(

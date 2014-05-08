@@ -2,6 +2,7 @@
 
 namespace Wsdl2PhpGenerator;
 
+use InvalidArgumentException;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -9,10 +10,6 @@ use Wsdl2PhpGenerator\ConfigInterface;
 
 /**
  * This class contains configurable key/value pairs.
- *
- * @package Wsdl2PhpGenerator
- * @author Jim Schmid <js@1up.com>
- * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 class Config implements ConfigInterface
 {
@@ -35,7 +32,7 @@ class Config implements ConfigInterface
     public function get($key)
     {
         if (!array_key_exists($key, $this->options)) {
-            throw new \InvalidArgumentException(sprintf('The key %s does not exist.', $key));
+            throw new InvalidArgumentException(sprintf('The key %s does not exist.', $key));
         }
 
         return $this->options[$key];

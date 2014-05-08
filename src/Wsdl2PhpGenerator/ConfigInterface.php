@@ -5,10 +5,6 @@ namespace Wsdl2PhpGenerator;
 /**
  * The config interface which implemented represents
  * a configuration that is used across this project.
- *
- * @package Wsdl2PhpGenerator
- * @author Jim Schmid <js@1up.com>
- * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 interface ConfigInterface
 {
@@ -28,7 +24,7 @@ interface ConfigInterface
      *
      * @param $key
      * @param $value
-     * @return mixed
+     * @return ConfigInterface
      */
     public function set($key, $value);
 }
