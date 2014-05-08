@@ -313,9 +313,9 @@ class GenerateCommand extends Command
     ) {
         $featureMapping = function (Input $input, Config &$config) use ($name, $feature) {
             if ($input->getOption($name)) {
-                $options = $config->get('optionsFeature');
+                $options = $config->get('optionsFeatures');
                 $options[] = $feature;
-                $config->set('optionsFeature', array_unique($options));
+                $config->set('optionsFeatures', array_unique($options));
             }
         };
         return $this->addConfigOption($name, $shortcut, $mode, $description, $default, $featureMapping);

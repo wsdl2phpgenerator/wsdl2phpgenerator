@@ -180,12 +180,12 @@ class Service
     {
         $ret = '';
 
-        if (count($this->config->get('optionsFeature')) > 0) {
+        if (count($this->config->get('optionsFeatures')) > 0) {
             $i = 0;
             $ret .= "
   if (isset(\$options['features']) == false) {
     \$options['features'] = ";
-            foreach ($this->config->get('optionsFeature') as $option) {
+            foreach ($this->config->get('optionsFeatures') as $option) {
                 if ($i++ > 0) {
                     $ret .= ' | ';
                 }

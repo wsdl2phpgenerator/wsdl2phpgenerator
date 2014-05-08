@@ -47,7 +47,7 @@ class GenerateCommandTest extends \PHPUnit_Framework_TestCase
     {
         $input = $this->generateInput(array('--waitOneWayCalls' => true));
         $config = $this->getConfigFromInput($input);
-        $this->assertEquals(array('SOAP_WAIT_ONE_WAY_CALLS'), $config->get('optionsFeature'));
+        $this->assertEquals(array('SOAP_WAIT_ONE_WAY_CALLS'), $config->get('optionsFeatures'));
     }
 
     /**
@@ -94,13 +94,13 @@ class GenerateCommandTest extends \PHPUnit_Framework_TestCase
         });
 
         $this->assertConfig('--singleElementArrays', true, function (ConfigInterface $config) {
-                return in_array('SOAP_SINGLE_ELEMENT_ARRAYS', $config->get('optionsFeature'));
+                return in_array('SOAP_SINGLE_ELEMENT_ARRAYS', $config->get('optionsFeatures'));
         });
         $this->assertConfig('--waitOneWayCalls', true, function (ConfigInterface $config) {
-                return in_array('SOAP_WAIT_ONE_WAY_CALLS', $config->get('optionsFeature'));
+                return in_array('SOAP_WAIT_ONE_WAY_CALLS', $config->get('optionsFeatures'));
         });
         $this->assertConfig('--xsiArrayType', true, function (ConfigInterface $config) {
-                return in_array('SOAP_USE_XSI_ARRAY_TYPE', $config->get('optionsFeature'));
+                return in_array('SOAP_USE_XSI_ARRAY_TYPE', $config->get('optionsFeatures'));
         });
     }
 

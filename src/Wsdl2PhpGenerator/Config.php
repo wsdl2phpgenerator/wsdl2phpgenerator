@@ -60,7 +60,7 @@ class Config implements ConfigInterface
             'classExists'                    => false,
             'noTypeConstructor'              => false,
             'namespaceName'                  => '',
-            'optionsFeature'                 => array(),
+            'optionsFeatures'                => array(),
             'wsdlCache'                      => '',
             'compression'                    => '',
             'classNames'                     => '',
