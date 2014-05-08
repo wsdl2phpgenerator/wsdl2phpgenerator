@@ -10,6 +10,8 @@ use Wsdl2PhpGenerator\ConfigInterface;
 
 /**
  * This class contains configurable key/value pairs.
+ *
+ * @package Wsdl2PhpGenerator
  */
 class Config implements ConfigInterface
 {
@@ -18,9 +20,6 @@ class Config implements ConfigInterface
      */
     protected $options;
 
-    /**
-     * @param array $options
-     */
     public function __construct(array $options)
     {
         $resolver = new OptionsResolver();
@@ -29,6 +28,13 @@ class Config implements ConfigInterface
         $this->options = $resolver->resolve($options);
     }
 
+    /**
+     * Get a value from the configuration by key.
+     *
+     * @param $key
+     * @return mixed
+     * @throws \InvalidArgumentException
+     */
     public function get($key)
     {
         if (!array_key_exists($key, $this->options)) {
@@ -38,6 +44,13 @@ class Config implements ConfigInterface
         return $this->options[$key];
     }
 
+    /**
+     * Set or overwrite a configuration key with a given value.
+     *
+     * @param $key
+     * @param $value
+     * @return $this|ConfigInterface
+     */
     public function set($key, $value)
     {
         $this->options[$key] = $value;
