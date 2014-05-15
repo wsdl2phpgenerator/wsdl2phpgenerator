@@ -128,6 +128,13 @@ class Config implements ConfigInterface
     private $noIncludes;
 
     /**
+     * The string to use for indention.
+     *
+     * @var string
+     */
+    private $indentionStr;
+
+    /**
      * Sets all variables
      *
      * @param string $inputFile
@@ -147,8 +154,9 @@ class Config implements ConfigInterface
      * @param bool $createAccessors
      * @param bool $constructorParamsDefaultToNull
      * @param bool $noIncludes
+     * @param string $indentionStr
      */
-    public function __construct($inputFile, $outputDir, $verbose = false, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '', $prefix = '', $suffix = '', $sharedTypes = false, $createAccessors = false, $constructorParamsDefaultToNull = false, $noIncludes = false)
+    public function __construct($inputFile, $outputDir, $verbose = false, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '', $prefix = '', $suffix = '', $sharedTypes = false, $createAccessors = false, $constructorParamsDefaultToNull = false, $noIncludes = false, $indentionStr = '  ')
     {
         $this->namespaceName = trim($namespaceName);
         $this->oneFile = $oneFile;
@@ -177,6 +185,7 @@ class Config implements ConfigInterface
         $this->createAccessors = $createAccessors;
         $this->constructorParamsDefaultToNull = $constructorParamsDefaultToNull;
         $this->noIncludes = $noIncludes;
+        $this->indentionStr = $indentionStr;
     }
 
     public function getNamespaceName()
