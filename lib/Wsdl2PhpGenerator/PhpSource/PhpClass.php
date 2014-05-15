@@ -58,14 +58,14 @@ class PhpClass extends PhpElement
 
     /**
      *
-     * @var array Array of PhpVariable objects
+     * @var PhpVariable[] Array of PhpVariable objects
      * @access private
      */
     private $variables;
 
     /**
      *
-     * @var array Array of PhpFunction objects
+     * @var PhpFunction[] Array of PhpFunction objects
      * @access private
      */
     private $functions;
@@ -84,8 +84,9 @@ class PhpClass extends PhpElement
      * @param string $extends A string of the class that this class extends
      * @param PhpDocComment $comment
      * @param bool $final
+     * @param string $indentionStr
      */
-    public function __construct($identifier, $classExists = false, $extends = '', PhpDocComment $comment = null, $final = false)
+    public function __construct($identifier, $classExists = false, $extends = '', PhpDocComment $comment = null, $final = false, $indentionStr = '  ')
     {
         $this->dependencies = array();
         $this->classExists = $classExists;
@@ -97,7 +98,7 @@ class PhpClass extends PhpElement
         $this->constants = array();
         $this->variables = array();
         $this->functions = array();
-        $this->indentionStr = '  '; // Use two spaces as indention
+        $this->indentionStr = $indentionStr;
     }
 
     /**
