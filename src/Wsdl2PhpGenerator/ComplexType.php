@@ -98,8 +98,13 @@ class ComplexType extends Type
 
             $comment = new PhpDocComment();
             $comment->setVar(PhpDocElementFactory::getVar($type, $name, ''));
-            $comment->setAccess(PhpDocElementFactory::getPublicAccess());
-            $var = new PhpVariable('public', $name, 'null', $comment);
+            if ($this->config->getCreateAccessors()) {
+                $comment->setAccess(PhpDocElementFactory::getProtectedAccess());
+                $var = new PhpVariable('protected', $name, 'null', $comment);
+            } else {
+                $comment->setAccess(PhpDocElementFactory::getPublicAccess());
+                $var = new PhpVariable('public', $name, 'null', $comment);
+            }
             $class->addVariable($var);
 
             if (!$member->getNillable()) {
