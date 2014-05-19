@@ -119,7 +119,9 @@ class ComplexType extends Type
 
                     $setterComment = new PhpDocComment();
                     $setterComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
-                    $setter = new PhpFunction('public', 'set' . ucfirst($name), '$' . $name, '  $this->' . $name . ' = $' . $name . ';' . PHP_EOL, $setterComment);
+                    $setterBody = '  $this->' . $name . ' = $' . $name . ';' . PHP_EOL;
+                    $setterBody .= PHP_EOL . '  return $this;' . PHP_EOL;
+                    $setter = new PhpFunction('public', 'set' . ucfirst($name), '$' . $name, $setterBody, $setterComment);
                     $accessors[] = $setter;
                 }
             }
