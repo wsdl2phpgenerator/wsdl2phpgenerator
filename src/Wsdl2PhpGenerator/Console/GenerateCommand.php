@@ -288,7 +288,7 @@ class GenerateCommand extends Command
     ) {
         $cacheMapping = function (Input $input, Config &$config) use ($name, $cache) {
             if ($input->getOption($name)) {
-                $config->setWsdlCache($cache);
+                $config->set('wsdlCache', $cache);
             }
         };
         return $this->addConfigOption($name, $shortcut, $mode, $description, $default, $cacheMapping);
@@ -313,9 +313,9 @@ class GenerateCommand extends Command
     ) {
         $featureMapping = function (Input $input, Config &$config) use ($name, $feature) {
             if ($input->getOption($name)) {
-                $options = $config->getOptionFeatures();
+                $options = $config->get('optionsFeatures');
                 $options[] = $feature;
-                $config->setOptionFeatures(array_unique($options));
+                $config->set('optionsFeatures', array_unique($options));
             }
         };
         return $this->addConfigOption($name, $shortcut, $mode, $description, $default, $featureMapping);
@@ -329,7 +329,10 @@ class GenerateCommand extends Command
         }
 
         // Initialize configuration with null values. They will be updated during mapping.
-        $config = new Config(null, null);
+        $config = new Config(array(
+            'inputFile' => null,
+            'outputDir' => null
+        ));
 
         // Map arguments to configuration
         foreach ($this->inputConfigMapping as $mapping) {
@@ -337,10 +340,10 @@ class GenerateCommand extends Command
         }
 
         // Some arguments interact. Prompt the user to determine how to react.
-        if ($config->getOneFile() && $config->getClassNames()) {
+        if ($config->get('oneFile') && $config->get('classNames')) {
             // Print different messages based on if more than one class is requested for generation
-            if (sizeof($config->getClassNamesArray()) > 1) {
-                $message = sprintf('You have selected to only generate some of the classes in the wsdl (%s) and to save them in one file. Continue?', $config->getClassNamesArray());
+            if (sizeof($config->get('classNames')) > 1) {
+                $message = sprintf('You have selected to only generate some of the classes in the wsdl (%s) and to save them in one file. Continue?', $config->get('classNames'));
             } else {
                 $message = 'You have selected to only generate one class and save it to a single file. If you have selected the service class and outputs this file to a directory where you previosly have generated the classes the file will be overwritten. Continue?';
             }
@@ -377,9 +380,7 @@ class GenerateCommand extends Command
                         $value = $input->getOption($name);
                     }
                     if (!empty($value)) {
-                        $configClass = new \ReflectionClass($config);
-                        $setter = $configClass->getMethod('set' . ucfirst($configMapping));
-                        $setter->invoke($config, $value);
+                        $config->set($configMapping, $value);
                     }
                 };
             }

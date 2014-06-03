@@ -50,8 +50,8 @@ class OutputManager
     {
         $this->config = $config;
         $this->dir = '';
-        $this->useNamespace = (strlen($this->config->getNamespaceName()) > 0);
-        $this->classesToSave = $this->config->getClassNamesArray();
+        $this->useNamespace = (strlen($this->config->get('namespaceName')) > 0);
+        $this->classesToSave = $this->config->get('classNames');
         $this->file = null;
     }
 
@@ -65,9 +65,9 @@ class OutputManager
     {
         $this->setOutputDirectory();
 
-        if ($this->config->getOneFile()) {
-            if (!is_dir($this->config->getOutputDir())) {
-                $this->file = new PhpFile(basename($this->config->getOutputDir()));
+        if ($this->config->get('oneFile')) {
+            if (!is_dir($this->config->get('outputDir'))) {
+                $this->file = new PhpFile(basename($this->config->get('outputDir')));
             } else {
                 $this->file = new PhpFile($service->getIdentifier());
             }
@@ -77,8 +77,8 @@ class OutputManager
                 $this->addClassToFile($type);
             }
 
-            if (!is_dir($this->config->getOutputDir())) {
-                $this->file->save(dirname($this->config->getOutputDir()));
+            if (!is_dir($this->config->get('outputDir'))) {
+                $this->file->save(dirname($this->config->get('outputDir')));
             } else {
                 $this->file->save($this->dir);
             }
@@ -98,10 +98,10 @@ class OutputManager
      */
     private function setOutputDirectory()
     {
-        $outputDirectory = $this->config->getOutputDir();
+        $outputDirectory = $this->config->get('outputDir');
 
         //Try to create output dir if non existing
-        if ($this->config->getOneFile()) {
+        if ($this->config->get('oneFile')) {
             $outputDirectory = dirname($outputDirectory);
         }
         if (is_dir($outputDirectory) == false) {
@@ -153,7 +153,7 @@ class OutputManager
     private function addNamespace()
     {
         if ($this->useNamespace && $this->file->hasNamespace() == false) {
-            $this->file->addNamespace($this->config->getNamespaceName());
+            $this->file->addNamespace($this->config->get('namespaceName'));
         }
     }
 
@@ -166,12 +166,12 @@ class OutputManager
      */
     private function isValidClass(PhpClass $class)
     {
-        $suffix = strlen($this->config->getSuffix());
+        $suffix = strlen($this->config->get('suffix'));
         if ($suffix > 0) {
             $nSuf = 0 - $suffix;
-            $className = substr($class->getIdentifier(), strlen($this->config->getPrefix()), $nSuf);
+            $className = substr($class->getIdentifier(), strlen($this->config->get('prefix')), $nSuf);
         } else {
-            $className = substr($class->getIdentifier(), strlen($this->config->getPrefix()));
+            $className = substr($class->getIdentifier(), strlen($this->config->get('prefix')));
         }
 
         if (count($this->classesToSave) == 0 || count($this->classesToSave) > 0 && in_array($className, $this->classesToSave)) {

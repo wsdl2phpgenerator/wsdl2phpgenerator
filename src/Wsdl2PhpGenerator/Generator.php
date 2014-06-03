@@ -69,7 +69,7 @@ class Generator implements GeneratorInterface
 
         $this->log('Starting generation');
 
-        $wsdl = $this->config->getInputFile();
+        $wsdl = $this->config->get('inputFile');
         if (is_array($wsdl)) {
             foreach ($wsdl as $ws) {
                 $this->load($ws);
@@ -94,6 +94,27 @@ class Generator implements GeneratorInterface
 
         $this->loadTypes();
         $this->loadService();
+    }
+
+    /**
+     * Load schemas
+     */
+    private function loadSchema()
+    {
+        foreach ($this->dom as $dom) {
+            $sxml = simplexml_import_dom($dom);
+            $namespaces = $sxml->getDocNamespaces();
+            if (!empty($namespaces['xsd'])) {
+                foreach ($sxml->xpath('//xsd:import/@schemaLocation') as $schemaUrl) {
+                    // If the URL is relative then try to do a simple
+                    // conversion to an absolute one.
+                    if (strpos($schemaUrl, '//') === false) {
+                        $schemaUrl = dirname($this->config->get('inputFile')) . '/' . $schemaUrl;
+                    }
+                    $this->schema[] = simplexml_load_file($schemaUrl);
+                }
+            }
+        }
     }
 
     /**
@@ -151,7 +172,7 @@ class Generator implements GeneratorInterface
 
             if ($type != null) {
                 $already_registered = false;
-                if ($this->config->getSharedTypes()) {
+                if ($this->config->get('sharedTypes')) {
                     foreach ($this->types as $registered_types) {
                         if ($registered_types->getIdentifier() == $type->getIdentifier()) {
                             $already_registered = true;
@@ -199,7 +220,7 @@ class Generator implements GeneratorInterface
             if ($class != null) {
                 $types[] = $class;
 
-                if (!$this->config->getOneFile() && !$this->config->getNoIncludes()) {
+                if (!$this->config->get('oneFile') && !$this->config->get('noIncludes')) {
                     $service->addDependency($class->getIdentifier() . '.php');
                 }
             }
