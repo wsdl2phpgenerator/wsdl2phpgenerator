@@ -110,18 +110,18 @@ class ComplexType extends Type
                 if ($this->config->getConstructorParamsDefaultToNull()) {
                     $constructorParameters .= ' = null';
                 }
+            }
 
-                if ($this->config->getCreateAccessors()) {
-                    $getterComment = new PhpDocComment();
-                    $getterComment->setReturn(PhpDocElementFactory::getReturn($type, ''));
-                    $getter = new PhpFunction('public', 'get' . ucfirst($name), '', '  return $this->' . $name . ';' . PHP_EOL, $getterComment);
-                    $accessors[] = $getter;
+            if ($this->config->getCreateAccessors()) {
+                $getterComment = new PhpDocComment();
+                $getterComment->setReturn(PhpDocElementFactory::getReturn($type, ''));
+                $getter = new PhpFunction('public', 'get' . ucfirst($name), '', '  return $this->' . $name . ';' . PHP_EOL, $getterComment);
+                $accessors[] = $getter;
 
-                    $setterComment = new PhpDocComment();
-                    $setterComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
-                    $setter = new PhpFunction('public', 'set' . ucfirst($name), '$' . $name, '  $this->' . $name . ' = $' . $name . ';' . PHP_EOL, $setterComment);
-                    $accessors[] = $setter;
-                }
+                $setterComment = new PhpDocComment();
+                $setterComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
+                $setter = new PhpFunction('public', 'set' . ucfirst($name), '$' . $name, '  $this->' . $name . ' = $' . $name . ';' . PHP_EOL, $setterComment);
+                $accessors[] = $setter;
             }
         }
 
