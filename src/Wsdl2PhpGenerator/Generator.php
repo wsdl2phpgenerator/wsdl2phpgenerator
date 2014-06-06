@@ -6,7 +6,6 @@
 namespace Wsdl2PhpGenerator;
 
 use \Exception;
-use Psr\Log\LoggerInterface;
 use Wsdl2PhpGenerator\Xml\WsdlDocument;
 
 /**
@@ -44,7 +43,7 @@ class Generator implements GeneratorInterface
     private $config;
 
     /**
-     * @var LoggerInterface
+     * @var mixed
      */
     private $logger;
 
@@ -247,9 +246,9 @@ class Generator implements GeneratorInterface
      */
 
     /**
-     * @param LoggerInterface $logger
+     * @param mixed $logger logger object of any class that provides log($level, $message) function, e.g. LoggerInterface from psr/log
      */
-    public function setLogger(LoggerInterface $logger)
+    public function setLogger($logger)
     {
         $this->logger = $logger;
     }
