@@ -17,7 +17,7 @@ before_script:
   # https://github.com/symfony/symfony/issues/4687
   - composer install --dev --no-interaction --prefer-source
   # Update the Symfony version to test against.
-  - composer require symfony/console:${SYMFONY_VERSION}
+  - composer require symfony/options-resolver:${SYMFONY_VERSION}
 
 script:
   - mkdir -p build/logs
