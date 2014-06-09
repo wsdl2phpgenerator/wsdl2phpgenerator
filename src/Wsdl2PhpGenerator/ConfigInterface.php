@@ -168,4 +168,17 @@ interface ConfigInterface
      * @return boolean
      */
     public function getConstructorParamsDefaultToNull();
+
+    /**
+     * Returns if DateTime object should be automatically converted to string
+     * in constructor and getters/setters.
+     *
+     * @return boolean
+     */
+    public function getAutomaticallyConvertDateTime();
+
+    /**
+     * @param boolean $automaticallyConvertDateTime
+     */
+    public function setAutomaticallyConvertDateTime($automaticallyConvertDateTime);
 }
