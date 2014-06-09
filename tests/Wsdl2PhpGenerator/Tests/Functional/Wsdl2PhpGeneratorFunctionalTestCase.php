@@ -39,12 +39,20 @@ abstract class Wsdl2PhpGeneratorFunctionalTestCase extends PHPUnit_Framework_Tes
      */
     abstract protected function getWsdlPath();
 
+    /**
+     * Subclasses can override this function to set options on $this->config
+     */
+    protected function configureOptions()
+    {
+    }
+
     protected function setup()
     {
         $class = new ReflectionClass($this);
         $this->outputDir = 'tests/generated/' . $class->getShortName();
         $this->generator = new Generator();
         $this->config = new Config($this->getWsdlPath(), $this->outputDir);
+        $this->configureOptions();
 
         // We do not execute the code generation here to allow individual test cases
         // to update the configuration further before generating.
