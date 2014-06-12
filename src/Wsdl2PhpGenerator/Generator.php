@@ -158,7 +158,8 @@ class Generator implements GeneratorInterface
                 $this->log('Loading type ' . $type->getPhpIdentifier());
 
                 foreach ($typeNode->getParts() as $name => $typeName) {
-                    $type->addMember($typeName, $name, $typeNode->isElementNillable($name));
+                    $nillable = $typeNode->isElementNillable($name) || $typeNode->getElementMinOccurs($name) === 0;
+                    $type->addMember($typeName, $name, $nillable);
                 }
             } elseif ($enumValues = $typeNode->getEnumerations()) {
                 $type = new Enum($this->config, $typeNode->getName(), $typeNode->getRestriction());
