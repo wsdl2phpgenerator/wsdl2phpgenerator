@@ -82,7 +82,7 @@ class ComplexType extends Type
                 $type = Validator::validateType($member->getType());
                 $name = Validator::validateAttribute($member->getName());
 
-                if (!$member->getNillable()) {
+                if (!$member->getNullable()) {
                     $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
                     $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());
                     $constructorParameters .= ', $' . $name;
@@ -102,7 +102,7 @@ class ComplexType extends Type
             $var = new PhpVariable('public', $name, 'null', $comment);
             $class->addVariable($var);
 
-            if (!$member->getNillable()) {
+            if (!$member->getNullable()) {
                 $constructorSource .= '  $this->' . $name . ' = $' . $name . ';' . PHP_EOL;
                 $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
                 $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());
@@ -155,11 +155,11 @@ class ComplexType extends Type
      *
      * @param string $type
      * @param string $name
-     * @param bool $nillable
+     * @param bool $nullable
      */
-    public function addMember($type, $name, $nillable)
+    public function addMember($type, $name, $nullable)
     {
-        $this->members[$name] = new Variable($type, $name, $nillable);
+        $this->members[$name] = new Variable($type, $name, $nullable);
     }
 
     /**
