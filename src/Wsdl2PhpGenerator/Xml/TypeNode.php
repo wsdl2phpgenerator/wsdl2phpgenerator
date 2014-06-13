@@ -98,7 +98,7 @@ class TypeNode extends XmlNode
             if ($element->getAttribute('name') == $name) {
                 $minOccurs = $element->getAttribute('minOccurs');
                 if ($minOccurs === '') {
-                    return 1;
+                    return null;
                 }
                 return $minOccurs;
             }
