@@ -6,6 +6,10 @@
 namespace Wsdl2PhpGenerator;
 
 use \Exception;
+// psr/log is intentionally not included with the project to keep dependencies to a minimum but
+// the interface is still used to define logging within the codebase.
+// A projects which use logging should include it itself.
+use Psr\Log\LoggerInterface;
 use Wsdl2PhpGenerator\Xml\WsdlDocument;
 
 /**
@@ -43,7 +47,7 @@ class Generator implements GeneratorInterface
     private $config;
 
     /**
-     * @var mixed
+     * @var LoggerInterface
      */
     private $logger;
 
@@ -246,9 +250,9 @@ class Generator implements GeneratorInterface
      */
 
     /**
-     * @param mixed $logger logger object of any class that provides log($level, $message) function, e.g. LoggerInterface from psr/log
+     * @param LoggerInterface $logger
      */
-    public function setLogger($logger)
+    public function setLogger(LoggerInterface $logger)
     {
         $this->logger = $logger;
     }
