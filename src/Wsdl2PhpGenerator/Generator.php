@@ -6,6 +6,9 @@
 namespace Wsdl2PhpGenerator;
 
 use \Exception;
+// psr/log is intentionally not included with the project to keep dependencies to a minimum but
+// the interface is still used to define logging within the codebase.
+// A projects which use logging should include it itself.
 use Psr\Log\LoggerInterface;
 use Wsdl2PhpGenerator\Xml\WsdlDocument;
 
