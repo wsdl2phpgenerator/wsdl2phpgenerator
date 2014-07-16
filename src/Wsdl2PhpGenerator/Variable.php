@@ -24,20 +24,20 @@ class Variable
     private $name;
 
     /**
-     * @var boolean Nillable
+     * @var boolean nullable
      */
-    private $nillable;
+    private $nullable;
 
     /**
      * @param string $type
      * @param string $name
-     * @param bool $nillable
+     * @param bool $nullable
      */
-    public function __construct($type, $name, $nillable)
+    public function __construct($type, $name, $nullable)
     {
         $this->type = $type;
         $this->name = $name;
-        $this->nillable = $nillable;
+        $this->nullable = $nullable;
     }
 
     /**
@@ -59,8 +59,8 @@ class Variable
     /**
      * @return boolean
      */
-    public function getNillable()
+    public function getNullable()
     {
-        return $this->nillable;
+        return $this->nullable;
     }
 }
