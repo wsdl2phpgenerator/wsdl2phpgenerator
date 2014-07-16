@@ -103,7 +103,7 @@ class TypeNode extends XmlNode
                 return $minOccurs;
             }
         }
-        return 1;
+        return null;
     }
 
     /**
