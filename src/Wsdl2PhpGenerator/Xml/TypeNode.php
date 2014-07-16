@@ -88,6 +88,25 @@ class TypeNode extends XmlNode
     }
 
     /**
+     * Returns the minOccurs value of the element.
+     * @param $name string The name of the sub element
+     * @return int the minOccurs value of the element
+     */
+    public function getElementMinOccurs($name)
+    {
+        foreach ($this->element->getElementsByTagName('element') as $element) {
+            if ($element->getAttribute('name') == $name) {
+                $minOccurs = $element->getAttribute('minOccurs');
+                if ($minOccurs === '') {
+                    return null;
+                }
+                return $minOccurs;
+            }
+        }
+        return 1;
+    }
+
+    /**
      * Returns the base type for the type.
      *
      * This is used to model inheritance between types.
