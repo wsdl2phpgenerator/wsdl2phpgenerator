@@ -5,7 +5,7 @@ namespace Wsdl2PhpGenerator\Tests\Functional;
 /**
  * Test handling of the ConstructorParamsDefaultToNull configuration option.
  */
-class ConstructorParamsDefaultToNullTest extends Wsdl2PhpGeneratorFunctionalTestCase
+class ConstructorParamsDefaultToNullTest extends FunctionalTestCase
 {
 
     protected function getWsdlPath()

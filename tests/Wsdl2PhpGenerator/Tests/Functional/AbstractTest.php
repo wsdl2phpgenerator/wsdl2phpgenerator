@@ -5,7 +5,7 @@ namespace Wsdl2PhpGenerator\Tests\Functional;
 /**
  * Test handling of abstract types and extensions.
  */
-class AbstractTest extends Wsdl2PhpGeneratorFunctionalTestCase
+class AbstractTest extends FunctionalTestCase
 {
 
     protected function getWsdlPath()

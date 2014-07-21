@@ -1,7 +1,7 @@
 <?php
 namespace Wsdl2PhpGenerator\Tests\Functional;
 
-class MsSequelServerNativeWebServicesTest extends Wsdl2PhpGeneratorFunctionalTestCase
+class MsSequelServerNativeWebServicesTest extends FunctionalTestCase
 {
 
     protected function getWsdlPath()

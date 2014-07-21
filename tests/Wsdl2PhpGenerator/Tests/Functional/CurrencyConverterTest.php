@@ -13,7 +13,7 @@ use SoapFault;
  * - Enum generation
  * - Simple request/response
  */
-class CurrencyConverterTest extends Wsdl2PhpGeneratorFunctionalTestCase
+class CurrencyConverterTest extends FunctionalTestCase
 {
 
     protected function getWsdlPath()
