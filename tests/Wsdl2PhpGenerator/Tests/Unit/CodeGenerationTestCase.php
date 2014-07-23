@@ -229,6 +229,64 @@ class CodeGenerationTestCase extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Assert that a named parameter for a method has the expected type defined in the DocBlock.
+     *
+     * @param ReflectionMethod $method The method to test.
+     * @param string $parameterName The name of the parameter.
+     * @param string $type The name of the expected type.
+     */
+    protected function assertMethodParameterDocBlockHasType(\ReflectionMethod $method, $parameterName, $type)
+    {
+        // Attempt to do some simple extraction of type declaration from the
+        // DocBlock.
+        $docBlockParameterType = null;
+        if (preg_match('/@param (\S+) \$' . $parameterName . '/', $method->getDocComment(), $matches)) {
+            $docBlockParameterType = $matches[1];
+        }
+
+        $this->assertEquals(
+            $type,
+            $docBlockParameterType,
+            sprintf(
+                'DocBlock form method %s->%s states that parameter %s has type %s. Expected %s.',
+                $parameterName,
+                $method->getDeclaringClass()->getName(),
+                $method->getName(),
+                $docBlockParameterType,
+                $type
+            )
+        );
+    }
+
+    /**
+     * Assert that a method has the expected type defined as the return type in the DocBlock.
+     *
+     * @param ReflectionMethod $method The method to test.
+     * @param string $type The expected return type.
+     */
+    protected function assertMethodHasReturnType(\ReflectionMethod $method, $type)
+    {
+        // Attempt to do some simple extraction of type declaration from the
+        // DocBlock.
+        $docBlockReturnType = null;
+        if (preg_match('/@return (\S*)/', $method->getDocComment(), $matches)) {
+            $docBlockReturnType = $matches[1];
+        }
+
+        $this->assertEquals(
+            $type,
+            $docBlockReturnType,
+            sprintf(
+                'Method "%s->%s" has return type %s. Expected %s',
+                $method->getDeclaringClass()->getName(),
+                $method->getName(),
+                $docBlockReturnType,
+                $type
+            )
+        );
+    }
+
+    /**
      * Assert that a class is a subclass of another class.
      *
      * @param ReflectionClass|string $class The subclass of the name of it.
