@@ -36,3 +36,12 @@ tools:
         excluded_dirs:
             - vendor
             - tests/generated
+
+build:
+    tests:
+        override:
+            -
+                command: 'phpunit'
+                coverage:
+                    file: 'build/logs/clover.xml'
+                    format: 'php-clover'
