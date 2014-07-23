@@ -72,7 +72,7 @@ class ComplexType extends Type
 
         $constructorComment = new PhpDocComment();
         $constructorSource = '';
-        $constructorParameters = '';
+        $constructorParameters = array();
         $accessors = array();
 
         // Add base type members to constructor parameter list first and call base class constructor
@@ -83,19 +83,17 @@ class ComplexType extends Type
 
                 if (!$member->getNullable()) {
                     $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
-                    $constructorParameters .= ', $' . $name;
-                    if ($this->config->get('constructorParamsDefaultToNull')) {
-                        $constructorParameters .= ' = null';
-                    }
+                    $constructorParameters[$name] = Validator::validateTypeHint($type);
                 }
             }
-            $constructorSource .= '  parent::__construct(' . substr($constructorParameters, 2) . ');' . PHP_EOL;
+            $constructorSource .= '  parent::__construct(' . $this->buildParametersString($constructorParameters, false) . ');' . PHP_EOL;
         }
 
         // Add member variables
         foreach ($this->members as $member) {
             $type = Validator::validateType($member->getType());
             $name = Validator::validateAttribute($member->getName());
+            $typeHint = Validator::validateTypeHint($type);
 
             $comment = new PhpDocComment();
             $comment->setVar(PhpDocElementFactory::getVar($type, $name, ''));
@@ -113,10 +111,12 @@ class ComplexType extends Type
                     $constructorSource .= '  $this->' . $name . ' = $' . $name . ';' . PHP_EOL;
                 }
                 $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
-                $constructorParameters .= ', $' . $name;
+                $constructorName = $name;
                 if ($this->config->get('constructorParamsDefaultToNull')) {
-                    $constructorParameters .= ' = null';
+                    // This is somewhat hacky but we do no have function parameters as a class yet.
+                    $constructorName .= ' = null';
                 }
+                $constructorParameters[$constructorName] = $typeHint;
             }
 
             if ($this->config->get('createAccessors')) {
@@ -144,13 +144,12 @@ class ComplexType extends Type
                 } else {
                     $setterCode = '  $this->' . $name . ' = $' . $name . ';' . PHP_EOL;
                 }
-                $setter = new PhpFunction('public', 'set' . ucfirst($name), '$' . $name, $setterCode, $setterComment);
+                $setter = new PhpFunction('public', 'set' . ucfirst($name), $this->buildParametersString(array($name => $typeHint)), $setterCode, $setterComment);
                 $accessors[] = $setter;
             }
         }
 
-        $constructorParameters = substr($constructorParameters, 2); // Remove first comma
-        $function = new PhpFunction('public', '__construct', $constructorParameters, $constructorSource, $constructorComment);
+        $function = new PhpFunction('public', '__construct', $this->buildParametersString($constructorParameters), $constructorSource, $constructorComment);
 
         // Only add the constructor if type constructor is selected
         if ($this->config->get('noTypeConstructor') == false) {
@@ -194,5 +193,22 @@ class ComplexType extends Type
     public function getMembers()
     {
         return $this->members;
+    }
+
+    /**
+     * Generate a string representing the parameters for a function e.g. "type1 $param1, type2 $param2, $param3"
+     *
+     * @param array $parameters A map of parameters. Keys are parameter names and values are parameter types.
+     *                          Parameter types may be empty. In that case they are not used.
+     * @param bool $includeType Whether to include the parameters types in the string
+     * @return string The parameter string.
+     */
+    protected function buildParametersString(array $parameters, $includeType = true)
+    {
+        $parameterStrings = array();
+        foreach ($parameters as $name => $type) {
+            $parameterStrings[] = (!empty($type) && $includeType) ? $type . ' $' . $name : '$' . $name;
+        }
+        return implode(', ', $parameterStrings);
     }
 }

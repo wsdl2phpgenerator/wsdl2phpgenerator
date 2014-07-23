@@ -40,6 +40,7 @@ class MsSequelServerNativeWebServicesTest extends FunctionalTestCase
         $object = new \DayAsNumber(new \DateTime());
         $class = new \ReflectionClass($object);
 
+        $this->assertMethodHasParameter($class->getConstructor(), 'day', 'DateTime');
         $this->assertMethodParameterDocBlockHasType($class->getConstructor(), 'day', '\DateTime');
     }
 

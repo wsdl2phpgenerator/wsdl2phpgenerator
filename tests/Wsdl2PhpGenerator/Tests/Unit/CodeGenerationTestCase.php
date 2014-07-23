@@ -112,7 +112,7 @@ class CodeGenerationTestCase extends PHPUnit_Framework_TestCase
         $comment = $attribute->getDocComment();
         // Attempt to do some simple extraction of type declaration from the
         // DocBlock.
-        if (preg_match('/@var (\w+)/', $comment, $matches)) {
+        if (preg_match('/@var (\S+)/', $comment, $matches)) {
             $value = $attribute->getValue($object);
             $docBlockType = $matches[1];
         }
@@ -226,6 +226,42 @@ class CodeGenerationTestCase extends PHPUnit_Framework_TestCase
                 'Type hinted class for parameters should match'
             );
         }
+    }
+
+    /**
+     * Assert that a named parameter for a method has the expected type defined as a type hint.
+     *
+     * @param ReflectionMethod $method The method to test.
+     * @param string $parameterName The name of the parameter.
+     * @param string $type The name of the expected type.
+     */
+    protected function assertMethodParameterHasType(\ReflectionMethod $method, $parameterName, $type)
+    {
+        $this->assertMethodHasParameter($method, $parameterName);
+
+        $type = ($type instanceof ReflectionClass) ? $type->getName() : $type;
+
+        $parameter = null;
+        foreach ($method->getParameters() as $p) {
+            if ($p->getName() == $parameterName) {
+                $parameter = $p;
+                break;
+            }
+        }
+
+        $parameterClass = ($parameter->getClass() instanceof ReflectionClass) ? $parameter->getClass()->getName() : '';
+        $this->assertEquals(
+            $type,
+            $parameterClass,
+            sprintf(
+                'Parameter %s for method %s->%s has type %s. Expected %s.',
+                $parameterName,
+                $method->getDeclaringClass()->getName(),
+                $method->getName(),
+                $parameterClass,
+                $type
+            )
+        );
     }
 
     /**

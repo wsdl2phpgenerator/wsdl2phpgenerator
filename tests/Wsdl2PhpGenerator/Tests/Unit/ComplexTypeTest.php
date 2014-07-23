@@ -40,14 +40,15 @@ class ComplexTypeTest extends CodeGenerationTestCase
 
         $object = new \ComplexTypeTestClass(new \DateTime());
         $class = new \ReflectionClass($object);
+        $this->assertMethodParameterHasType($class->getConstructor(), 'dateTimeAttribute', 'DateTime');
         $this->assertMethodParameterDocBlockHasType($class->getConstructor(), 'dateTimeAttribute', '\DateTime');
 
         $this->assertMethodHasReturnType($class->getMethod('getDateTimeAttribute'), '\DateTime');
+        $this->assertMethodParameterHasType($class->getMethod('setDateTimeAttribute'), 'dateTimeAttribute', 'DateTime');
         $this->assertMethodParameterDocBlockHasType(
             $class->getMethod('setDateTimeAttribute'),
             'dateTimeAttribute',
             '\DateTime'
         );
     }
-
 }
