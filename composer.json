@@ -16,8 +16,8 @@
         "symfony/options-resolver": "~2.3"
     },
     "require-dev": {
-        "phing/phing": "2.7.*",
+        "phing/phing": "~2.7",
         "php-vcr/phpunit-testlistener-vcr": "1.1.*",
-        "phpunit/phpunit": "4.0.*"
+        "phpunit/phpunit": "~4.0"
     }
 }
