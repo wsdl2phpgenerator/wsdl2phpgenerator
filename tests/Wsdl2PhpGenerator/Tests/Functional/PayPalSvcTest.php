@@ -12,6 +12,11 @@ class PayPalSvcTest extends Wsdl2PhpGeneratorFunctionalTestCase
         return $this->fixtureDir . '/paypal/PayPalSvc.wsdl';
     }
 
+    protected function configureOptions() {
+        parent::configureOptions();
+        $this->config->setCreateAccessors(true);
+    }
+
     /**
      * Test that relative import parts are handled correctly.
      *
@@ -26,5 +31,9 @@ class PayPalSvcTest extends Wsdl2PhpGeneratorFunctionalTestCase
         $this->assertGeneratedClassExists('AmountType');
         $this->assertGeneratedClassExists('AccountStateCodeType');
         $this->assertGeneratedClassExists('EnhancedCheckoutDataType');
+
+        $this->assertGeneratedClassExists('RefundTransactionResponseType');
+        $this->assertClassHasMethod('RefundTransactionResponseType', 'getRefundTransactionID');
+        $this->assertClassHasMethod('RefundTransactionResponseType', 'setRefundTransactionID');
     }
 }

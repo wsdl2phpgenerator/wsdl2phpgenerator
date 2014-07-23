@@ -16,7 +16,7 @@ use Wsdl2PhpGenerator\Config;
 class ConfigTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Wsdl2PhpConfig
+     * @var Config
      */
     protected $object;
 
