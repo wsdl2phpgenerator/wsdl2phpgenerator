@@ -149,11 +149,7 @@ class ComplexType extends Type
         }
 
         $function = new PhpFunction('public', '__construct', $this->buildParametersString($constructorParameters), $constructorSource, $constructorComment);
-
-        // Only add the constructor if type constructor is selected
-        if ($this->config->get('noTypeConstructor') == false) {
-            $class->addFunction($function);
-        }
+        $class->addFunction($function);
 
         foreach ($accessors as $accessor) {
             $class->addFunction($accessor);
