@@ -76,7 +76,6 @@ class Config implements ConfigInterface
             'prefix'                         => '',
             'suffix'                         => '',
             'sharedTypes'                    => false,
-            'createAccessors'                => false,
             'constructorParamsDefaultToNull' => false,
             'noIncludes'                     => false
         ));

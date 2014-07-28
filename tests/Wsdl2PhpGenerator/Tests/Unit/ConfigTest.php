@@ -17,7 +17,6 @@ class ConfigTest extends PHPUnit_Framework_TestCase
             'outputDir'                      => '/tmp/output',
             'verbose'                        => false,
             'oneFile'                        => true,
-            'classExists'                    => true,
             'noTypeConstructor'              => true,
             'namespaceName'                  => 'myNamespace',
             'optionsFeatures'                => array('SOAP_SINGLE_ELEMENT_ARRAYS'),
@@ -27,7 +26,6 @@ class ConfigTest extends PHPUnit_Framework_TestCase
             'prefix'                         => 'prefix',
             'suffix'                         => 'suffix',
             'sharedTypes'                    => false,
-            'createAccessors'                => false,
             'constructorParamsDefaultToNull' => false,
             'noIncludes'                     => false
         );
@@ -48,7 +46,6 @@ class ConfigTest extends PHPUnit_Framework_TestCase
             'outputDir'                      => '/tmp/output',
             'verbose'                        => false,
             'oneFile'                        => true,
-            'classExists'                    => true,
             'noTypeConstructor'              => true,
             'namespaceName'                  => 'myNamespace',
             'optionsFeatures'                => array('SOAP_SINGLE_ELEMENT_ARRAYS'),
@@ -57,7 +54,6 @@ class ConfigTest extends PHPUnit_Framework_TestCase
             'prefix'                         => 'prefix',
             'suffix'                         => 'suffix',
             'sharedTypes'                    => false,
-            'createAccessors'                => false,
             'constructorParamsDefaultToNull' => false,
             'noIncludes'                     => false
         );

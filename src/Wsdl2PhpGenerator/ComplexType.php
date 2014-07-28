@@ -101,11 +101,7 @@ class ComplexType extends Type
 
             $comment = new PhpDocComment();
             $comment->setVar(PhpDocElementFactory::getVar($type, $name, ''));
-            if ($this->config->get('createAccessors')) {
-                $var = new PhpVariable('protected', $name, 'null', $comment);
-            } else {
-                $var = new PhpVariable('public', $name, 'null', $comment);
-            }
+            $var = new PhpVariable('protected', $name, 'null', $comment);
             $class->addVariable($var);
 
             if (!$member->getNullable()) {
@@ -123,35 +119,33 @@ class ComplexType extends Type
                 $constructorParameters[$constructorName] = $typeHint;
             }
 
-            if ($this->config->get('createAccessors')) {
-                $getterComment = new PhpDocComment();
-                $getterComment->setReturn(PhpDocElementFactory::getReturn($type, ''));
-                $getterCode = '';
-                if ($type == '\DateTime') {
-                    $getterCode = '  if ($this->' . $name . ' == null) {' . PHP_EOL
-                        . '    return null;' . PHP_EOL
-                        . '  } else {' . PHP_EOL
-                        . '    return \DateTime::createFromFormat(\DateTime::ATOM, $this->' . $name . ');' . PHP_EOL
-                        . '  }' . PHP_EOL;
-                } else {
-                    $getterCode = '  return $this->' . $name . ';' . PHP_EOL;
-                }
-                $getter = new PhpFunction('public', 'get' . ucfirst($name), '', $getterCode, $getterComment);
-                $accessors[] = $getter;
-
-                $setterComment = new PhpDocComment();
-                $setterComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
-                $setterComment->setReturn(PhpDocElementFactory::getReturn($this->phpNamespacedIdentifier, ''));
-                $setterCode = '';
-                if ($type == '\DateTime') {
-                    $setterCode = '  $this->' . $name . ' = $' . $name . '->format(\DateTime::ATOM);' . PHP_EOL;
-                } else {
-                    $setterCode = '  $this->' . $name . ' = $' . $name . ';' . PHP_EOL;
-                }
-                $setterCode .= '  return $this;' . PHP_EOL;
-                $setter = new PhpFunction('public', 'set' . ucfirst($name), $this->buildParametersString(array($name => $typeHint)), $setterCode, $setterComment);
-                $accessors[] = $setter;
+            $getterComment = new PhpDocComment();
+            $getterComment->setReturn(PhpDocElementFactory::getReturn($type, ''));
+            $getterCode = '';
+            if ($type == '\DateTime') {
+                $getterCode = '  if ($this->' . $name . ' == null) {' . PHP_EOL
+                    . '    return null;' . PHP_EOL
+                    . '  } else {' . PHP_EOL
+                    . '    return \DateTime::createFromFormat(\DateTime::ATOM, $this->' . $name . ');' . PHP_EOL
+                    . '  }' . PHP_EOL;
+            } else {
+                $getterCode = '  return $this->' . $name . ';' . PHP_EOL;
             }
+            $getter = new PhpFunction('public', 'get' . ucfirst($name), '', $getterCode, $getterComment);
+            $accessors[] = $getter;
+
+            $setterComment = new PhpDocComment();
+            $setterComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
+            $setterComment->setReturn(PhpDocElementFactory::getReturn($this->phpNamespacedIdentifier, ''));
+            $setterCode = '';
+            if ($type == '\DateTime') {
+                $setterCode = '  $this->' . $name . ' = $' . $name . '->format(\DateTime::ATOM);' . PHP_EOL;
+            } else {
+                $setterCode = '  $this->' . $name . ' = $' . $name . ';' . PHP_EOL;
+            }
+            $setterCode .= '  return $this;' . PHP_EOL;
+            $setter = new PhpFunction('public', 'set' . ucfirst($name), $this->buildParametersString(array($name => $typeHint)), $setterCode, $setterComment);
+            $accessors[] = $setter;
         }
 
         $function = new PhpFunction('public', '__construct', $this->buildParametersString($constructorParameters), $constructorSource, $constructorComment);
