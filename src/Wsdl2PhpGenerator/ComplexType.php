@@ -61,7 +61,7 @@ class ComplexType extends Type
 
         $class = new PhpClass(
             $this->phpIdentifier,
-            $this->config->get('classExists'),
+            false,
             $this->baseType !== null ? $this->baseType->getPhpIdentifier() : ''
         );
 

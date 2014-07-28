@@ -95,7 +95,7 @@ class Service
 
         // Create the class object
         $comment = new PhpDocComment($this->description);
-        $this->class = new PhpClass($name, $this->config->get('classExists'), '\SoapClient', $comment);
+        $this->class = new PhpClass($name, false, '\SoapClient', $comment);
 
         // Create the constructor
         $comment = new PhpDocComment();
