@@ -83,9 +83,7 @@ class Service
      */
     public function generateClass()
     {
-
-        // Add prefix and suffix
-        $name = $this->config->get('prefix') . $this->identifier . $this->config->get('suffix');
+        $name = $this->identifier;
 
         // Generate a valid classname
         $name = Validator::validateClass($name, $this->config->get('namespaceName'));

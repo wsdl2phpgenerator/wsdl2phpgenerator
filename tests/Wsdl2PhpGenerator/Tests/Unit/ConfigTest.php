@@ -22,8 +22,6 @@ class ConfigTest extends PHPUnit_Framework_TestCase
             'wsdlCache'                      => 'WSDL_CACHE_BOTH',
             'compression'                    => 'SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP',
             'classNames'                     => 'test,test2, test3',
-            'prefix'                         => 'prefix',
-            'suffix'                         => 'suffix',
             'sharedTypes'                    => false,
             'constructorParamsDefaultToNull' => false,
             'noIncludes'                     => false
@@ -49,8 +47,6 @@ class ConfigTest extends PHPUnit_Framework_TestCase
             'optionsFeatures'                => array('SOAP_SINGLE_ELEMENT_ARRAYS'),
             'wsdlCache'                      => 'WSDL_CACHE_BOTH',
             'compression'                    => 'SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP',
-            'prefix'                         => 'prefix',
-            'suffix'                         => 'suffix',
             'sharedTypes'                    => false,
             'constructorParamsDefaultToNull' => false,
             'noIncludes'                     => false

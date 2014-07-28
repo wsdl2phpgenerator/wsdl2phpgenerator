@@ -72,8 +72,6 @@ class Config implements ConfigInterface
             'wsdlCache'                      => '',
             'compression'                    => '',
             'classNames'                     => '',
-            'prefix'                         => '',
-            'suffix'                         => '',
             'sharedTypes'                    => false,
             'constructorParamsDefaultToNull' => false,
             'noIncludes'                     => false

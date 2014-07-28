@@ -166,18 +166,9 @@ class OutputManager
      */
     private function isValidClass(PhpClass $class)
     {
-        $suffix = strlen($this->config->get('suffix'));
-        if ($suffix > 0) {
-            $nSuf = 0 - $suffix;
-            $className = substr($class->getIdentifier(), strlen($this->config->get('prefix')), $nSuf);
-        } else {
-            $className = substr($class->getIdentifier(), strlen($this->config->get('prefix')));
-        }
-
-        if (count($this->classesToSave) == 0 || count($this->classesToSave) > 0 && in_array($className, $this->classesToSave)) {
-            return true;
-        }
-
-        return false;
+        return (count($this->classesToSave) == 0 || count($this->classesToSave) > 0 && in_array(
+                $class->getIdentifier(),
+                $this->classesToSave
+            ));
     }
 }
