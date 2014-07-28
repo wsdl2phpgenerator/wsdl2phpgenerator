@@ -66,7 +66,6 @@ class Config implements ConfigInterface
 
         $resolver->setDefaults(array(
             'verbose'                        => false,
-            'oneFile'                        => false,
             'namespaceName'                  => '',
             'optionsFeatures'                => array(),
             'wsdlCache'                      => '',

@@ -65,28 +65,9 @@ class OutputManager
     {
         $this->setOutputDirectory();
 
-        if ($this->config->get('oneFile')) {
-            if (!is_dir($this->config->get('outputDir'))) {
-                $this->file = new PhpFile(basename($this->config->get('outputDir')));
-            } else {
-                $this->file = new PhpFile($service->getIdentifier());
-            }
-            $this->addNamespace();
-            $this->addClassToFile($service);
-            foreach ($types as $type) {
-                $this->addClassToFile($type);
-            }
-
-            if (!is_dir($this->config->get('outputDir'))) {
-                $this->file->save(dirname($this->config->get('outputDir')));
-            } else {
-                $this->file->save($this->dir);
-            }
-        } else {
-            $this->saveClassToFile($service);
-            foreach ($types as $type) {
-                $this->saveClassToFile($type);
-            }
+        $this->saveClassToFile($service);
+        foreach ($types as $type) {
+            $this->saveClassToFile($type);
         }
     }
 
@@ -101,9 +82,6 @@ class OutputManager
         $outputDirectory = $this->config->get('outputDir');
 
         //Try to create output dir if non existing
-        if ($this->config->get('oneFile')) {
-            $outputDirectory = dirname($outputDirectory);
-        }
         if (is_dir($outputDirectory) == false) {
             if (mkdir($outputDirectory, 0777, true) == false) {
                 throw new Exception('Could not create output directory and it does not exist!');
