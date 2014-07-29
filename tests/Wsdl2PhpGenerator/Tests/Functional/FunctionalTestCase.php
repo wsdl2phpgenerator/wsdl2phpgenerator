@@ -80,6 +80,9 @@ abstract class FunctionalTestCase extends CodeGenerationTestCase
         $this->generator->generate($this->config);
 
         self::$generatedTestCases[$class->getShortName()] = true;
+
+        // Register the autoloader.
+        require_once $this->outputDir . DIRECTORY_SEPARATOR . 'autoload.php';
     }
 
     /**

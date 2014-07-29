@@ -17,7 +17,7 @@ class AbstractTest extends FunctionalTestCase
     {
         $this->markTestIncomplete('Handling of abstract types is not implemented yet.');
 
-        // The base service class should be available. This also loads all other generated classes.
+        // The base service class should be available.
         $this->assertGeneratedClassExists('AbstractServiceService');
 
         // AbstractServiceService contains an operation called echo. This is a PHP keyword and should thus have been

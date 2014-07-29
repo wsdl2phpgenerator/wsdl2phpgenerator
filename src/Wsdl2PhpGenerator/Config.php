@@ -73,7 +73,6 @@ class Config implements ConfigInterface
             'classNames'                     => '',
             'sharedTypes'                    => false,
             'constructorParamsDefaultToNull' => false,
-            'noIncludes'                     => false
         ));
 
         $resolver->setAllowedValues(array(

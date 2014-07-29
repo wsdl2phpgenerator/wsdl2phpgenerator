@@ -23,7 +23,6 @@ class ConfigTest extends PHPUnit_Framework_TestCase
             'classNames'                     => 'test,test2, test3',
             'sharedTypes'                    => false,
             'constructorParamsDefaultToNull' => false,
-            'noIncludes'                     => false
         );
 
         $this->config = new Config($this->options);
@@ -47,7 +46,6 @@ class ConfigTest extends PHPUnit_Framework_TestCase
             'compression'                    => 'SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP',
             'sharedTypes'                    => false,
             'constructorParamsDefaultToNull' => false,
-            'noIncludes'                     => false
         );
 
         foreach ($expectedValues as $key => $expectedValue) {

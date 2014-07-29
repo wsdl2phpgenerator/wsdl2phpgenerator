@@ -26,7 +26,6 @@ class NaicsTest extends FunctionalTestCase
     public function testNaics()
     {
         // Perform the request.
-        require_once $this->outputDir . '/GenericNAICS.php';
         $service = new \GenericNAICS();
         $request = new \GetNAICSByIndustry('Computer Systems');
 

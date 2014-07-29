@@ -65,11 +65,6 @@ class ComplexType extends Type
             $this->baseType !== null ? $this->baseType->getPhpIdentifier() : ''
         );
 
-        // Add the base class as a dependency. Otherwise we risk referencing an undefined class.
-        if (!empty($this->baseType) && !$this->config->get('noIncludes')) {
-            $class->addDependency($this->baseType->getPhpIdentifier() . '.php');
-        }
-
         $constructorComment = new PhpDocComment();
         $constructorSource = '';
         $constructorParameters = array();

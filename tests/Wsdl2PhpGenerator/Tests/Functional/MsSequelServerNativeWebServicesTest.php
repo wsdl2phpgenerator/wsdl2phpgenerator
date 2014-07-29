@@ -21,7 +21,9 @@ class MsSequelServerNativeWebServicesTest extends FunctionalTestCase
         // valid.
         // We do not call the service here. It is not necessary for the check
         // at hand and we do not have a valid endpoint for the service either.
-        require_once $this->outputDir . '/Sql_endpoint.php';
+        // Create an instance of a class containing problematic constants. This also autoloads it.
+        $typeEnum = new \sqlDbTypeEnum();
+        // If we got this far and loaded the class without parse errors we should be good.
         $this->assertTrue(true);
 
         // Test that classes with datetimes are created correctly.

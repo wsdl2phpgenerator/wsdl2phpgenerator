@@ -12,8 +12,8 @@ class AmazonEc2Test extends FunctionalTestCase
 
     public function testNonStandardNamespace()
     {
-        // Load the generated code.
-        require_once $this->outputDir . '/AmazonEC2.php';
+        // Load a service class.
+        $amazon = new \AmazonEC2();
 
         // If we have gotten so far without errors we should be good.
         $this->assertTrue(true);
