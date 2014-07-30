@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="urn:www.example.org:import"
+            xmlns:tns="urn:www.example.org:import">
+
+    <xsd:element name="Author" type="tns:Author"/>
+    <xsd:complexType abstract="true" name="Author">
+        <xsd:sequence>
+            <xsd:element name="firstname" type="xsd:string"/>
+            <xsd:element name="lastname" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="UserAuthor">
+        <xsd:complexContent>
+            <xsd:extension base="Author">
+                <xsd:sequence>
+                    <xsd:element name="userid" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+</xsd:schema>
