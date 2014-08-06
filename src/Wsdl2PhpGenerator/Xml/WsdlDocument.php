@@ -36,8 +36,12 @@ class WsdlDocument extends SchemaDocument
     {
         $this->config = $config;
 
+        // Never use PHP WSDL cache to when creating the SoapClient instance used to extract information.
+        // Otherwise we risk generating code for a WSDL that is no longer valid.
+        $options = array_merge($this->config->get('optionsFeatures'), array('cache_wsdl' => WSDL_CACHE_NONE));
+
         try {
-            $this->soapClient = new SoapClient($wsdlUrl, $this->config->get('optionsFeatures'));
+            $this->soapClient = new SoapClient($wsdlUrl, $options);
             parent::__construct($wsdlUrl);
         } catch (SoapFault $e) {
             throw new Exception('Unable to load WSDL: ' . $e->getMessage(), $e->getCode(), $e);
