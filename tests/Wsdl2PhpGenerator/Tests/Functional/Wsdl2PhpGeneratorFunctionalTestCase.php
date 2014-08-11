@@ -39,6 +39,13 @@ abstract class Wsdl2PhpGeneratorFunctionalTestCase extends PHPUnit_Framework_Tes
      */
     abstract protected function getWsdlPath();
 
+    /**
+     * Subclasses can override this function to set options on $this->config
+     */
+    protected function configureOptions()
+    {
+    }
+
     protected function setup()
     {
         $class = new ReflectionClass($this);
@@ -48,6 +55,7 @@ abstract class Wsdl2PhpGeneratorFunctionalTestCase extends PHPUnit_Framework_Tes
             'inputFile' => $this->getWsdlPath(),
             'outputDir' => $this->outputDir
         ));
+        $this->configureOptions();
 
         // We do not execute the code generation here to allow individual test cases
         // to update the configuration further before generating.
@@ -270,12 +278,17 @@ abstract class Wsdl2PhpGeneratorFunctionalTestCase extends PHPUnit_Framework_Tes
      */
     protected function assertMethodHasParameter(\ReflectionMethod $method, ReflectionParameter $parameter)
     {
-        $parameterNames = array();
+        $parameters = array();
         foreach ($method->getParameters() as $methodParameter) {
-            $parameterNames[] = $methodParameter->getName();
+            $parameters[$methodParameter->getName()] = $methodParameter;
         }
-        $message = (empty($message)) ? sprintf('Parameter "%s" not found among parameter for method "%s->%s" ("%s")', $parameter->getName(), $method->getDeclaringClass()->getName(), $method->getName(), implode('", "', $parameterNames)) : $message;
-        $this->assertContains($parameter->getName(), $parameterNames, $message);
+        $message = (empty($message)) ? sprintf('Parameter "%s" not found among parameter for method "%s->%s" ("%s")', $parameter->getName(), $method->getDeclaringClass()->getName(), $method->getName(), implode('", "', array_keys($parameters))) : $message;
+        $this->assertContains($parameter->getName(), array_keys($parameters), $message);
+
+        // Main attributes for parameters should also be equal.
+        $actualParameter = $parameters[$parameter->getName()] ;
+        $this->assertEquals($actualParameter->getDefaultValue(), $parameter->getDefaultValue(), 'Default values for parameters do not match.');
+        $this->assertEquals($actualParameter->getClass(), $parameter->getClass(), 'Type hinted class for parameters should match');
     }
 
     /**
