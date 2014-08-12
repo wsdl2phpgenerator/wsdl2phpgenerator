@@ -275,12 +275,17 @@ abstract class Wsdl2PhpGeneratorFunctionalTestCase extends PHPUnit_Framework_Tes
      */
     protected function assertMethodHasParameter(\ReflectionMethod $method, ReflectionParameter $parameter)
     {
-        $parameterNames = array();
+        $parameters = array();
         foreach ($method->getParameters() as $methodParameter) {
-            $parameterNames[] = $methodParameter->getName();
+            $parameters[$methodParameter->getName()] = $methodParameter;
         }
-        $message = (empty($message)) ? sprintf('Parameter "%s" not found among parameter for method "%s->%s" ("%s")', $parameter->getName(), $method->getDeclaringClass()->getName(), $method->getName(), implode('", "', $parameterNames)) : $message;
-        $this->assertContains($parameter->getName(), $parameterNames, $message);
+        $message = (empty($message)) ? sprintf('Parameter "%s" not found among parameter for method "%s->%s" ("%s")', $parameter->getName(), $method->getDeclaringClass()->getName(), $method->getName(), implode('", "', array_keys($parameters))) : $message;
+        $this->assertContains($parameter->getName(), array_keys($parameters), $message);
+
+        // Main attributes for parameters should also be equal.
+        $actualParameter = $parameters[$parameter->getName()] ;
+        $this->assertEquals($actualParameter->getDefaultValue(), $parameter->getDefaultValue(), 'Default values for parameters do not match.');
+        $this->assertEquals($actualParameter->getClass(), $parameter->getClass(), 'Type hinted class for parameters should match');
     }
 
     /**
