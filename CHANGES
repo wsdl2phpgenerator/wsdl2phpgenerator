@@ -1,4 +1,10 @@
 
+2.4.2 / 2014-08-13 
+==================
+
+ * Fixed default null value for subclass constructors when using the ConstructorParamsDefaultToNull configuration option.
+ * Disable PHP WSDL cache when extracting information.
+
 2.4.1 / 2014-07-24 
 ==================
 
