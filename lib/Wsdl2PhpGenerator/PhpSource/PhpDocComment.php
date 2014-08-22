@@ -109,7 +109,11 @@ class PhpDocComment
 
         // TODO: Look over the generation and possible combinations
 
-        $lines = explode(PHP_EOL, $this->description);
+        $preDescription = trim($this->description);
+        if ($this->config->getCommentsDescriptionWithoutGaps()) {
+            $preDescription = preg_replace('/([^\s])[ \t]*[\r\n]([ ]{4,}|\t)([^\s])/', '$1 $3', $preDescription);
+        }
+        $lines = explode(PHP_EOL, $preDescription);
         foreach ($lines as $line) {
             $ret .= ' * ' . trim($line) . PHP_EOL;
         }

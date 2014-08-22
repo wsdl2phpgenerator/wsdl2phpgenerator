@@ -61,4 +61,46 @@ class PhpDocCommentTest extends PHPUnit_Framework_TestCase
         $this->assertContains(' * @access private', $this->comment->getSource());
     }
 
+    public function testCommentsGeneratedWithoutGaps()
+    {
+        // By default gaps are in comments
+        $this->comment->setDescription('
+            Here we have
+    some gaps in comments, that usually
+            goes to us from some formatting or word wrapping.
+
+            Or we just dont want to have these new lines.
+            Only doubled one leaves.
+
+            Other
+            gaps
+            are
+        gone.
+
+');
+        $this->assertContains('
+ * Here we have
+ * some gaps in comments, that usually
+ * goes to us from some formatting or word wrapping.
+ *
+ * Or we just dont want to have these new lines.
+ * Only doubled one leaves.
+ *
+ * Other
+ * gaps
+ * are
+ * gone.
+', $this->comment->getSource());
+
+        // Disabling it...
+        $this->config->setCommentsDescriptionWithoutGaps(true);
+        $this->assertContains('
+ * Here we have some gaps in comments, that usually goes to us from some formatting or word wrapping.
+ *
+ * Or we just dont want to have these new lines. Only doubled one leaves.
+ *
+ * Other gaps are gone.
+', $this->comment->getSource());
+    }
+
 }
