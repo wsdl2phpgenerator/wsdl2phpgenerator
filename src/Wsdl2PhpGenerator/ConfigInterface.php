@@ -168,4 +168,16 @@ interface ConfigInterface
      * @return boolean
      */
     public function getConstructorParamsDefaultToNull();
+
+    /**
+     * @param boolean $commentsWithoutPublicAccess
+     */
+    public function setCommentsWithoutPublicAccess($commentsWithoutPublicAccess);
+
+    /**
+     * Returns if comments should be generated without 'public' access tag
+     *
+     * @return boolean
+    */
+    public function getCommentsWithoutPublicAccess();
 }

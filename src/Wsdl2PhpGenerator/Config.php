@@ -128,6 +128,13 @@ class Config implements ConfigInterface
     private $noIncludes;
 
     /**
+     * If comments should be generated without 'public' access tag
+     *
+     * @var bool
+     */
+    private $commentsWithoutPublicAccess;
+
+    /**
      * Sets all variables
      *
      * @param string $inputFile
@@ -147,6 +154,7 @@ class Config implements ConfigInterface
      * @param bool $createAccessors
      * @param bool $constructorParamsDefaultToNull
      * @param bool $noIncludes
+     * @param bool $commentsWithoutPublicAccess
      */
     public function __construct($inputFile, $outputDir, $verbose = false, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '', $prefix = '', $suffix = '', $sharedTypes = false, $createAccessors = false, $constructorParamsDefaultToNull = false, $noIncludes = false)
     {
@@ -177,6 +185,7 @@ class Config implements ConfigInterface
         $this->createAccessors = $createAccessors;
         $this->constructorParamsDefaultToNull = $constructorParamsDefaultToNull;
         $this->noIncludes = $noIncludes;
+        $this->setCommentsWithoutPublicAccess($commentsWithoutPublicAccess);
     }
 
     public function getNamespaceName()
@@ -448,5 +457,23 @@ class Config implements ConfigInterface
     public function setNoIncludes($noIncludes)
     {
         $this->noIncludes = $noIncludes;
+    }
+
+    /**
+     * @param boolean $commentsWithoutPublicAccess
+     */
+    public function setCommentsWithoutPublicAccess($commentsWithoutPublicAccess)
+    {
+        $this->commentsWithoutPublicAccess = $commentsWithoutPublicAccess;
+    }
+
+    /**
+     * Returns if comments should be generated without 'public' access tag
+     *
+     * @return boolean
+    */
+    public function getCommentsWithoutPublicAccess()
+    {
+        return $this->commentsWithoutPublicAccess;
     }
 }

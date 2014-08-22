@@ -118,6 +118,9 @@ class PhpDocComment
             $ret .= ' * ' . PHP_EOL;
         }
 
+        // Remove trailing spaces
+        $ret = str_replace(' * ' . PHP_EOL, ' *' . PHP_EOL, $ret);
+
         if (count($this->params) > 0) {
             foreach ($this->params as $param) {
                 $ret .= $param->getSource();
@@ -138,7 +141,13 @@ class PhpDocComment
             $ret .= $this->author->getSource();
         }
         if ($this->access != null) {
-            $ret .= $this->access->getSource();
+            $isPublic      = $this->access->getDatatype() == 'public';
+            $withoutPublic = $this->config->getCommentsWithoutPublicAccess();
+            if ($isPublic && $withoutPublic) {
+                // do nothing
+            } else {
+                $ret .= $this->access->getSource();
+            }
         }
         if ($this->return != null) {
             $ret .= $this->return->getSource();
