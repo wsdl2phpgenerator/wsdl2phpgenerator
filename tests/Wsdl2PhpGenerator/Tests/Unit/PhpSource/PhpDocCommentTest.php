@@ -102,5 +102,4 @@ class PhpDocCommentTest extends PHPUnit_Framework_TestCase
  * Other gaps are gone.
 ', $this->comment->getSource());
     }
-
 }
