@@ -4,6 +4,8 @@
  */
 namespace Wsdl2PhpGenerator\PhpSource;
 
+use Wsdl2PhpGenerator\ConfigInterface;
+
 /**
  * Class that represents the source code for a phpdoc comment in php
  *
@@ -13,6 +15,11 @@ namespace Wsdl2PhpGenerator\PhpSource;
  */
 class PhpDocComment
 {
+    /**
+     * @var ConfigInterface
+     */
+    private $config;
+
     /**
      *
      * @var PhpDocElement A access element
@@ -72,9 +79,13 @@ class PhpDocComment
 
     /**
      * Constructs the object, sets all variables to empty
+     *
+     * @param ConfigInterface $config
+     * @param string $description
      */
-    public function __construct($description = '')
+    public function __construct(ConfigInterface $config, $description = '')
     {
+        $this->config = $config;
         $this->description = $description;
         $this->access = null;
         $this->var = null;

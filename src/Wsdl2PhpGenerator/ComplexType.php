@@ -70,7 +70,7 @@ class ComplexType extends Type
             $class->addDependency($this->baseType->getIdentifier() . '.php');
         }
 
-        $constructorComment = new PhpDocComment();
+        $constructorComment = new PhpDocComment($this->config);
         $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());
         $constructorSource = '';
         $constructorParameters = '';
@@ -99,7 +99,7 @@ class ComplexType extends Type
             $type = Validator::validateType($member->getType());
             $name = Validator::validateAttribute($member->getName());
 
-            $comment = new PhpDocComment();
+            $comment = new PhpDocComment($this->config);
             $comment->setVar(PhpDocElementFactory::getVar($type, $name, ''));
             $comment->setAccess(PhpDocElementFactory::getPublicAccess());
             $var = new PhpVariable('public', $name, 'null', $comment);
@@ -116,12 +116,12 @@ class ComplexType extends Type
             }
 
             if ($this->config->getCreateAccessors()) {
-                $getterComment = new PhpDocComment();
+                $getterComment = new PhpDocComment($this->config);
                 $getterComment->setReturn(PhpDocElementFactory::getReturn($type, ''));
                 $getter = new PhpFunction('public', 'get' . ucfirst($name), '', '  return $this->' . $name . ';' . PHP_EOL, $getterComment);
                 $accessors[] = $getter;
 
-                $setterComment = new PhpDocComment();
+                $setterComment = new PhpDocComment($this->config);
                 $setterComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
                 $setter = new PhpFunction('public', 'set' . ucfirst($name), '$' . $name, '  $this->' . $name . ' = $' . $name . ';' . PHP_EOL, $setterComment);
                 $accessors[] = $setter;

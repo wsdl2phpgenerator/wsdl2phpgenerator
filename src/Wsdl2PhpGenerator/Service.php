@@ -94,11 +94,11 @@ class Service
         $name = ucfirst($name);
 
         // Create the class object
-        $comment = new PhpDocComment($this->description);
+        $comment = new PhpDocComment($this->config, $this->description);
         $this->class = new PhpClass($name, $this->config->getClassExists(), '\SoapClient', $comment);
 
         // Create the constructor
-        $comment = new PhpDocComment();
+        $comment = new PhpDocComment($this->config);
         $comment->addParam(PhpDocElementFactory::getParam('array', 'options', 'A array of config values'));
         $comment->addParam(PhpDocElementFactory::getParam('string', 'wsdl', 'The wsdl file to use'));
         $comment->setAccess(PhpDocElementFactory::getPublicAccess());
@@ -118,7 +118,7 @@ class Service
 
         // Generate the classmap
         $name = 'classmap';
-        $comment = new PhpDocComment();
+        $comment = new PhpDocComment($this->config);
         $comment->setAccess(PhpDocElementFactory::getPrivateAccess());
         $comment->setVar(PhpDocElementFactory::getVar('array', $name, 'The defined classes'));
 
@@ -139,7 +139,7 @@ class Service
         foreach ($this->operations as $operation) {
             $name = Validator::validateOperation($operation->getName());
 
-            $comment = new PhpDocComment($operation->getDescription());
+            $comment = new PhpDocComment($this->config, $operation->getDescription());
             $comment->setAccess(PhpDocElementFactory::getPublicAccess());
             $comment->setReturn(PhpDocElementFactory::getReturn($operation->getReturns(), ''));
 
