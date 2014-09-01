@@ -4,6 +4,8 @@
  */
 namespace Wsdl2PhpGenerator\PhpSource;
 
+use Wsdl2PhpGenerator\ConfigInterface;
+
 /**
  * Class that represents the source code for a phpdoc comment in php
  *
@@ -13,6 +15,11 @@ namespace Wsdl2PhpGenerator\PhpSource;
  */
 class PhpDocComment
 {
+    /**
+     * @var ConfigInterface
+     */
+    private $config;
+
     /**
      *
      * @var PhpDocElement A access element
@@ -72,9 +79,13 @@ class PhpDocComment
 
     /**
      * Constructs the object, sets all variables to empty
+     *
+     * @param ConfigInterface $config
+     * @param string $description
      */
-    public function __construct($description = '')
+    public function __construct(ConfigInterface $config, $description = '')
     {
+        $this->config = $config;
         $this->description = $description;
         $this->access = null;
         $this->var = null;
@@ -98,7 +109,11 @@ class PhpDocComment
 
         // TODO: Look over the generation and possible combinations
 
-        $lines = explode(PHP_EOL, $this->description);
+        $preDescription = trim($this->description);
+        if ($this->config->getCommentsDescriptionWithoutGaps()) {
+            $preDescription = preg_replace('/([^\s])[ \t]*[\r\n]([ ]{4,}|\t)([^\s])/', '$1 $3', $preDescription);
+        }
+        $lines = explode(PHP_EOL, $preDescription);
         foreach ($lines as $line) {
             $ret .= ' * ' . trim($line) . PHP_EOL;
         }
@@ -106,6 +121,9 @@ class PhpDocComment
         if (strlen($this->description) > 0) {
             $ret .= ' * ' . PHP_EOL;
         }
+
+        // Remove trailing spaces
+        $ret = str_replace(' * ' . PHP_EOL, ' *' . PHP_EOL, $ret);
 
         if (count($this->params) > 0) {
             foreach ($this->params as $param) {
@@ -127,7 +145,13 @@ class PhpDocComment
             $ret .= $this->author->getSource();
         }
         if ($this->access != null) {
-            $ret .= $this->access->getSource();
+            $isPublic      = $this->access->getDatatype() == 'public';
+            $withoutPublic = $this->config->getCommentsWithoutPublicAccess();
+            if ($isPublic && $withoutPublic) {
+                // do nothing
+            } else {
+                $ret .= $this->access->getSource();
+            }
         }
         if ($this->return != null) {
             $ret .= $this->return->getSource();

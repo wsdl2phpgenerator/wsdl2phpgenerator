@@ -128,6 +128,20 @@ class Config implements ConfigInterface
     private $noIncludes;
 
     /**
+     * If comments should be generated without 'public' access tag
+     *
+     * @var bool
+     */
+    private $commentsWithoutPublicAccess;
+
+    /**
+     * If comments descriptions should be generated without ugly gaps that goes from XML formatting linewrap
+     *
+     * @var bool
+     */
+    private $commentsDescriptionWithoutGaps;
+
+    /**
      * Sets all variables
      *
      * @param string $inputFile
@@ -147,8 +161,10 @@ class Config implements ConfigInterface
      * @param bool $createAccessors
      * @param bool $constructorParamsDefaultToNull
      * @param bool $noIncludes
+     * @param bool $commentsWithoutPublicAccess
+     * @param bool $commentsDescriptionWithoutGaps
      */
-    public function __construct($inputFile, $outputDir, $verbose = false, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '', $prefix = '', $suffix = '', $sharedTypes = false, $createAccessors = false, $constructorParamsDefaultToNull = false, $noIncludes = false)
+    public function __construct($inputFile, $outputDir, $verbose = false, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '', $prefix = '', $suffix = '', $sharedTypes = false, $createAccessors = false, $constructorParamsDefaultToNull = false, $noIncludes = false, $commentsWithoutPublicAccess = false, $commentsDescriptionWithoutGaps = false)
     {
         $this->namespaceName = trim($namespaceName);
         $this->oneFile = $oneFile;
@@ -177,6 +193,8 @@ class Config implements ConfigInterface
         $this->createAccessors = $createAccessors;
         $this->constructorParamsDefaultToNull = $constructorParamsDefaultToNull;
         $this->noIncludes = $noIncludes;
+        $this->setCommentsWithoutPublicAccess($commentsWithoutPublicAccess);
+        $this->setCommentsDescriptionWithoutGaps($commentsDescriptionWithoutGaps);
     }
 
     public function getNamespaceName()
@@ -448,5 +466,41 @@ class Config implements ConfigInterface
     public function setNoIncludes($noIncludes)
     {
         $this->noIncludes = $noIncludes;
+    }
+
+    /**
+     * @param boolean $commentsWithoutPublicAccess
+     */
+    public function setCommentsWithoutPublicAccess($commentsWithoutPublicAccess)
+    {
+        $this->commentsWithoutPublicAccess = $commentsWithoutPublicAccess;
+    }
+
+    /**
+     * Returns if comments should be generated without 'public' access tag
+     *
+     * @return boolean
+    */
+    public function getCommentsWithoutPublicAccess()
+    {
+        return $this->commentsWithoutPublicAccess;
+    }
+
+    /**
+     * @param boolean $commentsDescriptionWithoutGaps
+     */
+    public function setCommentsDescriptionWithoutGaps($commentsDescriptionWithoutGaps)
+    {
+        $this->commentsDescriptionWithoutGaps = $commentsDescriptionWithoutGaps;
+    }
+
+    /**
+     * Returns if comments descriptions should be generated without ugly gaps that goes from XML formatting linewrap
+     *
+     * @return boolean
+    */
+    public function getCommentsDescriptionWithoutGaps()
+    {
+        return $this->commentsDescriptionWithoutGaps;
     }
 }
