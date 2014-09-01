@@ -22,6 +22,12 @@ class CurrencyConverterTest extends Wsdl2PhpGeneratorFunctionalTestCase
         return $this->fixtureDir . '/currencyconvertor/CurrencyConvertor.wsdl';
     }
 
+    protected function configureOptions()
+    {
+        $this->config->setNamespaceName('CC');
+        $this->config->setCreateAccessors(true);
+    }
+
     /**
      * Perform a basic code generation/request/response scenario.
      *
@@ -37,22 +43,28 @@ class CurrencyConverterTest extends Wsdl2PhpGeneratorFunctionalTestCase
             'ConversionRateResponse',
         );
         foreach ($expected_classes as $class) {
-            $this->assertGeneratedClassExists($class);
+            $this->assertGeneratedClassExists($class, $this->config->getNamespaceName());
         }
 
         // Make sure that we have expected constants and methods.
-        $this->assertClassHasConst('USD', 'Currency');
-        $this->assertClassHasConst('EUR', 'Currency');
-        $this->assertClassHasMethod('CurrencyConvertor', 'ConversionRate');
+        $this->assertClassHasConst('USD', '\\CC\\Currency');
+        $this->assertClassHasConst('EUR', '\\CC\\Currency');
+        $this->assertClassHasMethod('\\CC\\CurrencyConvertor', 'ConversionRate');
 
         // Setup and execute the service call.
-        $service = new \CurrencyConvertor();
-        $request = new \ConversionRate(\Currency::USD, \Currency::EUR);
+        $service = new \CC\CurrencyConvertor();
+        $request = new \CC\ConversionRate(\CC\Currency::USD, \CC\Currency::EUR);
+        $request
+            ->setFromCurrency(\CC\Currency::RUB)
+            ->setToCurrency(\CC\Currency::CNY)
+        ;
+        $this->assertEquals(\CC\Currency::RUB, $request->FromCurrency);
+        $this->assertEquals(\CC\Currency::CNY, $request->ToCurrency);
         try {
             $response = $service->ConversionRate($request);
 
             // Test that the response is as expected.
-            $this->assertTrue(get_class($response) == 'ConversionRateResponse');
+            $this->assertTrue(get_class($response) == 'CC\\ConversionRateResponse');
             // In the end the conversion rate between USD and EUR should be a numeric.
             // It is actually a double but this type does not seem to be supported by
             // assertAttributeInternalType().
