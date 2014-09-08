@@ -94,46 +94,50 @@ class PhpDocComment
      */
     public function getSource()
     {
-        $ret = PHP_EOL . '/**' . PHP_EOL;
-
-        // TODO: Look over the generation and possible combinations
-
-        $lines = explode(PHP_EOL, $this->description);
-        foreach ($lines as $line) {
-            $ret .= ' * ' . trim($line) . PHP_EOL;
-        }
-
+        $description = '';
         if (strlen($this->description) > 0) {
-            $ret .= ' * ' . PHP_EOL;
+            $preDescription = trim($this->description);
+            $lines = explode(PHP_EOL, $preDescription);
+            foreach ($lines as $line) {
+                $description .= ' ' . trim('* ' . $line) . PHP_EOL;
+            }
         }
 
+        $tags = '';
         if (count($this->params) > 0) {
             foreach ($this->params as $param) {
-                $ret .= $param->getSource();
+                $tags .= $param->getSource();
             }
         }
         if (count($this->throws) > 0) {
             foreach ($this->throws as $throws) {
-                $ret .= $throws->getSource();
+                $tags .= $throws->getSource();
             }
         }
         if ($this->var != null) {
-            $ret .= $this->var->getSource();
+            $tags .= $this->var->getSource();
         }
         if ($this->package != null) {
-            $ret .= $this->package->getSource();
+            $tags .= $this->package->getSource();
         }
         if ($this->author != null) {
-            $ret .= $this->author->getSource();
+            $tags .= $this->author->getSource();
         }
         if ($this->access != null) {
-            $ret .= $this->access->getSource();
+            $tags .= $this->access->getSource();
         }
         if ($this->return != null) {
-            $ret .= $this->return->getSource();
+            $tags .= $this->return->getSource();
         }
 
-        $ret .= ' */' . PHP_EOL;
+        if (!empty($description) && !empty($tags)) {
+            $description .= ' *' . PHP_EOL;
+        }
+        $ret = $description . $tags;
+
+        if (!empty($ret)) {
+            $ret = PHP_EOL . '/**' . PHP_EOL . $ret . ' */' . PHP_EOL;
+        }
 
         return $ret;
     }

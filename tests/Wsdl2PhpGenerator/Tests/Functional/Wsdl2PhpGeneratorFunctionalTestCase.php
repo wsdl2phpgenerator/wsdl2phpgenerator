@@ -35,6 +35,12 @@ abstract class Wsdl2PhpGeneratorFunctionalTestCase extends PHPUnit_Framework_Tes
     protected $fixtureDir = 'tests/fixtures/wsdl';
 
     /**
+     * Storage of already generated classes from WSDL to avoid double delaring and fatals
+     * @var array
+     */
+    private static $generatedTestCases = array();
+
+    /**
      * @return string The path to the WSDL to generate code from.
      */
     abstract protected function getWsdlPath();
@@ -46,7 +52,16 @@ abstract class Wsdl2PhpGeneratorFunctionalTestCase extends PHPUnit_Framework_Tes
     {
     }
 
-    protected function setup()
+    protected function setUp()
+    {
+        $this->generateCode();
+    }
+
+    /**
+     * Generate code from provided WSDL once to avoid redeclare fatal errors.
+     * Individual test cases can update the configuration before generating.
+     */
+    protected function generateCode()
     {
         $class = new ReflectionClass($this);
         $this->outputDir = 'tests/generated/' . $class->getShortName();
@@ -57,6 +72,10 @@ abstract class Wsdl2PhpGeneratorFunctionalTestCase extends PHPUnit_Framework_Tes
         // We do not execute the code generation here to allow individual test cases
         // to update the configuration further before generating.
 
+        if (!empty(self::$generatedTestCases[$class->getShortName()])) {
+            return;
+        }
+
         // Clear output dir before starting.
         if (is_dir($this->outputDir)) {
             // Remove any generated code.
@@ -66,6 +85,7 @@ abstract class Wsdl2PhpGeneratorFunctionalTestCase extends PHPUnit_Framework_Tes
         // Generate the code.
         $this->generator->generate($this->config);
 
+        self::$generatedTestCases[$class->getShortName()] = true;
     }
 
     /**
