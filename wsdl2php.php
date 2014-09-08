@@ -6,8 +6,11 @@ use Wsdl2PhpGenerator\Console\Application;
 use Wsdl2PhpGenerator\Console\GenerateCommand;
 use Wsdl2PhpGenerator\Generator;
 
+// Require Composer autoloader depending on usage:
+// From own project...
 if (file_exists('vendor/autoload.php')) {
     require 'vendor/autoload.php';
+// ... or when included in another project.
 } else {
     require __DIR__ . '/../../autoload.php';
 }
