@@ -38,6 +38,11 @@ abstract class Type
     protected $phpIdentifier;
 
     /**
+     * @var string The name of the type used in php code with namespace (if needed) ie. the validated name
+     */
+    protected $phpNamespacedIdentifier;
+    
+    /**
      * @var string The datatype the simple type is of. This not used by complex types
      */
     protected $datatype;
@@ -62,6 +67,10 @@ abstract class Type
         $name = Validator::validateClass($name);
 
         $this->phpIdentifier = $name;
+        $this->phpNamespacedIdentifier = $name;
+        if ($this->config->get('namespaceName')) {
+            $this->phpNamespacedIdentifier = '\\' . $this->config->get('namespaceName') . '\\' . $name;
+        }
     }
 
     /**
