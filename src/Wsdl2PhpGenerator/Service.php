@@ -88,7 +88,7 @@ class Service
         $name = $this->config->getPrefix() . $this->identifier . $this->config->getSuffix();
 
         // Generate a valid classname
-        $name = Validator::validateClass($name);
+        $name = Validator::validateClass($name, $this->config->getNamespaceName());
 
         // uppercase the name
         $name = ucfirst($name);
