@@ -109,19 +109,23 @@ class Validator
      * Validates a class name against PHP naming conventions and already defined classes.
      *
      * @param string $name the name of the class to test
+     * @param string $namespace the name of the namespace
      * @return string The validated version of the submitted class name
      */
-    public static function validateClass($name)
+    public static function validateClass($name, $namespace = null)
     {
         $name = self::validateNamingConvention($name);
-        if (self::isKeyword($name) || class_exists($name)) {
+
+        $prefix = isset($namespace) ? "\\$namespace\\" : '';
+
+        if (self::isKeyword($name) || class_exists($prefix . $name)) {
             $name .= self::NAME_SUFFIX;
         }
 
         // In case of continued name clashes append numbering.
         $newName = $name;
         $i = 1;
-        while (class_exists($newName)) {
+        while (class_exists($prefix . $newName)) {
             $newName = $name . $i++;
         }
 
