@@ -15,7 +15,7 @@ if (file_exists('vendor/autoload.php')) {
     require __DIR__ . '/../../autoload.php';
 }
 
-$app = new Application('wsdl2php', '2.4.2');
+$app = new Application('wsdl2php', '2.5.0');
 $command = new GenerateCommand();
 $command->setGenerator(Generator::getInstance());
 $app->add($command);

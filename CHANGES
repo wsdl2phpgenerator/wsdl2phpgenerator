@@ -1,4 +1,11 @@
 
+2.5.0 / 2014-09-09 
+==================
+
+ * Support method chaining for setters when using the createAccessors option.
+ * Avoid empty comments and unnecessary new line after description.
+ * Fixed path to composer autoloader when included in a composer.json from another project.
+
 2.4.2 / 2014-08-13 
 ==================
 
