@@ -8,8 +8,8 @@ use Wsdl2PhpGenerator\Generator;
 
 // Require Composer autoloader depending on usage:
 // From own project...
-if (file_exists('vendor/autoload.php')) {
-    require 'vendor/autoload.php';
+if (file_exists(__DIR__ . '/vendor/autoload.php')) {
+    require __DIR__ . '/vendor/autoload.php';
 // ... or when included in another project.
 } else {
     require __DIR__ . '/../../autoload.php';
