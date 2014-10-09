@@ -55,7 +55,7 @@ class SchemaDocument extends XmlNode
 
         // Locate and instantiate schemas which are imported by the current schema.
         $this->imports = array();
-        foreach ($this->xpath('//wsdl:import/@location|//s:import/@schemaLocation') as $import) {
+        foreach ($this->xpath('//wsdl:import/@location|//s:import/@schemaLocation|//s:include/@schemaLocation') as $import) {
             $importUrl = $import->value;
             if (strpos($importUrl, '//') === false) {
                 $importUrl = dirname($xsdUrl) . '/' . $importUrl;
