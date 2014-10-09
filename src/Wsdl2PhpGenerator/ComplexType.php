@@ -56,7 +56,7 @@ class ComplexType extends Type
     * @param string $constructorParameters
     */
    protected function generateConstructorFromBaseType(ComplexType $baseType, PhpDocComment $constructorComment, &$constructorParameters)
-    {
+   {
         if ($baseType->baseType !== null) {
             $this->generateConstructorFromBaseType($baseType->baseType, $constructorComment, $constructorParameters);
         }
