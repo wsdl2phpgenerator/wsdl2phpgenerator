@@ -128,6 +128,13 @@ class Config implements ConfigInterface
     private $noIncludes;
 
     /**
+     * Decides if constants are generated in classes
+     *
+     * @var bool
+     */
+    private $noConstants;
+
+    /**
      * Sets all variables
      *
      * @param string $inputFile
@@ -148,7 +155,7 @@ class Config implements ConfigInterface
      * @param bool $constructorParamsDefaultToNull
      * @param bool $noIncludes
      */
-    public function __construct($inputFile, $outputDir, $verbose = false, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '', $prefix = '', $suffix = '', $sharedTypes = false, $createAccessors = false, $constructorParamsDefaultToNull = false, $noIncludes = false)
+    public function __construct($inputFile, $outputDir, $verbose = false, $oneFile = false, $classExists = false, $noTypeConstructor = false, $namespaceName = '', $optionsFeatures = array(), $wsdlCache = '', $compression = '', $classNames = '', $prefix = '', $suffix = '', $sharedTypes = false, $createAccessors = false, $constructorParamsDefaultToNull = false, $noIncludes = false, $noConstants = false)
     {
         $this->namespaceName = trim($namespaceName);
         $this->oneFile = $oneFile;
@@ -177,6 +184,7 @@ class Config implements ConfigInterface
         $this->createAccessors = $createAccessors;
         $this->constructorParamsDefaultToNull = $constructorParamsDefaultToNull;
         $this->noIncludes = $noIncludes;
+        $this->noConstants = $noConstants;
     }
 
     public function getNamespaceName()
@@ -314,6 +322,13 @@ class Config implements ConfigInterface
         return $this->noIncludes;
     }
 
+   /**
+    * @return bool
+    */
+    public function getNoConstants(){
+        return $this->noConstants;
+    }
+
     /**
      * @param boolean $classExists
      */
@@ -448,5 +463,12 @@ class Config implements ConfigInterface
     public function setNoIncludes($noIncludes)
     {
         $this->noIncludes = $noIncludes;
+    }
+
+    /**
+     * @param boolean $noConstants
+     */
+    public function setNoConstants($noConstants){
+        $this->noConstants = $noConstants;
     }
 }

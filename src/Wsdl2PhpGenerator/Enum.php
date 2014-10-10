@@ -50,15 +50,20 @@ class Enum extends Type
 
         $first = true;
 
-        foreach ($this->values as $value) {
+        if($this->config->getNoConstants() === false)
+        {
+          foreach ($this->values as $value)
+          {
             $name = Validator::validateConstant($value);
 
-            if ($first) {
-                $this->class->addConstant($name, '__default');
-                $first = false;
+            if ($first)
+            {
+              $this->class->addConstant($name, '__default');
+              $first = false;
             }
 
             $this->class->addConstant($value, $name);
+          }
         }
     }
 
