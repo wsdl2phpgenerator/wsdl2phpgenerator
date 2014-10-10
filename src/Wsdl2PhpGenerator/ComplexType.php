@@ -106,7 +106,7 @@ class ComplexType extends Type
         // Add base type members to constructor parameter list first and call base class constructor
         if ($this->baseType !== null) {
             $this->generateConstructorFromBaseType($this->baseType, $constructorComment, $constructorParameters);
-            $constructorSource .= '  parent::__construct(' . substr($constructorParameters, 2) . ');' . PHP_EOL;
+            $constructorSource .= '  parent::__construct(' . str_replace(' = null', '', substr($constructorParameters, 2)) . ');' . PHP_EOL;
         }
 
         // Add member variables
