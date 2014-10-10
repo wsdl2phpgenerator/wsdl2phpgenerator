@@ -91,7 +91,7 @@ class ComplexType extends Type
                     }
                 }
             }
-            $constructorSource .= '  parent::__construct(' . substr($constructorParameters, 2) . ');' . PHP_EOL;
+            $constructorSource .= '  parent::__construct(' . str_replace(' = null', '', substr($constructorParameters, 2)) . ');' . PHP_EOL;
         }
 
         // Add member variables
