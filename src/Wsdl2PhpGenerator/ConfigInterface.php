@@ -168,4 +168,14 @@ interface ConfigInterface
      * @return boolean
      */
     public function getConstructorParamsDefaultToNull();
+
+    /**
+     * @return boolean
+     */
+    public function getNoConstants();
+
+    /**
+     * @param boolean $noConstants
+     */
+    public function setNoConstants($noConstants);
 }
