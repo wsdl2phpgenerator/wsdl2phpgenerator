@@ -218,11 +218,13 @@ class CodeGenerationTestCase extends PHPUnit_Framework_TestCase
         // Main attributes for parameters should also be equal.
         if ($parameter instanceof ReflectionParameter) {
             $actualParameter = $parameters[$parameterName];
-            $this->assertEquals(
-                $actualParameter->getDefaultValue(),
-                $parameter->getDefaultValue(),
-                'Default values for parameters do not match.'
-            );
+            if ($parameter->isDefaultValueAvailable()) {
+                $this->assertEquals(
+                    $actualParameter->getDefaultValue(),
+                    $parameter->getDefaultValue(),
+                    'Default values for parameters do not match.'
+                );
+            }
             $this->assertEquals(
                 $actualParameter->getClass(),
                 $parameter->getClass(),

@@ -15,8 +15,6 @@ class AbstractTest extends FunctionalTestCase
 
     public function testAbstract()
     {
-        $this->markTestIncomplete('Handling of abstract types is not implemented yet.');
-
         // The base service class should be available.
         $this->assertGeneratedClassExists('AbstractServiceService');
 
@@ -28,10 +26,6 @@ class AbstractTest extends FunctionalTestCase
         }, $serviceClass->getMethods());
         $this->assertNotContains('echo', $methods, 'Class should not contain a method called echo. It is a reserved keyword');
         $this->assertContains('aEcho', $methods, 'Class should contain a method with a derived name for echo since it is a reserved keyword');
-
-        // The complex type Author is abstract in the WSDL and should thus also abstract when generated.
-        $abstractClass = new \ReflectionClass('Author');
-        $this->assertTrue($abstractClass->isAbstract(), 'A class representing a type with abstract="true" should be abstract');
 
         // Complex types UserAuthor and NonUserAuthor extends the User type. That relationship should be converted to
         // subclasses in the generated code.
@@ -50,6 +44,24 @@ class AbstractTest extends FunctionalTestCase
         $subClassConstructor = $subClass->getConstructor();
         foreach ($baseConstructor->getParameters() as $parameter) {
             $this->assertMethodHasParameter($subClassConstructor, $parameter);
+        }
+        $subSubClass = new \ReflectionClass('NicknameUserAuthor');
+        $subSubClassConstructor = $subSubClass->getConstructor();
+        $subSubClassConstructorParameters = $subSubClassConstructor->getParameters();
+        usort($subSubClassConstructorParameters, function(\ReflectionParameter $a, \ReflectionParameter $b) {
+            return $a->getPosition() - $b->getPosition();
+        });
+        $i = 0;
+        foreach ($baseConstructor->getParameters() as $parameter) {
+            $this->assertMethodHasParameter($subSubClassConstructor, $parameter);
+            $subSubParam = $subSubClassConstructorParameters[$i++];
+            $this->assertEquals($parameter->getName(), $subSubParam->getName());
+        }
+        $i = 0;
+        foreach ($subClassConstructor->getParameters() as $parameter) {
+            $this->assertMethodHasParameter($subSubClassConstructor, $parameter);
+            $subSubParam = $subSubClassConstructorParameters[$i++];
+            $this->assertEquals($parameter->getName(), $subSubParam->getName());
         }
     }
 }
