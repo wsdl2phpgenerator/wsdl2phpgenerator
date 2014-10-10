@@ -40,6 +40,16 @@
         </complexContent>
       </complexType>
 
+      <complexType name="NicknameUserAuthor">
+        <complexContent>
+          <extension base="tns:UserAuthor">
+            <sequence>
+              <element name="nickname" type="xsd:string"/>
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
+
       <complexType name="NonUserAuthor">
         <complexContent>
           <extension base="tns:Author">

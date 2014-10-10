@@ -51,5 +51,13 @@ class AbstractTest extends Wsdl2PhpGeneratorFunctionalTestCase
         foreach ($baseConstructor->getParameters() as $parameter) {
             $this->assertMethodHasParameter($subClassConstructor, $parameter);
         }
+        $subSubClass = new \ReflectionClass('NicknameUserAuthor');
+        $subSubClassConstructor = $subSubClass->getConstructor();
+        foreach ($baseConstructor->getParameters() as $parameter) {
+            $this->assertMethodHasParameter($subSubClassConstructor, $parameter);
+        }
+        foreach ($subClassConstructor->getParameters() as $parameter) {
+            $this->assertMethodHasParameter($subSubClassConstructor, $parameter);
+        }
     }
 }
