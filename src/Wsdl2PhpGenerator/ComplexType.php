@@ -49,6 +49,33 @@ class ComplexType extends Type
     }
 
     /**
+     * Generates constructor parameters from baseType tree
+     *
+     * @param ComplexType $baseType
+     * @param PhpDocComment $constructorComment
+     * @param string $constructorParameters
+     */
+    protected function generateConstructorFromBaseType(ComplexType $baseType, PhpDocComment $constructorComment, &$constructorParameters)
+    {
+        if ($baseType->baseType !== null) {
+            $this->generateConstructorFromBaseType($baseType->baseType, $constructorComment, $constructorParameters);
+        }
+        foreach ($baseType->getMembers() as $member) {
+            $type = Validator::validateType($member->getType());
+            $name = Validator::validateAttribute($member->getName());
+
+            if (!$member->getNillable()) {
+                $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
+                $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());
+                $constructorParameters .= ', $' . $name;
+                if ($this->config->getConstructorParamsDefaultToNull()) {
+                    $constructorParameters .= ' = null';
+                }
+            }
+        }
+    }
+
+    /**
      * Implements the loading of the class object
      *
      * @throws Exception if the class is already generated(not null)
@@ -78,19 +105,7 @@ class ComplexType extends Type
 
         // Add base type members to constructor parameter list first and call base class constructor
         if ($this->baseType !== null) {
-            foreach ($this->baseType->getMembers() as $member) {
-                $type = Validator::validateType($member->getType());
-                $name = Validator::validateAttribute($member->getName());
-
-                if (!$member->getNillable()) {
-                    $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
-                    $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());
-                    $constructorParameters .= ', $' . $name;
-                    if ($this->config->getConstructorParamsDefaultToNull()) {
-                        $constructorParameters .= ' = null';
-                    }
-                }
-            }
+            $this->generateConstructorFromBaseType($this->baseType, $constructorComment, $constructorParameters);
             $constructorSource .= '  parent::__construct(' . substr($constructorParameters, 2) . ');' . PHP_EOL;
         }
 
