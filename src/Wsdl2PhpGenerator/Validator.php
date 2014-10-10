@@ -241,8 +241,7 @@ class Validator
         }
 
         // encoding special chars to avoid naming conflicts at constant names
-        $name = htmlspecialchars($name);
-        $name = str_replace([';', '&'], '', $name);
+        $name = str_replace(array(';', '&'), '_', htmlspecialchars($name));
 
         return preg_replace('/[^a-zA-Z0-9_x7f-xff]*/', '', preg_replace('/^[^a-zA-Z_x7f-xff]*/', '', $name));
     }
