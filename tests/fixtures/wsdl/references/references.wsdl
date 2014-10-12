@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions
+        name="references"
+        targetNamespace="urn:www.example.org:references"
+        xmlns="http://schemas.xmlsoap.org/wsdl/"
+        xmlns:tns="urn:www.example.org:references"
+        xmlns:import="urn:www.example.org:import"
+        xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+        xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+        xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <wsdl:types>
+        <schema targetNamespace="urn:www.example.org:references"
+                xmlns="http://www.w3.org/2001/XMLSchema">
+
+            <import namespace="urn:www.example.org:import" schemaLocation="import.xsd" />
+            <xsd:include schemaLocation="include.xsd" />
+
+            <!-- Include an extra type here. This should be the only available class if references are not loaded. -->
+            <xsd:complexType name="Book">
+                <xsd:sequence>
+                    <xsd:element name="name" type="xsd:string"/>
+                    <xsd:element name="author" type="import:Author"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
+        </schema>
+    </wsdl:types>
+
+    <wsdl:message name="echoRequest">
+        <wsdl:part name="name" type="xsd:string"/>
+        <wsdl:part name="author" type="import:Author"/>
+    </wsdl:message>
+
+    <wsdl:message name="echoResponse">
+        <wsdl:part name="return" type="import:Book"/>
+    </wsdl:message>
+
+    <wsdl:message name="echoLiteralRequest">
+        <wsdl:part name="author" element="import:Author"/>
+    </wsdl:message>
+
+    <wsdl:message name="echoLiteralResponse">
+        <wsdl:part name="return" element="import:Author"/>
+    </wsdl:message>
+
+    <wsdl:message name="echoDerivedRequest">
+        <wsdl:part name="parameter" type="tns:BaseClass"/>
+    </wsdl:message>
+
+    <wsdl:message name="echoDerivedResponse">
+        <wsdl:part name="return" type="tns:BaseClass"/>
+    </wsdl:message>
+
+    <wsdl:portType name="ReferencesService">
+        <wsdl:operation name="echo" parameterOrder="obj typename">
+            <wsdl:input message="tns:echoRequest" name="echoRequest"/>
+            <wsdl:output message="tns:echoResponse" name="echoResponse"/>
+        </wsdl:operation>
+
+        <wsdl:operation name="echoLiteral">
+            <wsdl:input message="tns:echoLiteralRequest"/>
+            <wsdl:output message="tns:echoLiteralResponse"/>
+        </wsdl:operation>
+
+        <wsdl:operation name="echoDerived">
+            <wsdl:input message="tns:echoDerivedRequest" name="echoDerivedRequest"/>
+            <wsdl:output message="tns:echoDerivedResponse" name="echoDerivedResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <wsdl:binding name="ReferencesServiceSoapBinding"
+                  type="tns:ReferencesService">
+
+        <wsdlsoap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+
+        <wsdl:operation name="echo">
+            <wsdlsoap:operation style="rpc" soapAction=""/>
+            <wsdl:input name="echoRequest">
+                <wsdlsoap:body
+                        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                        namespace="urn:www.example.org:references" use="encoded"/>
+            </wsdl:input>
+            <wsdl:output name="echoResponse">
+                <wsdlsoap:body
+                        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                        namespace="urn:www.example.org:references" use="encoded"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="echoLiteral">
+            <wsdlsoap:operation style="document" soapAction=""/>
+            <wsdl:input name="echoLiteralRequest">
+                <wsdlsoap:body namespace="urn:www.example.org:references" use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="echoLiteralResponse">
+                <wsdlsoap:body namespace="urn:www.example.org:references" use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="echoDerived">
+            <wsdlsoap:operation style="rpc" soapAction=""/>
+            <wsdl:input name="echoDerivedRequest">
+                <wsdlsoap:body
+                        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                        namespace="urn:www.example.org:references" use="encoded"/>
+            </wsdl:input>
+            <wsdl:output name="echoDerivedResponse">
+                <wsdlsoap:body
+                        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                        namespace="urn:www.example.org:references" use="encoded"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsdl:service name="ReferencesServiceService">
+        <wsdl:port name="ReferencesService"
+                   binding="tns:ReferencesServiceSoapBinding">
+            <wsdlsoap:address location="http://localhost:8080/"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

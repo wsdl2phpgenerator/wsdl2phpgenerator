@@ -25,11 +25,11 @@ class SchemaDocument extends XmlNode
 
 
     /**
-     * The schemas which are imported by the current schema.
+     * The schemas which are referenced by the current schema.
      *
      * @var SchemaDocument[]
      */
-    protected $imports;
+    protected $referereces;
 
     /**
      * The urls of schemas which have already been loaded.
@@ -53,16 +53,21 @@ class SchemaDocument extends XmlNode
         // Register the schema to avoid cyclic imports.
         self::$loadedUrls[] = $xsdUrl;
 
-        // Locate and instantiate schemas which are imported by the current schema.
-        $this->imports = array();
-        foreach ($this->xpath('//wsdl:import/@location|//s:import/@schemaLocation') as $import) {
-            $importUrl = $import->value;
-            if (strpos($importUrl, '//') === false) {
-                $importUrl = dirname($xsdUrl) . '/' . $importUrl;
+        // Locate and instantiate schemas which are referenced by the current schema.
+        // A reference in this context can either be
+        // - an import from another namespace: http://www.w3.org/TR/xmlschema-1/#composition-schemaImport
+        // - an include within the same namespace: http://www.w3.org/TR/xmlschema-1/#compound-schema
+        $this->referereces = array();
+        foreach ($this->xpath(  '//wsdl:import/@location|' .
+                                '//s:import/@schemaLocation|' .
+                                '//s:include/@schemaLocation') as $reference) {
+            $referenceUrl = $reference->value;
+            if (strpos($referenceUrl, '//') === false) {
+                $referenceUrl = dirname($xsdUrl) . '/' . $referenceUrl;
             }
 
-            if (!in_array($importUrl, self::$loadedUrls)) {
-                $this->imports[] = new SchemaDocument($importUrl);
+            if (!in_array($referenceUrl, self::$loadedUrls)) {
+                $this->referereces[] = new SchemaDocument($referenceUrl);
             }
         }
     }
@@ -83,7 +88,7 @@ class SchemaDocument extends XmlNode
         }
 
         if (empty($type)) {
-            foreach ($this->imports as $import) {
+            foreach ($this->referereces as $import) {
                 $type = $import->findTypeElement($name);
                 if (!empty($type)) {
                     break;

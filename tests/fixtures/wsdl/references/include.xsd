@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="urn:www.example.org:references"
+            xmlns:tns="urn:www.example.org:references">
+
+    <xsd:complexType name="BaseClass">
+        <xsd:sequence>
+            <xsd:element name="id" type="xsd:unsignedInt" minOccurs="1"
+                         maxOccurs="1"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="DerivedClass">
+        <xsd:complexContent>
+            <xsd:extension base="tns:BaseClass">
+                <xsd:sequence>
+                    <xsd:element name="someVar" type="xsd:string"
+                                 minOccurs="0" maxOccurs="unbounded"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+</xsd:schema>
