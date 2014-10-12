@@ -101,7 +101,6 @@ class Service
         $comment = new PhpDocComment();
         $comment->addParam(PhpDocElementFactory::getParam('array', 'options', 'A array of config values'));
         $comment->addParam(PhpDocElementFactory::getParam('string', 'wsdl', 'The wsdl file to use'));
-        $comment->setAccess(PhpDocElementFactory::getPublicAccess());
 
         $source = '  foreach (self::$classmap as $key => $value) {
     if (!isset($options[\'classmap\'][$key])) {
@@ -119,7 +118,6 @@ class Service
         // Generate the classmap
         $name = 'classmap';
         $comment = new PhpDocComment();
-        $comment->setAccess(PhpDocElementFactory::getPrivateAccess());
         $comment->setVar(PhpDocElementFactory::getVar('array', $name, 'The defined classes'));
 
         $init = 'array(' . PHP_EOL;
@@ -140,7 +138,6 @@ class Service
             $name = Validator::validateOperation($operation->getName());
 
             $comment = new PhpDocComment($operation->getDescription());
-            $comment->setAccess(PhpDocElementFactory::getPublicAccess());
             $comment->setReturn(PhpDocElementFactory::getReturn($operation->getReturns(), ''));
 
             foreach ($operation->getParams() as $param => $hint) {

@@ -71,7 +71,6 @@ class ComplexType extends Type
         }
 
         $constructorComment = new PhpDocComment();
-        $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());
         $constructorSource = '';
         $constructorParameters = '';
         $accessors = array();
@@ -84,7 +83,6 @@ class ComplexType extends Type
 
                 if (!$member->getNillable()) {
                     $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
-                    $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());
                     $constructorParameters .= ', $' . $name;
                     if ($this->config->getConstructorParamsDefaultToNull()) {
                         $constructorParameters .= ' = null';
@@ -101,14 +99,12 @@ class ComplexType extends Type
 
             $comment = new PhpDocComment();
             $comment->setVar(PhpDocElementFactory::getVar($type, $name, ''));
-            $comment->setAccess(PhpDocElementFactory::getPublicAccess());
             $var = new PhpVariable('public', $name, 'null', $comment);
             $class->addVariable($var);
 
             if (!$member->getNillable()) {
                 $constructorSource .= '  $this->' . $name . ' = $' . $name . ';' . PHP_EOL;
                 $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
-                $constructorComment->setAccess(PhpDocElementFactory::getPublicAccess());
                 $constructorParameters .= ', $' . $name;
                 if ($this->config->getConstructorParamsDefaultToNull()) {
                     $constructorParameters .= ' = null';
