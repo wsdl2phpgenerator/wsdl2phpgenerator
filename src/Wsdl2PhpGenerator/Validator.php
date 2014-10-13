@@ -116,16 +116,18 @@ class Validator
     {
         $name = self::validateNamingConvention($name);
 
-        $prefix = isset($namespace) ? "\\$namespace\\" : '';
+        $prefix = !empty($namespace) ? $namespace . '\\' : '';
 
-        if (self::isKeyword($name) || class_exists($prefix . $name)) {
+        if (self::isKeyword($name) ||
+            interface_exists($prefix . $name) ||
+            class_exists($prefix . $name)) {
             $name .= self::NAME_SUFFIX;
         }
 
         // In case of continued name clashes append numbering.
         $newName = $name;
         $i = 1;
-        while (class_exists($prefix . $newName)) {
+        while (interface_exists($prefix . $newName) || class_exists($prefix . $newName)) {
             $newName = $name . $i++;
         }
 

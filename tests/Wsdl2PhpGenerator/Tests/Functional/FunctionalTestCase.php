@@ -127,9 +127,6 @@ abstract class FunctionalTestCase extends CodeGenerationTestCase
         $file = $this->outputDir . '/' . $className . '.php';
         $this->assertFileExists($file);
         require_once $file;
-        if ($namespaceName) {
-            $namespaceName = '\\' . $namespaceName . '\\';
-        }
-        $this->assertClassExists($namespaceName . $className);
+        $this->assertClassExists($className, $namespaceName);
     }
 }
