@@ -83,6 +83,10 @@ class ComplexType extends Type
 
                 if (!$member->getNullable()) {
                     $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
+                    if ($this->config->get('constructorParamsDefaultToNull')) {
+                        // This is somewhat hacky but we do no have function parameters as a class yet.
+                        $name .= ' = null';
+                    }
                     $constructorParameters[$name] = Validator::validateTypeHint($type);
                 }
             }
@@ -113,7 +117,7 @@ class ComplexType extends Type
                 $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
                 $constructorName = $name;
                 if ($this->config->get('constructorParamsDefaultToNull')) {
-                    // This is somewhat hacky but we do no have function parameters as a class yet.
+                    // More hackery with with parameter names..
                     $constructorName .= ' = null';
                 }
                 $constructorParameters[$constructorName] = $typeHint;
@@ -144,6 +148,7 @@ class ComplexType extends Type
                 } else {
                     $setterCode = '  $this->' . $name . ' = $' . $name . ';' . PHP_EOL;
                 }
+                $setterCode .= '  return $this;' . PHP_EOL;
                 $setter = new PhpFunction('public', 'set' . ucfirst($name), $this->buildParametersString(array($name => $typeHint)), $setterCode, $setterComment);
                 $accessors[] = $setter;
             }
