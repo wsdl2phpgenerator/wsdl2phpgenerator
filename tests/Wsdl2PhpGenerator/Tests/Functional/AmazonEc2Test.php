@@ -1,7 +1,7 @@
 <?php
 namespace Wsdl2PhpGenerator\Tests\Functional;
 
-class AmazonEc2Test extends Wsdl2PhpGeneratorFunctionalTestCase
+class AmazonEc2Test extends FunctionalTestCase
 {
 
     protected function getWsdlPath()

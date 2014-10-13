@@ -1,107 +1,20 @@
 <?php
-namespace Wsdl2PhpGenerator\Tests\Functional;
+
+namespace Wsdl2PhpGenerator\Tests\Unit;
 
 use PHPUnit_Framework_TestCase;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
 use ReflectionProperty;
-use Wsdl2PhpGenerator\Config;
-use Wsdl2PhpGenerator\Generator;
 
 /**
- * Base class for functional tests for wsdl2phpgenerator.
+ * Base class for testing code generation.
+ *
+ * Contains various assertions for examining code.
  */
-abstract class Wsdl2PhpGeneratorFunctionalTestCase extends PHPUnit_Framework_TestCase
+class CodeGenerationTestCase extends PHPUnit_Framework_TestCase
 {
-
-    /**
-     * @var string Path to the directory which will contain the generated code.
-     */
-    protected $outputDir;
-
-    /**
-     * @var Generator The generator which will execute the code generation.
-     */
-    protected $generator;
-
-    /**
-     * @var Config The configuration for the code generation.
-     */
-    protected $config;
-
-    protected $fixtureDir = 'tests/fixtures/wsdl';
-
-    /**
-     * @return string The path to the WSDL to generate code from.
-     */
-    abstract protected function getWsdlPath();
-
-    /**
-     * Subclasses can override this function to set options on $this->config
-     */
-    protected function configureOptions()
-    {
-    }
-
-    protected function setup()
-    {
-        $class = new ReflectionClass($this);
-        $this->outputDir = 'tests/generated/' . $class->getShortName();
-        $this->generator = new Generator();
-        $this->config = new Config(array(
-            'inputFile' => $this->getWsdlPath(),
-            'outputDir' => $this->outputDir
-        ));
-        $this->configureOptions();
-
-        // We do not execute the code generation here to allow individual test cases
-        // to update the configuration further before generating.
-
-        // Clear output dir before starting.
-        if (is_dir($this->outputDir)) {
-            // Remove any generated code.
-            $this->deleteDir($this->outputDir);
-        }
-
-        // Generate the code.
-        $this->generator->generate($this->config);
-
-    }
-
-    /**
-     * Recursively delete a directory and all contents.
-     *
-     * @param string $dir The directory to delete.
-     */
-    protected function deleteDir($dir)
-    {
-        // Implementation taken from http://stackoverflow.com/a/3352564.
-        $files = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS),
-            RecursiveIteratorIterator::CHILD_FIRST
-        );
-        foreach ($files as $fileInfo) {
-            $deleteFunction = ($fileInfo->isDir() ? 'rmdir' : 'unlink');
-            $deleteFunction($fileInfo->getRealPath());
-        }
-
-        // Finally remove the top directory.
-        rmdir($dir);
-    }
-
-    /**
-     * Assert that a generated file exists.
-     *
-     * @param $filename The name of the file.
-     * @param string $message The message to show if the assertion fails.
-     */
-    protected function assertGeneratedFileExists($filename, $message = '')
-    {
-        $this->assertFileExists($this->outputDir . '/' . $filename, $message);
-    }
 
     /**
      * Assert that a class is defined.
@@ -112,24 +25,6 @@ abstract class Wsdl2PhpGeneratorFunctionalTestCase extends PHPUnit_Framework_Tes
     protected function assertClassExists($className, $message = '')
     {
         $this->assertTrue(class_exists($className), $message);
-    }
-
-    /**
-     * Assertion that tests that a class with a specific name has been
-     * generated.
-     *
-     * @param string $className The name of the class to test for.
-     * @param string $namespaceName Optional name of the namespace
-     */
-    protected function assertGeneratedClassExists($className, $namespaceName = null)
-    {
-        $file = $this->outputDir . '/' . $className . '.php';
-        $this->assertFileExists($file);
-        require_once $file;
-        if ($namespaceName) {
-            $namespaceName = '\\' . $namespaceName . '\\';
-        }
-        $this->assertClassExists($namespaceName . $className);
     }
 
     /**
@@ -164,8 +59,13 @@ abstract class Wsdl2PhpGeneratorFunctionalTestCase extends PHPUnit_Framework_Tes
                 // If the DocBlock declares that the value should be a class then check¨
                 // that the actual attribute value matches.
                 if (empty($message)) {
-                    $message = sprintf('Attribute %s on %s is of type %s. DocBlock says it should be %s.',
-                        $attributeName, get_class($object), get_class($object->{$attributeName}), $docBlockType);
+                    $message = sprintf(
+                        'Attribute %s on %s is of type %s. DocBlock says it should be %s.',
+                        $attributeName,
+                        get_class($object),
+                        get_class($object->{$attributeName}),
+                        $docBlockType
+                    );
                 }
                 $this->assertTrue(is_a($object->{$attributeName}, $docBlockType), $message);
             } else {
@@ -212,7 +112,7 @@ abstract class Wsdl2PhpGeneratorFunctionalTestCase extends PHPUnit_Framework_Tes
         $comment = $attribute->getDocComment();
         // Attempt to do some simple extraction of type declaration from the
         // DocBlock.
-        if (preg_match('/@var (\w+)/', $comment, $matches)) {
+        if (preg_match('/@var (\S+)/', $comment, $matches)) {
             $value = $attribute->getValue($object);
             $docBlockType = $matches[1];
         }
@@ -250,7 +150,16 @@ abstract class Wsdl2PhpGeneratorFunctionalTestCase extends PHPUnit_Framework_Tes
             $classPropertyNames[] = $classProperty->getName();
         }
 
-        $this->assertContains($property, $classPropertyNames, sprintf('Property "%s" not found among properties for class "%s" ("%s")', $property, $class->getName(), implode('", "', $classPropertyNames)));
+        $this->assertContains(
+            $property,
+            $classPropertyNames,
+            sprintf(
+                'Property "%s" not found among properties for class "%s" ("%s")',
+                $property,
+                $class->getName(),
+                implode('", "', $classPropertyNames)
+            )
+        );
     }
 
     /**
@@ -269,7 +178,12 @@ abstract class Wsdl2PhpGeneratorFunctionalTestCase extends PHPUnit_Framework_Tes
         foreach ($class->getMethods() as $classMethod) {
             $classMethodNames[] = $classMethod->getName();
         }
-        $message = (empty($message)) ? sprintf('Method "%s" not found among methods for class "%s" ("%s")', $method, $class->getName(), implode('", "', $classMethodNames)) : $message;
+        $message = (empty($message)) ? sprintf(
+            'Method "%s" not found among methods for class "%s" ("%s")',
+            $method,
+            $class->getName(),
+            implode('", "', $classMethodNames)
+        ) : $message;
         $this->assertContains($method, $classMethodNames, $message);
     }
 
@@ -277,22 +191,135 @@ abstract class Wsdl2PhpGeneratorFunctionalTestCase extends PHPUnit_Framework_Tes
      * Assert that a method has a property defined.
      *
      * @param ReflectionMethod $method The method.
-     * @param ReflectionParameter $parameter The parameter.
+     * @param ReflectionParameter|string $parameter The parameter or the name of it
      * @param string $message The message to show if the assertion fails.
      */
-    protected function assertMethodHasParameter(\ReflectionMethod $method, ReflectionParameter $parameter)
+    protected function assertMethodHasParameter(\ReflectionMethod $method, $parameter)
     {
+        $parameterName = ($parameter instanceof ReflectionParameter) ? $parameter->getName() : $parameter;
+
         $parameters = array();
         foreach ($method->getParameters() as $methodParameter) {
             $parameters[$methodParameter->getName()] = $methodParameter;
         }
-        $message = (empty($message)) ? sprintf('Parameter "%s" not found among parameter for method "%s->%s" ("%s")', $parameter->getName(), $method->getDeclaringClass()->getName(), $method->getName(), implode('", "', array_keys($parameters))) : $message;
-        $this->assertContains($parameter->getName(), array_keys($parameters), $message);
+
+        $message = (empty($message)) ? sprintf(
+            'Parameter "%s" not found among parameter for method "%s->%s" ("%s")',
+            $parameterName,
+            $method->getDeclaringClass()->getName(),
+            $method->getName(),
+            implode('", "', array_keys($parameters))
+        ) : $message;
+        $this->assertContains($parameterName, array_keys($parameters), $message);
 
         // Main attributes for parameters should also be equal.
-        $actualParameter = $parameters[$parameter->getName()] ;
-        $this->assertEquals($actualParameter->getDefaultValue(), $parameter->getDefaultValue(), 'Default values for parameters do not match.');
-        $this->assertEquals($actualParameter->getClass(), $parameter->getClass(), 'Type hinted class for parameters should match');
+        if ($parameter instanceof ReflectionParameter) {
+            $actualParameter = $parameters[$parameterName];
+            $this->assertEquals(
+                $actualParameter->getDefaultValue(),
+                $parameter->getDefaultValue(),
+                'Default values for parameters do not match.'
+            );
+            $this->assertEquals(
+                $actualParameter->getClass(),
+                $parameter->getClass(),
+                'Type hinted class for parameters should match'
+            );
+        }
+    }
+
+    /**
+     * Assert that a named parameter for a method has the expected type defined as a type hint.
+     *
+     * @param ReflectionMethod $method The method to test.
+     * @param string $parameterName The name of the parameter.
+     * @param string $type The name of the expected type.
+     */
+    protected function assertMethodParameterHasType(\ReflectionMethod $method, $parameterName, $type)
+    {
+        $this->assertMethodHasParameter($method, $parameterName);
+
+        $type = ($type instanceof ReflectionClass) ? $type->getName() : $type;
+
+        $parameter = null;
+        foreach ($method->getParameters() as $p) {
+            if ($p->getName() == $parameterName) {
+                $parameter = $p;
+                break;
+            }
+        }
+
+        $parameterClass = ($parameter->getClass() instanceof ReflectionClass) ? $parameter->getClass()->getName() : '';
+        $this->assertEquals(
+            $type,
+            $parameterClass,
+            sprintf(
+                'Parameter %s for method %s->%s has type %s. Expected %s.',
+                $parameterName,
+                $method->getDeclaringClass()->getName(),
+                $method->getName(),
+                $parameterClass,
+                $type
+            )
+        );
+    }
+
+    /**
+     * Assert that a named parameter for a method has the expected type defined in the DocBlock.
+     *
+     * @param ReflectionMethod $method The method to test.
+     * @param string $parameterName The name of the parameter.
+     * @param string $type The name of the expected type.
+     */
+    protected function assertMethodParameterDocBlockHasType(\ReflectionMethod $method, $parameterName, $type)
+    {
+        // Attempt to do some simple extraction of type declaration from the
+        // DocBlock.
+        $docBlockParameterType = null;
+        if (preg_match('/@param (\S+) \$' . $parameterName . '/', $method->getDocComment(), $matches)) {
+            $docBlockParameterType = $matches[1];
+        }
+
+        $this->assertEquals(
+            $type,
+            $docBlockParameterType,
+            sprintf(
+                'DocBlock form method %s->%s states that parameter %s has type %s. Expected %s.',
+                $parameterName,
+                $method->getDeclaringClass()->getName(),
+                $method->getName(),
+                $docBlockParameterType,
+                $type
+            )
+        );
+    }
+
+    /**
+     * Assert that a method has the expected type defined as the return type in the DocBlock.
+     *
+     * @param ReflectionMethod $method The method to test.
+     * @param string $type The expected return type.
+     */
+    protected function assertMethodHasReturnType(\ReflectionMethod $method, $type)
+    {
+        // Attempt to do some simple extraction of type declaration from the
+        // DocBlock.
+        $docBlockReturnType = null;
+        if (preg_match('/@return (\S*)/', $method->getDocComment(), $matches)) {
+            $docBlockReturnType = $matches[1];
+        }
+
+        $this->assertEquals(
+            $type,
+            $docBlockReturnType,
+            sprintf(
+                'Method "%s->%s" has return type %s. Expected %s',
+                $method->getDeclaringClass()->getName(),
+                $method->getName(),
+                $docBlockReturnType,
+                $type
+            )
+        );
     }
 
     /**
@@ -307,7 +334,9 @@ abstract class Wsdl2PhpGeneratorFunctionalTestCase extends PHPUnit_Framework_Tes
         $class = (!$class instanceof ReflectionClass) ? new ReflectionClass($class) : $class;
         $baseClass = (!$baseClass instanceof ReflectionClass) ? new ReflectionClass($baseClass) : $baseClass;
 
-        $this->assertTrue($class->isSubclassOf($baseClass->getName()), sprintf('Class "%s" is not subclass of "%s"', $class->getName(), $baseClass->getName()));
+        $this->assertTrue(
+            $class->isSubclassOf($baseClass->getName()),
+            sprintf('Class "%s" is not subclass of "%s"', $class->getName(), $baseClass->getName())
+        );
     }
-
 }

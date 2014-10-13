@@ -8,7 +8,7 @@ namespace Wsdl2PhpGenerator\Tests\Functional;
  *
  * In this regard imports and includes are both treated as a reference.
  */
-class ReferencesTest extends Wsdl2PhpGeneratorFunctionalTestCase
+class ReferencesTest extends FunctionalTestCase
 {
 
     protected $namespace = 'ReferencesTest';

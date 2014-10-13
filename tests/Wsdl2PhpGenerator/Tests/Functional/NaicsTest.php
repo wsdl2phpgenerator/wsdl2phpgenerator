@@ -11,7 +11,7 @@ use SoapFault;
  * structure and that the actual data structure also matches the type
  * declarations in the Doc Blocks.
  */
-class NaicsTest extends Wsdl2PhpGeneratorFunctionalTestCase
+class NaicsTest extends FunctionalTestCase
 {
 
     protected function getWsdlPath()

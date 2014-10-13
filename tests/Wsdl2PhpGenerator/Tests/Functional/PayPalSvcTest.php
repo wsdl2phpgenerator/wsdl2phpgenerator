@@ -3,7 +3,7 @@ namespace Wsdl2PhpGenerator\Tests\Functional;
 
 use SoapFault;
 
-class PayPalSvcTest extends Wsdl2PhpGeneratorFunctionalTestCase
+class PayPalSvcTest extends FunctionalTestCase
 {
 
     protected function getWsdlPath()
