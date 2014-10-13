@@ -226,10 +226,6 @@ class Generator implements GeneratorInterface
             $class = $type->getClass();
             if ($class != null) {
                 $types[] = $class;
-
-                if (!$this->config->get('oneFile') && !$this->config->get('noIncludes')) {
-                    $service->addDependency($class->getIdentifier() . '.php');
-                }
             }
         }
 

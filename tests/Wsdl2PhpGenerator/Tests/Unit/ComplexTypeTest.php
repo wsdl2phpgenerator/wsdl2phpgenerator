@@ -24,8 +24,7 @@ class ComplexTypeTest extends CodeGenerationTestCase
         // The important part is the accessors part.
         $config = new Config(array(
             'inputFile' => null,
-            'outputDir' => null,
-            'createAccessors' => true
+            'outputDir' => null
         ));
         $complexType = new ComplexType($config, 'ComplexTypeTestClass');
         $complexType->addMember('dateTime', 'dateTimeAttribute', false);

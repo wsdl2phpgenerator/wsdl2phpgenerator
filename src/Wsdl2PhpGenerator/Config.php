@@ -66,20 +66,13 @@ class Config implements ConfigInterface
 
         $resolver->setDefaults(array(
             'verbose'                        => false,
-            'oneFile'                        => false,
-            'classExists'                    => false,
-            'noTypeConstructor'              => false,
             'namespaceName'                  => '',
             'optionsFeatures'                => array(),
             'wsdlCache'                      => '',
             'compression'                    => '',
             'classNames'                     => '',
-            'prefix'                         => '',
-            'suffix'                         => '',
             'sharedTypes'                    => false,
-            'createAccessors'                => false,
             'constructorParamsDefaultToNull' => false,
-            'noIncludes'                     => false
         ));
 
         $resolver->setAllowedValues(array(

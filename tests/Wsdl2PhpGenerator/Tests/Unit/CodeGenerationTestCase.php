@@ -58,18 +58,19 @@ class CodeGenerationTestCase extends PHPUnit_Framework_TestCase
         $docBlockType = $this->getAttributeDocBlockType($attributeName, $object);
         if ($docBlockType) {
             if (class_exists($docBlockType)) {
-                // If the DocBlock declares that the value should be a class then check¨
-                // that the actual attribute value matches.
+                // If the DocBlock declares that the value should be a class then check
+                // that the return value of the attribute getter matches.
+                $attributeValue = $object->{'get' . ucfirst($attributeName)}();
                 if (empty($message)) {
                     $message = sprintf(
                         'Attribute %s on %s is of type %s. DocBlock says it should be %s.',
                         $attributeName,
                         get_class($object),
-                        get_class($object->{$attributeName}),
+                        get_class($attributeValue),
                         $docBlockType
                     );
                 }
-                $this->assertTrue(is_a($object->{$attributeName}, $docBlockType), $message);
+                $this->assertTrue(is_a($attributeValue, $docBlockType), $message);
             } else {
                 // Else we have a primitive type so just check for that.
                 $this->assertAttributeInternalType($docBlockType, $attributeName, $object, $message);
@@ -114,8 +115,7 @@ class CodeGenerationTestCase extends PHPUnit_Framework_TestCase
         $comment = $attribute->getDocComment();
         // Attempt to do some simple extraction of type declaration from the
         // DocBlock.
-        if (preg_match('/@var (\S+)/', $comment, $matches)) {
-            $value = $attribute->getValue($object);
+        if (preg_match('/@var (\w+)/', $comment, $matches)) {
             $docBlockType = $matches[1];
         }
 

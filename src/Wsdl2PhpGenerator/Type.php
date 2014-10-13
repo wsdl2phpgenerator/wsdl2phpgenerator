@@ -61,12 +61,7 @@ abstract class Type
         $this->datatype = $datatype;
         $this->identifier = $name;
 
-        // Add prefix and suffix
-        $name = $this->config->get('prefix') . $this->identifier . $this->config->get('suffix');
-
-        $name = Validator::validateClass($name, $this->config->get('namespaceName'));
-
-        $this->phpIdentifier = $name;
+        $this->phpIdentifier = Validator::validateClass($name, $this->config->get('namespaceName'));
         $this->phpNamespacedIdentifier = $name;
         if ($this->config->get('namespaceName')) {
             $this->phpNamespacedIdentifier = '\\' . $this->config->get('namespaceName') . '\\' . $name;

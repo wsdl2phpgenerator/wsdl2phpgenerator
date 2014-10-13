@@ -83,9 +83,7 @@ class Service
      */
     public function generateClass()
     {
-
-        // Add prefix and suffix
-        $name = $this->config->get('prefix') . $this->identifier . $this->config->get('suffix');
+        $name = $this->identifier;
 
         // Generate a valid classname
         $name = Validator::validateClass($name, $this->config->get('namespaceName'));
@@ -95,7 +93,7 @@ class Service
 
         // Create the class object
         $comment = new PhpDocComment($this->description);
-        $this->class = new PhpClass($name, $this->config->get('classExists'), '\SoapClient', $comment);
+        $this->class = new PhpClass($name, false, '\SoapClient', $comment);
 
         // Create the constructor
         $comment = new PhpDocComment();

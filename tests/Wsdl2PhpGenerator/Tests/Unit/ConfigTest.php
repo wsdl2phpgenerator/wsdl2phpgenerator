@@ -16,20 +16,13 @@ class ConfigTest extends PHPUnit_Framework_TestCase
             'inputFile'                      => 'inputFile.xml',
             'outputDir'                      => '/tmp/output',
             'verbose'                        => false,
-            'oneFile'                        => true,
-            'classExists'                    => true,
-            'noTypeConstructor'              => true,
             'namespaceName'                  => 'myNamespace',
             'optionsFeatures'                => array('SOAP_SINGLE_ELEMENT_ARRAYS'),
             'wsdlCache'                      => 'WSDL_CACHE_BOTH',
             'compression'                    => 'SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP',
             'classNames'                     => 'test,test2, test3',
-            'prefix'                         => 'prefix',
-            'suffix'                         => 'suffix',
             'sharedTypes'                    => false,
-            'createAccessors'                => false,
             'constructorParamsDefaultToNull' => false,
-            'noIncludes'                     => false
         );
 
         $this->config = new Config($this->options);
@@ -47,19 +40,12 @@ class ConfigTest extends PHPUnit_Framework_TestCase
             'inputFile'                      => 'inputFile.xml',
             'outputDir'                      => '/tmp/output',
             'verbose'                        => false,
-            'oneFile'                        => true,
-            'classExists'                    => true,
-            'noTypeConstructor'              => true,
             'namespaceName'                  => 'myNamespace',
             'optionsFeatures'                => array('SOAP_SINGLE_ELEMENT_ARRAYS'),
             'wsdlCache'                      => 'WSDL_CACHE_BOTH',
             'compression'                    => 'SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP',
-            'prefix'                         => 'prefix',
-            'suffix'                         => 'suffix',
             'sharedTypes'                    => false,
-            'createAccessors'                => false,
             'constructorParamsDefaultToNull' => false,
-            'noIncludes'                     => false
         );
 
         foreach ($expectedValues as $key => $expectedValue) {
