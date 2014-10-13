@@ -7,6 +7,7 @@ use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
 use ReflectionProperty;
+use Wsdl2PhpGenerator\Type;
 
 /**
  * Base class for testing code generation.
@@ -20,11 +21,12 @@ class CodeGenerationTestCase extends PHPUnit_Framework_TestCase
      * Assert that a class is defined.
      *
      * @param string $className The name of the class.
+     * @param string $namespaceName The namespace for the class.
      * @param string $message The Message to show if the assertion fails.
      */
-    protected function assertClassExists($className, $message = '')
+    protected function assertClassExists($className, $namespaceName = null, $message = '')
     {
-        $this->assertTrue(class_exists($className), $message);
+        $this->assertTrue(class_exists($namespaceName . '\\' . $className), $message);
     }
 
     /**
@@ -338,5 +340,26 @@ class CodeGenerationTestCase extends PHPUnit_Framework_TestCase
             $class->isSubclassOf($baseClass->getName()),
             sprintf('Class "%s" is not subclass of "%s"', $class->getName(), $baseClass->getName())
         );
+    }
+
+    /**
+     * Generate and load a class into PHP memory.
+     *
+     * This will cause the class to be available for subsequent code.
+     *
+     * @param Type $type The type to generate.
+     * @param string $namespace The namespace to use for the class.
+     */
+    protected function generateClass(Type $type, $namespace = null)
+    {
+        $source = $type->getClass()->getSource();
+        if (!empty($namespace)) {
+            $source = 'namespace ' . $namespace . ';' . PHP_EOL . $source;
+        }
+
+        // Eval the source for the generated class. This is now pretty but currently the only way we can test whether
+        // the generated code is as expected. Our own code generation library does not allow us to retrieve functions
+        // from the representing class.
+        eval($source);
     }
 }

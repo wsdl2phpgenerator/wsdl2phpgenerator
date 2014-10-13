@@ -13,6 +13,8 @@ use Wsdl2PhpGenerator\Config;
 class ComplexTypeTest extends CodeGenerationTestCase
 {
 
+    protected $namespace = 'ComplexTypeTest';
+
     /**
      * Test handling of attributes of the DateTime type.
      */
@@ -28,10 +30,8 @@ class ComplexTypeTest extends CodeGenerationTestCase
         $complexType = new ComplexType($config, 'ComplexTypeTestClass');
         $complexType->addMember('dateTime', 'dateTimeAttribute', false);
 
-        // Eval the source for the generated class. This is now pretty but currently the only way we can test whether
-        // the generated code is as expected. Our own code generation library does not allow us to retrieve functions
-        // from the representing class.
-        eval($complexType->getClass()->getSource());
+        $this->generateClass($complexType);
+
         $this->assertClassExists('ComplexTypeTestClass');
 
         $this->assertClassHasAttribute('dateTimeAttribute', 'ComplexTypeTestClass');
@@ -51,4 +51,58 @@ class ComplexTypeTest extends CodeGenerationTestCase
             '\DateTime'
         );
     }
+
+    /**
+     * Test handling of name generation with keywords when namespacing is not used.
+     */
+    public function testKeywordNoNamespaceNameGeneration()
+    {
+        // Dummy configuration.
+        $config = new Config(array(
+                'inputFile' => null,
+                'outputDir' => null
+            ));
+        // Iterator is an existing interface.
+        $complexType = new ComplexType($config, 'Iterator');
+        // Class variables cannot start with a number.
+        $complexType->addMember('int', '1var', false);
+
+        $this->generateClass($complexType);
+        $this->assertClassExists('IteratorCustom');
+
+        $this->assertClassHasAttribute('a1var', 'IteratorCustom');
+
+        // stdClass is an existing class name.
+        $complexType = new ComplexType($config, 'stdClass');
+        // Class variables cannot start with a dash.
+        $complexType->addMember('int', '-var', false);
+
+        $this->generateClass($complexType);
+        $this->assertClassExists('stdClassCustom');
+
+        $this->assertClassHasAttribute('avar', 'stdClassCustom');
+    }
+
+    /**
+     * Test handling of name generation with keywords when namespacing is used.
+     */
+    public function testKeywordNamespaceNameGeneration()
+    {
+        // More dummy configuration. The important part is the namespace.
+        $config = new Config(array(
+                'inputFile' => null,
+                'outputDir' => null,
+                'namespaceName' => $this->namespace,
+            ));
+        // Iterator is an existing interface.
+        $complexType = new ComplexType($config, 'Iterator');
+        $this->generateClass($complexType, $this->namespace);
+        $this->assertClassExists('Iterator', $this->namespace);
+
+        // stdClass is an existing class name.
+        $complexType = new ComplexType($config, 'stdClass');
+        $this->generateClass($complexType, $this->namespace);
+        $this->assertClassExists('stdClass', $this->namespace);
+    }
+
 }
