@@ -93,14 +93,15 @@ class Service implements ClassGenerator
 
         // Create the class object
         $comment = new PhpDocComment($this->description);
-        $this->class = new PhpClass($name, false, '\SoapClient', $comment);
+        $this->class = new PhpClass($name, false, $this->config->get('soapClientClass'), $comment);
 
         // Create the constructor
         $comment = new PhpDocComment();
         $comment->addParam(PhpDocElementFactory::getParam('array', 'options', 'A array of config values'));
         $comment->addParam(PhpDocElementFactory::getParam('string', 'wsdl', 'The wsdl file to use'));
 
-        $source = '  foreach (self::$classmap as $key => $value) {
+        $source = '
+  foreach (self::$classmap as $key => $value) {
     if (!isset($options[\'classmap\'][$key])) {
       $options[\'classmap\'][$key] = $value;
     }
@@ -118,15 +119,13 @@ class Service implements ClassGenerator
         $comment = new PhpDocComment();
         $comment->setVar(PhpDocElementFactory::getVar('array', $name, 'The defined classes'));
 
-        $init = 'array(' . PHP_EOL;
+        $init = array();
         foreach ($this->types as $type) {
             if ($type instanceof ComplexType) {
-                $init .= "  '" . $type->getIdentifier() . "' => '" . $this->config->get('namespaceName') . "\\" . $type->getPhpIdentifier() . "'," . PHP_EOL;
+                $init[$type->getIdentifier()] = $this->config->get('namespaceName') . "\\" . $type->getPhpIdentifier();
             }
         }
-        $init = substr($init, 0, strrpos($init, ','));
-        $init .= ')';
-        $var = new PhpVariable('private static', $name, $init, $comment);
+        $var = new PhpVariable('private static', $name, var_export($init, true), $comment);
 
         // Add the classmap variable
         $this->class->addVariable($var);

@@ -73,6 +73,7 @@ class Config implements ConfigInterface
             'classNames'                     => '',
             'sharedTypes'                    => false,
             'constructorParamsDefaultToNull' => false,
+            'soapClientClass'               => '\SoapClient',
         ));
 
         $resolver->setAllowedValues(array(
