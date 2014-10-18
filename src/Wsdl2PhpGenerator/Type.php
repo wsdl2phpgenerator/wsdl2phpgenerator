@@ -14,7 +14,7 @@ use Wsdl2PhpGenerator\PhpSource\PhpClass;
  * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
-abstract class Type
+abstract class Type implements ClassGenerator
 {
 
     /**

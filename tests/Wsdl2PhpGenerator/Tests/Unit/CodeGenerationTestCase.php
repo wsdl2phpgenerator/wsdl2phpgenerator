@@ -7,6 +7,7 @@ use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
 use ReflectionProperty;
+use Wsdl2PhpGenerator\ClassGenerator;
 use Wsdl2PhpGenerator\Type;
 
 /**
@@ -347,12 +348,12 @@ class CodeGenerationTestCase extends PHPUnit_Framework_TestCase
      *
      * This will cause the class to be available for subsequent code.
      *
-     * @param Type $type The type to generate.
+     * @param ClassGenerator $generator The object from with to generate the class.
      * @param string $namespace The namespace to use for the class.
      */
-    protected function generateClass(Type $type, $namespace = null)
+    protected function generateClass(ClassGenerator $generator, $namespace = null)
     {
-        $source = $type->getClass()->getSource();
+        $source = $generator->getClass()->getSource();
         if (!empty($namespace)) {
             $source = 'namespace ' . $namespace . ';' . PHP_EOL . $source;
         }

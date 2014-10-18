@@ -18,7 +18,7 @@ use Wsdl2PhpGenerator\PhpSource\PhpVariable;
  * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
-class Service
+class Service implements ClassGenerator
 {
 
     /**
