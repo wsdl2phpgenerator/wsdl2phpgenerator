@@ -17,9 +17,6 @@ class ConfigTest extends PHPUnit_Framework_TestCase
             'outputDir'                      => '/tmp/output',
             'verbose'                        => false,
             'namespaceName'                  => 'myNamespace',
-            'optionsFeatures'                => array('SOAP_SINGLE_ELEMENT_ARRAYS'),
-            'wsdlCache'                      => 'WSDL_CACHE_BOTH',
-            'compression'                    => 'SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP',
             'classNames'                     => 'test,test2, test3',
             'sharedTypes'                    => false,
             'constructorParamsDefaultToNull' => false,
@@ -41,9 +38,6 @@ class ConfigTest extends PHPUnit_Framework_TestCase
             'outputDir'                      => '/tmp/output',
             'verbose'                        => false,
             'namespaceName'                  => 'myNamespace',
-            'optionsFeatures'                => array('SOAP_SINGLE_ELEMENT_ARRAYS'),
-            'wsdlCache'                      => 'WSDL_CACHE_BOTH',
-            'compression'                    => 'SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP',
             'sharedTypes'                    => false,
             'constructorParamsDefaultToNull' => false,
         );
@@ -67,38 +61,6 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 
         foreach ($expectedValues as $key => $expectedValue) {
             $this->assertEquals($this->config->get($key), $expectedValue);
-        }
-    }
-
-    /**
-     * Check if the wsdlCache field in the configuration object throws an exception
-     * if one tries to fill it with a non-allowed value.
-     *
-     * @expectedException Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
-     */
-    public function testSetWsdlCacheToNotAllowedValue()
-    {
-        $config = new Config(array(
-            'inputFile' => null,
-            'outputDir' => null,
-            'wsdlCache' => 'NOT_ALLOWED'
-        ));
-    }
-
-    /**
-     * Create a config object for each allowed value for the wsdlCache field in the
-     * configuration object to be sure it won't throw an exception.
-     */
-    public function testSetWsdlCacheToAllowedValues()
-    {
-        $allowed = array('', 'WSDL_CACHE_NONE', 'WSDL_CACHE_DISK', 'WSDL_CACHE_MEMORY', 'WSDL_CACHE_BOTH');
-
-        foreach ($allowed as $value) {
-            $this->assertInstanceOf('Wsdl2PhpGenerator\ConfigInterface', new Config(array(
-                'inputFile' => null,
-                'outputDir' => null,
-                'wsdlCache' => $value
-            )));
         }
     }
 

@@ -35,6 +35,7 @@ class ServiceTest extends CodeGenerationTestCase
                 'outputDir' => null,
                 'namespaceName' => $this->namespace,
                 'soapClientClass' => $this->soapclientClass,
+                'soapClientOptions' => $this->soapclientOptions,
             ));
 
         $service = new Service($config, 'TestService', array(), 'Service description');
@@ -59,4 +60,14 @@ class ServiceTest extends CodeGenerationTestCase
         $this->assertClassSubclassOf(new \ReflectionClass($service), $this->soapclientClass);
     }
 
+    /**
+     * Test configuration of SoapClient options.
+     *
+     * @depends testSoapConfig
+     */
+    public function testSoapClientOptions($service)
+    {
+        // The soap client options should be the same as the ones passed to the configuration.
+        $this->assertEquals($this->soapclientOptions, $service->options);
+    }
 }

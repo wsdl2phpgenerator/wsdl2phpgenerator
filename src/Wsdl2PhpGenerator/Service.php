@@ -105,9 +105,9 @@ class Service implements ClassGenerator
     if (!isset($options[\'classmap\'][$key])) {
       $options[\'classmap\'][$key] = $value;
     }
-  }
-  ' . $this->generateServiceOptions() . '
-  parent::__construct($wsdl, $options);' . PHP_EOL;
+  }' . PHP_EOL;
+        $source .= '  $options = array_merge(' . var_export($this->config->get('soapClientOptions'), true) . ', $options);' . PHP_EOL;
+        $source .= '  parent::__construct($wsdl, $options);' . PHP_EOL;
 
         $function = new PhpFunction('public', '__construct', 'array $options = array(), $wsdl = \'' . $this->config->get('inputFile') . '\'', $source, $comment);
 
@@ -167,46 +167,4 @@ class Service implements ClassGenerator
         $this->operations[] = new Operation($name, $params, $description, $returns);
     }
 
-    /**
-     * @return string Returns the string for the options array
-     */
-    private function generateServiceOptions()
-    {
-        $ret = '';
-
-        if (count($this->config->get('optionsFeatures')) > 0) {
-            $i = 0;
-            $ret .= "
-  if (isset(\$options['features']) == false) {
-    \$options['features'] = ";
-            foreach ($this->config->get('optionsFeatures') as $option) {
-                if ($i++ > 0) {
-                    $ret .= ' | ';
-                }
-
-                $ret .= $option;
-            }
-
-            $ret .= ";
-  }" . PHP_EOL;
-        }
-
-        if (strlen($this->config->get('wsdlCache')) > 0) {
-            $ret .= "
-  if (isset(\$options['wsdl_cache']) == false) {
-    \$options['wsdl_cache'] = " . $this->config->get('wsdlCache');
-            $ret .= ";
-  }" . PHP_EOL;
-        }
-
-        if (strlen($this->config->get('compression')) > 0) {
-            $ret .= "
-  if (isset(\$options['compression']) == false) {
-    \$options['compression'] = " . $this->config->get('compression');
-            $ret .= ";
-  }" . PHP_EOL;
-        }
-
-        return $ret;
-    }
 }
