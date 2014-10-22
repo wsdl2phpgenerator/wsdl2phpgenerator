@@ -1,4 +1,10 @@
 
+2.5.2 / 2014-10-22 
+==================
+
+ * Fix making parent::__construct params with --constructorNull option
+ * Fix extracting information from XSD includes.
+
 2.5.1 / 2014-09-11 
 ==================
 
