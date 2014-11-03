@@ -78,10 +78,6 @@ class ComplexType extends Type
 
                 if (!$member->getNullable()) {
                     $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
-                    if ($this->config->get('constructorParamsDefaultToNull')) {
-                        // This is somewhat hacky but we do no have function parameters as a class yet.
-                        $name .= ' = null';
-                    }
                     $constructorParameters[$name] = Validator::validateTypeHint($type);
                 }
             }
@@ -106,12 +102,7 @@ class ComplexType extends Type
                     $constructorSource .= '  $this->' . $name . ' = $' . $name . ';' . PHP_EOL;
                 }
                 $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
-                $constructorName = $name;
-                if ($this->config->get('constructorParamsDefaultToNull')) {
-                    // More hackery with with parameter names..
-                    $constructorName .= ' = null';
-                }
-                $constructorParameters[$constructorName] = $typeHint;
+                $constructorParameters[$name] = $typeHint;
             }
 
             $getterComment = new PhpDocComment();
@@ -143,8 +134,18 @@ class ComplexType extends Type
             $accessors[] = $setter;
         }
 
-        $function = new PhpFunction('public', '__construct', $this->buildParametersString($constructorParameters), $constructorSource, $constructorComment);
-        $class->addFunction($function);
+        $constructor = new PhpFunction(
+            'public',
+            '__construct',
+            $this->buildParametersString(
+                $constructorParameters,
+                true,
+                $this->config->get('constructorParamsDefaultToNull')
+            ),
+            $constructorSource,
+            $constructorComment
+        );
+        $class->addFunction($constructor);
 
         foreach ($accessors as $accessor) {
             $class->addFunction($accessor);
@@ -191,13 +192,21 @@ class ComplexType extends Type
      * @param array $parameters A map of parameters. Keys are parameter names and values are parameter types.
      *                          Parameter types may be empty. In that case they are not used.
      * @param bool $includeType Whether to include the parameters types in the string
+     * @param bool $defaultNull Whether to set the default value of parameters to null.
      * @return string The parameter string.
      */
-    protected function buildParametersString(array $parameters, $includeType = true)
+    protected function buildParametersString(array $parameters, $includeType = true, $defaultNull = false)
     {
         $parameterStrings = array();
         foreach ($parameters as $name => $type) {
-            $parameterStrings[] = (!empty($type) && $includeType) ? $type . ' $' . $name : '$' . $name;
+            $parameterString = '$' . $name;
+            if (!empty($type) && $includeType) {
+                $parameterString = $type . ' ' . $parameterString;
+            }
+            if ($defaultNull) {
+                $parameterString .= ' = null';
+            }
+            $parameterStrings[] = $parameterString;
         }
         return implode(', ', $parameterStrings);
     }
