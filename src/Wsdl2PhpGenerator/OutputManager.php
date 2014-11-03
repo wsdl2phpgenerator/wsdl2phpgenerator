@@ -123,7 +123,7 @@ class OutputManager
      */
     private function saveAutoloader($name, array $classes)
     {
-        $autoloaderName = 'autoload' . ucfirst($name);
+        $autoloaderName = 'autoload_' . md5($name . $this->config->get('namespaceName'));
 
         // The autoloader function we build contain two parts:
         // 1. An array of generated classes and their paths.

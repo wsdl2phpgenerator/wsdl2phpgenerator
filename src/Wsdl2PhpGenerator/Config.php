@@ -67,16 +67,11 @@ class Config implements ConfigInterface
         $resolver->setDefaults(array(
             'verbose'                        => false,
             'namespaceName'                  => '',
-            'optionsFeatures'                => array(),
-            'wsdlCache'                      => '',
-            'compression'                    => '',
             'classNames'                     => '',
             'sharedTypes'                    => false,
             'constructorParamsDefaultToNull' => false,
-        ));
-
-        $resolver->setAllowedValues(array(
-            'wsdlCache' => array('', 'WSDL_CACHE_NONE', 'WSDL_CACHE_DISK', 'WSDL_CACHE_MEMORY', 'WSDL_CACHE_BOTH')
+            'soapClientClass'               => '\SoapClient',
+            'soapClientOptions'             => array()
         ));
 
         $resolver->setNormalizers(array(

@@ -18,7 +18,7 @@ use Wsdl2PhpGenerator\PhpSource\PhpVariable;
  * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
-class Service
+class Service implements ClassGenerator
 {
 
     /**
@@ -93,20 +93,21 @@ class Service
 
         // Create the class object
         $comment = new PhpDocComment($this->description);
-        $this->class = new PhpClass($name, false, '\SoapClient', $comment);
+        $this->class = new PhpClass($name, false, $this->config->get('soapClientClass'), $comment);
 
         // Create the constructor
         $comment = new PhpDocComment();
         $comment->addParam(PhpDocElementFactory::getParam('array', 'options', 'A array of config values'));
         $comment->addParam(PhpDocElementFactory::getParam('string', 'wsdl', 'The wsdl file to use'));
 
-        $source = '  foreach (self::$classmap as $key => $value) {
+        $source = '
+  foreach (self::$classmap as $key => $value) {
     if (!isset($options[\'classmap\'][$key])) {
       $options[\'classmap\'][$key] = $value;
     }
-  }
-  ' . $this->generateServiceOptions() . '
-  parent::__construct($wsdl, $options);' . PHP_EOL;
+  }' . PHP_EOL;
+        $source .= '  $options = array_merge(' . var_export($this->config->get('soapClientOptions'), true) . ', $options);' . PHP_EOL;
+        $source .= '  parent::__construct($wsdl, $options);' . PHP_EOL;
 
         $function = new PhpFunction('public', '__construct', 'array $options = array(), $wsdl = \'' . $this->config->get('inputFile') . '\'', $source, $comment);
 
@@ -118,15 +119,13 @@ class Service
         $comment = new PhpDocComment();
         $comment->setVar(PhpDocElementFactory::getVar('array', $name, 'The defined classes'));
 
-        $init = 'array(' . PHP_EOL;
+        $init = array();
         foreach ($this->types as $type) {
             if ($type instanceof ComplexType) {
-                $init .= "  '" . $type->getIdentifier() . "' => '" . $this->config->get('namespaceName') . "\\" . $type->getPhpIdentifier() . "'," . PHP_EOL;
+                $init[$type->getIdentifier()] = $this->config->get('namespaceName') . "\\" . $type->getPhpIdentifier();
             }
         }
-        $init = substr($init, 0, strrpos($init, ','));
-        $init .= ')';
-        $var = new PhpVariable('private static', $name, $init, $comment);
+        $var = new PhpVariable('private static', $name, var_export($init, true), $comment);
 
         // Add the classmap variable
         $this->class->addVariable($var);
@@ -168,46 +167,4 @@ class Service
         $this->operations[] = new Operation($name, $params, $description, $returns);
     }
 
-    /**
-     * @return string Returns the string for the options array
-     */
-    private function generateServiceOptions()
-    {
-        $ret = '';
-
-        if (count($this->config->get('optionsFeatures')) > 0) {
-            $i = 0;
-            $ret .= "
-  if (isset(\$options['features']) == false) {
-    \$options['features'] = ";
-            foreach ($this->config->get('optionsFeatures') as $option) {
-                if ($i++ > 0) {
-                    $ret .= ' | ';
-                }
-
-                $ret .= $option;
-            }
-
-            $ret .= ";
-  }" . PHP_EOL;
-        }
-
-        if (strlen($this->config->get('wsdlCache')) > 0) {
-            $ret .= "
-  if (isset(\$options['wsdl_cache']) == false) {
-    \$options['wsdl_cache'] = " . $this->config->get('wsdlCache');
-            $ret .= ";
-  }" . PHP_EOL;
-        }
-
-        if (strlen($this->config->get('compression')) > 0) {
-            $ret .= "
-  if (isset(\$options['compression']) == false) {
-    \$options['compression'] = " . $this->config->get('compression');
-            $ret .= ";
-  }" . PHP_EOL;
-        }
-
-        return $ret;
-    }
 }
