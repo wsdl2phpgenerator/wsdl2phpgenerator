@@ -37,31 +37,21 @@ class AbstractTest extends FunctionalTestCase
         $this->assertClassSubclassOf('DerivedClass2', 'BaseClass', $subClassMessage);
 
         // The constructor for subclasses should at least have the same parameters as the constructor of the class they
-        // extend.
+        // extend. They should also appear in the same order.
         $baseClass = new \ReflectionClass('Author');
         $baseConstructor = $baseClass->getConstructor();
         $subClass = new \ReflectionClass('UserAuthor');
         $subClassConstructor = $subClass->getConstructor();
         foreach ($baseConstructor->getParameters() as $parameter) {
-            $this->assertMethodHasParameter($subClassConstructor, $parameter);
+            $this->assertMethodHasParameter($subClassConstructor, $parameter, $parameter->getPosition());
         }
         $subSubClass = new \ReflectionClass('NicknameUserAuthor');
         $subSubClassConstructor = $subSubClass->getConstructor();
-        $subSubClassConstructorParameters = $subSubClassConstructor->getParameters();
-        usort($subSubClassConstructorParameters, function(\ReflectionParameter $a, \ReflectionParameter $b) {
-            return $a->getPosition() - $b->getPosition();
-        });
-        $i = 0;
         foreach ($baseConstructor->getParameters() as $parameter) {
-            $this->assertMethodHasParameter($subSubClassConstructor, $parameter);
-            $subSubParam = $subSubClassConstructorParameters[$i++];
-            $this->assertEquals($parameter->getName(), $subSubParam->getName());
+            $this->assertMethodHasParameter($subSubClassConstructor, $parameter, $parameter->getPosition());
         }
-        $i = 0;
         foreach ($subClassConstructor->getParameters() as $parameter) {
-            $this->assertMethodHasParameter($subSubClassConstructor, $parameter);
-            $subSubParam = $subSubClassConstructorParameters[$i++];
-            $this->assertEquals($parameter->getName(), $subSubParam->getName());
+            $this->assertMethodHasParameter($subSubClassConstructor, $parameter, $parameter->getPosition());
         }
     }
 }
