@@ -308,7 +308,9 @@ abstract class Wsdl2PhpGeneratorFunctionalTestCase extends PHPUnit_Framework_Tes
 
         // Main attributes for parameters should also be equal.
         $actualParameter = $parameters[$parameter->getName()] ;
-        $this->assertEquals($actualParameter->getDefaultValue(), $parameter->getDefaultValue(), 'Default values for parameters do not match.');
+        if ($parameter->isDefaultValueAvailable()) {
+            $this->assertEquals($actualParameter->getDefaultValue(), $parameter->getDefaultValue(), 'Default values for parameters do not match.');
+        }
         $this->assertEquals($actualParameter->getClass(), $parameter->getClass(), 'Type hinted class for parameters should match');
     }
 
