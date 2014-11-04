@@ -188,7 +188,7 @@ class ComplexType extends Type
     {
         $members = array();
         if (!empty($type->baseType)) {
-            $members = array_merge($type->baseType->getMembers(), $this->getBaseTypeMembers($type->baseType));
+            $members = array_merge($this->getBaseTypeMembers($type->baseType), $type->baseType->getMembers());
         }
         return $members;
     }
