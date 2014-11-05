@@ -295,16 +295,22 @@ abstract class Wsdl2PhpGeneratorFunctionalTestCase extends PHPUnit_Framework_Tes
      *
      * @param ReflectionMethod $method The method.
      * @param ReflectionParameter $parameter The parameter.
-     * @param string $message The message to show if the assertion fails.
+     * @param int $position The expected position (from 0) of the parameter in the list of parameters for the method.
      */
-    protected function assertMethodHasParameter(\ReflectionMethod $method, ReflectionParameter $parameter)
+    protected function assertMethodHasParameter(\ReflectionMethod $method, ReflectionParameter $parameter, $position = NULL)
     {
         $parameters = array();
         foreach ($method->getParameters() as $methodParameter) {
             $parameters[$methodParameter->getName()] = $methodParameter;
         }
-        $message = (empty($message)) ? sprintf('Parameter "%s" not found among parameter for method "%s->%s" ("%s")', $parameter->getName(), $method->getDeclaringClass()->getName(), $method->getName(), implode('", "', array_keys($parameters))) : $message;
+        $message = sprintf('Parameter "%s" not found among parameters for method "%s->%s" ("%s")', $parameter->getName(), $method->getDeclaringClass()->getName(), $method->getName(), implode('", "', array_keys($parameters)));
         $this->assertContains($parameter->getName(), array_keys($parameters), $message);
+
+        if ($position !== NULL) {
+            $parameterNames = array_keys($parameters);
+            $message = sprintf('Parameter "%s" not found at position %s for parameters for method "%s->%s" ("%s")', $parameter->getName(), $position, $method->getDeclaringClass()->getName(), $method->getName(), implode('", "', array_keys($parameters)));
+            $this->assertEquals($parameter->getName(), $parameterNames[$position], $message);
+        }
 
         // Main attributes for parameters should also be equal.
         $actualParameter = $parameters[$parameter->getName()] ;
