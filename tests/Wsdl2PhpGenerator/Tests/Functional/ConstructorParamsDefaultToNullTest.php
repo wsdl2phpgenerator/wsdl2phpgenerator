@@ -8,6 +8,8 @@ namespace Wsdl2PhpGenerator\Tests\Functional;
 class ConstructorParamsDefaultToNullTest extends Wsdl2PhpGeneratorFunctionalTestCase
 {
 
+    protected $namespaceName = 'ConstructorParamsDefaultToNullTest';
+
     protected function getWsdlPath()
     {
         return $this->fixtureDir . '/extension/extension.wsdl';
@@ -16,13 +18,18 @@ class ConstructorParamsDefaultToNullTest extends Wsdl2PhpGeneratorFunctionalTest
     protected function configureOptions()
     {
         $this->config->setConstructorParamsDefaultToNull(true);
+        $this->config->setNamespaceName($this->namespaceName);
     }
 
     public function testConstructorParamsDefaultToNull()
     {
         // Load the base class and check that all constructor parameters have a default null value.
-        $this->assertGeneratedClassExists('BaseClass');
-        $object = new \BaseClass();
+        // @todo: Remove Custom suffix for v3.
+        // Other test cases contains classes with these names and thus Custom is suffixed in these situations to
+        // avoid name clashes despite using a different namespace. This should be fixed in future versions.
+        // Note that this also means that this test will fail when run on its own.
+        $this->assertGeneratedClassExists('BaseClassCustom', $this->namespaceName);
+        $object = new \ConstructorParamsDefaultToNullTest\BaseClassCustom();
         $baseClass = new \ReflectionClass($object);
         $baseClassConstructor = $baseClass->getConstructor();
         foreach ($baseClassConstructor->getParameters() as $parameter) {
@@ -31,8 +38,9 @@ class ConstructorParamsDefaultToNullTest extends Wsdl2PhpGeneratorFunctionalTest
 
         // Load the subclass and check that all constructor parameters also exist for the base class and that each of
         // them defaults to null.
-        $this->assertGeneratedClassExists('DerivedClass1');
-        $subClassObject = new \DerivedClass1();
+        // @todo: More remove Custom suffix for v3.
+        $this->assertGeneratedClassExists('DerivedClass1Custom', $this->namespaceName);
+        $subClassObject = new \ConstructorParamsDefaultToNullTest\DerivedClass1Custom();
         $subClass = new \ReflectionClass($subClassObject);
         $subClassConstructor = $subClass->getConstructor();
         foreach ($baseClassConstructor->getParameters() as $baseClassParameter) {

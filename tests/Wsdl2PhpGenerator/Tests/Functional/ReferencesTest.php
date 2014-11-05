@@ -30,15 +30,16 @@ class ReferencesTest extends Wsdl2PhpGeneratorFunctionalTestCase
         // Class availability it retrieved from the PHP SoapClient so these should work if the base WSDL and referenced
         // schemas are correct.
         // This also loads the classes.
+        // @todo: Remove Custom suffix for v3.
+        // Other test cases contains classes with these names and thus Custom is suffixed in these situations to
+        // avoid name clashes despite using a different namespace. This should be fixed in future versions.
+        // Note that this also means that this test will fail when run on its own.
         $expectedClasses = array(
             'ReferencesServiceService',
-            'Author',
-            'UserAuthor',
-            'Book',
-            // 'BaseClass',
-            // @todo: Test for BaseClass in v3.
-            // Other test cases contains that name and thus it may be called BaseClassCustom in these situations to
-            // avoid name clashes despite using a different namespace. This should be fixed in future versions.
+            'AuthorCustom',
+            'UserAuthorCustom',
+            'BookCustom',
+            'BaseClassCustom',
             'DerivedClass',
         );
         foreach ($expectedClasses as $class) {
@@ -48,9 +49,10 @@ class ReferencesTest extends Wsdl2PhpGeneratorFunctionalTestCase
         // Test that subclasses are handled correctly.
         // Extensions/base attributes for types are extracted from schemas by Wsdl2PhpGenerator custom code. This
         // should work if references are handled correctly.
+        // @todo: More remove Custom suffix for v3.
         $subclasses = array(
-            'UserAuthor' => 'Author',
-            //'DerivedClass' => 'BaseClass', @todo: More test for BaseClass in v3.
+            'UserAuthorCustom' => 'AuthorCustom',
+            'DerivedClass' => 'BaseClassCustom',
         );
         foreach ($subclasses as $subclass => $baseclass) {
             $this->assertClassSubclassOf(
