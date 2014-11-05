@@ -106,6 +106,21 @@
 
         <!-- Build a new phar file using https://github.com/kherge/Box -->
         <exec command="vendor/bin/box build" checkreturn="true" logoutput="true" />
+
+        <!-- Test that the generated phar file is functional.
+             This may fail as we only include parts of our dependencies in the phar.
+             Files in autoload_files.php not added in box.json will cause the phar to
+             fail. -->
+        <foreach param="pharfile" target="test-phar">
+            <fileset dir=".">
+                <include name="*.phar"/>
+            </fileset>
+        </foreach>
+    </target>
+
+    <target name="test-phar" description="Test that phar file is working">
+        <!-- If we can get the version then assume that the phar works. -->
+        <exec command="php ${pharfile} --version" checkreturn="true" logoutput="true"/>
     </target>
 
     <target name="check-prerequisites" description="Check that all required elements are available." hidden="true">
