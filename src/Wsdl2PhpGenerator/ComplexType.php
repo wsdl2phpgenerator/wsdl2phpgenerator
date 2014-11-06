@@ -71,8 +71,9 @@ class ComplexType extends Type
         $accessors = array();
 
         // Add base type members to constructor parameter list first and call base class constructor
-        if ($this->baseType !== null) {
-            foreach ($this->baseType->getMembers() as $member) {
+        $parentMembers = $this->getBaseTypeMembers($this);
+        if (!empty($parentMembers)) {
+            foreach ($parentMembers as $member) {
                 $type = Validator::validateType($member->getType());
                 $name = Validator::validateAttribute($member->getName());
 
@@ -208,6 +209,22 @@ class ComplexType extends Type
             }
             $parameterStrings[] = $parameterString;
         }
+
         return implode(', ', $parameterStrings);
+    }
+
+    /**
+     * Get members from base types all the way through the type hierarchy.
+     *
+     * @param ComplexType $type The type to retrieve base type members from.
+     * @return Variable[] Member variables from all base types.
+     */
+    protected function getBaseTypeMembers(ComplexType $type)
+    {
+        $members = array();
+        if (!empty($type->baseType)) {
+            $members = array_merge($this->getBaseTypeMembers($type->baseType), $type->baseType->getMembers());
+        }
+        return $members;
     }
 }

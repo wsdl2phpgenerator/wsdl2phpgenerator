@@ -195,9 +195,9 @@ class CodeGenerationTestCase extends PHPUnit_Framework_TestCase
      *
      * @param ReflectionMethod $method The method.
      * @param ReflectionParameter|string $parameter The parameter or the name of it
-     * @param string $message The message to show if the assertion fails.
+     * @param int $position The expected position (from 0) of the parameter in the list of parameters for the method.
      */
-    protected function assertMethodHasParameter(\ReflectionMethod $method, $parameter)
+    protected function assertMethodHasParameter(\ReflectionMethod $method, $parameter, $position = NULL, $type = NULL)
     {
         $parameterName = ($parameter instanceof ReflectionParameter) ? $parameter->getName() : $parameter;
 
@@ -215,14 +215,29 @@ class CodeGenerationTestCase extends PHPUnit_Framework_TestCase
         ) : $message;
         $this->assertContains($parameterName, array_keys($parameters), $message);
 
+        if ($position !== null) {
+            $parameterNames = array_keys($parameters);
+            $message = sprintf(
+                'Parameter "%s" not found at position %s for parameters for method "%s->%s" ("%s")',
+                $parameterName,
+                $position,
+                $method->getDeclaringClass()->getName(),
+                $method->getName(),
+                implode('", "', array_keys($parameters))
+            );
+            $this->assertEquals($parameterName, $parameterNames[$position], $message);
+        }
+
         // Main attributes for parameters should also be equal.
         if ($parameter instanceof ReflectionParameter) {
             $actualParameter = $parameters[$parameterName];
-            $this->assertEquals(
-                $actualParameter->getDefaultValue(),
-                $parameter->getDefaultValue(),
-                'Default values for parameters do not match.'
-            );
+            if ($parameter->isDefaultValueAvailable()) {
+                $this->assertEquals(
+                    $actualParameter->getDefaultValue(),
+                    $parameter->getDefaultValue(),
+                    'Default values for parameters do not match.'
+                );
+            }
             $this->assertEquals(
                 $actualParameter->getClass(),
                 $parameter->getClass(),
