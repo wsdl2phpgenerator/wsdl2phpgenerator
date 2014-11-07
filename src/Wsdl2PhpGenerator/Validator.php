@@ -114,18 +114,19 @@ class Validator
     public static function validateClass($name)
     {
         $name = self::validateNamingConvention($name);
-        if (self::isKeyword($name) || class_exists($name)) {
-            $name .= self::NAME_SUFFIX;
-        }
 
-        // In case of continued name clashes append numbering.
-        $newName = $name;
-        $i = 1;
-        while (class_exists($newName)) {
-            $newName = $name . $i++;
-        }
+        $name = self::validateUnique($name, function ($name) {
+                // Use reflection to get access to private isKeyword method.
+                // @todo Remove this when we stop supporting PHP 5.3.
+                $isKeywordMethod = new \ReflectionMethod(__CLASS__, 'isKeyword');
+                $isKeywordMethod->setAccessible(true);
+                $isKeyword = $isKeywordMethod->invoke(null, $name);
+             return !$isKeyword &&
+                !interface_exists($name) &&
+                !class_exists($name);
+        }, self::NAME_SUFFIX);
 
-        return $newName;
+        return $name;
     }
 
     /**
@@ -225,6 +226,56 @@ class Validator
         }
 
         return $typeName;
+    }
+
+    /**
+     * Validates a type to be used as a method parameter type hint.
+     *
+     * @param string $typeName The name of the type to test.
+     * @return null|string Returns a valid type hint for the type or null if there is no valid type hint.
+     */
+    public static function validateTypeHint($typeName)
+    {
+        $typeHint = null;
+
+        // We currently only support type hints for arrays and DateTimes.
+        // Going forward we could support it for generated types. The challenge here are enums as they are actually
+        // strings and not class instances and we have no way of determining whether the type is an enum at this point.
+        if (substr($typeName, -2) == "[]") {
+            $typeHint = 'array';
+        } elseif ($typeName == '\DateTime') {
+            $typeHint = $typeName;
+        }
+
+        return $typeHint;
+    }
+
+    /**
+     * Validate that a name is unique.
+     *
+     * If a name is not unique then append a suffix and numbering.
+     *
+     * @param $name The name to test.
+     * @param callable $function A callback which should return true if the element is unique. Otherwise false.
+     * @param string $suffix A suffix to append between the name and numbering.
+     * @return string A unique name.
+     */
+    public static function validateUnique($name, $function, $suffix = null)
+    {
+        $i = 1;
+        $newName = $name;
+        while (!call_user_func($function, $newName)) {
+            if (!$suffix) {
+                $newName = $name . ($i + 1);
+            } elseif ($i == 1) {
+                $newName = $name . $suffix;
+            } else {
+                $newName = $name . $suffix . $i;
+            }
+            $i++;
+        }
+
+        return $newName;
     }
 
     /**
