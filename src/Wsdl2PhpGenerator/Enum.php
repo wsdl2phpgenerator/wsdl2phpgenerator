@@ -50,8 +50,13 @@ class Enum extends Type
 
         $first = true;
 
+        $names = array();
         foreach ($this->values as $value) {
             $name = Validator::validateConstant($value);
+
+            $name = Validator::validateUnique($name, function ($name) use ($names) {
+                    return !in_array($name, $names);
+            });
 
             if ($first) {
                 $this->class->addConstant($name, '__default');
@@ -59,6 +64,7 @@ class Enum extends Type
             }
 
             $this->class->addConstant($value, $name);
+            $names[] = $name;
         }
     }
 

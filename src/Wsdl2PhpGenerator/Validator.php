@@ -259,6 +259,34 @@ class Validator
     }
 
     /**
+     * Validate that a name is unique.
+     *
+     * If a name is not unique then append a suffix and numbering.
+     *
+     * @param $name The name to test.
+     * @param callable $function A callback which should return true if the element is unique. Otherwise false.
+     * @param string $suffix A suffix to append between the name and numbering.
+     * @return string A unique name.
+     */
+    public static function validateUnique($name, $function, $suffix = null)
+    {
+        $i = 1;
+        $newName = $name;
+        while (!call_user_func($function, $newName)) {
+            if (!$suffix) {
+                $newName = $name . ($i + 1);
+            } elseif ($i == 1) {
+                $newName = $name . $suffix;
+            } else {
+                $newName = $name . $suffix . $i;
+            }
+            $i++;
+        }
+
+        return $newName;
+    }
+
+    /**
      * Validates a name against standard PHP naming conventions
      *
      * @param string $name the name to validate
