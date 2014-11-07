@@ -118,20 +118,18 @@ class Validator
 
         $prefix = !empty($namespace) ? $namespace . '\\' : '';
 
-        if (self::isKeyword($name) ||
-            interface_exists($prefix . $name) ||
-            class_exists($prefix . $name)) {
-            $name .= self::NAME_SUFFIX;
-        }
+        $name = self::validateUnique($name, function ($name) use ($prefix) {
+                // Use reflection to get access to private isKeyword method.
+                // @todo Remove this when we stop supporting PHP 5.3.
+                $isKeywordMethod = new \ReflectionMethod(__CLASS__, 'isKeyword');
+                $isKeywordMethod->setAccessible(true);
+                $isKeyword = $isKeywordMethod->invoke(null, $name);
+             return !$isKeyword &&
+                !interface_exists($prefix . $name) &&
+                !class_exists($prefix . $name);
+        }, self::NAME_SUFFIX);
 
-        // In case of continued name clashes append numbering.
-        $newName = $name;
-        $i = 1;
-        while (interface_exists($prefix . $newName) || class_exists($prefix . $newName)) {
-            $newName = $name . $i++;
-        }
-
-        return $newName;
+        return $name;
     }
 
     /**
