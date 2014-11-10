@@ -128,7 +128,10 @@ class Service
                 $init .= "  '" . $type->getIdentifier() . "' => '" . $this->config->getNamespaceName() . "\\" . $type->getPhpIdentifier() . "'," . PHP_EOL;
             }
         }
-        $init = substr($init, 0, strrpos($init, ','));
+        $positionOfLastSemicolon = strrpos($init, ',');
+        if ($positionOfLastSemicolon != false) {
+            $init = substr($init, 0, $positionOfLastSemicolon);
+        }
         $init .= ')';
         $var = new PhpVariable('private static', $name, $init, $comment);
 
