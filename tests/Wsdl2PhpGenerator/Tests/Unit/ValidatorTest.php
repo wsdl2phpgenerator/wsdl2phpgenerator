@@ -54,16 +54,13 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('foobar', Validator::validateType('foo-bar'));
         $this->assertEquals('Foo', Validator::validateType('Foo'));
         $this->assertEquals('foo523', Validator::validateType('foo523'));
-        $this->assertEquals('_test[]', Validator::validateType('arrayOf_test'));
-        $this->assertEquals('Test[]', Validator::validateType('arrayOfTest'));
+        $this->assertEquals('arrayOfTest', Validator::validateType('arrayOfTest'));
         $this->assertEquals('test[]', Validator::validateType('test[]'));
-        $this->assertEquals('_xsd_int[]', Validator::validateType('ArrayOf_xsd_int'));
 
         $this->assertEquals('int', Validator::validateType('nonNegativeInteger'));
         $this->assertEquals('float', Validator::validateType('float'));
         $this->assertEquals('string', Validator::validateType('normalizedString'));
         $this->assertEquals('string', Validator::validateType('<anyXML>'));
-        $this->assertEquals('Foo[]', Validator::validateType('ArrayOfFoo'));
         $this->assertEquals('Foo[]', Validator::validateType('Foo[]'));
 
         $this->assertEquals('andCustom', Validator::validateType('and')); // and is reserved keyword
