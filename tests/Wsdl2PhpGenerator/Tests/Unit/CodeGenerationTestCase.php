@@ -57,7 +57,30 @@ class CodeGenerationTestCase extends PHPUnit_Framework_TestCase
     protected function assertAttributeTypeMatchesDocBlock($attributeName, $object, $message = '')
     {
         $docBlockType = $this->getAttributeDocBlockType($attributeName, $object);
-        if ($docBlockType) {
+        if (substr($docBlockType, -2, 2) == '[]') {
+            // If the DocBlock declares that the value should be an array then check
+            // that the return value of the attribute getter is array and it's content matches.
+            $docBlockType = substr($docBlockType, 0, -2);
+            $this->assertAttributeInternalType('array', $attributeName, $object, $message);
+            if (empty($message)) {
+                $message = sprintf(
+                    'DocBlock %s is array of %s. It should contain only %s.',
+                    get_class($object),
+                    $docBlockType,
+                    $docBlockType
+                );
+            }
+            $attributeValue = $object->{'get' . ucfirst($attributeName)}();
+            if (!empty($attributeValue)) {
+                if (class_exists($docBlockType)) {
+                    $this->assertContainsOnlyInstancesOf($docBlockType, $attributeValue, $message);
+                }
+                else {
+                    // Else we have a primitive type so just check for that.
+                    $this->assertContainsOnly($docBlockType, $attributeValue, $message);
+                }
+            }
+        } elseif ($docBlockType) {
             if (class_exists($docBlockType)) {
                 // If the DocBlock declares that the value should be a class then check
                 // that the return value of the attribute getter matches.
@@ -93,8 +116,10 @@ class CodeGenerationTestCase extends PHPUnit_Framework_TestCase
         if ($docBlockType) {
             if ($type === 'bool') {
                 $type = 'boolean';
-            }
-            if (class_exists($docBlockType)) {
+            } elseif (substr($docBlockType, -2, 2) == '[]') {
+                // if $docBlockType ends with [] attribute is expected to be native php array
+                $docBlockType = 'array';
+            } elseif (class_exists($docBlockType)) {
                 $docBlockType = 'object';
             }
             $this->assertEquals($type, $docBlockType, $message);
@@ -116,7 +141,7 @@ class CodeGenerationTestCase extends PHPUnit_Framework_TestCase
         $comment = $attribute->getDocComment();
         // Attempt to do some simple extraction of type declaration from the
         // DocBlock.
-        if (preg_match('/@var (\w+)/', $comment, $matches)) {
+        if (preg_match('/@var ([\w\[\]]+)/', $comment, $matches)) {
             $docBlockType = $matches[1];
         }
 
