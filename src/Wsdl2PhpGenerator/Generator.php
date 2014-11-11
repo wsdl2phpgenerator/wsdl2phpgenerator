@@ -125,11 +125,6 @@ class Generator implements GeneratorInterface
         $types = $this->wsdl->getTypes();
 
         foreach ($types as $typeNode) {
-            if ($typeNode->isArray()) {
-                // skip arrays
-                continue;
-            }
-
             $type = null;
 
             if ($typeNode->isComplex()) {

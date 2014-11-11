@@ -176,7 +176,24 @@ abstract class Wsdl2PhpGeneratorFunctionalTestCase extends PHPUnit_Framework_Tes
     protected function assertAttributeTypeMatchesDocBlock($attributeName, $object, $message = '')
     {
         $docBlockType = $this->getAttributeDocBlockType($attributeName, $object);
-        if ($docBlockType) {
+        if (substr($docBlockType, -2, 2) == '[]') {
+            $docBlockType = substr($docBlockType, 0, -2);
+            $this->assertAttributeInternalType('array', $attributeName, $object, $message);
+
+            if (class_exists($docBlockType)) {
+                if (!empty($object->{$attributeName})) { // if it is't we can't check anything
+                    $firstElemetOfArray = reset($object->{$attributeName});
+                    if (empty($message)) {
+                        $message = sprintf('Attribute %s on %s is array of type %s. DocBlock says it should be array of %s.',
+                            $attributeName, get_class($object), get_class($firstElemetOfArray), $docBlockType);
+                    }
+                    $this->assertTrue(is_a($object->{$attributeName}[0], $docBlockType), $message);
+                }
+            } else {
+                // Else we have a primitive type so just check for that.
+                $this->assertAttributeInternalType($docBlockType, $attributeName, $object, $message);
+            }
+        } elseif ($docBlockType) {
             if (class_exists($docBlockType)) {
                 // If the DocBlock declares that the value should be a class then check¨
                 // that the actual attribute value matches.
@@ -206,8 +223,9 @@ abstract class Wsdl2PhpGeneratorFunctionalTestCase extends PHPUnit_Framework_Tes
         if ($docBlockType) {
             if ($type === 'bool') {
                 $type = 'boolean';
-            }
-            if (class_exists($docBlockType)) {
+            } elseif (substr($docBlockType, -2, 2) == '[]') {
+                $docBlockType = 'array';
+            } elseif (class_exists($docBlockType)) {
                 $docBlockType = 'object';
             }
             $this->assertEquals($type, $docBlockType, $message);
@@ -229,7 +247,7 @@ abstract class Wsdl2PhpGeneratorFunctionalTestCase extends PHPUnit_Framework_Tes
         $comment = $attribute->getDocComment();
         // Attempt to do some simple extraction of type declaration from the
         // DocBlock.
-        if (preg_match('/@var (\w+)/', $comment, $matches)) {
+        if (preg_match('/@var ([\w\[\]]+)/', $comment, $matches)) {
             $value = $attribute->getValue($object);
             $docBlockType = $matches[1];
         }

@@ -42,6 +42,9 @@ class TypeNode extends XmlNode
         $firstLineElements = explode(" ", $lines[0]);
         $this->restriction = $firstLineElements[0];
         $this->name = $firstLineElements[1];
+        if (substr($this->name, -2, 2) == '[]') {
+            $this->name = substr($this->name, 0, -2);
+        }
 
         parent::__construct();
     }
@@ -118,6 +121,15 @@ class TypeNode extends XmlNode
         $wsdlLines = $this->getWsdlLines();
 
         $parts = array();
+
+        if (sizeof($wsdlLines) == 1 && substr($wsdlLines[0], -2, 2) == '[]') {
+            list($typeName, $name) = explode(" ", $wsdlLines[0]);
+            $name = substr($name, 0, -2);
+            $typeName .= '[]';
+
+            $parts[$name] = $typeName;
+        }
+
         for ($i = 1; $i < sizeof($wsdlLines) - 1; $i++) {
             $wsdlLines[$i] = trim($wsdlLines[$i]);
             list($typeName, $name) = explode(" ", substr($wsdlLines[$i], 0, strlen($wsdlLines[$i]) - 1));
@@ -191,10 +203,9 @@ class TypeNode extends XmlNode
      */
     public function isComplex()
     {
-        // Checking the number of lines in the type filters out simple types, enumerations and patterns.
-        // There might be a better way to go about this but this approach was used in previous versions so we keep it
-        // that way for now.
-        return count($this->getWsdlLines()) > 1;
+        return
+            $this->restriction == 'struct' ||
+            $this->element->localName == 'complexType';
     }
 
     /**
