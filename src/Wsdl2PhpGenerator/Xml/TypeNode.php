@@ -88,6 +88,15 @@ class TypeNode extends XmlNode
     }
 
     /**
+     * Returns whether element is abstract
+     * @return boolWwhether the element is abstract
+     */
+    public function isAbstract()
+    {
+        return (bool) $this->element->getAttribute('abstract');
+    }
+
+    /**
      * Returns the base type for the type.
      *
      * This is used to model inheritance between types.

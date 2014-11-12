@@ -38,6 +38,13 @@ class PhpClass extends PhpElement
 
     /**
      *
+     * @var bool If the class is abstract
+     * @access private
+     */
+    private $abstract;
+
+    /**
+     *
      * @var string
      * @access private
      */
@@ -84,13 +91,15 @@ class PhpClass extends PhpElement
      * @param string $extends A string of the class that this class extends
      * @param PhpDocComment $comment
      * @param bool $final
+     * @param bool $abstract
      */
-    public function __construct($identifier, $classExists = false, $extends = '', PhpDocComment $comment = null, $final = false)
+    public function __construct($identifier, $classExists = false, $extends = '', PhpDocComment $comment = null, $final = false, $abstract = false)
     {
         $this->dependencies = array();
         $this->classExists = $classExists;
         $this->comment = $comment;
         $this->final = $final;
+        $this->abstract = $abstract;
         $this->identifier = $identifier;
         $this->access = '';
         $this->extends = $extends;
@@ -125,6 +134,8 @@ class PhpClass extends PhpElement
 
         if ($this->final) {
             $ret .= 'final ';
+        } elseif ($this->abstract) {
+            $ret .= 'abstract ';
         }
 
         $ret .= 'class ' . $this->identifier;
@@ -277,5 +288,16 @@ class PhpClass extends PhpElement
     public function functionExists($identifier)
     {
         return array_key_exists($identifier, $this->functions);
+    }
+
+    /**
+     * Sets abstract flag for class
+     *
+     * @access public
+     * @param bool $abstract
+     */
+    public function setAbstract($abstract)
+    {
+        $this->abstract = (bool) $abstract;
     }
 }
