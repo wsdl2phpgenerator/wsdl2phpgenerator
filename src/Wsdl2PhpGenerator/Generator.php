@@ -25,31 +25,31 @@ class Generator implements GeneratorInterface
     /**
      * @var WsdlDocument
      */
-    private $wsdl;
+    protected $wsdl;
 
     /**
      * @var Service
      */
-    private $service;
+    protected $service;
 
     /**
      * An array of Type objects that represents the types in the service
      *
      * @var Type[]
      */
-    private $types = array();
+    protected $types = array();
 
     /**
      * This is the object that holds the current config
      *
      * @var ConfigInterface
      */
-    private $config;
+    protected $config;
 
     /**
      * @var LoggerInterface
      */
-    private $logger;
+    protected $logger;
 
 
     /**
@@ -72,6 +72,17 @@ class Generator implements GeneratorInterface
 
         $this->log('Starting generation');
 
+        // Warn users who have disabled SOAP_SINGLE_ELEMENT_ARRAYS.
+        // Note that this can be
+        $options = $this->config->get('soapClientOptions');
+        if (empty($options['features']) ||
+            (($options['features'] & SOAP_SINGLE_ELEMENT_ARRAYS) != SOAP_SINGLE_ELEMENT_ARRAYS)) {
+            $message = array('SoapClient option feature SOAP_SINGLE_ELEMENT_ARRAYS is not set.',
+                             'This is not recommended as data types in DocBlocks for array properties will not be ',
+                             'valid if the array only contains a single value.');
+            $this->log(implode(PHP_EOL, $message), 'warning');
+        }
+
         $wsdl = $this->config->get('inputFile');
         if (is_array($wsdl)) {
             foreach ($wsdl as $ws) {
@@ -89,7 +100,7 @@ class Generator implements GeneratorInterface
     /**
      * Load the wsdl file into php
      */
-    private function load($wsdl)
+    protected function load($wsdl)
     {
         $this->log('Loading the WSDL');
 
@@ -102,7 +113,7 @@ class Generator implements GeneratorInterface
     /**
      * Load schemas
      */
-    private function loadSchema()
+    protected function loadSchema()
     {
         foreach ($this->dom as $dom) {
             $sxml = simplexml_import_dom($dom);
@@ -123,7 +134,7 @@ class Generator implements GeneratorInterface
     /**
      * Loads the service class
      */
-    private function loadService()
+    protected function loadService()
     {
         $service = $this->wsdl->getService();
         $this->log('Starting to load service ' . $service->getName());
@@ -142,7 +153,7 @@ class Generator implements GeneratorInterface
     /**
      * Loads all type classes
      */
-    private function loadTypes()
+    protected function loadTypes()
     {
         $this->log('Loading types');
 
@@ -205,7 +216,7 @@ class Generator implements GeneratorInterface
      *
      * @throws Exception If no service is loaded
      */
-    private function savePhp()
+    protected function savePhp()
     {
         $service = $this->service->getClass();
 
@@ -233,7 +244,7 @@ class Generator implements GeneratorInterface
      * @param string $message The message to log
      * @param string $level
      */
-    private function log($message, $level = 'notice')
+    protected function log($message, $level = 'notice')
     {
         if (isset($this->logger)) {
             $this->logger->log($level, $message);
