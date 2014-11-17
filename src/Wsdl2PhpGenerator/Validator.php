@@ -189,9 +189,6 @@ class Validator
         if (substr($typeName, -2) == "[]") {
             return $typeName;
         }
-        if (strtolower(substr($typeName, 0, 7)) == "arrayof") {
-            return substr($typeName, 7) . '[]';
-        }
 
         switch (strtolower($typeName)) {
             case "int":

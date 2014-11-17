@@ -40,11 +40,9 @@ class NaicsTest extends FunctionalTestCase
             $this->assertAttributeTypeConsistency('object', 'NAICSData', $response);
             $this->assertAttributeTypeConsistency('int', 'Records', $response->getNAICSData());
             $this->assertAttributeInternalType('object', 'NAICSData', $response->getNAICSData());
-            // $response->NAICSData->NAICSData should a NAICS but is a stdClass.
-            // TODO: Fix inconsistencies between actual type and DocBlock declaration.
-            // $this->assertAttributeTypeConsistency('object', 'NAICSData', $response->NAICSData);
+            $this->assertAttributeTypeConsistency('object', 'NAICSData', $response->getNAICSData());
             $this->assertAttributeTypeConsistency('array', 'NAICS', $response->getNAICSData()->getNAICSData());
-            $naicsArray = $response->getNAICSData()->getNAICSData()->NAICS;
+            $naicsArray = $response->getNAICSData()->getNAICSData()->getNAICS();
             foreach ($naicsArray as $naics) {
                 $this->assertAttributeTypeConsistency('string', 'NAICSCode', $naics);
                 $this->assertAttributeTypeConsistency('string', 'Title', $naics);
