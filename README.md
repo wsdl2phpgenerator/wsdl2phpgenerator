@@ -12,7 +12,7 @@ Uses the [MIT licence](http://www.opensource.org/licenses/mit-license.php).
 ## Contributors
 Originally developed by [@walle](https://github.com/walle) and includes bugfixes and improvements from [@vakopian](https://github.com/vakopian), [@statikbe](https://github.com/statikbe/),
 [@ecolinet](https://github.com/ecolinet), [@nuth](https://github.com/nuth/), [@chriskl](https://github.com/chriskl/), [@RSully](https://github.com/RSully/), [@jrbasso](https://github.com/jrbasso/),
-[@dypa](https://github.com/dypa/), [@Lafriks](https://github.com/Lafriks/), [@SamMousa](https://github.com/SamMousa/), [@garex](https://github.com/garex/), [@honzap](https://github.com/honzap/) and [@kasperg](https://github.com/kasperg/).
+[@dypa](https://github.com/dypa/), [@Lafriks](https://github.com/Lafriks/), [@SamMousa](https://github.com/SamMousa/), [@garex](https://github.com/garex/), [@honzap](https://github.com/honzap/), [@jk](https://github.com/jk/) and [@kasperg](https://github.com/kasperg/).
 
 Pull requests are very welcome. Please read [our guidelines for contributing](https://github.com/wsdl2phpgenerator/wsdl2phpgenerator/blob/master/CONTRIBUTING.md).
 
