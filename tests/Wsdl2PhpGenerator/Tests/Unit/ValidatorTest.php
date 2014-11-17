@@ -39,10 +39,18 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Testing the validate class function with an existing class.
+     * Testing the validate class function with existing classes.
      */
     public function testValidateClassExists() {
-        $this->assertEquals('SoapClientCustom', Validator::validateClass(Validator::validateClass('SoapClient')));
+        // Base handling
+        $this->assertEquals('SoapClientCustom', Validator::validateClass('SoapClient'));
+        // Use eval to allow creating a class inside a class.
+        eval("class SoapClientCustom {};");
+        // Now that both SoapClient and SoapClientCustom are defined we append numbering.
+        $this->assertEquals('SoapClientCustom2', Validator::validateClass('SoapClient'));
+        eval("class SoapClientCustom2 {};");
+        // ... And numbering should continue.
+        $this->assertEquals('SoapClientCustom3', Validator::validateClass('SoapClient'));
     }
 
     /**

@@ -118,20 +118,18 @@ class Validator
 
         $prefix = !empty($namespace) ? $namespace . '\\' : '';
 
-        if (self::isKeyword($name) ||
-            interface_exists($prefix . $name) ||
-            class_exists($prefix . $name)) {
-            $name .= self::NAME_SUFFIX;
-        }
+        $name = self::validateUnique($name, function ($name) use ($prefix) {
+                // Use reflection to get access to private isKeyword method.
+                // @todo Remove this when we stop supporting PHP 5.3.
+                $isKeywordMethod = new \ReflectionMethod(__CLASS__, 'isKeyword');
+                $isKeywordMethod->setAccessible(true);
+                $isKeyword = $isKeywordMethod->invoke(null, $name);
+             return !$isKeyword &&
+                !interface_exists($prefix . $name) &&
+                !class_exists($prefix . $name);
+        }, self::NAME_SUFFIX);
 
-        // In case of continued name clashes append numbering.
-        $newName = $name;
-        $i = 1;
-        while (interface_exists($prefix . $newName) || class_exists($prefix . $newName)) {
-            $newName = $name . $i++;
-        }
-
-        return $newName;
+        return $name;
     }
 
     /**
@@ -253,6 +251,34 @@ class Validator
         }
 
         return $typeHint;
+    }
+
+    /**
+     * Validate that a name is unique.
+     *
+     * If a name is not unique then append a suffix and numbering.
+     *
+     * @param $name The name to test.
+     * @param callable $function A callback which should return true if the element is unique. Otherwise false.
+     * @param string $suffix A suffix to append between the name and numbering.
+     * @return string A unique name.
+     */
+    public static function validateUnique($name, $function, $suffix = null)
+    {
+        $i = 1;
+        $newName = $name;
+        while (!call_user_func($function, $newName)) {
+            if (!$suffix) {
+                $newName = $name . ($i + 1);
+            } elseif ($i == 1) {
+                $newName = $name . $suffix;
+            } else {
+                $newName = $name . $suffix . $i;
+            }
+            $i++;
+        }
+
+        return $newName;
     }
 
     /**
