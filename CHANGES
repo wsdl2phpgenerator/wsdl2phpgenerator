@@ -1,4 +1,10 @@
 
+2.5.5 / 2014-11-17 
+==================
+
+ * Ensure that values are unique for Enums.
+ * Fix syntax error when service contains no types to map.
+
 2.5.4 / 2014-11-06 
 ==================
 
