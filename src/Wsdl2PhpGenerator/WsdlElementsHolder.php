@@ -9,6 +9,10 @@ class WsdlElementsHolder {
      */
     private $service;
     /**
+     * @var Service
+     */
+    private $baseService;
+    /**
      * An array of Type objects that represents the types in the service
      *
      * @var Type[]
@@ -17,6 +21,7 @@ class WsdlElementsHolder {
 
     function __construct() {
         $this->service = null;
+        $this->baseService = null;
     }
 
     public function addType($typeName, $type) {
@@ -30,11 +35,14 @@ class WsdlElementsHolder {
         if (!$methods) {
             return $this;
         }
+        if (!$this->baseService) {
+            throw new \RuntimeException("Service not initiated.");
+        }
         $holder = new self();
-        $holder->setService(clone $this->getService());
+        $holder->setService(clone ($this->baseService));
         foreach ($methods as $method) {
-            $operation = $holder->getService()->getOperation($method);
-            $types = array();
+            $operation = $this->getService()->getOperation($method);
+            $holder->getService()->addOperationObject($operation);
             foreach ($operation->getParams() as $param) {
                 $holder->addType($param, $this->getType($param));
             }
@@ -42,6 +50,7 @@ class WsdlElementsHolder {
             $holder->addType($returns, $this->getType($returns));
             $this->combineTypesForMethod($holder, $holder->getTypes());
         }
+        $holder->getService()->setTypes($holder->getTypes());
         return $holder;
     }
 
@@ -50,13 +59,26 @@ class WsdlElementsHolder {
      * @param array $arrayOfTypes
      */
     private function combineTypesForMethod($holder, $arrayOfTypes) {
+        $foundedTypes = array();
         /**
          * @var Type $type
          */
         foreach ($arrayOfTypes as $name => $type) {
-            $workingType = $type;
-            $typeValues = $type;
+            if ($type instanceof ComplexType) {
+                /** @var ComplexType $type */
+                $members = $type->getMembers();
+                foreach ($members as $member) {
+                    /** @var Variable $member */
+                    $memberTypeName = str_replace('[]', '', $member->getType());
+                    $memberType = $this->getType($memberTypeName);
+                    if (!$memberType || $holder->hasType($memberTypeName)) { continue; }
+                    $holder->addType($memberTypeName, $memberType);
+                    $foundedTypes[$memberTypeName] = $memberType;
+                }
+            }
         }
+        if (!$foundedTypes) { return; }
+        $this->combineTypesForMethod($holder, $foundedTypes);
     }
 
     /**
@@ -86,6 +108,7 @@ class WsdlElementsHolder {
      */
     public function setService($service) {
         $this->service = $service;
+        $this->baseService = clone $service;
     }
 
     /**

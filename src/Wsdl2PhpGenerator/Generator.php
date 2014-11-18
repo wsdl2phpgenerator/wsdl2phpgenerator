@@ -181,7 +181,7 @@ class Generator implements GeneratorInterface
      */
     private function savePhp()
     {
-        $holder = $this->elementsHolder->filterByMethods(null); //array('Get_Job_Postings'));
+        $holder = $this->elementsHolder->filterByMethods(array('Get_Job_Postings'));
         $service = $holder->getService()->getClass();
 
         if ($service == null) {
