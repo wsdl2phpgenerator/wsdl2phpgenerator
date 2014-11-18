@@ -25,16 +25,11 @@ class Generator implements GeneratorInterface
     private $wsdl;
 
     /**
-     * @var Service
-     */
-    private $service;
-
-    /**
-     * An array of Type objects that represents the types in the service
+     * Service and types holder
      *
-     * @var Type[]
+     * @var WsdlElementsHolder
      */
-    private $types = array();
+    private $elementsHolder;
 
     /**
      * This is the object that holds the current config
@@ -54,8 +49,7 @@ class Generator implements GeneratorInterface
      */
     public function __construct()
     {
-        $this->service = null;
-        $this->types = array();
+        $this->elementsHolder = new WsdlElementsHolder();
     }
 
     /**
@@ -104,12 +98,15 @@ class Generator implements GeneratorInterface
         $service = $this->wsdl->getService();
         $this->log('Starting to load service ' . $service->getName());
 
-        $this->service = new Service($this->config, $service->getName(), $this->types, $service->getDocumentation());
+        $this->elementsHolder->setService(
+            new Service($this->config, $service->getName(), $this->elementsHolder->getTypes(),
+                $service->getDocumentation()));
+
 
         foreach ($this->wsdl->getOperations() as $function) {
             $this->log('Loading function ' . $function->getName());
 
-            $this->service->addOperation($function->getName(), $function->getParams(), $function->getDocumentation(), $function->getReturns());
+            $this->elementsHolder->getService()->addOperation($function->getName(), $function->getParams(), $function->getDocumentation(), $function->getReturns());
         }
 
         $this->log('Done loading service ' . $service->getName());
@@ -152,7 +149,7 @@ class Generator implements GeneratorInterface
             if ($type != null) {
                 $already_registered = false;
                 if ($this->config->getSharedTypes()) {
-                    foreach ($this->types as $registered_types) {
+                    foreach ($this->elementsHolder->getTypes() as $registered_types) {
                         if ($registered_types->getIdentifier() == $type->getIdentifier()) {
                             $already_registered = true;
                             break;
@@ -160,7 +157,7 @@ class Generator implements GeneratorInterface
                     }
                 }
                 if (!$already_registered) {
-                    $this->types[$typeNode->getName()] = $type;
+                    $this->elementsHolder->addType($typeNode->getName(), $type);
                 }
             }
         }
@@ -169,8 +166,8 @@ class Generator implements GeneratorInterface
         // We can only do this once all types have been loaded. Otherwise we risk referencing types which have not been
         // loaded yet.
         foreach ($types as $type) {
-            if (($baseType = $type->getBase()) && isset($this->types[$baseType])) {
-                $this->types[$type->getName()]->setBaseType($this->types[$baseType]);
+            if (($baseType = $type->getBase()) && $this->elementsHolder->hasType($baseType)) {
+                $this->elementsHolder->getType($type->getName())->setBaseType($this->elementsHolder->getType($baseType));
             }
         }
 
@@ -184,7 +181,7 @@ class Generator implements GeneratorInterface
      */
     private function savePhp()
     {
-        $service = $this->service->getClass();
+        $service = $this->elementsHolder->getService()->getClass();
 
         if ($service == null) {
             throw new Exception('No service loaded');
@@ -194,11 +191,10 @@ class Generator implements GeneratorInterface
 
         // Generate all type classes
         $types = array();
-        foreach ($this->types as $type) {
+        foreach ($this->elementsHolder->getTypes() as $type) {
             $class = $type->getClass();
             if ($class != null) {
                 $types[] = $class;
-
                 if (!$this->config->getOneFile() && !$this->config->getNoIncludes()) {
                     $service->addDependency($class->getIdentifier() . '.php');
                 }
