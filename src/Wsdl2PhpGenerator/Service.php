@@ -173,7 +173,11 @@ class Service
      */
     public function addOperation($name, $params, $description, $returns)
     {
-        $this->operations[] = new Operation($name, $params, $description, $returns);
+        $this->operations[$name] = new Operation($name, $params, $description, $returns);
+    }
+
+    public function getOperation($name) {
+        return isset($this->operations[$name]) ? $this->operations[$name]: null;
     }
 
     /**
