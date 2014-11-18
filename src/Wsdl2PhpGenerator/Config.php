@@ -72,6 +72,11 @@ class Config implements ConfigInterface
     private $classNames;
 
     /**
+     * @var string
+     */
+    private $methodNames;
+
+    /**
      * If a type constructor should not be generated
      *
      * @var bool
@@ -448,5 +453,31 @@ class Config implements ConfigInterface
     public function setNoIncludes($noIncludes)
     {
         $this->noIncludes = $noIncludes;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMethodNames() {
+        return $this->methodNames;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMethodNamesArray() {
+        if (strpos($this->methodNames, ',') !== false) {
+            return array_map('trim', explode(',', $this->methodNames));
+        } elseif (strlen($this->methodNames) > 0) {
+            return array($this->methodNames);
+        }
+        return array();
+    }
+
+    /**
+     * @param string $names
+     */
+    public function setMethodNames($names) {
+        $this->methodNames = $names;
     }
 }
