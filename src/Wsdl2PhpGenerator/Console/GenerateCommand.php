@@ -68,6 +68,14 @@ class GenerateCommand extends Command
                 'classNames'
             )
             ->addConfigOption(
+                'methodNames',
+                null,
+                InputOption::VALUE_REQUIRED,
+                "A comma separated list of method names to generate.\n",
+                null,
+                'methodNames'
+            )
+            ->addConfigOption(
                 'classExists',
                 'e',
                 InputOption::VALUE_NONE,

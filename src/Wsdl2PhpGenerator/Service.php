@@ -173,8 +173,28 @@ class Service
      */
     public function addOperation($name, $params, $description, $returns)
     {
-        $this->operations[] = new Operation($name, $params, $description, $returns);
+        $this->operations[$name] = new Operation($name, $params, $description, $returns);
     }
+
+    public function addOperationObject(Operation $operation)
+    {
+        $this->operations[$operation->getName()] = $operation;
+
+    }
+
+    public function getOperation($name)
+    {
+        return isset($this->operations[$name]) ? $this->operations[$name] : null;
+    }
+
+    /**
+     * @param array $types
+     */
+    public function setTypes($types)
+    {
+        $this->types = $types;
+    }
+
 
     /**
      * @return string Returns the string for the options array

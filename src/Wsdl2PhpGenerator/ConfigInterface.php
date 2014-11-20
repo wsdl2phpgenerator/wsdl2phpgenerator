@@ -100,6 +100,21 @@ interface ConfigInterface
     public function getOptionFeatures();
 
     /**
+     * @return string
+     */
+    public function getMethodNames();
+
+    /**
+     * @return array
+     */
+    public function getMethodNamesArray();
+
+    /**
+     * @param string $names
+     */
+    public function setMethodNames($names);
+
+    /**
      * Returns the prefix if any
      *
      * @return string
