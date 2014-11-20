@@ -97,12 +97,13 @@ class Generator implements GeneratorInterface
     {
         $service = $this->wsdl->getService();
         $this->log('Starting to load service ' . $service->getName());
-
         $this->elementsHolder->setService(
-            new Service($this->config, $service->getName(), $this->elementsHolder->getTypes(),
-                $service->getDocumentation()));
-
-
+            new Service($this->config,
+                $service->getName(),
+                $this->elementsHolder->getTypes(),
+                $service->getDocumentation()
+            )
+        );
         foreach ($this->wsdl->getOperations() as $function) {
             $this->log('Loading function ' . $function->getName());
 
@@ -139,7 +140,7 @@ class Generator implements GeneratorInterface
             } elseif ($enumValues = $typeNode->getEnumerations()) {
                 $type = new Enum($this->config, $typeNode->getName(), $typeNode->getRestriction());
                 array_walk($enumValues, function ($value) use ($type) {
-                      $type->addValue($value);
+                    $type->addValue($value);
                 });
             } elseif ($pattern = $typeNode->getPattern()) {
                 $type = new Pattern($this->config, $typeNode->getName(), $typeNode->getRestriction());

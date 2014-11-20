@@ -176,19 +176,22 @@ class Service
         $this->operations[$name] = new Operation($name, $params, $description, $returns);
     }
 
-    public function addOperationObject(Operation $operation) {
+    public function addOperationObject(Operation $operation)
+    {
         $this->operations[$operation->getName()] = $operation;
 
     }
 
-    public function getOperation($name) {
-        return isset($this->operations[$name]) ? $this->operations[$name]: null;
+    public function getOperation($name)
+    {
+        return isset($this->operations[$name]) ? $this->operations[$name] : null;
     }
 
     /**
      * @param array $types
      */
-    public function setTypes($types) {
+    public function setTypes($types)
+    {
         $this->types = $types;
     }
 

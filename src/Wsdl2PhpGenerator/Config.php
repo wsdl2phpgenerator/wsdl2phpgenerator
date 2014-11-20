@@ -458,14 +458,16 @@ class Config implements ConfigInterface
     /**
      * @return string
      */
-    public function getMethodNames() {
+    public function getMethodNames()
+    {
         return $this->methodNames;
     }
 
     /**
      * @return array
      */
-    public function getMethodNamesArray() {
+    public function getMethodNamesArray()
+    {
         if (strpos($this->methodNames, ',') !== false) {
             return array_map('trim', explode(',', $this->methodNames));
         } elseif (strlen($this->methodNames) > 0) {
@@ -477,7 +479,8 @@ class Config implements ConfigInterface
     /**
      * @param string $names
      */
-    public function setMethodNames($names) {
+    public function setMethodNames($names)
+    {
         $this->methodNames = $names;
     }
 }

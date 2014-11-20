@@ -3,7 +3,8 @@
 namespace Wsdl2PhpGenerator;
 
 
-class WsdlElementsHolder {
+class WsdlElementsHolder
+{
     /**
      * @var Service
      */
@@ -19,19 +20,22 @@ class WsdlElementsHolder {
      */
     private $types = array();
 
-    function __construct() {
+    public function __construct()
+    {
         $this->service = null;
         $this->baseService = null;
     }
 
-    public function addType($typeName, $type) {
+    public function addType($typeName, $type)
+    {
         $this->types[$typeName] = $type;
     }
 
     /**
      * @param array|null $methods
      */
-    public function filterByMethods($methods) {
+    public function filterByMethods($methods)
+    {
         if (!$methods) {
             return $this;
         }
@@ -58,7 +62,8 @@ class WsdlElementsHolder {
      * @param self $holder
      * @param array $arrayOfTypes
      */
-    private function combineTypesForMethod($holder, $arrayOfTypes) {
+    private function combineTypesForMethod($holder, $arrayOfTypes)
+    {
         $foundedTypes = array();
         /**
          * @var Type $type
@@ -71,20 +76,25 @@ class WsdlElementsHolder {
                     /** @var Variable $member */
                     $memberTypeName = str_replace('[]', '', $member->getType());
                     $memberType = $this->getType($memberTypeName);
-                    if (!$memberType || $holder->hasType($memberTypeName)) { continue; }
+                    if (!$memberType || $holder->hasType($memberTypeName)) {
+                        continue;
+                    }
                     $holder->addType($memberTypeName, $memberType);
                     $foundedTypes[$memberTypeName] = $memberType;
                 }
             }
         }
-        if (!$foundedTypes) { return; }
+        if (!$foundedTypes) {
+            return;
+        }
         $this->combineTypesForMethod($holder, $foundedTypes);
     }
 
     /**
      * @return Service
      */
-    public function getService() {
+    public function getService()
+    {
         return $this->service;
     }
 
@@ -93,20 +103,24 @@ class WsdlElementsHolder {
      *
      * @return null|Type
      */
-    public function getType($type) {
+    public function getType($type)
+    {
         return $this->hasType($type) ? $this->types[$type] : null;
     }
+
     /**
      * @return Type[]
      */
-    public function getTypes() {
+    public function getTypes()
+    {
         return $this->types;
     }
 
     /**
      * @param Service $service
      */
-    public function setService($service) {
+    public function setService($service)
+    {
         $this->service = $service;
         $this->baseService = clone $service;
     }
@@ -116,7 +130,8 @@ class WsdlElementsHolder {
      *
      * @return bool
      */
-    public function hasType($type) {
+    public function hasType($type)
+    {
         return isset($this->types[$type]);
     }
 }
