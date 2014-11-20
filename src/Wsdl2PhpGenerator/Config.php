@@ -68,20 +68,22 @@ class Config implements ConfigInterface
             'verbose'                        => false,
             'namespaceName'                  => '',
             'classNames'                     => '',
+            'methodNames'                    => '',
             'sharedTypes'                    => false,
             'constructorParamsDefaultToNull' => false,
             'soapClientClass'               => '\SoapClient',
             'soapClientOptions'             => array()
         ));
-
-        $resolver->setNormalizers(array(
-            'classNames' => function(Options $options, $value) {
-                if (strlen($value) === 0) {
-                    return array();
-                }
-
-                return array_map('trim', explode(',', $value));
+        $normalizer = function(Options $options, $value) {
+            if (strlen($value) === 0) {
+                return array();
             }
+            return array_map('trim', explode(',', $value));
+        };
+        $resolver->setNormalizers(array(
+            'classNames' => $normalizer,
+            'methodNames' => $normalizer
         ));
     }
+
 }

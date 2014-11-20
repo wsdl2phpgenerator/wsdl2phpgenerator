@@ -12,6 +12,11 @@ class FilterFactory
      */
     public function create(ConfigInterface $config)
     {
-        return new DefaultFilter();
+        $methodNames = $config->get('methodNames');
+        if (empty($methodNames)) {
+            return new DefaultFilter();
+        } else {
+            return new ServiceOperationFilter($config);
+        }
     }
 } 
