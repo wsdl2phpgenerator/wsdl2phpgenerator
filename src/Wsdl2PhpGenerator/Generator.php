@@ -133,7 +133,7 @@ class Generator implements GeneratorInterface
             $type = null;
 
             if ($typeNode->isComplex()) {
-                $type = new ComplexType($this->config, $typeNode->getName());
+                $type = new ComplexType($this->config, $typeNode->getName(), $typeNode->isAbstract());
                 $this->log('Loading type ' . $type->getPhpIdentifier());
 
                 foreach ($typeNode->getParts() as $name => $typeName) {

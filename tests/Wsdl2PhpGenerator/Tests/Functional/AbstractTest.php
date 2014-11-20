@@ -13,6 +13,16 @@ class AbstractTest extends Wsdl2PhpGeneratorFunctionalTestCase
         return $this->fixtureDir . '/abstract/abstract.wsdl';
     }
 
+    public function testAbstractModifier()
+    {
+        // The base service class should be available. This also loads all other generated classes.
+        $this->assertGeneratedClassExists('AbstractServiceService');
+
+        // The complex type Author is abstract in the WSDL and should thus also abstract when generated.
+        $abstractClass = new \ReflectionClass('Author');
+        $this->assertTrue($abstractClass->isAbstract(), 'A class representing a type with abstract="true" should be abstract');
+    }
+
     public function testAbstract()
     {
         // The base service class should be available. This also loads all other generated classes.

@@ -36,16 +36,25 @@ class ComplexType extends Type
     private $members;
 
     /**
+     * The type is abstract
+     *
+     * @var bool
+     */
+    private $abstract = false;
+
+    /**
      * Construct the object
      *
      * @param ConfigInterface $config The configuration
      * @param string $name The identifier for the class
+     * @param bool $abstract The type is abstract
      */
-    public function __construct(ConfigInterface $config, $name)
+    public function __construct(ConfigInterface $config, $name, $abstract = false)
     {
         parent::__construct($config, $name, null);
         $this->members = array();
         $this->baseType = null;
+        $this->abstract = $abstract;
     }
 
     /**
@@ -64,6 +73,7 @@ class ComplexType extends Type
             $this->config->getClassExists(),
             $this->baseType !== null ? $this->baseType->getPhpIdentifier() : ''
         );
+        $class->setAbstract($this->abstract);
 
         // Add the base class as a dependency. Otherwise we risk referencing an undefined class.
         if (!empty($this->baseType) && !$this->config->getOneFile() && !$this->config->getNoIncludes()) {
