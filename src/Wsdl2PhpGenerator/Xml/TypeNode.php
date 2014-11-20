@@ -89,7 +89,8 @@ class TypeNode extends XmlNode
 
     /**
      * Returns whether element is abstract
-     * @return boolWwhether the element is abstract
+     *
+     * @return bool whether the element is abstract
      */
     public function isAbstract()
     {
