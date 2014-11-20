@@ -10,6 +10,7 @@ use \Exception;
 // the interface is still used to define logging within the codebase.
 // A projects which use logging should include it itself.
 use Psr\Log\LoggerInterface;
+use Wsdl2PhpGenerator\Filter\FilterFactory;
 use Wsdl2PhpGenerator\Xml\WsdlDocument;
 
 /**
@@ -51,6 +52,7 @@ class Generator implements GeneratorInterface
      */
     private $logger;
 
+    private $filter;
 
     /**
      * Construct the generator
@@ -207,8 +209,11 @@ class Generator implements GeneratorInterface
      */
     private function savePhp()
     {
-        $service = $this->service->getClass();
-
+        $factory = new FilterFactory();
+        $filter = $factory->create($this->config);
+        $filteredService = $filter->filter($this->service);
+        $service = $filteredService->getClass();
+        $filteredTypes = $filteredService->getTypes();
         if ($service == null) {
             throw new Exception('No service loaded');
         }
@@ -217,7 +222,7 @@ class Generator implements GeneratorInterface
 
         // Generate all type classes
         $types = array();
-        foreach ($this->types as $type) {
+        foreach ($filteredTypes as $type) {
             $class = $type->getClass();
             if ($class != null) {
                 $types[] = $class;

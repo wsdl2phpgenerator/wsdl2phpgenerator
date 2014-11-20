@@ -47,7 +47,7 @@ class Service implements ClassGenerator
     private $description;
 
     /**
-     * @var array An array of Types
+     * @var Type[] An array of Types
      */
     private $types;
 
@@ -76,6 +76,14 @@ class Service implements ClassGenerator
         }
 
         return $this->class;
+    }
+
+    /**
+     * @return Type[]
+     */
+    public function getTypes()
+    {
+        return $this->types;
     }
 
     /**
