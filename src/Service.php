@@ -47,7 +47,7 @@ class Service implements ClassGenerator
     private $description;
 
     /**
-     * @var array An array of Types
+     * @var Type[] An array of Types
      */
     private $types;
 
@@ -61,9 +61,12 @@ class Service implements ClassGenerator
     {
         $this->config = $config;
         $this->identifier = $identifier;
-        $this->types = $types;
         $this->description = $description;
         $this->operations = array();
+        $this->types = array();
+        foreach ($types as $type) {
+            $this->types[$type->getIdentifier()] = $type;
+        }
     }
 
     /**
@@ -76,6 +79,48 @@ class Service implements ClassGenerator
         }
 
         return $this->class;
+    }
+
+    /**
+     * @param string $operationName
+     * @return Operation|null if not exists
+     */
+    public function getOperation($operationName)
+    {
+        return isset($this->operations[$operationName])? $this->operations[$operationName]: null;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdentifier()
+    {
+        return $this->identifier;
+    }
+
+    /**
+     * @param $identifier
+     *
+     * @return Type|null
+     */
+    public function getType($identifier)
+    {
+        return isset($this->types[$identifier])? $this->types[$identifier]: null;
+    }
+    /**
+     * @return Type[]
+     */
+    public function getTypes()
+    {
+        return $this->types;
     }
 
     /**
@@ -155,16 +200,10 @@ class Service implements ClassGenerator
     }
 
     /**
-     * Adds an operation to the service
-     *
-     * @param string $name
-     * @param array $params
-     * @param string $description
-     * @param string $returns
+     * @param Operation $operation
      */
-    public function addOperation($name, $params, $description, $returns)
+    public function addOperation($operation)
     {
-        $this->operations[] = new Operation($name, $params, $description, $returns);
+        $this->operations[$operation->getName()] = $operation;
     }
-
 }
