@@ -74,10 +74,14 @@ class ServiceOperationFilter implements  FilterInterface
                     if (!$memberType || isset($finalTypes[$memberTypeName])) {
                         continue;
                     }
-
                     $finalTypes[$memberTypeName] = $memberType;
                     $foundedTypes[$memberTypeName] = $memberType;
                 }
+            }
+            $baseType = $type->getBaseType();
+            if ($baseType && $baseType instanceof ComplexType) {
+                $finalTypes[$baseType->getDatatype()] = $baseType;
+                $foundedTypes[$baseType->getDatatype()] = $baseType;
             }
         }
         if (!$foundedTypes) {

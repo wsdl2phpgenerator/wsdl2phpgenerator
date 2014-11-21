@@ -37,6 +37,7 @@ class ServiceOperationFilterTest extends \PHPUnit_Framework_TestCase {
         // Check that getBook and types exists
         $this->assertEquals($sourceService->getOperation('GetBook'), $actualService->getOperation('GetBook'));
         $this->assertEquals($sourceService->getType('Method_Get_Book_Response_BOOK'), $actualService->getType('Method_Get_Book_Response_BOOK'));
+        $this->assertEquals($sourceService->getType('Method_Get_Book_Response_BOOK_BOOK_NAME'), $actualService->getType('Method_Get_Book_Response_BOOK_BOOK_NAME'));
         $this->assertEquals($sourceService->getType('Get_Book_Type_Response'), $actualService->getType('Get_Book_Type_Response'));
         $this->assertEquals($sourceService->getType('Method_Get_Book_Request_BOOK'), $actualService->getType('Method_Get_Book_Request_BOOK'));
         $this->assertEquals($sourceService->getType('Get_Book_Type_Request'), $actualService->getType('Get_Book_Type_Request'));
@@ -48,9 +49,12 @@ class ServiceOperationFilterTest extends \PHPUnit_Framework_TestCase {
      */
     private function givenServiceWithOperations() {
         // Response GetBook types
+        $responseBookName = new ComplexType($this->config,'Method_Get_Book_Response_BOOK_BOOK_NAME');
+        $responseBookName->addMember('string', 'bookName', false);
         $responseBook = new ComplexType($this->config,'Method_Get_Book_Response_BOOK');
         $responseBook->addMember('int', 'bookId', false);
-        $responseBook->addMember('string', 'bookName', false);
+        // Base type example
+        $responseBook->setBaseType($responseBookName);
         $returnGetBookType = new ComplexType($this->config,'Get_Book_Type_Response');
         $returnGetBookType->addMember('Method_Get_Book_Response_BOOK', 'book_response', false);
         // Request GetBook types
@@ -73,6 +77,7 @@ class ServiceOperationFilterTest extends \PHPUnit_Framework_TestCase {
         $getAuthorsOperator = new Operation('GetAuthor', 'Method_Get_Authors_Request', 'Get Authors', 'Method_Get_Authors_Response');
         // Service creation
         $types = array(
+            $responseBookName,
             $responseBook,
             $returnGetBookType,
             $requestBook,
