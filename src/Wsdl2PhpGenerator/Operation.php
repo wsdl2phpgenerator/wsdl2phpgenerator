@@ -37,7 +37,7 @@ class Operation
     /**
      *
      * @param string $name
-     * @param array $paramStr The parameter string for a operation from the wsdl
+     * @param string $paramStr The parameter string for a operation from the wsdl
      * @param string $description
      * @param string $returns
      */

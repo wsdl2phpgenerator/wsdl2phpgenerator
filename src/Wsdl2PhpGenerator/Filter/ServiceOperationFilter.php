@@ -3,6 +3,7 @@
 namespace Wsdl2PhpGenerator\Filter;
 
 
+use Wsdl2PhpGenerator\ComplexType;
 use Wsdl2PhpGenerator\ConfigInterface;
 use Wsdl2PhpGenerator\Service;
 
@@ -38,7 +39,7 @@ class ServiceOperationFilter implements  FilterInterface
         foreach ($this->methods as $method) {
             $operation = $service->getOperation($method);
             if (!$operation) { continue; }
-            foreach ($operation->getParams() as $param) {
+            foreach ($operation->getParams() as $param => $hint) {
                 $types[$param] = $service->getType($param);
             }
             $returns = $operation->getReturns();
@@ -69,10 +70,11 @@ class ServiceOperationFilter implements  FilterInterface
                     /** @var Variable $member */
                     // @HACK: Consider how to get type for array
                     $memberTypeName = str_replace('[]', '', $member->getType());
-                    $memberType = $this->getType($memberTypeName);
-                    if (!$service->getType($memberTypeName) || isset($finalTypes[$memberTypeName])) {
+                    $memberType = $service->getType($memberTypeName);
+                    if (!$memberType || isset($finalTypes[$memberTypeName])) {
                         continue;
                     }
+
                     $finalTypes[$memberTypeName] = $memberType;
                     $foundedTypes[$memberTypeName] = $memberType;
                 }
@@ -81,6 +83,6 @@ class ServiceOperationFilter implements  FilterInterface
         if (!$foundedTypes) {
             return $finalTypes;
         }
-        $this->calculateInheretedTypes($service, $finalTypes, $foundedTypes);
+        return $this->calculateInheretedTypes($service, $finalTypes, $foundedTypes);
     }
 }
