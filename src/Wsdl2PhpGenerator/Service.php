@@ -200,22 +200,9 @@ class Service implements ClassGenerator
     }
 
     /**
-     * Adds an operation to the service
-     *
-     * @param string $name
-     * @param array $params
-     * @param string $description
-     * @param string $returns
-     */
-    public function addOperation($name, $params, $description, $returns)
-    {
-        $this->addOperationObject(new Operation($name, $params, $description, $returns));
-    }
-
-    /**
      * @param Operation $operation
      */
-    public function addOperationObject($operation)
+    public function addOperation($operation)
     {
         $this->operations[$operation->getName()] = $operation;
     }

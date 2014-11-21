@@ -46,7 +46,11 @@ class ServiceOperationFilter implements  FilterInterface
             $types = array_merge($types, $this->calculateInheretedTypes($service, $types, $types));
             $operations[] = $operation;
         }
-        return new Service($this->config, $service->getIdentifier(), $types, $service->getDescription());
+        $filteredService = new Service($this->config, $service->getIdentifier(), $types, $service->getDescription());
+        foreach ($operations as $operation) {
+            $filteredService->addOperation($operation);
+        }
+        return $filteredService;
     }
 
     /**
