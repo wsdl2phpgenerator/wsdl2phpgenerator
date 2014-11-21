@@ -104,4 +104,32 @@ class ComplexTypeTest extends CodeGenerationTestCase
         $this->assertClassExists('stdClass', $this->namespace);
     }
 
+    /**
+     * Test fluent setters.
+     */
+    public function testFluentSetters() {
+      $config = new Config(array(
+          'inputFile' => null,
+          'outputDir' => null,
+        ));
+
+      $complexType = new ComplexType($config, 'Fluent');
+      $complexType->addMember('string', 'attribute', true);
+
+      $this->generateClass($complexType);
+
+      // When calling a setter the returned value should be the same as the
+      // object where the setter was called.
+      $object = new \Fluent();
+      $returnValue = $object->setAttribute('value');
+      $this->assertEquals($object, $returnValue);
+
+      // The setter should also have its own class as its return type.
+      $class = new \ReflectionClass($object);
+      $this->assertMethodHasReturnType(
+        $class->getMethod('setAttribute'),
+        $class->getName()
+      );
+    }
+
 }

@@ -53,12 +53,8 @@ class CurrencyConverterTest extends FunctionalTestCase
         // Setup and execute the service call.
         $service = new \CC\CurrencyConvertor();
         $request = new \CC\ConversionRate(\CC\Currency::USD, \CC\Currency::EUR);
-        $request
-            ->setFromCurrency(\CC\Currency::RUB)
-            ->setToCurrency(\CC\Currency::CNY)
-        ;
-        $this->assertEquals(\CC\Currency::RUB, $request->getFromCurrency());
-        $this->assertEquals(\CC\Currency::CNY, $request->getToCurrency());
+        $this->assertEquals(\CC\Currency::USD, $request->getFromCurrency());
+        $this->assertEquals(\CC\Currency::EUR, $request->getToCurrency());
         try {
             $response = $service->ConversionRate($request);
 
