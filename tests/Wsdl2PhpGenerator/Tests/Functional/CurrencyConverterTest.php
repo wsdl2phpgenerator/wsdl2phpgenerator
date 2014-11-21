@@ -24,10 +24,7 @@ class CurrencyConverterTest extends FunctionalTestCase
 
     protected function configureOptions()
     {
-        // TODO: Remove namespace and createAccessors options.
-        // Testing these belong in a separate class.
         $this->config->set('namespaceName', 'CC');
-        $this->config->set('createAccessors', true);
     }
 
     /**

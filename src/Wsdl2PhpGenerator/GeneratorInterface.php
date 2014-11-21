@@ -10,12 +10,6 @@ namespace Wsdl2PhpGenerator;
  */
 interface GeneratorInterface
 {
-    /**
-     * Initializes the single instance if it hasn't been, and returns it if it has.
-     *
-     * @return GeneratorInterface
-     */
-    public static function instance();
 
     /**
      * Returns the loaded config
