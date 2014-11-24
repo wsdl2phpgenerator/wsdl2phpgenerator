@@ -35,10 +35,7 @@ class ReferencesTest extends FunctionalTestCase
             'Author',
             'UserAuthor',
             'Book',
-            // 'BaseClass',
-            // @todo: Test for BaseClass in v3.
-            // Other test cases contains that name and thus it may be called BaseClassCustom in these situations to
-            // avoid name clashes despite using a different namespace. This should be fixed in future versions.
+            'BaseClass',
             'DerivedClass',
         );
         foreach ($expectedClasses as $class) {
@@ -50,7 +47,7 @@ class ReferencesTest extends FunctionalTestCase
         // should work if references are handled correctly.
         $subclasses = array(
             'UserAuthor' => 'Author',
-            //'DerivedClass' => 'BaseClass', @todo: More test for BaseClass in v3.
+            'DerivedClass' => 'BaseClass',
         );
         foreach ($subclasses as $subclass => $baseclass) {
             $this->assertClassSubclassOf(

@@ -4,8 +4,7 @@
 <!-- A Generator instance seems to pile up configuration if called
      multiple times with configurations referencing different WSDLs.
      This results in Generators writing code for all WSDLs that has
-     passed through.
-     @TODO Process isolation is a temporary hack. Can this be fixed? -->
+     passed through. -->
 <phpunit
         backupGlobals="false"
         backupStaticAttributes="false"

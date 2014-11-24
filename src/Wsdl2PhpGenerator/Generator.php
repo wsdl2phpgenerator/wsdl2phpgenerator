@@ -6,9 +6,6 @@
 namespace Wsdl2PhpGenerator;
 
 use \Exception;
-// psr/log is intentionally not included with the project to keep dependencies to a minimum but
-// the interface is still used to define logging within the codebase.
-// A projects which use logging should include it itself.
 use Psr\Log\LoggerInterface;
 use Wsdl2PhpGenerator\Filter\FilterFactory;
 use Wsdl2PhpGenerator\Xml\WsdlDocument;
@@ -246,60 +243,12 @@ class Generator implements GeneratorInterface
         }
     }
 
-    /*
-     * Setters/getters
-     */
-
     /**
-     * @param LoggerInterface $logger
+     * @inherit
      */
     public function setLogger(LoggerInterface $logger)
     {
         $this->logger = $logger;
     }
 
-    /**
-     * Returns the loaded config
-     *
-     * @return ConfigInterface
-     */
-    public function getConfig()
-    {
-        return $this->config;
-    }
-
-
-    /*
-     * Singleton logic for backwards compatibility
-     * TODO: v3: remove
-     */
-
-    /**
-     * @var static
-     * @deprecated
-     */
-    protected static $instance;
-
-    /**
-     * Initializes the single instance if it hasn't been, and returns it if it has.
-     * @deprecated
-     */
-    public static function instance()
-    {
-        if (static::$instance === null) {
-            static::$instance = new static;
-        }
-        return static::$instance;
-    }
-
-    /**
-     * Returns the singleton of the generator class.
-     *
-     * @return Generator The dreaded singleton instance
-     * @deprecated
-     */
-    public static function getInstance()
-    {
-        return static::instance();
-    }
 }
