@@ -63,7 +63,7 @@ class ServiceOperationFilterTest extends \PHPUnit_Framework_TestCase {
         $requestGetBook = new ComplexType($this->config, 'Get_Book_Type_Request');
         $requestGetBook->addMember('Method_Get_Book_Request_BOOK', 'book_request', false);
         // Operation GetBook
-        $getBookOperation = new Operation('GetBook', 'Get_Book_Type_Request', 'Get Book', 'Get_Book_Type_Response');
+        $getBookOperation = new Operation('GetBook', 'Get_Book_Type_Request $request', 'Get Book', 'Get_Book_Type_Response');
         // Response GetAuthors type
         $responseAuthor = new ComplexType($this->config,'Get_Authors_Response_Author');
         $responseAuthor->addMember('int', 'authorId', false);
@@ -74,7 +74,7 @@ class ServiceOperationFilterTest extends \PHPUnit_Framework_TestCase {
         $requestGetAuthor = new ComplexType($this->config, 'Method_Get_Authors_Request');
         $requestGetAuthor->addMember('Method_Get_Book_Request_BOOK', 'book_request', false);
         // Operation GetAuthors
-        $getAuthorsOperator = new Operation('GetAuthor', 'Method_Get_Authors_Request', 'Get Authors', 'Method_Get_Authors_Response');
+        $getAuthorsOperator = new Operation('GetAuthor', 'Method_Get_Authors_Request $request', 'Get Authors', 'Method_Get_Authors_Response');
         // Service creation
         $types = array(
             $responseBookName,
