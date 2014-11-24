@@ -158,7 +158,8 @@ class ComplexType extends Type
     /**
      * @return ComplexType
      */
-    public function getBaseType() {
+    public function getBaseType()
+    {
         return $this->baseType;
     }
 

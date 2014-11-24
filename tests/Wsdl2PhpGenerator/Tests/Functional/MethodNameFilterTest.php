@@ -3,9 +3,10 @@
 namespace Wsdl2PhpGenerator\Tests\Functional;
 
 
-class MethodNameFilterTest extends FunctionalTestCase {
-
-    public function testFilterByMethodName() {
+class MethodNameFilterTest extends FunctionalTestCase
+{
+    public function testFilterByMethodName()
+    {
         $this->assertGeneratedFileExists('Method_Get_Book_Request.php');
         $this->assertGeneratedFileExists('Method_Get_Book_Response.php');
         $this->assertGeneratedFileExists('Book_Author.php');
@@ -26,14 +27,13 @@ class MethodNameFilterTest extends FunctionalTestCase {
 
     protected function configureOptions()
     {
-        // TODO: Remove namespace and createAccessors options.
-        // Testing these belong in a separate class.
         $this->config->set('methodNames', array('Get_Book'));
     }
     /**
      * @return string The path to the WSDL to generate code from.
      */
-    protected function getWsdlPath() {
+    protected function getWsdlPath()
+    {
         return $this->fixtureDir . '/abstract/book_shell.wsdl';
     }
 }

@@ -49,8 +49,6 @@ class Generator implements GeneratorInterface
      */
     private $logger;
 
-    private $filter;
-
     /**
      * Construct the generator
      */
@@ -250,5 +248,4 @@ class Generator implements GeneratorInterface
     {
         $this->logger = $logger;
     }
-
 }

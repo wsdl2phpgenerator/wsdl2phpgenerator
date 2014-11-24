@@ -85,5 +85,4 @@ class Config implements ConfigInterface
             'methodNames' => $normalizer
         ));
     }
-
 }

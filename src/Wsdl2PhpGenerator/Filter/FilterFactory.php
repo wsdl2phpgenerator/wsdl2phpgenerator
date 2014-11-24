@@ -19,4 +19,4 @@ class FilterFactory
             return new ServiceOperationFilter($config);
         }
     }
-} 
+}

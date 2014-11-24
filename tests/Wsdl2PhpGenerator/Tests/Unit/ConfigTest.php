@@ -80,7 +80,8 @@ class ConfigTest extends PHPUnit_Framework_TestCase
         $this->assertNormalizerForParameter('methodNames');
     }
 
-    private function assertNormalizerForParameter($parameterName) {
+    private function assertNormalizerForParameter($parameterName)
+    {
         $toTest = array(
             ''                   => array(),
             'test1'              => array('test1'),

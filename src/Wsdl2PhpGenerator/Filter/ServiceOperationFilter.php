@@ -2,12 +2,11 @@
 
 namespace Wsdl2PhpGenerator\Filter;
 
-
 use Wsdl2PhpGenerator\ComplexType;
 use Wsdl2PhpGenerator\ConfigInterface;
 use Wsdl2PhpGenerator\Service;
 
-class ServiceOperationFilter implements  FilterInterface
+class ServiceOperationFilter implements FilterInterface
 {
     /**
      * @var ConfigInterface
@@ -22,7 +21,8 @@ class ServiceOperationFilter implements  FilterInterface
     /**
      * @param ConfigInterface $config
      */
-    function __construct($config) {
+    public function __construct($config)
+    {
         $this->config = $config;
         $this->methods = $config->get('methodNames');
     }
@@ -38,11 +38,15 @@ class ServiceOperationFilter implements  FilterInterface
         $operations = array();
         foreach ($this->methods as $method) {
             $operation = $service->getOperation($method);
-            if (!$operation) { continue; }
+            if (!$operation) {
+                continue;
+            }
             foreach ($operation->getParams() as $param => $hint) {
                 $arr = $operation->getPhpDocParams($param, $service->getTypes());
                 $type = $service->getType($arr['type']);
-                if (empty($type)) { continue; }
+                if (empty($type)) {
+                    continue;
+                }
                 $types[$type->getIdentifier()] = $type;
             }
             $returns = $operation->getReturns();
@@ -62,7 +66,8 @@ class ServiceOperationFilter implements  FilterInterface
      * @param Type[] $finalTypes
      * @param Type[] $typesToProccess
      */
-    private function calculateInheretedTypes($service, $finalTypes, $typesToProccess) {
+    private function calculateInheretedTypes($service, $finalTypes, $typesToProccess)
+    {
         $foundedTypes = array();
         /** @var Type $type */
         foreach ($typesToProccess as $name => $type) {
