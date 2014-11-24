@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="urn:www.example.org:abstract" xmlns:tns="urn:www.example.org:abstract2">
+
+    <xsd:element name="projectE" type="tns:ProjectX"></xsd:element>
+    <xsd:complexType name="ProjectX">
+        <xsd:sequence>
+            <xsd:element name="name" type="xsd:string"></xsd:element>
+            <xsd:element name="ContactMailAdress" type="tns:ContactMailAdress"></xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:simpleType name="MailAdress">
+        <xsd:restriction base="xsd:string">
+            <xsd:pattern value="[^@]+@[^@]+"></xsd:pattern>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:complexType name="ContactMailAdress">
+        <xsd:simpleContent>
+            <xsd:extension base="tns:MailAdress">
+                <xsd:attribute name="contactPersonName" type="xsd:string" use="required"></xsd:attribute>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+</xsd:schema>

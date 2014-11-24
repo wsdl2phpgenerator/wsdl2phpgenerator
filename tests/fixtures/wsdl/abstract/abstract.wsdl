@@ -12,8 +12,9 @@
   <wsdl:types>
     <schema targetNamespace="urn:www.example.org:abstract"
       xmlns="http://www.w3.org/2001/XMLSchema">
+        <import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+        <xsd:include schemaLocation="type.xsd" />
 
-      <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
         <xsd:simpleType name="Communication_Usage_TypeEnumeration">
             <xsd:restriction base="xsd:string">
                 <xsd:annotation>
@@ -27,6 +28,7 @@
                 </xsd:annotation>
             </xsd:restriction>
         </xsd:simpleType>
+
         <xsd:complexType name="Communication_Usage_Type_ReferenceType">
             <xsd:annotation>
                 <xsd:documentation>Reference element representing a unique
@@ -57,6 +59,8 @@
                 </xsd:extension>
             </xsd:simpleContent>
         </xsd:complexType>
+
+
       <complexType name="Book">
         <sequence>
           <element name="name" type="xsd:string"/>
