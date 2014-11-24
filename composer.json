@@ -6,8 +6,13 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "autoload": {
-        "psr-0": {
+        "psr-4": {
             "Wsdl2PhpGenerator\\": ["src/", "lib/"]
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Wsdl2PhpGenerator\\Tests\\": ["tests/src"]
         }
     },
     "require": {

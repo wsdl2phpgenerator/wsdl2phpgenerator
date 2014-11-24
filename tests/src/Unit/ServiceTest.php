@@ -20,7 +20,7 @@ class ServiceTest extends CodeGenerationTestCase
     protected $namespace = 'SoapClientTest';
 
     // Use our mock soap client. It allows to to retrieve the configuration is was passed.
-    protected $soapclientClass = '\Wsdl2PhpGenerator\Mock\SoapClient';
+    protected $soapclientClass = '\Wsdl2PhpGenerator\Tests\Mock\SoapClient';
 
     // Example options which can be passed as options to a \SoapClient instance.
     protected $soapclientOptions = array('features' => SOAP_SINGLE_ELEMENT_ARRAYS, 'cache_wsdl' => WSDL_CACHE_NONE);

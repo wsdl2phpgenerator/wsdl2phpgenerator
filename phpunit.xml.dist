@@ -19,10 +19,10 @@
 
     <testsuites>
         <testsuite name="Unit tests">
-            <directory>tests/Wsdl2PhpGenerator/Tests/Unit</directory>
+            <directory>tests/src/Unit</directory>
         </testsuite>
         <testsuite name="Functional tests">
-            <directory>tests/Wsdl2PhpGenerator/Tests/Functional</directory>
+            <directory>tests/src/Functional</directory>
         </testsuite>
     </testsuites>
 
