@@ -40,7 +40,10 @@ class ServiceOperationFilter implements  FilterInterface
             $operation = $service->getOperation($method);
             if (!$operation) { continue; }
             foreach ($operation->getParams() as $param => $hint) {
-                $types[$param] = $service->getType($param);
+                $arr = $operation->getPhpDocParams($param, $service->getTypes());
+                $type = $service->getType($arr['type']);
+                if (empty($type)) { continue; }
+                $types[$type->getIdentifier()] = $type;
             }
             $returns = $operation->getReturns();
             $types[$operation->getReturns()] = $service->getType($returns);
@@ -63,6 +66,9 @@ class ServiceOperationFilter implements  FilterInterface
         $foundedTypes = array();
         /** @var Type $type */
         foreach ($typesToProccess as $name => $type) {
+            if (empty($type)) {
+                continue;
+            }
             if ($type instanceof ComplexType) {
                 /** @var ComplexType $type */
                 $members = $type->getMembers();
@@ -77,11 +83,11 @@ class ServiceOperationFilter implements  FilterInterface
                     $finalTypes[$memberTypeName] = $memberType;
                     $foundedTypes[$memberTypeName] = $memberType;
                 }
-            }
-            $baseType = $type->getBaseType();
-            if ($baseType && $baseType instanceof ComplexType) {
-                $finalTypes[$baseType->getDatatype()] = $baseType;
-                $foundedTypes[$baseType->getDatatype()] = $baseType;
+                $baseType = $type->getBaseType();
+                if ($baseType && $baseType instanceof ComplexType) {
+                    $finalTypes[$baseType->getDatatype()] = $baseType;
+                    $foundedTypes[$baseType->getDatatype()] = $baseType;
+                }
             }
         }
         if (!$foundedTypes) {

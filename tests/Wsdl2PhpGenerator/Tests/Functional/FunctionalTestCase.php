@@ -117,6 +117,11 @@ abstract class FunctionalTestCase extends CodeGenerationTestCase
         $this->assertFileExists($this->outputDir . '/' . $filename, $message);
     }
 
+    protected function assertFileNotGenerated($filename, $message = '')
+    {
+        $this->assertFileNotExists($this->outputDir . '/' . $filename, $message);
+    }
+
 
     /**
      * Assertion that tests that a class with a specific name has been
