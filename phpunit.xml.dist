@@ -4,8 +4,7 @@
 <!-- A Generator instance seems to pile up configuration if called
      multiple times with configurations referencing different WSDLs.
      This results in Generators writing code for all WSDLs that has
-     passed through.
-     @TODO Process isolation is a temporary hack. Can this be fixed? -->
+     passed through. -->
 <phpunit
         backupGlobals="false"
         backupStaticAttributes="false"
@@ -20,10 +19,10 @@
 
     <testsuites>
         <testsuite name="Unit tests">
-            <directory>tests/Wsdl2PhpGenerator/Tests/Unit</directory>
+            <directory>tests/src/Unit</directory>
         </testsuite>
         <testsuite name="Functional tests">
-            <directory>tests/Wsdl2PhpGenerator/Tests/Functional</directory>
+            <directory>tests/src/Functional</directory>
         </testsuite>
     </testsuites>
 

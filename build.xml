@@ -2,79 +2,6 @@
 
 <project name="wsdl2phpgenerator" default="prepare-release">
 
-    <target name="prepare-release" depends="check-prerequisites, update-app-version, update-changelog, build-phar"
-            description="Prepare a release by performing all related changes to the code base.">
-        <echo>Current code changes for release ${version}</echo>
-        <exec command="git diff HEAD" passthru="true" />
-        <echo>Make last adjustments by hand and use vendor/bin/phing create-release to finalize it.</echo>
-    </target>
-
-    <target name="create-release" depends="check-prerequisites, init-github"
-            description="Finalize a release by committing, tagging and pushing changes, creating a release, and upload phar file as an asset.">
-        <echo>Committing and tagging release ${version}</echo>
-
-        <!-- Extract a list of changes from the added lines to the changelog. These line will be prefixed by "+ *".
-             Drop the + but keep the *. -->
-        <exec command="git diff -U0 CHANGES > TAG_MESSAGE" />
-        <reflexive file="TAG_MESSAGE">
-            <filterchain>
-                <linecontainsregexp>
-                    <regexp pattern="^\+\s\*\s" ignoreCase="true" />
-                </linecontainsregexp>
-                <replaceregexp>
-                    <regexp pattern="\+\s" replace="" />
-                </replaceregexp>
-            </filterchain>
-        </reflexive>
-        <loadfile file="TAG_MESSAGE" property="changes"/>
-        <delete file="TAG_MESSAGE" />
-
-        <!-- Add, commit, tag and push changes. The tag message makes a nice release note on GitHub. -->
-        <exec command="git add CHANGES README.md wsdl2php.php" logoutput="true" checkreturn="true" />
-        <exec command="git commit -m 'Release ${version}'" logoutput="true" checkreturn="true" />
-        <exec command="git tag ${version} -f -m 'Release ${version}${line.separator}${changes}'" />
-        <exec command="git push origin master ${version}" logoutput="true" checkreturn="true" />
-
-        <!-- Rebuild the phar file as it will now have the proper name for the release as the tag has been created. -->
-        <phingcall target="build-phar"/>
-
-        <!-- Create a proper release for the tag as tags cannot have assets attached. -->
-        <githubcreaterelease username="${username}" password="${password}" authMethod="password"
-                             owner="wsdl2phpgenerator" repository="wsdl2phpgenerator" tagName="${version}"
-                             releaseId="release" />
-
-        <!-- Finally we can create the asset. -->
-        <githubcreateassets username="${username}" password="${password}" authMethod="password"
-                            owner="wsdl2phpgenerator" repository="wsdl2phpgenerator" releaseId="${release}">
-            <fileset dir=".">
-                <include name="wsdl2phpgenerator-*.phar"/>
-            </fileset>
-        </githubcreateassets>
-
-    </target>
-
-    <target name="update-app-version" depends="check-prerequisites"
-            description="Updates references to the version in the application code">
-        <reflexive>
-            <fileset dir=".">
-                <include name="wsdl2php.php" />
-                <include name="README.md" />
-            </fileset>
-            <filterchain>
-                <!-- Convert current version number to a token for subsequent replacement with actual value. -->
-                <replaceregexp>
-                    <regexp pattern="(Application\(.*?)[\d\.]+(\'\);)" replace="\1@VERSION@\2"/>
-                    <regexp pattern="(wsdl2phpgenerator-)[\d.]+(\.phar)" replace="\1@VERSION@\2"/>
-                    <regexp pattern="(\/releases\/download\/)[\d.]+" replace="\1@VERSION@"/>
-                    <regexp pattern='(wsdl2phpgenerator": ")[\d.]+(")' replace="\1@VERSION@\2"/>
-                </replaceregexp>
-                <replacetokens begintoken="@" endtoken="@">
-                    <token key="VERSION" value="${version}"/>
-                </replacetokens>
-            </filterchain>
-        </reflexive>
-    </target>
-
     <target name="update-changelog" depends="check-prerequisites"
             description="Update the changelog with changes for a version.">
         <!-- Reset any changes made to the changelog. -->
@@ -96,33 +23,6 @@
         </reflexive>
     </target>
 
-    <target name="build-phar" description="(Re)build phar file">
-        <!-- Remove any preexisting phar files. -->
-        <delete>
-            <fileset dir=".">
-                <include name="*.phar"/>
-            </fileset>
-        </delete>
-
-        <!-- Build a new phar file using https://github.com/kherge/Box -->
-        <exec command="vendor/bin/box build" checkreturn="true" logoutput="true" />
-
-        <!-- Test that the generated phar file is functional.
-             This may fail as we only include parts of our dependencies in the phar.
-             Files in autoload_files.php not added in box.json will cause the phar to
-             fail. -->
-        <foreach param="pharfile" target="test-phar">
-            <fileset dir=".">
-                <include name="*.phar"/>
-            </fileset>
-        </foreach>
-    </target>
-
-    <target name="test-phar" description="Test that phar file is working">
-        <!-- If we can get the version then assume that the phar works. -->
-        <exec command="php ${pharfile} --version" checkreturn="true" logoutput="true"/>
-    </target>
-
     <target name="check-prerequisites" description="Check that all required elements are available." hidden="true">
         <propertyprompt propertyName="version" useExistingValue="true"
                         promptText="Enter the verson/git tag to work with"  />
@@ -136,16 +36,6 @@
         <fail if="git.changelog.missing" message="git changelog must be installed to create a release. See https://github.com/visionmedia/git-extras."/>
 
         <echo>git changelog: OK</echo>
-    </target>
-
-    <target name="init-github" description="Initialize GitHub tasks and properties" hidden="true">
-        <!-- Load GitHub tasks. -->
-        <taskdef name="githubcreaterelease" classname="PhingGitHub\CreateReleaseTask" classpath="vendor/kasperg" />
-        <taskdef name="githubcreateassets" classname="PhingGitHub\CreateAssetsTask" classpath="vendor/kasperg" />
-
-        <!-- Initialize GitHub-related properties -->
-        <propertyprompt promptText="Enter your GitHub username?" propertyName="username" useExistingValue="true"/>
-        <propertyprompt promptText="Enter your GitHub password?" propertyName="password" useExistingValue="true"/>
     </target>
 
 </project>
