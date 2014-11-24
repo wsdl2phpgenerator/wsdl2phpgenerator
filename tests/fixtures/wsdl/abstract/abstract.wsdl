@@ -12,8 +12,7 @@
   <wsdl:types>
     <schema targetNamespace="urn:www.example.org:abstract"
       xmlns="http://www.w3.org/2001/XMLSchema">
-
-      <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+        <import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
 
       <complexType name="Book">
         <sequence>
