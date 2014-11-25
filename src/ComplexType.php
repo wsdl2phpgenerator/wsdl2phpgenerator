@@ -98,7 +98,11 @@ class ComplexType extends Type
 
             if (!$member->getNullable()) {
                 if ($type == '\DateTime') {
-                    $constructorSource .= '  $this->' . $name . ' = $' . $name . '->format(\DateTime::ATOM);' . PHP_EOL;
+                    if ($this->config->get('constructorParamsDefaultToNull')) {
+                        $constructorSource .= '  $this->' . $name . ' = $' . $name . ' ? $' . $name . '->format(\DateTime::ATOM) : null;' . PHP_EOL;
+                    } else {
+                        $constructorSource .= '  $this->' . $name . ' = $' . $name . '->format(\DateTime::ATOM);' . PHP_EOL;
+                    }
                 } else {
                     $constructorSource .= '  $this->' . $name . ' = $' . $name . ';' . PHP_EOL;
                 }
