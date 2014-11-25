@@ -1,4 +1,7 @@
 language: php
+cache:
+  directories:
+    - vendor
 
 php:
   - 5.3
@@ -15,11 +18,7 @@ env:
 sudo: false
 
 before_script:
-  # Use --prefer-source to download dependencies via git and avoid GitHub API
-  # rate limits resulting in 502 HTTP responses, build errors and
-  # Composer\Downloader\TransportException.
-  # https://github.com/symfony/symfony/issues/4687
-  - composer install --dev --no-interaction --prefer-source
+  - composer install --dev --no-interaction
   # Update the Symfony version to test against.
   - composer require symfony/options-resolver:${SYMFONY_VERSION}
 
