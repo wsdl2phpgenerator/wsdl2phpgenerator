@@ -9,7 +9,7 @@
         <echo>Make last adjustments by hand and use vendor/bin/phing create-release to finalize it.</echo>
     </target>
 
-    <target name="create-release" depends="check-prerequisites"
+    <target name="create-release" depends="check-prerequisites, init-github"
             description="Finalize a release by committing, tagging and pushing changes, creating a release, and upload phar file as an asset.">
         <echo>Committing and tagging release ${version}</echo>
 
@@ -34,6 +34,12 @@
         <exec command="git commit -m 'Release ${version}'" logoutput="true" checkreturn="true" />
         <exec command="git tag ${version} -f -m 'Release ${version}${line.separator}${changes}'" />
         <exec command="git push origin master ${version}" logoutput="true" checkreturn="true" />
+
+
+        <!-- Create a proper release for the tag as tags cannot have assets attached. -->
+        <githubcreaterelease username="${username}" password="${password}" authMethod="password"
+                             owner="wsdl2phpgenerator" repository="wsdl2phpgenerator" tagName="${version}"
+                             releaseId="release" />
     </target>
 
     <target name="update-changelog" depends="check-prerequisites"
@@ -70,6 +76,16 @@
         <fail if="git.changelog.missing" message="git changelog must be installed to create a release. See https://github.com/visionmedia/git-extras."/>
 
         <echo>git changelog: OK</echo>
+    </target>
+
+    <target name="init-github" description="Initialize GitHub tasks and properties" hidden="true">
+        <!-- Load GitHub tasks. -->
+        <taskdef name="githubcreaterelease" classname="PhingGitHub\CreateReleaseTask" classpath="vendor/kasperg" />
+        <taskdef name="githubcreateassets" classname="PhingGitHub\CreateAssetsTask" classpath="vendor/kasperg" />
+
+        <!-- Initialize GitHub-related properties -->
+        <propertyprompt promptText="Enter your GitHub username?" propertyName="username" useExistingValue="true"/>
+        <propertyprompt promptText="Enter your GitHub password?" propertyName="password" useExistingValue="true"/>
     </target>
 
 </project>
