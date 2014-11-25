@@ -215,7 +215,6 @@ class Generator implements GeneratorInterface
      */
     protected function savePhp()
     {
-        // XXX: Add tests for filtering
         $factory = new FilterFactory();
         $filter = $factory->create($this->config);
         $filteredService = $filter->filter($this->service);
