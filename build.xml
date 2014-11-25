@@ -2,6 +2,40 @@
 
 <project name="wsdl2phpgenerator" default="prepare-release">
 
+    <target name="prepare-release" depends="check-prerequisites, update-changelog"
+            description="Prepare a release by performing all related changes to the code base.">
+        <echo>Current code changes for release ${version}</echo>
+        <exec command="git diff HEAD" passthru="true" />
+        <echo>Make last adjustments by hand and use vendor/bin/phing create-release to finalize it.</echo>
+    </target>
+
+    <target name="create-release" depends="check-prerequisites"
+            description="Finalize a release by committing, tagging and pushing changes, creating a release, and upload phar file as an asset.">
+        <echo>Committing and tagging release ${version}</echo>
+
+        <!-- Extract a list of changes from the added lines to the changelog. These line will be prefixed by "+ *".
+             Drop the + but keep the *. -->
+        <exec command="git diff -U0 CHANGES > TAG_MESSAGE" />
+        <reflexive file="TAG_MESSAGE">
+            <filterchain>
+                <linecontainsregexp>
+                    <regexp pattern="^\+\s\*\s" ignoreCase="true" />
+                </linecontainsregexp>
+                <replaceregexp>
+                    <regexp pattern="\+\s" replace="" />
+                </replaceregexp>
+            </filterchain>
+        </reflexive>
+        <loadfile file="TAG_MESSAGE" property="changes"/>
+        <delete file="TAG_MESSAGE" />
+
+        <!-- Add, commit, tag and push changes. The tag message makes a nice release note on GitHub. -->
+        <exec command="git add CHANGES" logoutput="true" checkreturn="true" />
+        <exec command="git commit -m 'Release ${version}'" logoutput="true" checkreturn="true" />
+        <exec command="git tag ${version} -f -m 'Release ${version}${line.separator}${changes}'" />
+        <exec command="git push origin master ${version}" logoutput="true" checkreturn="true" />
+    </target>
+
     <target name="update-changelog" depends="check-prerequisites"
             description="Update the changelog with changes for a version.">
         <!-- Reset any changes made to the changelog. -->
