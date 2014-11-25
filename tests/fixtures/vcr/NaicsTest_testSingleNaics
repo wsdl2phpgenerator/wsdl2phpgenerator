@@ -1,0 +1,21 @@
+
+-
+    request:
+        method: POST
+        url: 'http://www.webservicex.net/GenericNAICS.asmx'
+        headers:
+            Host: www.webservicex.net
+            Content-Type: 'text/xml; charset=utf-8; action="http://www.webservicex.net/GetNAICSByID"'
+            Content-Length: '282'
+        body: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ns1=\"http://www.webservicex.net/\"><SOAP-ENV:Body><ns1:GetNAICSByID><ns1:NAICSCode>54151</ns1:NAICSCode></ns1:GetNAICSByID></SOAP-ENV:Body></SOAP-ENV:Envelope>\n"
+    response:
+        status: 200
+        headers:
+            Cache-Control: 'private, max-age=0'
+            Content-Length: '1164'
+            Content-Type: 'text/xml; charset=utf-8'
+            Server: Microsoft-IIS/7.0
+            X-AspNet-Version: 4.0.30319
+            X-Powered-By: ASP.NET
+            Date: 'Sat, 15 Nov 2014 20:56:14 GMT'
+        body: '<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><GetNAICSByIDResponse xmlns="http://www.webservicex.net/"><GetNAICSByIDResult>true</GetNAICSByIDResult><NAICSData><Records>1</Records><NAICSData><NAICS><NAICSCode>54151</NAICSCode><Title>Computer Systems Design and Related Services</Title><Country /><IndustryDescription>This industry comprises establishments primarily engaged in providing expertise in the field of information technologies through one or more of the following activities: (1) writing, modifying, testing, and supporting software to meet the needs of a particular customer; (2) planning and designing computer systems that integrate computer hardware, software, and communication technologies; (3) on-site management and operation of clients'' computer systems and/or data processing facilities; and (4) other professional and technical computer-related advice and services.</IndustryDescription></NAICS></NAICSData></NAICSData></GetNAICSByIDResponse></soap:Body></soap:Envelope>'
