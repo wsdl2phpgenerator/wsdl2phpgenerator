@@ -79,7 +79,6 @@ class ServiceOperationFilter implements FilterInterface
                 $members = $type->getMembers();
                 foreach ($members as $member) {
                     /** @var Variable $member */
-                    // @HACK: Consider how to get type for array
                     $memberTypeName = str_replace('[]', '', $member->getType());
                     $memberType = $service->getType($memberTypeName);
                     if (!$memberType || isset($finalTypes[$memberTypeName])) {
