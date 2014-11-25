@@ -74,7 +74,7 @@ class Config implements ConfigInterface
             'soapClientClass'               => '\SoapClient',
             'soapClientOptions'             => array(),
         ));
-        $trimNormalizer = function(Options $options, $value) {
+        $trimNormalizer = function (Options $options, $value) {
             if (strlen($value) === 0) {
                 return array();
             }
@@ -88,7 +88,7 @@ class Config implements ConfigInterface
                 // The SOAP_SINGLE_ELEMENT_ARRAYS feature should be enabled by default if no other option has been set
                 // explicitly while leaving this out. This cannot be handled in the defaults as soapClientOptions is a
                 // nested array.
-                if ( ! isset($value['features'])) {
+                if (!isset($value['features'])) {
                     $value['features'] = SOAP_SINGLE_ELEMENT_ARRAYS;
                 }
 
