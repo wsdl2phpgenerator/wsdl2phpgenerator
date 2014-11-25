@@ -2,9 +2,9 @@
 <html>
 
   <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Wsdl2phpgenerator : Simple utility and class library for generating php classes from a wsdl file." />
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Wsdl2phpgenerator : Simple utility and class library for generating php classes from a wsdl file.">
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
@@ -32,81 +32,231 @@
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
         <h1>
-<a name="wsdl2phpgenerator" class="anchor" href="#wsdl2phpgenerator"><span class="octicon octicon-link"></span></a>wsdl2phpgenerator</h1>
+<a id="wsdl2phpgenerator" class="anchor" href="#wsdl2phpgenerator" aria-hidden="true"><span class="octicon octicon-link"></span></a>wsdl2phpgenerator</h1>
 
 <p><a href="https://packagist.org/packages/wsdl2phpgenerator/wsdl2phpgenerator"><img src="https://poser.pugx.org/wsdl2phpgenerator/wsdl2phpgenerator/v/stable.png" alt="Latest Stable Version"></a>
-<a href="https://travis-ci.org/wsdl2phpgenerator/wsdl2phpgenerator"><img src="https://travis-ci.org/wsdl2phpgenerator/wsdl2phpgenerator.png?branch=master" alt="Build Status"></a>
+<a href="https://travis-ci.org/wsdl2phpgenerator/wsdl2phpgenerator"><img src="https://travis-ci.org/wsdl2phpgenerator/wsdl2phpgenerator.svg?branch=master" alt="Build Status"></a>
 <a href="https://scrutinizer-ci.com/g/wsdl2phpgenerator/wsdl2phpgenerator/"><img src="https://scrutinizer-ci.com/g/wsdl2phpgenerator/wsdl2phpgenerator/badges/coverage.png?s=91798255fd973950b1e2d7478f99d6f6f80cf6da" alt="Code Coverage"></a>
 <a href="https://scrutinizer-ci.com/g/wsdl2phpgenerator/wsdl2phpgenerator/"><img src="https://scrutinizer-ci.com/g/wsdl2phpgenerator/wsdl2phpgenerator/badges/quality-score.png?s=23e602a86f75a79a2f1013caac99558f2464ce74" alt="Scrutinizer Quality Score"></a>
 <a href="https://www.versioneye.com/user/projects/52697615632bac67b2002e93"><img src="https://www.versioneye.com/user/projects/52697615632bac67b2002e93/badge.png" alt="Dependency Status"></a></p>
 
 <p>Simple WSDL to PHP classes converter. Takes a WSDL file and outputs class files ready to use.</p>
 
-<p>Uses the <a href="http://www.opensource.org/licenses/mit-license.php">MIT licence</a>.</p>
+<p>Uses the <a href="http://www.opensource.org/licenses/mit-license.php">MIT license</a>.</p>
 
 <h2>
-<a name="contributors" class="anchor" href="#contributors"><span class="octicon octicon-link"></span></a>Contributors</h2>
+<a id="new-major-version-30" class="anchor" href="#new-major-version-30" aria-hidden="true"><span class="octicon octicon-link"></span></a>New major version: 3.0</h2>
 
-<p>Originally developed by <a href="https://github.com/walle">@walle</a> and includes bugfixes and improvements from <a href="https://github.com/vakopian">@vakopian</a>, <a href="https://github.com/statikbe/">@statikbe</a>, <a href="https://github.com/ecolinet">@ecolinet</a>, <a href="https://github.com/nuth/">@nuth</a>, <a href="https://github.com/chriskl/">@chriskl</a>, <a href="https://github.com/RSully/">@RSully</a>, <a href="https://github.com/jrbasso/">@jrbasso</a>, <a href="https://github.com/dypa/">@dypa</a> and <a href="https://github.com/kasperg/">@kasperg</a>.</p>
+<p>A new major version of wsdl2phpgenerator has recently been released: 3.0.</p>
 
-<p>Pull requests are very welcome.</p>
+<p>This introduces changes to both configuration and generated code. The changes makes it more flexible to use, easier to include in other projects, promotes contributions and reduces maintenance.</p>
+
+<p>2.x users are encourage to read <a href="docs/whats-new-in-3.0.md">a walkthrough of what is new in 3.0</a>.</p>
 
 <h2>
-<a name="mailing-list" class="anchor" href="#mailing-list"><span class="octicon octicon-link"></span></a>Mailing list</h2>
+<a id="contributors" class="anchor" href="#contributors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contributors</h2>
+
+<p>Originally developed by <a href="https://github.com/walle">@walle</a> and includes bug fixes and improvements from <a href="https://github.com/vakopian">@vakopian</a>, <a href="https://github.com/statikbe/">@statikbe</a>,
+<a href="https://github.com/ecolinet">@ecolinet</a>, <a href="https://github.com/nuth/">@nuth</a>, <a href="https://github.com/chriskl/">@chriskl</a>, <a href="https://github.com/RSully/">@RSully</a>, <a href="https://github.com/jrbasso/">@jrbasso</a>,
+<a href="https://github.com/dypa/">@dypa</a>, <a href="https://github.com/Lafriks/">@Lafriks</a>, <a href="https://github.com/SamMousa/">@SamMousa</a>, <a href="https://github.com/xstefanox/">@xstefanox</a>, <a href="https://github.com/garex/">@garex</a>, <a href="https://github.com/honzap/">@honzap</a>, <a href="https://github.com/jk/">@jk</a>, <a href="https://github.com/sheeep/">@sheeep</a>, <a href="https://github.com/colinodell/">@colinodell</a>, <a href="https://github.com/red-led/">@red-led</a> and <a href="https://github.com/kasperg/">@kasperg</a>.</p>
+
+<p>Pull requests are very welcome. Please read <a href="https://github.com/wsdl2phpgenerator/wsdl2phpgenerator/blob/master/CONTRIBUTING.md">our guidelines for contributing</a>.</p>
+
+<h2>
+<a id="mailing-list" class="anchor" href="#mailing-list" aria-hidden="true"><span class="octicon octicon-link"></span></a>Mailing list</h2>
 
 <p>There is a mailing list for the project at <a href="https://groups.google.com/forum/#!forum/wsdl2phpgenerator">https://groups.google.com/forum/#!forum/wsdl2phpgenerator</a></p>
 
 <h2>
-<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
 
-<h3>
-<a name="standalone-executable" class="anchor" href="#standalone-executable"><span class="octicon octicon-link"></span></a>Standalone executable</h3>
+<p>Add wsdl2phpgenerator to your <a href="https://getcomposer.org/doc/00-intro.md">Composer</a> project:</p>
 
-<ol>
-<li>Download <a href="https://github.com/wsdl2phpgenerator/wsdl2phpgenerator/releases/download/2.3.0/wsdl2phpgenerator-2.3.0.phar">wsdl2phpgenerator-2.3.0.phar</a> from <a href="https://github.com/wsdl2phpgenerator/wsdl2phpgenerator/releases/latest">the latest release</a>
-</li>
-<li>Run <code>php wsdl2phpgenerator-2.3.0.phar -i input.wsdl -o tmp/my/directory/wsdl</code>
-</li>
-</ol><p>The directory is created if possible.</p>
+<div class="highlight highlight-bash"><pre>composer require wsdl2phpgenerator/wsdl2phpgenerator</pre></div>
 
-<p>Usage is listed under <code>./wsdl2php -h</code></p>
-
-<h3>
-<a name="executable-in-composer-project" class="anchor" href="#executable-in-composer-project"><span class="octicon octicon-link"></span></a>Executable in Composer project</h3>
-
-<ol>
-<li>Add <code>"wsdl2phpgenerator/wsdl2phpgenerator": "2.3.0"</code>  to the <code>require</code> or <code>require-dev</code> section of your <code>composer.json</code> file</li>
-<li>Run <code>composer update</code>
-</li>
-<li>Run <code>./vendor/bin/wsdl2php -i input.wsdl -o tmp/my/directory/wsdl</code>
-</li>
-</ol><p>The directory is created if possible.</p>
-
-<p>Usage is listed under <code>./vendor/bin/wsdl2php -h</code></p>
-
-<h3>
-<a name="code" class="anchor" href="#code"><span class="octicon octicon-link"></span></a>Code</h3>
-
-<div class="highlight highlight-php"><pre><span class="o">&lt;?</span><span class="nx">php</span>
-<span class="c1">// Map 'src' and 'lib' folders to the Wsdl2PhpGenerator namespace in your</span>
-<span class="c1">// favorite PSR-0 compatible classloader or require the files manually.</span>
-
-<span class="nv">$generator</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">\Wsdl2PhpGenerator\Generator</span><span class="p">();</span>
-<span class="nv">$generator</span><span class="o">-&gt;</span><span class="na">generate</span><span class="p">(</span>
-    <span class="k">new</span> <span class="nx">\Wsdl2PhpGenerator\Config</span><span class="p">(</span> <span class="nx">SOAPSERVICE</span><span class="p">,</span> <span class="nx">SOAPDIR</span> <span class="p">)</span>
-<span class="p">);</span>
-<span class="cp">?&gt;</span><span class="x"></span>
-</pre></div>
+<p>The project will also be available as <a href="https://github.com/wsdl2phpgenerator/wsdl2phpgenerator-cli">a command line application</a> which can be downloaded as a phar file.</p>
 
 <h2>
-<a name="versioning" class="anchor" href="#versioning"><span class="octicon octicon-link"></span></a>Versioning</h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
 
-<p>This project aims to use <a href="http://semver.org/">semantic versioning</a>. The following consitutes the public API: </p>
+<p>To generate classes create a <code>Generator</code> instance and pass it a <code>Config</code> instance.</p>
+
+<div class="highlight highlight-php"><pre><span class="pl-s2"><span class="pl-vo">$generator</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-s3">\Wsdl2PhpGenerator\</span><span class="pl-s3">Generator</span>();</span>
+<span class="pl-s2"><span class="pl-vo">$generator</span><span class="pl-k">-&gt;</span>generate(</span>
+<span class="pl-s2">    <span class="pl-k">new</span> <span class="pl-s3">\Wsdl2PhpGenerator\</span><span class="pl-s3">Config</span>(<span class="pl-s3">array</span>(</span>
+<span class="pl-s2">        <span class="pl-s1"><span class="pl-pds">'</span>inputFile<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s1"><span class="pl-pds">'</span>input.wsdl<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s2">        <span class="pl-s1"><span class="pl-pds">'</span>outputDir<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s1"><span class="pl-pds">'</span>/tmp/output<span class="pl-pds">'</span></span></span>
+<span class="pl-s2">    ))</span>
+<span class="pl-s2">);</span></pre></div>
+
+<p>After generating the code then configure your existing autoloader accordingly. The generated code also comes with a simple <code>autoload.php</code> file which can be included directly. This registers a simple autoloader for the generated classes.</p>
+
+<h4>
+<a id="example-usage" class="anchor" href="#example-usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example usage</h4>
+
+<p>The following example will generate code from a web service, load the generated classes, call the web service and return the result over the course of a single process.</p>
+
+<div class="highlight highlight-php"><pre><span class="pl-s2"><span class="pl-vo">$generator</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-s3">\Wsdl2PhpGenerator\</span><span class="pl-s3">Generator</span>();</span>
+<span class="pl-s2"><span class="pl-vo">$generator</span><span class="pl-k">-&gt;</span>generate(</span>
+<span class="pl-s2">    <span class="pl-k">new</span> <span class="pl-s3">\Wsdl2PhpGenerator\</span><span class="pl-s3">Config</span>(<span class="pl-s3">array</span>(</span>
+<span class="pl-s2">        <span class="pl-s1"><span class="pl-pds">'</span>inputFile<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s1"><span class="pl-pds">'</span>http://www.webservicex.net/CurrencyConvertor.asmx?WSDL<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s2">        <span class="pl-s1"><span class="pl-pds">'</span>outputDir<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s1"><span class="pl-pds">'</span>/tmp/CurrencyConverter<span class="pl-pds">'</span></span></span>
+<span class="pl-s2">    ))</span>
+<span class="pl-s2">);</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-k">require</span> <span class="pl-s1"><span class="pl-pds">'</span>/tmp/CurrencyConverter/autoload.php<span class="pl-pds">'</span></span>;</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-c">// A class will generated representing the service.</span></span>
+<span class="pl-s2"><span class="pl-c">// It is named after the element in the WSDL and has a method for each operation.</span></span>
+<span class="pl-s2"><span class="pl-vo">$service</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-s3">\</span><span class="pl-s3">CurrencyConvertor</span>();</span>
+<span class="pl-s2"><span class="pl-vo">$request</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-s3">\</span><span class="pl-s3">ConversionRate</span>(<span class="pl-s3">\</span><span class="pl-s3">Currency</span><span class="pl-k">::</span><span class="pl-c1">USD</span>, <span class="pl-s3">\</span><span class="pl-s3">Currency</span><span class="pl-k">::</span><span class="pl-c1">EUR</span>);</span>
+<span class="pl-s2"><span class="pl-vo">$response</span> <span class="pl-k">=</span> <span class="pl-vo">$service</span><span class="pl-k">-&gt;</span>ConversionRate(<span class="pl-vo">$request</span>);</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-s3">echo</span> <span class="pl-vo">$response</span><span class="pl-k">-&gt;</span>getConversionRateResult();</span></pre></div>
+
+<p>Note that this is not recommended usage. Normally code generation and web services calls will be two separate processes.</p>
+
+<h3>
+<a id="options" class="anchor" href="#options" aria-hidden="true"><span class="octicon octicon-link"></span></a>Options</h3>
+
+<p>The generator supports a range of options which can be set in the configuration.</p>
+
+<h4>
+<a id="inputfile" class="anchor" href="#inputfile" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>inputFile</code>
+</h4>
+
+<p>The path or url to the WSDL to generate classes from.</p>
+
+<h4>
+<a id="outputdir" class="anchor" href="#outputdir" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>outputDir</code>
+</h4>
+
+<p>The directory to place the generated classes in. It will be created if it does not already exist.</p>
+
+<h4>
+<a id="namespacename" class="anchor" href="#namespacename" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>namespaceName</code>
+</h4>
+
+<p>The <a href="http://php.net/manual/en/language.namespaces.php">namespace</a> to use for the generated classes. If not set classes will be generated without a namespace.</p>
+
+<h5>
+<a id="example-usage-1" class="anchor" href="#example-usage-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example usage</h5>
+
+<p>The following configuration will place generated code from the <a href="http://wiki.cdyne.com/?title=CDYNE_Weather">CDYNE Weather web service</a> under the <code>CDyne\Weather</code> namespace:</p>
+
+<div class="highlight highlight-php"><pre><span class="pl-s2"><span class="pl-vo">$generator</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-s3">\Wsdl2PhpGenerator\</span><span class="pl-s3">Generator</span>();</span>
+<span class="pl-s2"><span class="pl-vo">$generator</span><span class="pl-k">-&gt;</span>generate(</span>
+<span class="pl-s2">    <span class="pl-k">new</span> <span class="pl-s3">\Wsdl2PhpGenerator\</span><span class="pl-s3">Config</span>(<span class="pl-s3">array</span>(</span>
+<span class="pl-s2">        <span class="pl-s1"><span class="pl-pds">'</span>inputFile<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s1"><span class="pl-pds">'</span>http://wsf.cdyne.com/WeatherWS/Weather.asmx?wsdl<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s2">        <span class="pl-s1"><span class="pl-pds">'</span>outputDir<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s1"><span class="pl-pds">'</span>/tmp/weather<span class="pl-pds">'</span></span></span>
+<span class="pl-s2">        <span class="pl-s1"><span class="pl-pds">'</span>namespaceName<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s1"><span class="pl-pds">'</span>CDyne\Weather<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s2">    ))</span>
+<span class="pl-s2">);</span></pre></div>
+
+<h4>
+<a id="classnames" class="anchor" href="#classnames" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>classNames</code>
+</h4>
+
+<p>A comma-separared list or array of class names to generate. All other classes in the WSDL will be ignored.</p>
+
+<h5>
+<a id="example-usage-2" class="anchor" href="#example-usage-2" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example usage</h5>
+
+<p>The following configuration will only generate <code>AmazonEC2</code> and <code>CopyImageType</code> classes from the Amazon EC2 webservice.</p>
+
+<div class="highlight highlight-php"><pre><span class="pl-s2"><span class="pl-vo">$generator</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-s3">\Wsdl2PhpGenerator\</span><span class="pl-s3">Generator</span>();</span>
+<span class="pl-s2"><span class="pl-vo">$generator</span><span class="pl-k">-&gt;</span>generate(</span>
+<span class="pl-s2">    <span class="pl-k">new</span> <span class="pl-s3">\Wsdl2PhpGenerator\</span><span class="pl-s3">Config</span>(<span class="pl-s3">array</span>(</span>
+<span class="pl-s2">        <span class="pl-s1"><span class="pl-pds">'</span>inputFile<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s1"><span class="pl-pds">'</span>https://s3.amazonaws.com/ec2-downloads/2013-10-01.ec2.wsdl<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s2">        <span class="pl-s1"><span class="pl-pds">'</span>outputDir<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s1"><span class="pl-pds">'</span>/tmp/amazon<span class="pl-pds">'</span></span></span>
+<span class="pl-s2">        <span class="pl-s1"><span class="pl-pds">'</span>classNames<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s1"><span class="pl-pds">'</span>AmazonEC2, CopyImageType<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s2">    ))</span>
+<span class="pl-s2">);</span></pre></div>
+
+<h4>
+<a id="sharedtypes" class="anchor" href="#sharedtypes" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>sharedTypes</code>
+</h4>
+
+<p>If enabled this makes all types with the same identify use the same class and only generate it once. The default solution is to prepend numbering to avoid name clashes.</p>
+
+<h4>
+<a id="constructorparamsdefaulttonull" class="anchor" href="#constructorparamsdefaulttonull" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>constructorParamsDefaultToNull</code>
+</h4>
+
+<p>If enabled this sets the default value of all parameters in all constructors to <code>null</code>. If this is used then properties must be set using accessors.</p>
+
+<h4>
+<a id="soapclientclass" class="anchor" href="#soapclientclass" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>soapClientClass</code>
+</h4>
+
+<p>The base class to use for generated services. This should be a subclass of the <a href="http://php.net/manual/en/class.soapclient.php">PHP <code>SoapClient</code></a>.</p>
+
+<p>Examples of third party SOAP client implementations which can be used:</p>
+
+<ul>
+<li><a href="https://github.com/BeSimple/BeSimpleSoapClient">BeSimpleSoapClient</a></li>
+<li>
+<a href="https://github.com/zendframework/Component_ZendSoap">ZendFramework2 SOAP Component</a> </li>
+<li><a href="https://github.com/dcarbone/soap-plus">soap-plus</a></li>
+<li><a href="https://gist.github.com/RobThree/4117914">SoapClientEx</a></li>
+</ul>
+
+<p>Note that is is the responsibility of the surrounding code to ensure that the base class is available during code generation and when calling web services.</p>
+
+<h5>
+<a id="example-usage-3" class="anchor" href="#example-usage-3" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example usage</h5>
+
+<p>The following configuration will use the BeSimple SOAP client as base class:</p>
+
+<div class="highlight highlight-php"><pre><span class="pl-s2"><span class="pl-vo">$generator</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-s3">\Wsdl2PhpGenerator\</span><span class="pl-s3">Generator</span>();</span>
+<span class="pl-s2"><span class="pl-vo">$generator</span><span class="pl-k">-&gt;</span>generate(</span>
+<span class="pl-s2">    <span class="pl-k">new</span> <span class="pl-s3">\Wsdl2PhpGenerator\</span><span class="pl-s3">Config</span>(<span class="pl-s3">array</span>(</span>
+<span class="pl-s2">        <span class="pl-s1"><span class="pl-pds">'</span>inputFile<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s1"><span class="pl-pds">'</span>input.wsdl<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s2">        <span class="pl-s1"><span class="pl-pds">'</span>outputDir<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s1"><span class="pl-pds">'</span>/tmp/output<span class="pl-pds">'</span></span></span>
+<span class="pl-s2">        <span class="pl-s1"><span class="pl-pds">'</span>soapClientClass<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s1"><span class="pl-pds">'</span>\BeSimple\SoapClient\SoapClient<span class="pl-pds">'</span></span></span>
+<span class="pl-s2">    ))</span>
+<span class="pl-s2">);</span></pre></div>
+
+<h4>
+<a id="soapclientoptions" class="anchor" href="#soapclientoptions" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>soapClientOptions</code>
+</h4>
+
+<p>An array of configuration options to pass to the SoapClient. They will be used when accessing the WSDL to generate the code and as defaults for subsequent requests to the SOAP service. The PHP documentation has <a href="http://php.net/manual/en/soapclient.soapclient.php#refsect1-soapclient.soapclient-parameters">a list of supported options</a>.</p>
+
+<p>The list of options for the client can be extended by using more advanced <code>SoapClient</code> implementations.</p>
+
+<p>Note that wsdl2phpgenerator expects the <code>features</code> option to contain <code>SOAP_SINGLE_ELEMENT_ARRAYS</code>. <a href="http://php.net/manual/en/soapclient.soapclient.php#73082">This ensures that type hints are consistent even if sequences only contain one element</a>. If the <code>features</code> option is set explicitly in <code>soapClientOptions</code> the <code>SOAP_SINGLE_ELEMENT_ARRAYS</code> must also be added explicitly.</p>
+
+<h5>
+<a id="example-usage-4" class="anchor" href="#example-usage-4" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example usage</h5>
+
+<p>The following configuration will enable basic authentication and set the connection timeout to 60 seconds.</p>
+
+<div class="highlight highlight-php"><pre><span class="pl-s2"><span class="pl-vo">$generator</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-s3">\Wsdl2PhpGenerator\</span><span class="pl-s3">Generator</span>();</span>
+<span class="pl-s2"><span class="pl-vo">$generator</span><span class="pl-k">-&gt;</span>generate(</span>
+<span class="pl-s2">    <span class="pl-k">new</span> <span class="pl-s3">\Wsdl2PhpGenerator\</span><span class="pl-s3">Config</span>(<span class="pl-s3">array</span>(</span>
+<span class="pl-s2">        <span class="pl-s1"><span class="pl-pds">'</span>inputFile<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s1"><span class="pl-pds">'</span>input.wsdl<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s2">        <span class="pl-s1"><span class="pl-pds">'</span>outputDir<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s1"><span class="pl-pds">'</span>/tmp/output<span class="pl-pds">'</span></span></span>
+<span class="pl-s2">        <span class="pl-s1"><span class="pl-pds">'</span>soapClientOptions<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s3">array</span>(</span>
+<span class="pl-s2">            <span class="pl-s1"><span class="pl-pds">'</span>authentication<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-c1">SOAP_AUTHENTICATION_BASIC</span>,</span>
+<span class="pl-s2">            <span class="pl-s1"><span class="pl-pds">'</span>login<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s1"><span class="pl-pds">'</span>username<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s2">            <span class="pl-s1"><span class="pl-pds">'</span>password<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s1"><span class="pl-pds">'</span>secret<span class="pl-pds">'</span></span></span>
+<span class="pl-s2">            <span class="pl-s1"><span class="pl-pds">'</span>connection_timeout<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-c1">60</span>,</span>
+<span class="pl-s2">    ))</span>
+<span class="pl-s2">);</span></pre></div>
+
+<h2>
+<a id="versioning" class="anchor" href="#versioning" aria-hidden="true"><span class="octicon octicon-link"></span></a>Versioning</h2>
+
+<p>This project aims to use <a href="http://semver.org/">semantic versioning</a>. The following constitutes the public API:</p>
 
 <ul>
 <li><code>\Wsdl2PhpGenerator\GeneratorInterface</code></li>
 <li><code>\Wsdl2PhpGenerator\ConfigInterface</code></li>
-</ul><p>Changes to these means that the major version will be increased. Additional features and bug fixes increate minor and patch versions.</p>
+<li>Generated code</li>
+</ul>
+
+<p>Backwards incompatible changes to these means that the major version will be increased. Additional features and bug fixes increate minor and patch versions.</p>
       </section>
     </div>
 
