@@ -1,4 +1,31 @@
 
+3.0.0 / 2014-11-25 
+==================
+
+For a walkthrough of the changes in 3.x see https://github.com/wsdl2phpgenerator/wsdl2phpgenerator/blob/3.x/docs/whats-new-in-3.0.md.
+
+ * Convert to PSR4 file structure.
+ * Update Generator interface.
+ * Removed @todo and @deprecated elements.
+ * Enable SOAP_SINGLE_ELEMENT_ARRAYS by default.
+ * ArrayOf* types ganeration as separate classes
+ * Refactor SoapClient options
+ * Add support for custom SoapClient implementations.
+ * Replace noIncludes configuration option with generated autoloader.
+ * Remove the oneFile configuration options.
+ * Remove prefix and suffix configuration options.
+ * Remove noTypeConstructor config option.
+ * Remove createAccessors configuration option.
+ * Remove the classExists option.
+ * Type name generation respects namespace.
+ * Add type hinting for array parameters.
+ * Use DateTime parameters and return values for date properties.
+ * Fix identifier when loading dependencies.
+ * Remove @access
+ * Refactor the project to be used as a library only.
+ * Refactored Config and ConfigInterface to use an OptionsResolver instead of fixed string inputs.
+ * Members are protected if accessor methods are being used
+
 2.5.5 / 2014-11-17 
 ==================
 
