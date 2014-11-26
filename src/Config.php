@@ -72,6 +72,7 @@ class Config implements ConfigInterface
             'constructorParamsDefaultToNull' => false,
             'soapClientClass'               => '\SoapClient',
             'soapClientOptions'             => array(),
+            'proxy'                         => false
         ));
 
         $resolver->setNormalizers(array(
@@ -82,12 +83,78 @@ class Config implements ConfigInterface
 
                 return array_map('trim', explode(',', $value));
             },
+
             'soapClientOptions' => function (Options $options, $value) {
                 // The SOAP_SINGLE_ELEMENT_ARRAYS feature should be enabled by default if no other option has been set
                 // explicitly while leaving this out. This cannot be handled in the defaults as soapClientOptions is a
                 // nested array.
                 if (!isset($value['features'])) {
                     $value['features'] = SOAP_SINGLE_ELEMENT_ARRAYS;
+                }
+                return $value;
+            },
+
+            'proxy' => function(Options $options, $value) {
+                if (!$value) return false; // proxy setting is optional
+                if (is_string($value)) {
+                    $url_parts = parse_url($value);
+                    $proxy_array = array(
+                        'proxy_host' => $url_parts['host']
+                    );
+                    if (isset($url_parts['scheme'])) {
+                        $proxy_array['proxy_scheme'] = $url_parts['scheme'];
+                    }
+                    if (isset($url_parts['port'])) {
+                        $proxy_array['proxy_port'] = $url_parts['port'];
+                    }
+                    if (isset($url_parts['user'])) {
+                        $proxy_array['proxy_login'] = $url_parts['user'];
+                    }
+                    if (isset($url_parts['pass'])) {
+                        $proxy_array['proxy_password'] = $url_parts['pass'];
+                    }
+                    $value = $proxy_array;
+                } elseif (is_array($value)) {
+                    if (!array_key_exists('host', $value) && !array_key_exists('proxy_host', $value)) {
+                        throw new InvalidArgumentException(
+                            '"proxy" configuration setting must contain at least a key "host" or "proxy_host"'
+                        );
+                    }
+                    // normalize short keys ('host') to SoapClient config standard ('proxy_host')
+                    if (isset($value['host'])) {
+                        $value['proxy_host'] = $value['host'];
+                        unset($value['host']);
+                    }
+                    if (isset($value['port'])) {
+                        $value['proxy_port'] = $value['port'];
+                        unset($value['port']);
+                    }
+                    if (isset($value['login'])) {
+                        $value['proxy_login'] = $value['login'];
+                        unset($value['login']);
+                    }
+                    if (isset($value['password'])) {
+                        $value['proxy_password'] = $value['password'];
+                        unset($value['password']);
+                    }
+                } else {
+                    throw new InvalidArgumentException(
+                        '"proxy" configuration setting must be either a string containing the proxy url '
+                        . 'or an array containing at least a key "host" or "proxy_host"'
+                    );
+                }
+                if (!isset($value['proxy_port'])) {
+                    $value['proxy_port'] = 8080; // Default value of SoapClient
+                }
+                if (!is_int($value['proxy_port'])) {
+                    $value['proxy_port'] = intval($value['proxy_port']); // convert strings to integers for better testing
+                }
+                $value['proxy_url'] = (isset($value['proxy_scheme']) ? $value['proxy_scheme'] . '://' : '');
+                $value['proxy_url'] .= $value['proxy_host'] . ':' . $value['proxy_port'];
+                if (isset($value['proxy_login']) && isset($value['proxy_password'])) {
+                    $value['http_header_auth'] = array(
+                        'Proxy-Authorization: Basic ' . base64_encode($value['proxy_login'] . ':' . $value['proxy_password'])
+                    );
                 }
                 return $value;
             }

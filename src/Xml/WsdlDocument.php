@@ -40,23 +40,14 @@ class WsdlDocument extends SchemaDocument
         // Otherwise we risk generating code for a WSDL that is no longer valid.
         $options = array_merge($this->config->get('soapClientOptions'), array('cache_wsdl' => WSDL_CACHE_NONE));
 
-
-        if (isset($options['proxy_host']) && $options['proxy_host']) {
-            $proxy = $options['proxy_host'];
-            if (isset($options['proxy_port']) && $options['proxy_port']) $proxy .= ':' . $options['proxy_port'];
-            $opts = array(
-                'http' => array(
-                    'proxy' => $proxy,
-                )
-            );
-            $context = stream_context_create($opts);
-            libxml_set_streams_context($context);
+        if (is_array($config->get('proxy'))) {
+            $options = array_merge($options, $config->get('proxy'));
         }
 
         try {
             $soapClientClass = new \ReflectionClass($this->config->get('soapClientClass'));
             $this->soapClient = $soapClientClass->newInstance($wsdlUrl, $options);
-            parent::__construct($wsdlUrl);
+            parent::__construct($config, $wsdlUrl); // we need to pass $config for proxy settings
         } catch (SoapFault $e) {
             throw new Exception('Unable to load WSDL: ' . $e->getMessage(), $e->getCode(), $e);
         }

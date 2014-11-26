@@ -7,6 +7,7 @@ namespace Wsdl2PhpGenerator\Xml;
 use DOMDocument;
 use DOMElement;
 use Exception;
+use Wsdl2PhpGenerator\ConfigInterface;
 
 /**
  * A SchemaDocument represents an XML element which contains type elements.
@@ -40,10 +41,23 @@ class SchemaDocument extends XmlNode
      */
     protected static $loadedUrls;
 
-    public function __construct($xsdUrl)
+    public function __construct(ConfigInterface $config, $xsdUrl)
     {
         $this->url = $xsdUrl;
 
+        $proxy = $config->get('proxy');
+        if (is_array($proxy)) {
+            $opts = array(
+                'http' => array(
+                    'proxy' => $proxy['proxy_url']
+                )
+            );
+            if (isset($proxy['http_header_auth'])) {
+                $opts['http']['header'] = $proxy['http_header_auth'];
+            }
+            $context = stream_context_create($opts);
+            libxml_set_streams_context($context);
+        }
         $document = new DOMDocument();
         $loaded = $document->load($xsdUrl);
         if (!$loaded) {
@@ -67,7 +81,7 @@ class SchemaDocument extends XmlNode
             }
 
             if (!in_array($referenceUrl, self::$loadedUrls)) {
-                $this->referereces[] = new SchemaDocument($referenceUrl);
+                $this->referereces[] = new SchemaDocument($config, $referenceUrl);
             }
         }
     }
