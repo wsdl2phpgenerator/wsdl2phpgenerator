@@ -94,8 +94,11 @@ class Config implements ConfigInterface
                 return $value;
             },
 
-            'proxy' => function(Options $options, $value) {
-                if (!$value) return false; // proxy setting is optional
+            'proxy' => function (Options $options, $value) {
+                if (!$value) {
+                    // proxy setting is optional
+                    return false;
+                }
                 if (is_string($value)) {
                     $url_parts = parse_url($value);
                     $proxy_array = array(
