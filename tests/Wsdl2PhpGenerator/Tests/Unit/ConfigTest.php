@@ -86,4 +86,79 @@ class ConfigTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($config->get('classNames'), $expected);
         }
     }
+
+    /**
+     * Test the proxy normalizer
+     */
+    public function testProxyNormalizer()
+    {
+        $toTest = array(
+            array(
+                'in' => '192.168.0.1:8080',
+                'out' => array(
+                    'proxy_host' => '192.168.0.1',
+                    'proxy_port' => 8080,
+                    'proxy_url' => '192.168.0.1:8080'
+                )
+            ),
+            array(
+                'in' => 'tcp://192.168.0.1:8080',
+                'out' => array(
+                    'proxy_host' => '192.168.0.1',
+                    'proxy_port' => 8080,
+                    'proxy_url' => 'tcp://192.168.0.1:8080',
+                    'proxy_scheme' => 'tcp'
+                )
+            ),
+            array(
+                'in' => 'tcp://user:secret@192.168.0.1:8080',
+                'out' => array(
+                    'proxy_host' => '192.168.0.1',
+                    'proxy_port' => 8080,
+                    'proxy_url' => 'tcp://192.168.0.1:8080',
+                    'proxy_scheme' => 'tcp',
+                    'proxy_login' => 'user',
+                    'proxy_password' => 'secret',
+                    'http_header_auth' => array('Proxy-Authorization: Basic dXNlcjpzZWNyZXQ=')
+                )
+            ),
+            array(
+                'in' => array(
+                    'host' => '192.168.0.1',
+                    'port' => 8080
+                ),
+                'out' => array(
+                    'proxy_host' => '192.168.0.1',
+                    'proxy_port' => 8080,
+                    'proxy_url' => '192.168.0.1:8080'
+                )
+            ),
+            array(
+                'in' => array(
+                    'host' => '192.168.0.1',
+                    'port' => 8080,
+                    'login' => 'user',
+                    'password' => 'secret'
+                ),
+                'out' => array(
+                    'proxy_host' => '192.168.0.1',
+                    'proxy_port' => 8080,
+                    'proxy_url' => '192.168.0.1:8080',
+                    'proxy_login' => 'user',
+                    'proxy_password' => 'secret',
+                    'http_header_auth' => array('Proxy-Authorization: Basic dXNlcjpzZWNyZXQ=')
+                )
+            ),
+        );
+
+        foreach ($toTest as $testcase) {
+            $config = new Config(array(
+                'inputFile'  => null,
+                'outputDir'  => null,
+                'proxy' => $testcase['in']
+            ));
+
+            $this->assertEquals($config->get('proxy'), $testcase['out']);
+        }
+    }
 }
