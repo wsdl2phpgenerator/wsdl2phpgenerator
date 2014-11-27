@@ -150,17 +150,14 @@ class ConfigTest extends PHPUnit_Framework_TestCase
                 'in' => '192.168.0.1:8080',
                 'out' => array(
                     'proxy_host' => '192.168.0.1',
-                    'proxy_port' => 8080,
-                    'proxy_url' => '192.168.0.1:8080'
+                    'proxy_port' => 8080
                 )
             ),
             array(
                 'in' => 'tcp://192.168.0.1:8080',
                 'out' => array(
                     'proxy_host' => '192.168.0.1',
-                    'proxy_port' => 8080,
-                    'proxy_url' => 'tcp://192.168.0.1:8080',
-                    'proxy_scheme' => 'tcp'
+                    'proxy_port' => 8080
                 )
             ),
             array(
@@ -168,38 +165,32 @@ class ConfigTest extends PHPUnit_Framework_TestCase
                 'out' => array(
                     'proxy_host' => '192.168.0.1',
                     'proxy_port' => 8080,
-                    'proxy_url' => 'tcp://192.168.0.1:8080',
-                    'proxy_scheme' => 'tcp',
                     'proxy_login' => 'user',
-                    'proxy_password' => 'secret',
-                    'http_header_auth' => array('Proxy-Authorization: Basic dXNlcjpzZWNyZXQ=')
+                    'proxy_password' => 'secret'
                 )
             ),
             array(
                 'in' => array(
-                    'host' => '192.168.0.1',
-                    'port' => 8080
+                    'proxy_host' => '192.168.0.1',
+                    'proxy_port' => 8080
                 ),
                 'out' => array(
                     'proxy_host' => '192.168.0.1',
-                    'proxy_port' => 8080,
-                    'proxy_url' => '192.168.0.1:8080'
+                    'proxy_port' => 8080
                 )
             ),
             array(
                 'in' => array(
-                    'host' => '192.168.0.1',
-                    'port' => 8080,
-                    'login' => 'user',
-                    'password' => 'secret'
+                    'proxy_host' => '192.168.0.1',
+                    'proxy_port' => 8080,
+                    'proxy_login' => 'user',
+                    'proxy_password' => 'secret'
                 ),
                 'out' => array(
                     'proxy_host' => '192.168.0.1',
                     'proxy_port' => 8080,
-                    'proxy_url' => '192.168.0.1:8080',
                     'proxy_login' => 'user',
-                    'proxy_password' => 'secret',
-                    'http_header_auth' => array('Proxy-Authorization: Basic dXNlcjpzZWNyZXQ=')
+                    'proxy_password' => 'secret'
                 )
             ),
         );

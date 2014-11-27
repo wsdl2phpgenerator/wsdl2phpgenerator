@@ -104,9 +104,6 @@ class Config implements ConfigInterface
                     $proxy_array = array(
                         'proxy_host' => $url_parts['host']
                     );
-                    if (isset($url_parts['scheme'])) {
-                        $proxy_array['proxy_scheme'] = $url_parts['scheme'];
-                    }
                     if (isset($url_parts['port'])) {
                         $proxy_array['proxy_port'] = $url_parts['port'];
                     }
@@ -118,42 +115,18 @@ class Config implements ConfigInterface
                     }
                     $value = $proxy_array;
                 } elseif (is_array($value)) {
-                    if (!array_key_exists('host', $value) && !array_key_exists('proxy_host', $value)) {
+                    if (!array_key_exists('proxy_host', $value) || !array_key_exists('proxy_port', $value)) {
                         throw new InvalidArgumentException(
-                            '"proxy" configuration setting must contain at least a key "host" or "proxy_host"'
+                            '"proxy" configuration setting must contain at least keys "proxy_host" and "proxy_port'
                         );
-                    }
-                    // normalize short keys ('host') to SoapClient config standard ('proxy_host')
-                    if (isset($value['host'])) {
-                        $value['proxy_host'] = $value['host'];
-                        unset($value['host']);
-                    }
-                    if (isset($value['port'])) {
-                        $value['proxy_port'] = $value['port'];
-                        unset($value['port']);
-                    }
-                    if (isset($value['login'])) {
-                        $value['proxy_login'] = $value['login'];
-                        unset($value['login']);
-                    }
-                    if (isset($value['password'])) {
-                        $value['proxy_password'] = $value['password'];
-                        unset($value['password']);
                     }
                 } else {
                     throw new InvalidArgumentException(
                         '"proxy" configuration setting must be either a string containing the proxy url '
-                        . 'or an array containing at least a key "host" or "proxy_host"'
+                        . 'or an array containing at least a key "proxy_host" and "proxy_port"'
                     );
                 }
                 $value['proxy_port'] = intval($value['proxy_port']); // make sure port is an integer
-                $value['proxy_url'] = (isset($value['proxy_scheme']) ? $value['proxy_scheme'] . '://' : '');
-                $value['proxy_url'] .= $value['proxy_host'] . ':' . $value['proxy_port'];
-                if (isset($value['proxy_login']) && isset($value['proxy_password'])) {
-                    $value['http_header_auth'] = array(
-                        'Proxy-Authorization: Basic ' . base64_encode($value['proxy_login'] . ':' . $value['proxy_password'])
-                    );
-                }
                 return $value;
             }
         ));

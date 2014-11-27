@@ -49,11 +49,13 @@ class SchemaDocument extends XmlNode
         if (is_array($proxy)) {
             $opts = array(
                 'http' => array(
-                    'proxy' => $proxy['proxy_url']
+                    'proxy' => $proxy['proxy_host'] . ':' . $proxy['proxy_port']
                 )
             );
-            if (isset($proxy['http_header_auth'])) {
-                $opts['http']['header'] = $proxy['http_header_auth'];
+            if (isset($proxy['proxy_login']) && isset($proxy['proxy_password'])) {
+                $opts['http']['header'] =  array(
+                    'Proxy-Authorization: Basic ' . base64_encode($proxy['proxy_login'] . ':' . $proxy['proxy_password'])
+                );
             }
             $context = stream_context_create($opts);
             libxml_set_streams_context($context);
