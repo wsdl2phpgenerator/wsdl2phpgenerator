@@ -3,6 +3,7 @@
 namespace Wsdl2PhpGenerator;
 
 use InvalidArgumentException;
+use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -116,12 +117,12 @@ class Config implements ConfigInterface
                     $value = $proxy_array;
                 } elseif (is_array($value)) {
                     if (!array_key_exists('proxy_host', $value) || !array_key_exists('proxy_port', $value)) {
-                        throw new InvalidArgumentException(
+                        throw new InvalidOptionsException(
                             '"proxy" configuration setting must contain at least keys "proxy_host" and "proxy_port'
                         );
                     }
                 } else {
-                    throw new InvalidArgumentException(
+                    throw new InvalidOptionsException(
                         '"proxy" configuration setting must be either a string containing the proxy url '
                         . 'or an array containing at least a key "proxy_host" and "proxy_port"'
                     );
