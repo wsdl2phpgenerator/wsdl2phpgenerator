@@ -146,12 +146,7 @@ class Config implements ConfigInterface
                         . 'or an array containing at least a key "host" or "proxy_host"'
                     );
                 }
-                if (!isset($value['proxy_port'])) {
-                    $value['proxy_port'] = 8080; // Default value of SoapClient
-                }
-                if (!is_int($value['proxy_port'])) {
-                    $value['proxy_port'] = intval($value['proxy_port']); // convert strings to integers for better testing
-                }
+                $value['proxy_port'] = intval($value['proxy_port']); // make sure port is an integer
                 $value['proxy_url'] = (isset($value['proxy_scheme']) ? $value['proxy_scheme'] . '://' : '');
                 $value['proxy_url'] .= $value['proxy_host'] . ':' . $value['proxy_port'];
                 if (isset($value['proxy_login']) && isset($value['proxy_password'])) {
