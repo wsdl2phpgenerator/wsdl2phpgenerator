@@ -5,13 +5,12 @@ namespace src\Functional;
 
 use Wsdl2PhpGenerator\Tests\Functional\FunctionalTestCase;
 
-class SimpleTypeInheritanceTest extends FunctionalTestCase {
+class SimpleTypeInheritanceTest extends FunctionalTestCase
+{
     public function testInheritance()
     {
-        $this->assertEquals(array('_' => 'Communication_Usage_TypeEnumeration', 'Primary' => 'boolean'),
-            $this->getPropertiesWithTypes('Communication_Usage_Type_ReferenceType'));
-        $this->assertEquals(array('_' => 'string', 'someVar2' => 'string[]'),
-            $this->getPropertiesWithTypes('Simple_Type_Inheritance'));
+        $this->assertEquals(array('_' => 'Communication_Usage_TypeEnumeration', 'Primary' => 'boolean'), $this->getPropertiesWithTypes('Communication_Usage_Type_ReferenceType'));
+        $this->assertEquals(array('_' => 'string', 'someVar2' => 'string[]'), $this->getPropertiesWithTypes('Simple_Type_Inheritance'));
     }
 
     protected function getWsdlPath()
@@ -34,4 +33,3 @@ class SimpleTypeInheritanceTest extends FunctionalTestCase {
         return $result;
     }
 }
-
