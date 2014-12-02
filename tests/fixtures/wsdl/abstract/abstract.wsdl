@@ -13,53 +13,6 @@
     <schema targetNamespace="urn:www.example.org:abstract"
       xmlns="http://www.w3.org/2001/XMLSchema">
         <import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-        <xsd:include schemaLocation="type.xsd" />
-
-        <xsd:simpleType name="Communication_Usage_TypeEnumeration">
-            <xsd:restriction base="xsd:string">
-                <xsd:annotation>
-                    <xsd:appinfo>
-                        <xsd:enumeration value="Academic Contact"/>
-                        <xsd:enumeration value="Business"/>
-                        <xsd:enumeration value="Home"/>
-                        <xsd:enumeration value="Lockbox"/>
-                        <xsd:enumeration value="Work"/>
-                    </xsd:appinfo>
-                </xsd:annotation>
-            </xsd:restriction>
-        </xsd:simpleType>
-
-        <xsd:complexType name="Communication_Usage_Type_ReferenceType">
-            <xsd:annotation>
-                <xsd:documentation>Reference element representing a unique
-                    instance of Communication Usage Type.
-                </xsd:documentation>
-                <xsd:appinfo>
-                    <xsd:Validation>
-                        <xsd:documentation>Invalid Communication Usage
-                            Type
-                        </xsd:documentation>
-                        <xsd:Validation_Message>Invalid Communication Usage
-                            Type
-                        </xsd:Validation_Message>
-                    </xsd:Validation>
-                </xsd:appinfo>
-            </xsd:annotation>
-            <xsd:simpleContent>
-                <xsd:extension
-                        base="xsd:Communication_Usage_TypeEnumeration">
-                    <xsd:attribute name="Primary" type="xsd:boolean">
-                        <xsd:annotation>
-                            <xsd:documentation>Boolean attribute identifying
-                                whether the Communcation Usage Type is
-                                Primary.
-                            </xsd:documentation>
-                        </xsd:annotation>
-                    </xsd:attribute>
-                </xsd:extension>
-            </xsd:simpleContent>
-        </xsd:complexType>
-
 
       <complexType name="Book">
         <sequence>
