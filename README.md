@@ -115,7 +115,7 @@ $generator->generate(
 
 #### `classNames`
 
-A comma-separared list or array of class names to generate. All other classes in the WSDL will be ignored.
+A comma-separared list or array of class names to generate. All other classes in the WSDL will be ignored. Deprectated. Will be removed in 4.0.0.
 
 ##### Example usage
 
@@ -131,7 +131,24 @@ $generator->generate(
     ))
 );
 ```
+#### `methodNames`
 
+A comma-separared list or array of service operations to generate. Will generate types that needs for selected operations. Service class will contains only selected operation.
+
+##### Example usage
+
+The following configuration will generates type for ReplaceRouteTableAssociation and RequestSpotInstances operation. Also Service class will be generated.
+
+```php
+$generator = new \Wsdl2PhpGenerator\Generator();
+$generator->generate(
+    new \Wsdl2PhpGenerator\Config(array(
+        'inputFile' => 'https://s3.amazonaws.com/ec2-downloads/2013-10-01.ec2.wsdl',
+        'outputDir' => '/tmp/amazon'
+        'methodNames' => 'ReplaceRouteTableAssociation, RequestSpotInstances',
+    ))
+);
+```
 #### `sharedTypes`
 
 If enabled this makes all types with the same identify use the same class and only generate it once. The default solution is to prepend numbering to avoid name clashes.
