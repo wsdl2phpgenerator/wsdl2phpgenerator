@@ -109,7 +109,7 @@ class Service implements ClassGenerator
     /**
      * @param $identifier
      *
-     * @return null|Type
+     * @return Type|null
      */
     public function getType($identifier)
     {
