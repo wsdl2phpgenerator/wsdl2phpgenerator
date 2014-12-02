@@ -44,10 +44,9 @@ class ServiceOperationFilter implements FilterInterface
             foreach ($operation->getParams() as $param => $hint) {
                 $arr = $operation->getPhpDocParams($param, $service->getTypes());
                 $type = $service->getType($arr['type']);
-                if (empty($type)) {
-                    continue;
+                if (!empty($type)) {
+                    $types[$type->getIdentifier()] = $type;
                 }
-                $types[$type->getIdentifier()] = $type;
             }
             $returns = $operation->getReturns();
             $types[$operation->getReturns()] = $service->getType($returns);
