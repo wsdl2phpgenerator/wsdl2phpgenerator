@@ -32,7 +32,7 @@ class ServiceOperationFilter implements FilterInterface
      *
      * @return Service
      */
-    public function filter($service)
+    public function filter(Service $service)
     {
         $types = array();
         $operations = array();
