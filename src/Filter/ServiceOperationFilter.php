@@ -55,7 +55,7 @@ class ServiceOperationFilter implements FilterInterface
             // Discover types used in returns
             $returns = $operation->getReturns();
             $types[$operation->getReturns()] = $service->getType($returns);
-            $types = array_merge($types, $this->calculateInheretedTypes($service, $types, $types));
+            $types = $this->calculateInheretedTypes($service, $types, $types);
             $operations[] = $operation;
         }
         $filteredService = new Service($this->config, $service->getIdentifier(), $types, $service->getDescription());
