@@ -4,6 +4,9 @@ namespace Wsdl2PhpGenerator\Filter;
 
 use Wsdl2PhpGenerator\Service;
 
+/**
+ * Default filter implementation. Doesn't do anything.
+ */
 class DefaultFilter implements FilterInterface
 {
     /**
