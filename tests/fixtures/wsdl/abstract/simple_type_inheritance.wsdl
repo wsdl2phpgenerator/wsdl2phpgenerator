@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions
+        name="abstract"
+        targetNamespace="urn:www.example.org:abstract"
+        xmlns="http://schemas.xmlsoap.org/wsdl/"
+        xmlns:tns="urn:www.example.org:abstract"
+        xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+        xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+        xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <wsdl:types>
+        <schema targetNamespace="urn:www.example.org:abstract"
+                xmlns="http://www.w3.org/2001/XMLSchema">
+            <import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+            <xsd:simpleType name="Communication_Usage_TypeEnumeration">
+                <xsd:restriction base="xsd:string">
+                    <xsd:annotation>
+                        <xsd:appinfo>
+                            <xsd:enumeration value="Academic Contact"/>
+                            <xsd:enumeration value="Business"/>
+                            <xsd:enumeration value="Home"/>
+                            <xsd:enumeration value="Lockbox"/>
+                            <xsd:enumeration value="Work"/>
+                        </xsd:appinfo>
+                    </xsd:annotation>
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:complexType name="Communication_Usage_Type_ReferenceType">
+                <xsd:annotation>
+                    <xsd:documentation>Reference element representing a unique
+                        instance of Communication Usage Type.
+                    </xsd:documentation>
+                    <xsd:appinfo>
+                        <xsd:Validation>
+                            <xsd:documentation>Invalid Communication Usage
+                                Type
+                            </xsd:documentation>
+                            <xsd:Validation_Message>Invalid Communication Usage
+                                Type
+                            </xsd:Validation_Message>
+                        </xsd:Validation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+                <xsd:simpleContent>
+                    <xsd:extension
+                            base="xsd:Communication_Usage_TypeEnumeration">
+                        <xsd:attribute name="Primary" type="xsd:boolean">
+                            <xsd:annotation>
+                                <xsd:documentation>Boolean attribute identifying
+                                    whether the Communcation Usage Type is
+                                    Primary.
+                                </xsd:documentation>
+                            </xsd:annotation>
+                        </xsd:attribute>
+                    </xsd:extension>
+                </xsd:simpleContent>
+            </xsd:complexType>
+            <xsd:complexType name="Simple_Type_Inheritance">
+                <xsd:complexContent>
+                    <xsd:extension base="xsd:string">
+                        <sequence>
+                            <element name="someVar2" type="xsd:string"
+                                     minOccurs="0" maxOccurs="unbounded"/>
+                        </sequence>
+                    </xsd:extension>
+                </xsd:complexContent>
+            </xsd:complexType>
+            <xsd:simpleType name="MailAdress">
+                <xsd:restriction base="xsd:string">
+                    <xsd:pattern value="[^@]+@[^@]+"></xsd:pattern>
+                </xsd:restriction>
+            </xsd:simpleType>
+            <xsd:complexType name="ContactMailAdress">
+                <xsd:simpleContent>
+                    <xsd:extension base="tns:MailAdress">
+                        <xsd:attribute name="contactPersonName" type="xsd:string" use="required"></xsd:attribute>
+                    </xsd:extension>
+                </xsd:simpleContent>
+            </xsd:complexType>
+        </schema>
+    </wsdl:types>
+    <wsdl:portType name="SimpleInheritanceServicePort">
+
+    </wsdl:portType>
+    <wsdl:binding name="SimpleInheritanceServiceBinding"
+                  type="tns:SimpleInheritanceServicePort">
+    </wsdl:binding>
+    <wsdl:service name="SimpleInheritanceService">
+        <wsdl:port name="SimpleInheritanceServicePort"
+                   binding="tns:SimpleInheritanceServiceBinding">
+            <wsdlsoap:address location="http://localhost:8080/"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
