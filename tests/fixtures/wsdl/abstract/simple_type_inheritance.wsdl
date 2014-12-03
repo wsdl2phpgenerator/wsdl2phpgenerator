@@ -66,6 +66,18 @@
                     </xsd:extension>
                 </xsd:complexContent>
             </xsd:complexType>
+            <xsd:simpleType name="MailAdress">
+                <xsd:restriction base="xsd:string">
+                    <xsd:pattern value="[^@]+@[^@]+"></xsd:pattern>
+                </xsd:restriction>
+            </xsd:simpleType>
+            <xsd:complexType name="ContactMailAdress">
+                <xsd:simpleContent>
+                    <xsd:extension base="tns:MailAdress">
+                        <xsd:attribute name="contactPersonName" type="xsd:string" use="required"></xsd:attribute>
+                    </xsd:extension>
+                </xsd:simpleContent>
+            </xsd:complexType>
         </schema>
     </wsdl:types>
     <wsdl:portType name="SimpleInheritanceServicePort">

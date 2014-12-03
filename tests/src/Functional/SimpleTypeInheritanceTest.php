@@ -11,6 +11,7 @@ class SimpleTypeInheritanceTest extends FunctionalTestCase
     {
         $this->assertEquals(array('_' => 'Communication_Usage_TypeEnumeration', 'Primary' => 'boolean'), $this->getPropertiesWithTypes('Communication_Usage_Type_ReferenceType'));
         $this->assertEquals(array('_' => 'string', 'someVar2' => 'string[]'), $this->getPropertiesWithTypes('Simple_Type_Inheritance'));
+        $this->assertEquals(array('_' => 'MailAdress', 'contactPersonName' => 'string'), $this->getPropertiesWithTypes('ContactMailAdress'));
     }
 
     protected function getWsdlPath()
