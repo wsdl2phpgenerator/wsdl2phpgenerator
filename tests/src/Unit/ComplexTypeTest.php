@@ -24,7 +24,8 @@ class ComplexTypeTest extends CodeGenerationTestCase
         // The important part is the accessors part.
         $config = new Config(array(
             'inputFile' => null,
-            'outputDir' => null
+            'outputDir' => null,
+            'constructorParamsDefaultToNull' => true,
         ));
         $complexType = new ComplexType($config, 'ComplexTypeTestClass');
         $complexType->addMember('dateTime', 'dateTimeAttribute', false);
@@ -49,6 +50,28 @@ class ComplexTypeTest extends CodeGenerationTestCase
             'dateTimeAttribute',
             '\DateTime'
         );
+    }
+
+    /**
+     * Test handling of attributes of the DateTime type for constructorParamsDefaultToNull
+     */
+    public function testDateTimeNullConstructorParams()
+    {
+        // Add constructorParamsDefaultToNull to default configuration
+        $config = new Config(array(
+            'inputFile' => null,
+            'outputDir' => null,
+            'constructorParamsDefaultToNull' => true,
+        ));
+        $complexType = new ComplexType($config, 'ComplexTypeDateTimeNullTestClass');
+        $complexType->addMember('dateTime', 'dateTimeAttribute', false);
+
+        $this->generateClass($complexType);
+
+        $this->assertClassExists('ComplexTypeDateTimeNullTestClass');
+
+        $object = new \ComplexTypeDateTimeNullTestClass(null);
+        $this->assertNull($object->getDateTimeAttribute());
     }
 
     /**
