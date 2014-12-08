@@ -5,32 +5,48 @@ namespace src\Functional;
 
 use Wsdl2PhpGenerator\Tests\Functional\FunctionalTestCase;
 
+/**
+ * Test case to ensure that we support inheritance for simple types.
+ */
 class SimpleTypeInheritanceTest extends FunctionalTestCase
 {
-    public function testInheritance()
-    {
-        $this->assertEquals(array('_' => 'Communication_Usage_TypeEnumeration', 'Primary' => 'boolean'), $this->getPropertiesWithTypes('Communication_Usage_Type_ReferenceType'));
-        $this->assertEquals(array('_' => 'string', 'someVar2' => 'string[]'), $this->getPropertiesWithTypes('Simple_Type_Inheritance'));
-        $this->assertEquals(array('_' => 'MailAdress', 'contactPersonName' => 'string'), $this->getPropertiesWithTypes('ContactMailAdress'));
-    }
+
+    protected $namespace = 'SimpleTypeInheritance';
 
     protected function getWsdlPath()
     {
-        return $this->fixtureDir . '/abstract/simple_type_inheritance.wsdl';
+        return $this->fixtureDir . '/simpletypeinheritance/simple_type_inheritance.wsdl';
     }
 
-    private function getPropertiesWithTypes($className)
+    protected function configureOptions()
     {
-        $class = new \ReflectionClass($className);
-        $properties = $class->getProperties();
-        $result = array();
-        /** @var \ReflectionProperty $property */
-        foreach ($properties as $property) {
-            if (!preg_match('#@var (.*?)\$(.*?)\n#s', $property->getDocComment(), $annotations)) {
-                continue;
-            }
-            $result[trim($annotations[2])] = trim($annotations[1]);
-        }
-        return $result;
+        $this->config->set('namespaceName', $this->namespace);
+        // Use constructorParamsDefaultToNull to avoid having to pass arguments
+        // when instantiating objects for assertions.
+        $this->config->set('constructorParamsDefaultToNull', true);
     }
+
+    public function testStringInheritance()
+    {
+        $object = new \SimpleTypeInheritance\Simple_Type_Inheritance();
+        $this->assertAttributeDocBlockInternalType('string', '_', $object);
+        // The actual DocBlock states that the attribute is string[]. This is
+        // not a valid PHP type so we use array instead.
+        $this->assertAttributeDocBlockInternalType('array', 'someVar2', $object);
+    }
+
+    public function testEnumInheritance()
+    {
+        $object = new \SimpleTypeInheritance\Communication_Usage_Type_ReferenceType();
+        $this->assertAttributeDocBlockInternalType('Communication_Usage_TypeEnumeration', '_', $object);
+        $this->assertAttributeDocBlockInternalType('boolean', 'Primary', $object);
+    }
+
+    public function testPatternInheritance()
+    {
+        $object = new \SimpleTypeInheritance\ContactMailAdress();
+        $this->assertAttributeDocBlockInternalType('MailAdress', '_', $object);
+        $this->assertAttributeDocBlockInternalType('string', 'contactPersonName', $object);
+    }
+
 }
