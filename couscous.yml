@@ -1,0 +1,27 @@
+template:
+    url: https://github.com/CouscousPHP/Template-Light
+
+# Base URL of the published website
+baseUrl: http://wsdl2phpgenerator.github.io/wsdl2phpgenerator
+
+# Used to link to the GitHub project
+github:
+    user: wsdl2phpgenerator
+    repo: wsdl2phpgenerator
+
+title: wsdl2phpgenerator
+subTitle: Generate PHP classes from a WSDL
+
+# The left menu bar
+menu:
+    items:
+        home:
+            text: Home page
+            absoluteUrl: /
+        3.0:
+            text: What is new in 3.0
+            # Or absolute urls
+            absoluteUrl: /docs/whats-new-in-3.0.html
+        changelog:
+            text: Changelog
+            absoluteUrl: /CHANGES.html

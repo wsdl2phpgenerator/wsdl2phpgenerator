@@ -21,6 +21,8 @@
         "symfony/options-resolver": "~2.3"
     },
     "require-dev": {
+        "php": ">=5.4.0",
+        "couscous/couscous": "~1.0",
         "kasperg/phing-github": "0.2.*",
         "phing/phing": "~2.7",
         "php-vcr/phpunit-testlistener-vcr": "1.1.*",
