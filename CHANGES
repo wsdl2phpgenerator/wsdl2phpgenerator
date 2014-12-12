@@ -1,4 +1,10 @@
 
+3.0.1 / 2014-12-12 
+==================
+
+ * Fix null pointer exception when combining DateTime attributes and constructorParamsDefaultToNull configuration.
+ * Fix simple type inheritance.
+
 3.0.0 / 2014-11-25 
 ==================
 
