@@ -139,4 +139,70 @@ class ConfigTest extends PHPUnit_Framework_TestCase
             'SOAP_SINGLE_ELEMENT_ARRAYS should not be enabled if other options have been enabled explicitly.'
         );
     }
+
+    /**
+     * Test the proxy normalizer
+     */
+    public function testProxyNormalizer()
+    {
+        $toTest = array(
+            array(
+                'in' => '192.168.0.1:8080',
+                'out' => array(
+                    'proxy_host' => '192.168.0.1',
+                    'proxy_port' => 8080
+                )
+            ),
+            array(
+                'in' => 'tcp://192.168.0.1:8080',
+                'out' => array(
+                    'proxy_host' => '192.168.0.1',
+                    'proxy_port' => 8080
+                )
+            ),
+            array(
+                'in' => 'tcp://user:secret@192.168.0.1:8080',
+                'out' => array(
+                    'proxy_host' => '192.168.0.1',
+                    'proxy_port' => 8080,
+                    'proxy_login' => 'user',
+                    'proxy_password' => 'secret'
+                )
+            ),
+            array(
+                'in' => array(
+                    'proxy_host' => '192.168.0.1',
+                    'proxy_port' => 8080
+                ),
+                'out' => array(
+                    'proxy_host' => '192.168.0.1',
+                    'proxy_port' => 8080
+                )
+            ),
+            array(
+                'in' => array(
+                    'proxy_host' => '192.168.0.1',
+                    'proxy_port' => 8080,
+                    'proxy_login' => 'user',
+                    'proxy_password' => 'secret'
+                ),
+                'out' => array(
+                    'proxy_host' => '192.168.0.1',
+                    'proxy_port' => 8080,
+                    'proxy_login' => 'user',
+                    'proxy_password' => 'secret'
+                )
+            ),
+        );
+
+        foreach ($toTest as $testcase) {
+            $config = new Config(array(
+                'inputFile'  => null,
+                'outputDir'  => null,
+                'proxy' => $testcase['in']
+            ));
+
+            $this->assertEquals($config->get('proxy'), $testcase['out']);
+        }
+    }
 }
