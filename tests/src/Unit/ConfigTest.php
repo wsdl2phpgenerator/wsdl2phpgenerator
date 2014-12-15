@@ -75,6 +75,19 @@ class ConfigTest extends PHPUnit_Framework_TestCase
      */
     public function testClassNamesNormalizer()
     {
+        $this->assertNormalizerForParameter('classNames');
+    }
+
+    /**
+     * Test the methodNames normalizer against various form of input values.
+     */
+    public function testMethodNamesNormalizer()
+    {
+        $this->assertNormalizerForParameter('methodNames');
+    }
+
+    private function assertNormalizerForParameter($parameterName)
+    {
         $toTest = array(
             ''                   => array(),
             'test1'              => array('test1'),
@@ -86,10 +99,10 @@ class ConfigTest extends PHPUnit_Framework_TestCase
             $config = new Config(array(
                 'inputFile'  => null,
                 'outputDir'  => null,
-                'classNames' => $value
+                $parameterName => $value
             ));
 
-            $this->assertEquals($config->get('classNames'), $expected);
+            $this->assertEquals($config->get($parameterName), $expected);
         }
     }
 

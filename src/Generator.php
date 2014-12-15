@@ -7,6 +7,7 @@ namespace Wsdl2PhpGenerator;
 
 use \Exception;
 use Psr\Log\LoggerInterface;
+use Wsdl2PhpGenerator\Filter\FilterFactory;
 use Wsdl2PhpGenerator\Xml\WsdlDocument;
 
 /**
@@ -140,7 +141,7 @@ class Generator implements GeneratorInterface
         foreach ($this->wsdl->getOperations() as $function) {
             $this->log('Loading function ' . $function->getName());
 
-            $this->service->addOperation($function->getName(), $function->getParams(), $function->getDocumentation(), $function->getReturns());
+            $this->service->addOperation(new Operation($function->getName(), $function->getParams(), $function->getDocumentation(), $function->getReturns()));
         }
 
         $this->log('Done loading service ' . $service->getName());
@@ -214,8 +215,11 @@ class Generator implements GeneratorInterface
      */
     protected function savePhp()
     {
-        $service = $this->service->getClass();
-
+        $factory = new FilterFactory();
+        $filter = $factory->create($this->config);
+        $filteredService = $filter->filter($this->service);
+        $service = $filteredService->getClass();
+        $filteredTypes = $filteredService->getTypes();
         if ($service == null) {
             throw new Exception('No service loaded');
         }
@@ -224,7 +228,7 @@ class Generator implements GeneratorInterface
 
         // Generate all type classes
         $types = array();
-        foreach ($this->types as $type) {
+        foreach ($filteredTypes as $type) {
             $class = $type->getClass();
             if ($class != null) {
                 $types[] = $class;
@@ -254,5 +258,4 @@ class Generator implements GeneratorInterface
     {
         $this->logger = $logger;
     }
-
 }
