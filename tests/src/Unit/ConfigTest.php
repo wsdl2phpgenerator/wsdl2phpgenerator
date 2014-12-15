@@ -86,6 +86,12 @@ class ConfigTest extends PHPUnit_Framework_TestCase
         $this->assertNormalizerForParameter('methodNames');
     }
 
+    /**
+     * Assert that a parameter in either string or array form is normalized to
+     * array form.
+     *
+     * @param string $parameterName The parameter name.
+     */
     private function assertNormalizerForParameter($parameterName)
     {
         $toTest = array(

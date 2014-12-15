@@ -82,8 +82,11 @@ class Service implements ClassGenerator
     }
 
     /**
-     * @param string $operationName
-     * @return Operation|null if not exists
+     * Returns an operation provided by the service based on its name.
+     *
+     * @param string $operationName The name of the operation.
+     *
+     * @return Operation|null The operation or null if it does not exist.
      */
     public function getOperation($operationName)
     {
@@ -91,7 +94,9 @@ class Service implements ClassGenerator
     }
 
     /**
-     * @return string
+     * Returns the description of the service.
+     *
+     * @return string The service description.
      */
     public function getDescription()
     {
@@ -99,7 +104,9 @@ class Service implements ClassGenerator
     }
 
     /**
-     * @return string
+     * Returns the identifier for the service ie. the name.
+     *
+     * @return string The service name.
      */
     public function getIdentifier()
     {
@@ -107,16 +114,20 @@ class Service implements ClassGenerator
     }
 
     /**
-     * @param $identifier
+     * Returns a type used by the service based on its name.
      *
-     * @return Type|null
+     * @param string $identifier The identifier for the type.
+     *
+     * @return Type|null The type or null if the type does not exist.
      */
     public function getType($identifier)
     {
         return isset($this->types[$identifier])? $this->types[$identifier]: null;
     }
     /**
-     * @return Type[]
+     * Returns all types defined by the service.
+     *
+     * @return Type[] An array of types.
      */
     public function getTypes()
     {
@@ -200,9 +211,11 @@ class Service implements ClassGenerator
     }
 
     /**
-     * @param Operation $operation
+     * Add an operation to the service.
+     *
+     * @param Operation $operation The operation to be added.
      */
-    public function addOperation($operation)
+    public function addOperation(Operation $operation)
     {
         $this->operations[$operation->getName()] = $operation;
     }

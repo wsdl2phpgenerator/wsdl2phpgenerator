@@ -160,7 +160,10 @@ class ComplexType extends Type
     }
 
     /**
-     * @return ComplexType
+     * Returns the base type for the type if any.
+     *
+     * @return ComplexType|null
+     *   The base type or null if the type has no base type.
      */
     public function getBaseType()
     {

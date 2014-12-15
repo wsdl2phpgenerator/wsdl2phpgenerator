@@ -8,11 +8,19 @@ use Wsdl2PhpGenerator\Filter\ServiceOperationFilter;
 use Wsdl2PhpGenerator\Operation;
 use Wsdl2PhpGenerator\Service;
 
+/**
+ * Use test for the ServiceOperationFilter class.
+ */
 class ServiceOperationFilterTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var ConfigInterface */
+    /**
+     * @var ConfigInterface
+     */
     private $config;
-    /** @var ServiceOperationFilter */
+
+    /**
+     * @var ServiceOperationFilter
+     */
     private $sut;
 
     protected function setUp()
@@ -26,6 +34,11 @@ class ServiceOperationFilterTest extends \PHPUnit_Framework_TestCase
         $this->sut = new ServiceOperationFilter($this->config);
     }
 
+    /**
+     * Test that the service operation filter is able to reduce
+     * operations and types based on operations.
+
+     */
     public function testFilterReturnsFilteredServiceWithUsedTypesOnly()
     {
         $sourceService = $this->givenServiceWithOperations();
@@ -48,6 +61,8 @@ class ServiceOperationFilterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Setup and return a service with operations and types.
+     *
      * @return Service
      */
     private function givenServiceWithOperations()

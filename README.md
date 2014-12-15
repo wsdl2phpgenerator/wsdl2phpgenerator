@@ -115,7 +115,9 @@ $generator->generate(
 
 #### `classNames`
 
-A comma-separared list or array of class names to generate. All other classes in the WSDL will be ignored. Deprectated. Will be removed in 4.0.0.
+A comma-separared list or array of class names to generate. All other classes in the WSDL will be ignored.
+
+This option is deprecated and will be removed in 4.0.0. Use `methodNames` instead.
 
 ##### Example usage
 
@@ -133,11 +135,11 @@ $generator->generate(
 ```
 #### `methodNames`
 
-A comma-separared list or array of service operations to generate. Will generate types that needs for selected operations. Service class will contains only selected operation.
+A comma-separated list or array of service operations to generate. This will only generate types that are needed for selected operations. The generated service class will only contain selected operation.
 
 ##### Example usage
 
-The following configuration will generates type for ReplaceRouteTableAssociation and RequestSpotInstances operation. Also Service class will be generated.
+The following configuration will generate operations and types for `ReplaceRouteTableAssociation` and `RequestSpotInstances` operations.
 
 ```php
 $generator = new \Wsdl2PhpGenerator\Generator();

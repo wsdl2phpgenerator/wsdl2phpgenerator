@@ -7,7 +7,8 @@ use Wsdl2PhpGenerator\ConfigInterface;
 use Wsdl2PhpGenerator\Service;
 
 /**
- * Filter that leaves only selected operations. Also removes not used types
+ * Filter that leaves only selected operations and types used by these
+ * operations.
  */
 class ServiceOperationFilter implements FilterInterface
 {
@@ -31,9 +32,7 @@ class ServiceOperationFilter implements FilterInterface
     }
 
     /**
-     * @param Service $service
-     *
-     * @return Service
+     * @inheritdoc
      */
     public function filter(Service $service)
     {
