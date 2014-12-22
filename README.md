@@ -117,6 +117,8 @@ $generator->generate(
 
 A comma-separared list or array of class names to generate. All other classes in the WSDL will be ignored.
 
+This option is deprecated and will be removed in 4.0.0. Use `operationNames` instead.
+
 ##### Example usage
 
 The following configuration will only generate `AmazonEC2` and `CopyImageType` classes from the Amazon EC2 webservice.
@@ -131,7 +133,24 @@ $generator->generate(
     ))
 );
 ```
+#### `operationNames`
 
+A comma-separated list or array of service operations to generate. This will only generate types that are needed for selected operations. The generated service class will only contain selected operation.
+
+##### Example usage
+
+The following configuration will generate operations and types for `ReplaceRouteTableAssociation` and `RequestSpotInstances` operations.
+
+```php
+$generator = new \Wsdl2PhpGenerator\Generator();
+$generator->generate(
+    new \Wsdl2PhpGenerator\Config(array(
+        'inputFile' => 'https://s3.amazonaws.com/ec2-downloads/2013-10-01.ec2.wsdl',
+        'outputDir' => '/tmp/amazon'
+        'operationNames' => 'ReplaceRouteTableAssociation, RequestSpotInstances',
+    ))
+);
+```
 #### `sharedTypes`
 
 If enabled this makes all types with the same identify use the same class and only generate it once. The default solution is to prepend numbering to avoid name clashes.

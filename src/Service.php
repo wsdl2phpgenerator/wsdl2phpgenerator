@@ -47,7 +47,7 @@ class Service implements ClassGenerator
     private $description;
 
     /**
-     * @var array An array of Types
+     * @var Type[] An array of Types
      */
     private $types;
 
@@ -61,9 +61,12 @@ class Service implements ClassGenerator
     {
         $this->config = $config;
         $this->identifier = $identifier;
-        $this->types = $types;
         $this->description = $description;
         $this->operations = array();
+        $this->types = array();
+        foreach ($types as $type) {
+            $this->types[$type->getIdentifier()] = $type;
+        }
     }
 
     /**
@@ -76,6 +79,59 @@ class Service implements ClassGenerator
         }
 
         return $this->class;
+    }
+
+    /**
+     * Returns an operation provided by the service based on its name.
+     *
+     * @param string $operationName The name of the operation.
+     *
+     * @return Operation|null The operation or null if it does not exist.
+     */
+    public function getOperation($operationName)
+    {
+        return isset($this->operations[$operationName])? $this->operations[$operationName]: null;
+    }
+
+    /**
+     * Returns the description of the service.
+     *
+     * @return string The service description.
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Returns the identifier for the service ie. the name.
+     *
+     * @return string The service name.
+     */
+    public function getIdentifier()
+    {
+        return $this->identifier;
+    }
+
+    /**
+     * Returns a type used by the service based on its name.
+     *
+     * @param string $identifier The identifier for the type.
+     *
+     * @return Type|null The type or null if the type does not exist.
+     */
+    public function getType($identifier)
+    {
+        return isset($this->types[$identifier])? $this->types[$identifier]: null;
+    }
+    /**
+     * Returns all types defined by the service.
+     *
+     * @return Type[] An array of types.
+     */
+    public function getTypes()
+    {
+        return $this->types;
     }
 
     /**
@@ -155,16 +211,12 @@ class Service implements ClassGenerator
     }
 
     /**
-     * Adds an operation to the service
+     * Add an operation to the service.
      *
-     * @param string $name
-     * @param array $params
-     * @param string $description
-     * @param string $returns
+     * @param Operation $operation The operation to be added.
      */
-    public function addOperation($name, $params, $description, $returns)
+    public function addOperation(Operation $operation)
     {
-        $this->operations[] = new Operation($name, $params, $description, $returns);
+        $this->operations[$operation->getName()] = $operation;
     }
-
 }
