@@ -30,7 +30,7 @@ class ServiceOperationFilter implements FilterInterface
     public function __construct($config)
     {
         $this->config = $config;
-        $this->methods = $config->get('methodNames');
+        $this->methods = $config->get('operationNames');
     }
 
     /**

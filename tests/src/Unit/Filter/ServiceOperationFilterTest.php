@@ -28,7 +28,7 @@ class ServiceOperationFilterTest extends \PHPUnit_Framework_TestCase
         $this->config = new Config(array(
             'inputFile' => 'tst.wsdl',
             'outputDir' => 'test',
-            'methodNames' => 'GetBook'
+            'operationNames' => 'GetBook'
 
         ));
         $this->sut = new ServiceOperationFilter($this->config);

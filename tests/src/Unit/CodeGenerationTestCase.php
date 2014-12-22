@@ -199,9 +199,9 @@ class CodeGenerationTestCase extends PHPUnit_Framework_TestCase
      */
     protected function assertClassHasMethod($class, $method, $message = '')
     {
-        $class = (!$class instanceof ReflectionClass) ? new ReflectionClass($class) : $class;
         $method = ($method instanceof ReflectionMethod) ? $method->getName() : $method;
 
+        $class = (!$class instanceof ReflectionClass) ? new ReflectionClass($class) : $class;
         $classMethodNames = array();
         foreach ($class->getMethods() as $classMethod) {
             $classMethodNames[] = $classMethod->getName();
@@ -213,6 +213,32 @@ class CodeGenerationTestCase extends PHPUnit_Framework_TestCase
             implode('", "', $classMethodNames)
         ) : $message;
         $this->assertContains($method, $classMethodNames, $message);
+    }
+
+
+    /**
+     * Assert that a class does not have a method defined.
+     *
+     * @param ReflectionClass|string $class The class or the name of it.
+     * @param ReflectionMethod|string $method The method or the name of it.
+     * @param string $message The message to show if the assertion fails.
+     */
+    protected function assertClassNotHasMethod($class, $method, $message = '')
+    {
+        $class = (!$class instanceof ReflectionClass) ? new ReflectionClass($class) : $class;
+        $method = ($method instanceof ReflectionMethod) ? $method->getName() : $method;
+
+        $classMethodNames = array();
+        foreach ($class->getMethods() as $classMethod) {
+            $classMethodNames[] = $classMethod->getName();
+        }
+        $message = (empty($message)) ? sprintf(
+            'Method "%s" found among methods for class "%s" ("%s")',
+            $method,
+            $class->getName(),
+            implode('", "', $classMethodNames)
+        ) : $message;
+        $this->assertNotContains($method, $classMethodNames, $message);
     }
 
     /**

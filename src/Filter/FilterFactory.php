@@ -17,7 +17,8 @@ class FilterFactory
      */
     public function create(ConfigInterface $config)
     {
-        if (!empty($config->get('methodNames'))) {
+        $operationNames = $config->get('operationNames');
+        if (!empty($operationNames)) {
             return new ServiceOperationFilter($config);
         } else {
             return new DefaultFilter();

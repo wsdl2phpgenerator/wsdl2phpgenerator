@@ -68,7 +68,7 @@ class Config implements ConfigInterface
             'verbose'                        => false,
             'namespaceName'                  => '',
             'classNames'                     => '',
-            'methodNames'                    => '',
+            'operationNames'                 => '',
             'sharedTypes'                    => false,
             'constructorParamsDefaultToNull' => false,
             'soapClientClass'               => '\SoapClient',
@@ -86,7 +86,7 @@ class Config implements ConfigInterface
         $resolver->setNormalizers(
             array(
                 'classNames' => $trimNormalizer,
-                'methodNames' => $trimNormalizer,
+                'operationNames' => $trimNormalizer,
                 'soapClientOptions' => function (Options $options, $value) {
                     // The SOAP_SINGLE_ELEMENT_ARRAYS feature should be enabled
                     // by default if no other option has been set explicitly

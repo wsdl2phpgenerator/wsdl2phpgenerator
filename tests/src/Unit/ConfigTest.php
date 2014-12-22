@@ -79,11 +79,11 @@ class ConfigTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test the methodNames normalizer against various form of input values.
+     * Test the operationNames normalizer against various form of input values.
      */
-    public function testMethodNamesNormalizer()
+    public function testOperationNamesNormalizer()
     {
-        $this->assertNormalizerForParameter('methodNames');
+        $this->assertNormalizerForParameter('operationNames');
     }
 
     /**

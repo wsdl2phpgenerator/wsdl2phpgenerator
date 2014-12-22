@@ -117,7 +117,7 @@ $generator->generate(
 
 A comma-separared list or array of class names to generate. All other classes in the WSDL will be ignored.
 
-This option is deprecated and will be removed in 4.0.0. Use `methodNames` instead.
+This option is deprecated and will be removed in 4.0.0. Use `operationNames` instead.
 
 ##### Example usage
 
@@ -133,7 +133,7 @@ $generator->generate(
     ))
 );
 ```
-#### `methodNames`
+#### `operationNames`
 
 A comma-separated list or array of service operations to generate. This will only generate types that are needed for selected operations. The generated service class will only contain selected operation.
 
@@ -147,7 +147,7 @@ $generator->generate(
     new \Wsdl2PhpGenerator\Config(array(
         'inputFile' => 'https://s3.amazonaws.com/ec2-downloads/2013-10-01.ec2.wsdl',
         'outputDir' => '/tmp/amazon'
-        'methodNames' => 'ReplaceRouteTableAssociation, RequestSpotInstances',
+        'operationNames' => 'ReplaceRouteTableAssociation, RequestSpotInstances',
     ))
 );
 ```
