@@ -5,6 +5,8 @@ namespace Wsdl2PhpGenerator\Filter;
 use Wsdl2PhpGenerator\ComplexType;
 use Wsdl2PhpGenerator\ConfigInterface;
 use Wsdl2PhpGenerator\Service;
+use Wsdl2PhpGenerator\Type;
+use Wsdl2PhpGenerator\Variable;
 
 /**
  * Filter that leaves only selected operations and types used by these
@@ -48,13 +50,20 @@ class ServiceOperationFilter implements FilterInterface
                 $arr = $operation->getPhpDocParams($param, $service->getTypes());
                 $type = $service->getType($arr['type']);
                 if (!empty($type)) {
-                    $types[$type->getIdentifier()] = $type;
+                    $types[] = $type;
                 }
             }
             // Discover types used in returns
             $returns = $operation->getReturns();
-            $types[$operation->getReturns()] = $service->getType($returns);
-            $types = $this->calculateInheretedTypes($service, $types, $types);
+            $types[] = $service->getType($returns);
+
+            foreach ($types as $type) {
+                $types = array_merge($types, $this->findUsedTypes($service, $type)) ;
+            }
+            // Remove duplicated using standard equality checks. Default string
+            // comparison does not work here.
+            $types = array_unique($types, SORT_REGULAR);
+
             $operations[] = $operation;
         }
         $filteredService = new Service($this->config, $service->getIdentifier(), $types, $service->getDescription());
@@ -66,46 +75,41 @@ class ServiceOperationFilter implements FilterInterface
     }
 
     /**
-     * Function to find all needed types
+     * Function to find all needed types.
      *
      * @param Service $service Source service with all types and operations
-     * @param Type[] $finalTypes Types for selected operations
-     * @param Type[] $typesToProcess Types that we should process in iteration
+     * @param Type $type Type to extract types from.
+     *
+     * @return Type[]
+     *   All identified types referred to including the current type.
      */
-    private function calculateInheretedTypes($service, $finalTypes, $typesToProcess)
+    private function findUsedTypes($service, Type $type)
     {
-        $foundedTypes = array();
-        /** @var Type $type */
-        foreach ($typesToProcess as $name => $type) {
-            if (empty($type)) {
+        if (!$type instanceof ComplexType) {
+            return array();
+        }
+
+        $foundTypes = array($type);
+
+        // Process Base type
+        $baseType = $type->getBaseType();
+        if ($baseType) {
+            $foundTypes = array_merge($foundTypes, $this->findUsedTypes($service, $baseType));
+        }
+
+        $members = $type->getMembers();
+        foreach ($members as $member) {
+            /** @var Variable $member */
+            // Remove array mark from type name
+            $memberTypeName = str_replace('[]', '', $member->getType());
+            $memberType = $service->getType($memberTypeName);
+            if (!$memberType) {
                 continue;
             }
-            // Process only complex types.
-            if ($type instanceof ComplexType) {
-                /** @var ComplexType $type */
-                $members = $type->getMembers();
-                foreach ($members as $member) {
-                    /** @var Variable $member */
-                    // Remove array mark from type name
-                    $memberTypeName = str_replace('[]', '', $member->getType());
-                    $memberType = $service->getType($memberTypeName);
-                    if (!$memberType || isset($finalTypes[$memberTypeName])) {
-                        continue;
-                    }
-                    $finalTypes[$memberTypeName] = $memberType;
-                    $foundedTypes[$memberTypeName] = $memberType;
-                }
-                // Process Base type
-                $baseType = $type->getBaseType();
-                if ($baseType && $baseType instanceof ComplexType) {
-                    $finalTypes[$baseType->getDatatype()] = $baseType;
-                    $foundedTypes[$baseType->getDatatype()] = $baseType;
-                }
-            }
+
+            $foundTypes = array_merge($foundTypes, $this->findUsedTypes($service, $memberType));
         }
-        if (!$foundedTypes) {
-            return $finalTypes;
-        }
-        return $this->calculateInheretedTypes($service, $finalTypes, $foundedTypes);
+
+        return $foundTypes;
     }
 }
