@@ -103,7 +103,7 @@ class TypeNode extends XmlNode
                 if ($minOccurs === '') {
                     return null;
                 }
-                return $minOccurs;
+                return (int) $minOccurs;
             }
         }
         return null;
