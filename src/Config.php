@@ -132,15 +132,21 @@ class Config implements ConfigInterface
                     }
                     $value = $proxy_array;
                 } elseif (is_array($value)) {
+                    foreach ($value as $k => $v) {
+                        // Prepend proxy_ to each key to match the expended proxy option names of the PHP SoapClient.
+                        $value['proxy_' . $k] = $v;
+                        unset($value[$k]);
+                    }
+
                     if (empty($value['proxy_host']) || empty($value['proxy_port'])) {
                         throw new InvalidOptionsException(
-                            '"proxy" configuration setting must contain at least keys "proxy_host" and "proxy_port'
+                            '"proxy" configuration setting must contain at least keys "host" and "port'
                         );
                     }
                 } else {
                     throw new InvalidOptionsException(
                         '"proxy" configuration setting must be either a string containing the proxy url '
-                        . 'or an array containing at least a key "proxy_host" and "proxy_port"'
+                        . 'or an array containing at least a key "host" and "port"'
                     );
                 }
 

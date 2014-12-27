@@ -190,8 +190,8 @@ class ConfigTest extends PHPUnit_Framework_TestCase
             ),
             array(
                 'in' => array(
-                    'proxy_host' => '192.168.0.1',
-                    'proxy_port' => 8080
+                    'host' => '192.168.0.1',
+                    'port' => 8080
                 ),
                 'out' => array(
                     'proxy_host' => '192.168.0.1',
@@ -200,10 +200,10 @@ class ConfigTest extends PHPUnit_Framework_TestCase
             ),
             array(
                 'in' => array(
-                    'proxy_host' => '192.168.0.1',
-                    'proxy_port' => 8080,
-                    'proxy_login' => 'user',
-                    'proxy_password' => 'secret'
+                    'host' => '192.168.0.1',
+                    'port' => 8080,
+                    'login' => 'user',
+                    'password' => 'secret'
                 ),
                 'out' => array(
                     'proxy_host' => '192.168.0.1',
