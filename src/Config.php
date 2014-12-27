@@ -96,6 +96,14 @@ class Config implements ConfigInterface
                 if (!isset($value['features'])) {
                     $value['features'] = SOAP_SINGLE_ELEMENT_ARRAYS;
                 }
+
+                // Merge proxy options into soapClientOptions to propagate general configuration options into the
+                // SoapClient. It is important that the proxy configuration has been normalized before it is merged.
+                // The OptionResolver ensures this by normalizing values on access.
+                if (!empty($options['proxy'])) {
+                    $value = array_merge($options['proxy'], $value);
+                }
+
                 return $value;
             },
 

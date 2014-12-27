@@ -224,4 +224,28 @@ class ConfigTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($config->get('proxy'), $testcase['out']);
         }
     }
+
+    /**
+     * Test that proxy configuration is propagated to SoapClient options.
+     */
+    public function testSoapProxyConfiguration()
+    {
+        $proxyString = 'tcp://user:secret@192.168.0.1:8080';
+        $proxyConfig = array(
+            'proxy_host' => '192.168.0.1',
+            'proxy_port' => 8080,
+            'proxy_login' => 'user',
+            'proxy_password' => 'secret',
+        );
+
+        $config = array(
+            'inputFile' => null,
+            'outputDir' => null,
+            'proxy' => $proxyString,
+        );
+        $config = new Config($config);
+
+        $this->assertEquals($proxyConfig, $config->get('proxy'));
+        $this->assertArraySubset($proxyConfig, $config->get('soapClientOptions'));
+    }
 }
