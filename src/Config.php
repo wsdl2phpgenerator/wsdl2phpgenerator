@@ -114,6 +114,10 @@ class Config implements ConfigInterface
                 }
                 if (is_string($value)) {
                     $url_parts = parse_url($value);
+                    if ($url_parts === false) {
+                        throw new InvalidOptionsException('"proxy" configuration setting contains a malformed url.');
+                    }
+
                     $proxy_array = array(
                         'proxy_host' => $url_parts['host']
                     );
@@ -128,7 +132,7 @@ class Config implements ConfigInterface
                     }
                     $value = $proxy_array;
                 } elseif (is_array($value)) {
-                    if (!array_key_exists('proxy_host', $value) || !array_key_exists('proxy_port', $value)) {
+                    if (empty($value['proxy_host']) || empty($value['proxy_port'])) {
                         throw new InvalidOptionsException(
                             '"proxy" configuration setting must contain at least keys "proxy_host" and "proxy_port'
                         );
@@ -139,7 +143,10 @@ class Config implements ConfigInterface
                         . 'or an array containing at least a key "proxy_host" and "proxy_port"'
                     );
                 }
-                $value['proxy_port'] = intval($value['proxy_port']); // make sure port is an integer
+
+                // Make sure port is an integer
+                $value['proxy_port'] = intval($value['proxy_port']);
+
                 return $value;
             }
         ));

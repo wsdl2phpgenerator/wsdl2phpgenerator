@@ -53,18 +53,23 @@ class SchemaDocument extends XmlNode
                 )
             );
             if (isset($proxy['proxy_login']) && isset($proxy['proxy_password'])) {
+                // Support for proxy authentication is untested. The current implementation is based on
+                // http://php.net/manual/en/function.stream-context-create.php#74431.
                 $opts['http']['header'] =  array(
-                    'Proxy-Authorization: Basic ' . base64_encode($proxy['proxy_login'] . ':' . $proxy['proxy_password'])
+                    'Proxy-Authorization: Basic ' .
+                    base64_encode($proxy['proxy_login'] . ':' . $proxy['proxy_password'])
                 );
             }
             $context = stream_context_create($opts);
             libxml_set_streams_context($context);
         }
+
         $document = new DOMDocument();
         $loaded = $document->load($xsdUrl);
         if (!$loaded) {
             throw new Exception('Unable to load XML from '. $xsdUrl);
         }
+
         parent::__construct($document, $document->documentElement);
         // Register the schema to avoid cyclic imports.
         self::$loadedUrls[] = $xsdUrl;
