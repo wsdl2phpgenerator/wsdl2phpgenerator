@@ -9,7 +9,7 @@ build:
             -
               command: 'yes | pecl install soap'
               not_if: 'php -r "exit(extension_loaded(''soap'') ? 0 : 1);"'
-            - 'composer install --dev --no-interaction --prefer-source'
+            - 'composer install --dev --no-interaction'
     tests:
         override:
             -
