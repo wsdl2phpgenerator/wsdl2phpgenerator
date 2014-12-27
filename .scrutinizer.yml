@@ -2,12 +2,23 @@ filter:
     excluded_paths:
         - 'vendor/*'
         - 'tests/generated/*'
-before_commands:
-    # Use --prefer-source to download dependencies via git and avoid GitHub API
-    # rate limits resulting in 502 HTTP responses, build errors and
-    # Composer\Downloader\TransportException.
-    # https://github.com/symfony/symfony/issues/4687
-    - 'composer install --dev --no-interaction --prefer-source'
+
+build:
+    dependencies:
+        override:
+            -
+              command: 'yes | pecl install soap'
+              not_if: 'php -r "exit(extension_loaded(''soap'') ? 0 : 1);"'
+            - 'composer install --dev --no-interaction --prefer-source'
+    tests:
+        override:
+            -
+                command: 'phpunit'
+                coverage:
+                    file: 'build/logs/clover.xml'
+                    format: 'php-clover'
+
+
 tools:
     php_mess_detector:
         config:
@@ -36,12 +47,3 @@ tools:
         excluded_dirs:
             - vendor
             - tests/generated
-
-build:
-    tests:
-        override:
-            -
-                command: 'phpunit'
-                coverage:
-                    file: 'build/logs/clover.xml'
-                    format: 'php-clover'
