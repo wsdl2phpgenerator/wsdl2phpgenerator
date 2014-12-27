@@ -159,6 +159,32 @@ If enabled this makes all types with the same identify use the same class and on
 
 If enabled this sets the default value of all parameters in all constructors to `null`. If this is used then properties must be set using accessors.
 
+#### `proxy`
+
+Specify a proxy to use when accessing the WSDL and other external ressources. This option should be used instead of [the proxy options support by the PHP `SoapClient`] (http://php.net/manual/en/soapclient.soapclient.php) as wsdl2phpgenerator uses more than the SOAP client to extract information.
+
+The following formats are supported:
+
+* An array with the following keys `host`, `port`, `login` and `password` matching [the proxy options support by the PHP `SoapClient`] (http://php.net/manual/en/soapclient.soapclient.php)
+* A string in an URL-like format
+
+The proxy information is used by is used when accessing the WSDL to generate the code and for subsequent requests to the SOAP service.
+
+##### Example usage
+
+The following configuration will use a proxy to access the [Google DoubleClick Ad Exchange Buyer SOAP API](https://developers.google.com/ad-exchange/buyer-soap/):
+
+```php
+$generator = new \Wsdl2PhpGenerator\Generator();
+$generator->generate(
+    new \Wsdl2PhpGenerator\Config(array(
+        'inputFile' => 'https://ads.google.com/apis/ads/publisher/v201306/ActivityService?wsdl',
+        'outputDir' => '/tmp/amazon'
+        'proxy' => 'tcp://user:secret@192.168.0.1:8080',
+    ))
+);
+```
+
 #### `soapClientClass`
 
 The base class to use for generated services. This should be a subclass of the [PHP `SoapClient`](http://php.net/manual/en/class.soapclient.php).
