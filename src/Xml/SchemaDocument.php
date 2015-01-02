@@ -8,6 +8,7 @@ use DOMDocument;
 use DOMElement;
 use Exception;
 use Wsdl2PhpGenerator\ConfigInterface;
+use Wsdl2PhpGenerator\StreamContextFactory;
 
 /**
  * A SchemaDocument represents an XML element which contains type elements.
@@ -45,24 +46,10 @@ class SchemaDocument extends XmlNode
     {
         $this->url = $xsdUrl;
 
-        $proxy = $config->get('proxy');
-        if (is_array($proxy)) {
-            $opts = array(
-                'http' => array(
-                    'proxy' => $proxy['proxy_host'] . ':' . $proxy['proxy_port']
-                )
-            );
-            if (isset($proxy['proxy_login']) && isset($proxy['proxy_password'])) {
-                // Support for proxy authentication is untested. The current implementation is based on
-                // http://php.net/manual/en/function.stream-context-create.php#74431.
-                $opts['http']['header'] =  array(
-                    'Proxy-Authorization: Basic ' .
-                    base64_encode($proxy['proxy_login'] . ':' . $proxy['proxy_password'])
-                );
-            }
-            $context = stream_context_create($opts);
-            libxml_set_streams_context($context);
-        }
+        // Generate a stream context used by libxml to access external resources.
+        // This will allow DOMDocument to load XSDs through a proxy.
+        $streamContextFactory = new StreamContextFactory();
+        libxml_set_streams_context($streamContextFactory->create($config));
 
         $document = new DOMDocument();
         $loaded = $document->load($xsdUrl);
