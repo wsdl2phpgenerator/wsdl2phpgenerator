@@ -108,27 +108,6 @@ class Generator implements GeneratorInterface
     }
 
     /**
-     * Load schemas
-     */
-    protected function loadSchema()
-    {
-        foreach ($this->dom as $dom) {
-            $sxml = simplexml_import_dom($dom);
-            $namespaces = $sxml->getDocNamespaces();
-            if (!empty($namespaces['xsd'])) {
-                foreach ($sxml->xpath('//xsd:import/@schemaLocation') as $schemaUrl) {
-                    // If the URL is relative then try to do a simple
-                    // conversion to an absolute one.
-                    if (strpos($schemaUrl, '//') === false) {
-                        $schemaUrl = dirname($this->config->get('inputFile')) . '/' . $schemaUrl;
-                    }
-                    $this->schema[] = simplexml_load_file($schemaUrl);
-                }
-            }
-        }
-    }
-
-    /**
      * Loads the service class
      */
     protected function loadService()
