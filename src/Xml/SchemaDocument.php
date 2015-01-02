@@ -7,6 +7,8 @@ namespace Wsdl2PhpGenerator\Xml;
 use DOMDocument;
 use DOMElement;
 use Exception;
+use Wsdl2PhpGenerator\ConfigInterface;
+use Wsdl2PhpGenerator\StreamContextFactory;
 
 /**
  * A SchemaDocument represents an XML element which contains type elements.
@@ -40,15 +42,21 @@ class SchemaDocument extends XmlNode
      */
     protected static $loadedUrls;
 
-    public function __construct($xsdUrl)
+    public function __construct(ConfigInterface $config, $xsdUrl)
     {
         $this->url = $xsdUrl;
+
+        // Generate a stream context used by libxml to access external resources.
+        // This will allow DOMDocument to load XSDs through a proxy.
+        $streamContextFactory = new StreamContextFactory();
+        libxml_set_streams_context($streamContextFactory->create($config));
 
         $document = new DOMDocument();
         $loaded = $document->load($xsdUrl);
         if (!$loaded) {
             throw new Exception('Unable to load XML from '. $xsdUrl);
         }
+
         parent::__construct($document, $document->documentElement);
         // Register the schema to avoid cyclic imports.
         self::$loadedUrls[] = $xsdUrl;
@@ -67,7 +75,7 @@ class SchemaDocument extends XmlNode
             }
 
             if (!in_array($referenceUrl, self::$loadedUrls)) {
-                $this->referereces[] = new SchemaDocument($referenceUrl);
+                $this->referereces[] = new SchemaDocument($config, $referenceUrl);
             }
         }
     }

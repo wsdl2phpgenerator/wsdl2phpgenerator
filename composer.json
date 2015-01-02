@@ -24,7 +24,7 @@
         "kasperg/phing-github": "0.2.*",
         "phing/phing": "~2.7",
         "php-vcr/phpunit-testlistener-vcr": "1.1.*",
-        "phpunit/phpunit": "~4.0",
+        "phpunit/phpunit": "~4.4",
 		"psr/log": "~1.0"
     }
 }
