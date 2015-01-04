@@ -30,7 +30,7 @@
         <delete file="TAG_MESSAGE" />
 
         <!-- Add, commit, tag and push changes. The tag message makes a nice release note on GitHub. -->
-        <exec command="git add CHANGES" logoutput="true" checkreturn="true" />
+        <exec command="git add README.md CHANGES" logoutput="true" checkreturn="true" />
         <exec command="git commit -m 'Release ${version}'" logoutput="true" checkreturn="true" />
         <exec command="git tag ${version} -f -m 'Release ${version}${line.separator}${changes}'" />
         <exec command="git push origin master ${version}" logoutput="true" checkreturn="true" />
