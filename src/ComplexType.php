@@ -117,7 +117,11 @@ class ComplexType extends Type
                 $getterCode = '  if ($this->' . $name . ' == null) {' . PHP_EOL
                     . '    return null;' . PHP_EOL
                     . '  } else {' . PHP_EOL
-                    . '    return \DateTime::createFromFormat(\DateTime::ATOM, $this->' . $name . ');' . PHP_EOL
+                    . '    try {' . PHP_EOL
+                    . '      return new \DateTime($this->' . $name . ');' . PHP_EOL
+                    . '    } catch (\Exception $e) {' . PHP_EOL
+                    . '      return false;' . PHP_EOL
+                    . '    }' . PHP_EOL
                     . '  }' . PHP_EOL;
             } else {
                 $getterCode = '  return $this->' . $name . ';' . PHP_EOL;
