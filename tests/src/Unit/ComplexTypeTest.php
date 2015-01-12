@@ -50,6 +50,19 @@ class ComplexTypeTest extends CodeGenerationTestCase
             'dateTimeAttribute',
             '\DateTime'
         );
+
+        // Using reflection to set up bad datetime value as like SoapClass does it
+        $property = 'dateTimeAttribute';
+        $badDateTime = 'noDate';
+        $this->setObjectProperty($object, $class, $property, $badDateTime);
+        $this->assertFalse($object->getDateTimeAttribute());
+
+        // Test passing variable datetime formats available in SOAP, http://www.w3.org/TR/2001/REC-xmlschema-2-20010502/#dateTime
+        $now = new \DateTime();
+        foreach (array('Y-m-d\TH:i:s', 'Y-m-d\TH:i:sP', 'Y-m-d\TH:i:s.u', 'Y-m-d\TH:i:s.uP', 'Y-m-d\TH:i:s\Z', 'Y-m-d\TH:i:s.u\Z') as $format) {
+            $this->setObjectProperty($object, $class, $property, $now->format($format));
+            $this->assertInstanceOf('\DateTime', $object->getDateTimeAttribute());
+        }
     }
 
     /**
@@ -155,4 +168,19 @@ class ComplexTypeTest extends CodeGenerationTestCase
       );
     }
 
+    /**
+     * Sets object property value using reflection
+     *
+     * @param mixed $object
+     * @param \ReflectionClass $class
+     * @param string $propertyName
+     * @param mixed $value
+     */
+    private function setObjectProperty($object, \ReflectionClass $class, $propertyName, $value)
+    {
+        $property = $class->getProperty($propertyName);
+        $property->setAccessible(true);
+        $property->setValue($object, $value);
+        $property->setAccessible(false);
+    }
 }
