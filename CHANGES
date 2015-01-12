@@ -1,4 +1,9 @@
 
+3.1.1 / 2015-01-12 
+==================
+
+ * More flexible conversion of dateTime values to DateTime objects
+
 3.1.0 / 2015-01-02 
 ==================
 
