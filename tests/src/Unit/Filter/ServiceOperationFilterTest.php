@@ -4,6 +4,7 @@ namespace Wsdl2PhpGenerator\Tests\Unit\Filter;
 use Wsdl2PhpGenerator\ComplexType;
 use Wsdl2PhpGenerator\Config;
 use Wsdl2PhpGenerator\ConfigInterface;
+use Wsdl2PhpGenerator\Enum;
 use Wsdl2PhpGenerator\Filter\ServiceOperationFilter;
 use Wsdl2PhpGenerator\Operation;
 use Wsdl2PhpGenerator\Service;
@@ -53,6 +54,7 @@ class ServiceOperationFilterTest extends \PHPUnit_Framework_TestCase
         // Check that getBook and types exists
         $this->assertEquals($sourceService->getOperation('GetBook'), $actualService->getOperation('GetBook'));
         $this->assertEquals($sourceService->getType('Method_Get_Book_Response_BOOK'), $actualService->getType('Method_Get_Book_Response_BOOK'));
+        $this->assertEquals($sourceService->getType('Book_Type_Enumeration'), $actualService->getType('Book_Type_Enumeration'));
         $this->assertEquals($sourceService->getType('Method_Get_Book_Response_BOOK_BOOK_NAME'), $actualService->getType('Method_Get_Book_Response_BOOK_BOOK_NAME'));
         $this->assertEquals($sourceService->getType('Get_Book_Type_Response'), $actualService->getType('Get_Book_Type_Response'));
         $this->assertEquals($sourceService->getType('Method_Get_Book_Request_BOOK'), $actualService->getType('Method_Get_Book_Request_BOOK'));
@@ -77,8 +79,12 @@ class ServiceOperationFilterTest extends \PHPUnit_Framework_TestCase
         $returnGetBookType = new ComplexType($this->config, 'Get_Book_Type_Response');
         $returnGetBookType->addMember('Method_Get_Book_Response_BOOK', 'book_response', false);
         // Request GetBook types
+        $bookType = new Enum($this->config, 'Book_Type_Enumeration', 'string');
+        $bookType->addValue('fiction');
+        $bookType->addValue('comedy');
         $requestBook = new ComplexType($this->config, 'Method_Get_Book_Request_BOOK');
         $requestBook->addMember('int', 'bookId', false);
+        $requestBook->addMember('Book_Type_Enumeration', 'genre', false);
         $requestGetBook = new ComplexType($this->config, 'Get_Book_Type_Request');
         $requestGetBook->addMember('Method_Get_Book_Request_BOOK', 'book_request', false);
         // Operation GetBook
@@ -103,7 +109,8 @@ class ServiceOperationFilterTest extends \PHPUnit_Framework_TestCase
             $requestGetBook,
             $responseAuthor,
             $returnGetAuthors,
-            $requestGetAuthor
+            $requestGetAuthor,
+            $bookType
         );
         $service = new Service($this->config, 'Book_Shell', $types, 'Book shells');
         $service->addOperation($getBookOperation);

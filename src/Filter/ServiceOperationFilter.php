@@ -4,6 +4,7 @@ namespace Wsdl2PhpGenerator\Filter;
 
 use Wsdl2PhpGenerator\ComplexType;
 use Wsdl2PhpGenerator\ConfigInterface;
+use Wsdl2PhpGenerator\Enum;
 use Wsdl2PhpGenerator\Service;
 use Wsdl2PhpGenerator\Type;
 use Wsdl2PhpGenerator\Variable;
@@ -85,6 +86,9 @@ class ServiceOperationFilter implements FilterInterface
      */
     private function findUsedTypes($service, Type $type)
     {
+        if ($type instanceof Enum) {
+            return array($type);
+        }
         if (!$type instanceof ComplexType) {
             return array();
         }
