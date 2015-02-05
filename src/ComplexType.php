@@ -65,10 +65,16 @@ class ComplexType extends Type
             throw new Exception("The class has already been generated");
         }
 
+        $classBaseType = '';
+
+        if ($this->baseType !== null && $this->baseType !== $this) {
+            $classBaseType = $this->baseType->getPhpIdentifier();
+        }
+
         $class = new PhpClass(
             $this->phpIdentifier,
             false,
-            $this->baseType !== null ? $this->baseType->getPhpIdentifier() : '',
+            $classBaseType,
             null,
             false,
             $this->abstract
@@ -265,10 +271,15 @@ class ComplexType extends Type
      */
     protected function getBaseTypeMembers(ComplexType $type)
     {
-        $members = array();
-        if (!empty($type->baseType)) {
-            $members = array_merge($this->getBaseTypeMembers($type->baseType), $type->baseType->getMembers());
+        if (empty($type->baseType)) {
+            return array();
         }
-        return $members;
+
+        if ($type === $type->baseType)
+        {
+            return array();
+        }
+
+        return array_merge($this->getBaseTypeMembers($type->baseType), $type->baseType->getMembers());
     }
 }
