@@ -107,8 +107,8 @@ $generator = new \Wsdl2PhpGenerator\Generator();
 $generator->generate(
     new \Wsdl2PhpGenerator\Config(array(
         'inputFile' => 'http://wsf.cdyne.com/WeatherWS/Weather.asmx?wsdl',
-        'outputDir' => '/tmp/weather'
-        'namespaceName' => 'CDyne\Weather',
+        'outputDir' => '/tmp/weather',
+        'namespaceName' => 'CDyne\Weather'
     ))
 );
 ```
@@ -128,8 +128,8 @@ $generator = new \Wsdl2PhpGenerator\Generator();
 $generator->generate(
     new \Wsdl2PhpGenerator\Config(array(
         'inputFile' => 'https://s3.amazonaws.com/ec2-downloads/2013-10-01.ec2.wsdl',
-        'outputDir' => '/tmp/amazon'
-        'classNames' => 'AmazonEC2, CopyImageType',
+        'outputDir' => '/tmp/amazon',
+        'classNames' => 'AmazonEC2, CopyImageType'
     ))
 );
 ```
@@ -146,8 +146,8 @@ $generator = new \Wsdl2PhpGenerator\Generator();
 $generator->generate(
     new \Wsdl2PhpGenerator\Config(array(
         'inputFile' => 'https://s3.amazonaws.com/ec2-downloads/2013-10-01.ec2.wsdl',
-        'outputDir' => '/tmp/amazon'
-        'operationNames' => 'ReplaceRouteTableAssociation, RequestSpotInstances',
+        'outputDir' => '/tmp/amazon',
+        'operationNames' => 'ReplaceRouteTableAssociation, RequestSpotInstances'
     ))
 );
 ```
@@ -179,8 +179,8 @@ $generator = new \Wsdl2PhpGenerator\Generator();
 $generator->generate(
     new \Wsdl2PhpGenerator\Config(array(
         'inputFile' => 'https://ads.google.com/apis/ads/publisher/v201306/ActivityService?wsdl',
-        'outputDir' => '/tmp/amazon'
-        'proxy' => 'tcp://user:secret@192.168.0.1:8080',
+        'outputDir' => '/tmp/amazon',
+        'proxy' => 'tcp://user:secret@192.168.0.1:8080'
     ))
 );
 ```
@@ -207,7 +207,7 @@ $generator = new \Wsdl2PhpGenerator\Generator();
 $generator->generate(
     new \Wsdl2PhpGenerator\Config(array(
         'inputFile' => 'input.wsdl',
-        'outputDir' => '/tmp/output'
+        'outputDir' => '/tmp/output',
         'soapClientClass' => '\BeSimple\SoapClient\SoapClient'
     ))
 );
@@ -230,14 +230,14 @@ $generator = new \Wsdl2PhpGenerator\Generator();
 $generator->generate(
     new \Wsdl2PhpGenerator\Config(array(
         'inputFile' => 'input.wsdl',
-        'outputDir' => '/tmp/output'
+        'outputDir' => '/tmp/output',
         'soapClientOptions' => array(
         	'authentication' => SOAP_AUTHENTICATION_BASIC,
         	'login' => 'username',
-        	'password' => 'secret'
-        	'connection_timeout' => 60,
+        	'password' => 'secret',
+        	'connection_timeout' => 60
     ))
-);
+));
 ````
 
 ## Versioning
