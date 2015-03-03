@@ -53,5 +53,14 @@ class AbstractTest extends FunctionalTestCase
         foreach ($subClassConstructor->getParameters() as $parameter) {
             $this->assertMethodHasParameter($subSubClassConstructor, $parameter, $parameter->getPosition());
         }
+
+    }
+
+    public function testAbstractClass()
+    {
+        $this->assertGeneratedClassExists('Author');
+        $abstractClass = new \ReflectionClass('Author');
+
+        $this->assertTrue($abstractClass->isAbstract());
     }
 }

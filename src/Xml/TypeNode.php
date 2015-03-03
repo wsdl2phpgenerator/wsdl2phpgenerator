@@ -225,8 +225,19 @@ class TypeNode extends XmlNode
     {
         // If array is defied as inherited from array type it has restricton to array elements type, but still is complexType
         return
-            $this->restriction == 'struct' ||
-            $this->element->localName == 'complexType';
+          $this->restriction == 'struct' ||
+          $this->element->localName == 'complexType';
+    }
+
+    /**
+     * Returns whether the type is abstract.
+     *
+     * @return bool Whether the type is abstract.
+     */
+    public function isAbstract()
+    {
+        return $this->element->hasAttribute('abstract')
+            && $this->element->getAttribute('abstract') == 'true';
     }
 
     /**

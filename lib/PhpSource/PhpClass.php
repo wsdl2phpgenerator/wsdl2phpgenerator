@@ -79,13 +79,21 @@ class PhpClass extends PhpElement
 
     /**
      *
+     * @var bool If the class is abstract.
+     * @access private
+     */
+    private $abstract;
+
+    /**
+     *
      * @param string $identifier
      * @param bool $classExists
      * @param string $extends A string of the class that this class extends
      * @param PhpDocComment $comment
      * @param bool $final
+     * @param bool $abstract
      */
-    public function __construct($identifier, $classExists = false, $extends = '', PhpDocComment $comment = null, $final = false)
+    public function __construct($identifier, $classExists = false, $extends = '', PhpDocComment $comment = null, $final = false, $abstract = false)
     {
         $this->dependencies = array();
         $this->classExists = $classExists;
@@ -98,6 +106,7 @@ class PhpClass extends PhpElement
         $this->variables = array();
         $this->functions = array();
         $this->indentionStr = '    '; // Use 4 spaces as indention, as requested by PSR-2
+        $this->abstract = $abstract;
     }
 
     /**
@@ -125,6 +134,10 @@ class PhpClass extends PhpElement
 
         if ($this->final) {
             $ret .= 'final ';
+        }
+
+        if ($this->abstract) {
+            $ret .= 'abstract ';
         }
 
         $ret .= 'class ' . $this->identifier;
