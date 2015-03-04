@@ -54,4 +54,22 @@ class AbstractTest extends FunctionalTestCase
             $this->assertMethodHasParameter($subSubClassConstructor, $parameter, $parameter->getPosition());
         }
     }
+
+    public function testNestedComplexType()
+    {
+        $this->assertGeneratedClassExists('nestedComplexType');
+        $this->assertGeneratedClassExists('entry');
+
+        $class = new \ReflectionClass('nestedComplexType');
+
+        $this->assertTrue(
+            $class->getConstructor()->getParameters()[0]->isArray(),
+            'The constructor should be an array as the maxOccurs are set to unbound.'
+        );
+
+        $this->assertTrue(
+            $class->getMethod('setEntry')->getParameters()[0]->isArray(),
+            'The setter should accept an array as the maxOccurs are set to unbound.'
+        );
+    }
 }

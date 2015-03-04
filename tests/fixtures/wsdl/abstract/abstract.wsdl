@@ -87,6 +87,21 @@
           </extension>
         </complexContent>
       </complexType>
+
+      <element name="nestedComplexType">
+        <complexType>
+          <sequence>
+            <element maxOccurs="unbounded" minOccurs="0" name="entry">
+              <complexType>
+                <sequence>
+                  <element minOccurs="0" name="key" type="string"/>
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+        
     </schema>
   </wsdl:types>
 
