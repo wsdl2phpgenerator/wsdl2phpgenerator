@@ -81,8 +81,11 @@ abstract class FunctionalTestCase extends CodeGenerationTestCase
 
         self::$generatedTestCases[$class->getShortName()] = true;
 
-        // Register the autoloader.
-        require_once $this->outputDir . DIRECTORY_SEPARATOR . 'autoload.php';
+        // Register the autoloader if it is generated.
+        $autoloaderPath = $this->outputDir . DIRECTORY_SEPARATOR . 'autoload.php';
+        if (file_exists($autoloaderPath)) {
+            require_once $autoloaderPath;
+        }
     }
 
     /**
