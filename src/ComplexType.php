@@ -65,8 +65,12 @@ class ComplexType extends Type
             throw new Exception("The class has already been generated");
         }
 
-        $classBaseType = '';
-
+        // Determine parent class
+        $classBaseType = null;
+        // If we have a base type which is different than the current class then extend that.
+        // It is actually possible to have different classes with the same name as PHP SoapClient has a poor
+        // understanding of namespaces. Two types with the same name but in different namespaces will have the same
+        // identifier.
         if ($this->baseType !== null && $this->baseType !== $this) {
             $classBaseType = $this->baseType->getPhpIdentifier();
         }
@@ -275,8 +279,9 @@ class ComplexType extends Type
             return array();
         }
 
-        if ($type === $type->baseType)
-        {
+        // Only get members from the base type if it differs from the current class. It is possible that they will be
+        // the same due to poor handling of namespaces in PHP SoapClients.
+        if ($type === $type->baseType) {
             return array();
         }
 
