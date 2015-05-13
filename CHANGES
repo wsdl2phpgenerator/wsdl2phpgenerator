@@ -1,4 +1,10 @@
 
+3.2.0 / 2015-05-13 
+==================
+
+ * Eliminate infinite recursion caused by self-referencing type.
+ * Create a class abstract when defined in the wsdl.
+
 3.1.2 / 2015-01-15 
 ==================
 
