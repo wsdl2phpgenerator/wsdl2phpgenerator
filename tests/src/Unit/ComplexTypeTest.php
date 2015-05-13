@@ -170,6 +170,28 @@ class ComplexTypeTest extends CodeGenerationTestCase
     }
 
     /**
+     * Test classes that extend themselves.
+     */
+    public function testExtendingOwnClass()
+    {
+        // It is actually possible to have a type which extends itself. This is caused by the poor understanding of PHP
+        // namespaces. Two types with the same name but in different namespaces will have the same identifier.
+        $config = new Config(array(
+            'inputFile' => null,
+            'outputDir' => null,
+        ));
+
+        $type = new ComplexType($config, 'ExtendOwn');
+        $type->setBaseType($type);
+
+        $this->generateClass($type);
+
+        $object = new \ExtendOwn();
+        $class = new \ReflectionClass($object);
+        $this->assertEmpty($class->getParentClass());
+    }
+
+    /**
      * Sets object property value using reflection.
      *
      * @param mixed $object The object to set the value on.
