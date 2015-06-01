@@ -58,7 +58,7 @@ class Config implements ConfigInterface
         return $this;
     }
 
-    protected function configureOptions(OptionsResolverInterface $resolver)
+    protected function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(array(
             'inputFile',
@@ -95,7 +95,10 @@ class Config implements ConfigInterface
                 return $normalizer->invokeArgs($object, func_get_args());
             };
         }, $normalizers);
-        $resolver->setNormalizers($normalizers);
+
+        foreach ($normalizers as $option => $normalizer) {
+            $resolver->setNormalizer($option, $normalizer);
+        }
     }
 
     /**
