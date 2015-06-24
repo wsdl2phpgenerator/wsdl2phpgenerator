@@ -4,9 +4,6 @@ namespace Wsdl2PhpGenerator\Tests\Functional;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ReflectionClass;
-use ReflectionMethod;
-use ReflectionParameter;
-use ReflectionProperty;
 use Wsdl2PhpGenerator\Config;
 use Wsdl2PhpGenerator\Generator;
 use Wsdl2PhpGenerator\Tests\Unit\CodeGenerationTestCase;
@@ -35,7 +32,7 @@ abstract class FunctionalTestCase extends CodeGenerationTestCase
     protected $fixtureDir = 'tests/fixtures/wsdl';
 
     /**
-     * Storage of already generated classes from WSDL to avoid double delaring and fatals
+     * Storage of already generated classes from WSDL to avoid double declaring and fatals
      * @var array
      */
     private static $generatedTestCases = array();
@@ -109,7 +106,7 @@ abstract class FunctionalTestCase extends CodeGenerationTestCase
     /**
      * Assert that a generated file exists.
      *
-     * @param $filename The name of the file.
+     * @param string $filename The name of the file.
      * @param string $message The message to show if the assertion fails.
      */
     protected function assertGeneratedFileExists($filename, $message = '')
@@ -138,7 +135,7 @@ abstract class FunctionalTestCase extends CodeGenerationTestCase
      */
     protected function assertGeneratedClassExists($className, $namespaceName = null)
     {
-        $file = $this->outputDir . '/' . $className . '.php';
+        $file = $this->outputDir . DIRECTORY_SEPARATOR . $className . '.php';
         $this->assertFileExists($file);
         require_once $file;
         $this->assertClassExists($className, $namespaceName);
