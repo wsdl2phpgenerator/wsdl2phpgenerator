@@ -102,6 +102,8 @@ class Generator implements GeneratorInterface
 
         $this->wsdl = new WsdlDocument($this->config, $wsdl);
 
+        $this->types = array();
+
         $this->loadTypes();
         $this->loadService();
     }
