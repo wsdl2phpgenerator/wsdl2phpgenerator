@@ -63,4 +63,12 @@ class Variable
     {
         return $this->nullable;
     }
+
+    /**
+     * @return boolean
+     */
+    public function isArray()
+    {
+        return substr($this->type, -2, 2) == '[]';
+    }
 }
