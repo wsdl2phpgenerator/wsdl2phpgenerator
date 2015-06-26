@@ -153,12 +153,30 @@ class ComplexType extends Type
             $setterComment->setReturn(PhpDocElementFactory::getReturn($this->phpNamespacedIdentifier, ''));
             $setterCode = '';
             if ($type == '\DateTime') {
-                $setterCode = '  $this->' . $name . ' = $' . $name . '->format(\DateTime::ATOM);' . PHP_EOL;
+                if ($member->getNullable()) {
+                    $setterCode = '  if ($' . $name . ' == null) {' . PHP_EOL
+                        . '   $this->' . $name . ' = null;' . PHP_EOL
+                        . '  } else {' . PHP_EOL
+                        . '    $this->' . $name . ' = $' . $name . '->format(\DateTime::ATOM);' . PHP_EOL
+                        . '  }' . PHP_EOL;
+                } else {
+                    $setterCode = '  $this->' . $name . ' = $' . $name . '->format(\DateTime::ATOM);' . PHP_EOL;
+                }
             } else {
                 $setterCode = '  $this->' . $name . ' = $' . $name . ';' . PHP_EOL;
             }
             $setterCode .= '  return $this;' . PHP_EOL;
-            $setter = new PhpFunction('public', 'set' . ucfirst($name), $this->buildParametersString(array($name => $typeHint)), $setterCode, $setterComment);
+            $setter = new PhpFunction(
+                'public',
+                'set' . ucfirst($name),
+                $this->buildParametersString(
+                    array($name => $typeHint),
+                    true,
+                    $type == '\DateTime' && $member->getNullable()
+                ),
+                $setterCode,
+                $setterComment
+            );
             $accessors[] = $setter;
         }
 
