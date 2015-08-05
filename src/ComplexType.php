@@ -172,7 +172,10 @@ class ComplexType extends Type
                 $this->buildParametersString(
                     array($name => $typeHint),
                     true,
-                    $type == '\DateTime' && $member->getNullable()
+                    // If the type of a member is nullable we should allow passing null to the setter. If the type
+                    // of the member is a class and not a primitive this is only possible if setter parameter has
+                    // a default null value. We can detect whether the type is a class by checking the type hint.
+                    $member->getNullable() && !empty($typeHint)
                 ),
                 $setterCode,
                 $setterComment
