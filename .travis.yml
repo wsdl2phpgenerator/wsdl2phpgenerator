@@ -7,10 +7,9 @@ php:
   - 5.6
 
 env:
-  - SYMFONY_VERSION="~2.3"
-  # Test against previous minor releases of Symfony 2.x to ensure that we
-  # actually support the versions we specify in our requirements.
-  - SYMFONY_VERSION="2.3.*"
+  matrix:
+    - PREFER_LOWEST="--prefer-lowest"
+    - PREFER_LOWEST=""
 
 sudo: false
 
@@ -19,9 +18,7 @@ before_script:
   # rate limits resulting in 502 HTTP responses, build errors and
   # Composer\Downloader\TransportException.
   # https://github.com/symfony/symfony/issues/4687
-  - composer install --dev --no-interaction --prefer-source
-  # Update the Symfony version to test against.
-  - composer require symfony/options-resolver:${SYMFONY_VERSION}
+  - composer update --dev --no-interaction --prefer-source $PREFER_LOWEST
 
 script:
   - mkdir -p build/logs
