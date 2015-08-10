@@ -12,7 +12,7 @@ use Wsdl2PhpGenerator\PhpSource\PhpFunction;
 use Wsdl2PhpGenerator\PhpSource\PhpVariable;
 
 /**
- * Service represents the service in the wsdl
+ * Service represents the service in the wsdl, from the client side
  *
  * @package Wsdl2PhpGenerator
  * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
@@ -24,32 +24,32 @@ class Service implements ClassGenerator
     /**
      * @var ConfigInterface
      */
-    private $config;
+    protected $config;
 
     /**
      * @var PhpClass The class used to create the service.
      */
-    private $class;
+    protected $class;
 
     /**
      * @var string The name of the service
      */
-    private $identifier;
+    protected $identifier;
 
     /**
      * @var Operation[] An array containing the operations of the service
      */
-    private $operations;
+    protected $operations;
 
     /**
      * @var string The description of the service used as description in the phpdoc of the class
      */
-    private $description;
+    protected $description;
 
     /**
      * @var Type[] An array of Types
      */
-    private $types;
+    protected $types;
 
     /**
      * @param ConfigInterface $config Configuration
@@ -181,7 +181,7 @@ class Service implements ClassGenerator
                 $init[$type->getIdentifier()] = $this->config->get('namespaceName') . "\\" . $type->getPhpIdentifier();
             }
         }
-        $var = new PhpVariable('private static', $name, var_export($init, true), $comment);
+        $var = new PhpVariable('public static', $name, var_export($init, true), $comment);
 
         // Add the classmap variable
         $this->class->addVariable($var);
