@@ -37,16 +37,17 @@ class ServerServiceTest extends CodeGenerationTestCase
                 'inputFile' => null,
                 'outputDir' => null,
                 'namespaceName' => $this->namespace,
+                'serverClassName' => 'TestAbstractServerService',
                 'soapServerClass' => $this->soapserverClass,
                 'soapServerOptions' => $this->soapserverOptions,
             ));
 
-        $service = new ServerService($config, 'TestServerService', array(), 'Server service description');
+        $service = new ServerService($config, 'TestService', array(), 'Service description');
         $this->generateClass($service, $this->namespace);
 
-        $this->assertClassExists('TestServerService', $this->namespace);
+        $this->assertClassExists('TestAbstractServerService', $this->namespace);
 
-        $service = new \SoapServerTest\TestServerService();
+        $service = new \SoapServerTest\TestAbstractServerService();
 
         return $service;
     }
