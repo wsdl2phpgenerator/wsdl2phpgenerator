@@ -80,7 +80,7 @@ class ServerService extends Service
     }
   }' . PHP_EOL;
         $source .= '  $options = array_merge(' . var_export($this->config->get('soapServerOptions'), true) . ', $options);' . PHP_EOL;
-        $source .= '  $this->options = $options;' . PHP_EOL;
+        $source .= '  $this->computedOptions = $options;' . PHP_EOL;
         $source .= '  parent::__construct($wsdl, $options);' . PHP_EOL;
         $source .= '  $this->setObject($this);' . PHP_EOL;
 
@@ -89,13 +89,13 @@ class ServerService extends Service
         // Add the constructor
         $this->class->addFunction($function);
 
-        // Generate the options
-        $name = 'options';
+        // Generate the computed options
+        $name = 'computedOptions';
         $comment = new PhpDocComment();
         $comment->setVar(PhpDocElementFactory::getVar('array', $name, 'The computed options'));
         $var = new PhpVariable('protected', $name, '', $comment);
 
-        // Add the options variable
+        // Add the computed options variable
         $this->class->addVariable($var);
 
         // Add all methods
