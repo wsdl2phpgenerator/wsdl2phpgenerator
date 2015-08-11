@@ -5,14 +5,14 @@ namespace Wsdl2PhpGenerator\Tests\Unit;
 
 
 use Wsdl2PhpGenerator\Config;
-use Wsdl2PhpGenerator\Service;
+use Wsdl2PhpGenerator\ServerService;
 use Wsdl2PhpGenerator\Tests\Functional\FunctionalTestCase;
 
 /**
  * Unit test for configuration of the SoapServer.
  *
  * This is functional test case as we have to create an instance of the service class. This forces us to have a valid
- * WSDL which the service class can be generated from.
+ * WSDL which the server service class can be generated from.
  */
 class ServerServiceTest extends CodeGenerationTestCase
 {
@@ -41,12 +41,12 @@ class ServerServiceTest extends CodeGenerationTestCase
                 'soapServerOptions' => $this->soapserverOptions,
             ));
 
-        $service = new Service($config, 'TestService', array(), 'Service description');
+        $service = new ServerService($config, 'TestServerService', array(), 'Server service description');
         $this->generateClass($service, $this->namespace);
 
-        $this->assertClassExists('TestService', $this->namespace);
+        $this->assertClassExists('TestServerService', $this->namespace);
 
-        $service = new \SoapServerTest\TestService();
+        $service = new \SoapServerTest\TestServerService();
 
         return $service;
     }
@@ -59,7 +59,7 @@ class ServerServiceTest extends CodeGenerationTestCase
     public function testSoapServerClass($service)
     {
 
-        // The service class should be a subclass of the configured soap server class.
+        // The server service class should be a subclass of the configured soap server class.
         $this->assertClassSubclassOf(new \ReflectionClass($service), $this->soapserverClass);
     }
 
