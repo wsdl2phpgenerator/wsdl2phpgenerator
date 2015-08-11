@@ -47,7 +47,7 @@ class ServerServiceTest extends CodeGenerationTestCase
 
         $this->assertClassExists('TestAbstractServerService', $this->namespace);
 
-        $service = new \SoapServerTest\TestAbstractServerService();
+        $service = new \Wsdl2PhpGenerator\Tests\Mock\ServerService();
 
         return $service;
     }
