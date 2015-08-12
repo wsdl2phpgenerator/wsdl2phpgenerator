@@ -23,24 +23,47 @@ class ServerService extends Service
     const SERVER_SERVICE_PREFIX = 'AbstractServer';
 
     /**
-     * @var string The name of the client service
+     * @var string The class name of the client service
      */
-    private $clientIdentifier;
+    private $clientClassName;
 
     /**
      * @param ConfigInterface $config Configuration
-     * @param string $clientIdentifier The name of the client service
+     * @param string $identifier The name of the client service
      * @param array $types The types the service knows about
      * @param string $description The description of the service
      */
-    public function __construct(ConfigInterface $config, $clientIdentifier, array $types, $description)
+    public function __construct(ConfigInterface $config, $identifier, array $types, $description)
     {
-        $this->clientIdentifier = $clientIdentifier;
+        // In most cases, the final class name of the client service is the same than the identifier
+        // of the client service
+        $this->clientClassName = $identifier;
         $serverIdentifier = $config->get('serverClassName');
         if (empty($serverIdentifier)) {
-            $serverIdentifier = self::SERVER_SERVICE_PREFIX . $clientIdentifier;
+            $serverIdentifier = self::SERVER_SERVICE_PREFIX . $identifier;
         }
         parent::__construct($config, $serverIdentifier, $types, $description);
+    }
+
+    /**
+     * Returns the class name of the client service.
+     *
+     * @return string The class name of the client service.
+     */
+    public function getClientClassName()
+    {
+        return $this->clientClassName;
+    }
+
+    /**
+     * Sets the class name of the client service.
+     *
+     * @return string The class name of the client service.
+     */
+    public function setClientClassName($clientClassName)
+    {
+        $this->clientClassName = $clientClassName;
+        $this->class = null;
     }
 
     /**
@@ -56,14 +79,6 @@ class ServerService extends Service
         // uppercase the name
         $serverName = ucfirst($serverName);
 
-        $clientName = $this->clientIdentifier;
-
-        // Generate a valid classname
-        $clientName = Validator::validateClass($clientName, $this->config->get('namespaceName'));
-
-        // uppercase the name
-        $clientName = ucfirst($clientName);
-
         // Create the class object
         $comment = new PhpDocComment($this->description);
         $this->class = new PhpClass($serverName, false, $this->config->get('soapServerClass'), $comment, false, true);
@@ -74,7 +89,7 @@ class ServerService extends Service
         $comment->addParam(PhpDocElementFactory::getParam('string', 'wsdl', 'The wsdl file to use'));
 
         $source = '
-  foreach (' . $clientName . '::$classmap as $key => $value) {
+  foreach (' . $this->clientClassName . '::$classmap as $key => $value) {
     if (!isset($options[\'classmap\'][$key])) {
       $options[\'classmap\'][$key] = $value;
     }
