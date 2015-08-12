@@ -414,7 +414,7 @@ class CodeGenerationTestCase extends PHPUnit_Framework_TestCase
      *
      * This will cause the class to be available for subsequent code.
      *
-     * @param ClassGenerator $generator The object from with to generate the class.
+     * @param ClassGenerator $generator The object from which to generate the class.
      * @param string $namespace The namespace to use for the class.
      */
     protected function generateClass(ClassGenerator $generator, $namespace = null)

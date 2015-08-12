@@ -4,7 +4,9 @@
 namespace Wsdl2PhpGenerator\Tests\Unit;
 
 
+use Wsdl2PhpGenerator\ClassGenerator;
 use Wsdl2PhpGenerator\Config;
+use Wsdl2PhpGenerator\Service;
 use Wsdl2PhpGenerator\ServerService;
 use Wsdl2PhpGenerator\Tests\Functional\FunctionalTestCase;
 
@@ -17,9 +19,18 @@ use Wsdl2PhpGenerator\Tests\Functional\FunctionalTestCase;
 class ServerServiceTest extends CodeGenerationTestCase
 {
 
-    protected $namespace = 'SoapServerTest';
+    protected $namespace = 'SoapClientTest';
 
-    // Use our mock soap server. It allows to to retrieve the configuration is was passed.
+    // Use our mock soap client. It allows to retrieve the configuration it was passed.
+    protected $soapclientClass = '\Wsdl2PhpGenerator\Tests\Mock\SoapClient';
+
+    // Example options which can be passed as options to a \SoapClient instance.
+    protected $soapclientOptions = array(
+        'features' => SOAP_SINGLE_ELEMENT_ARRAYS,
+        'cache_wsdl' => WSDL_CACHE_NONE,
+    );
+
+    // Use our mock soap server. It allows to retrieve the configuration it was passed.
     protected $soapserverClass = '\Wsdl2PhpGenerator\Tests\Mock\SoapServer';
 
     // Example options which can be passed as options to a \SoapServer instance.
@@ -33,7 +44,20 @@ class ServerServiceTest extends CodeGenerationTestCase
      */
     public function testSoapConfig()
     {
-        $config = new Config(array(
+        $clientConfig = new Config(array(
+                'inputFile' => null,
+                'outputDir' => null,
+                'namespaceName' => $this->namespace,
+                'soapClientClass' => $this->soapclientClass,
+                'soapClientOptions' => $this->soapclientOptions,
+            ));
+
+        $clientService = new Service($clientConfig, 'TestClientService', array(), 'Service description');
+        $this->generateClass($clientService, $this->namespace);
+
+        $this->assertClassExists('TestClientService', $this->namespace);
+
+        $serverConfig = new Config(array(
                 'inputFile' => null,
                 'outputDir' => null,
                 'namespaceName' => $this->namespace,
@@ -42,14 +66,38 @@ class ServerServiceTest extends CodeGenerationTestCase
                 'soapServerOptions' => $this->soapserverOptions,
             ));
 
-        $service = new ServerService($config, 'TestService', array(), 'Service description');
-        $this->generateClass($service, $this->namespace);
+        $serverService = new ServerService($serverConfig, $clientService->getClass()->getIdentifier(), array(), 'Service description');
+        $this->generateServerServiceClass($serverService, $this->namespace);
 
         $this->assertClassExists('TestAbstractServerService', $this->namespace);
 
-        $service = new \Wsdl2PhpGenerator\Tests\Mock\ServerService();
+        $serverService = new \Wsdl2PhpGenerator\Tests\Mock\TestServerService();
 
-        return $service;
+        return $serverService;
+    }
+
+    /**
+     * Generate and load a server service class into PHP memory.
+     *
+     * This will cause the server service class to be available for subsequent code.
+     *
+     * @param ClassGenerator $generator The object from which to generate the class.
+     * @param string $namespace The namespace to use for the class.
+     */
+    private function generateServerServiceClass(ClassGenerator $generator, $namespace = null)
+    {
+        $source = $generator->getClass()->getSource();
+        if (!empty($namespace)) {
+            $source = 'namespace ' . $namespace . ';' . PHP_EOL . $source;
+        }
+
+        // We need to remove following part of code or PHP will crash!
+        $source = str_replace('$this->setObject($this);', '', $source);
+
+        // Eval the source for the generated class. This is now pretty but currently the only way we can test whether
+        // the generated code is as expected. Our own code generation library does not allow us to retrieve functions
+        // from the representing class.
+        eval($source);
     }
 
     /**

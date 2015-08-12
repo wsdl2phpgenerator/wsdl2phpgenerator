@@ -218,6 +218,8 @@ class Generator implements GeneratorInterface
         $filter = $factory->create($this->config);
         $filteredService = $filter->filter($this->service);
         $service = $filteredService->getClass();
+        // Correct the client class name when necessary.
+        $this->serverService->setClientClassName($service->getIdentifier());
         $filteredServerService = $filter->filter($this->serverService);
         $serverService = $filteredServerService->getClass();
         $filteredTypes = $filteredService->getTypes();
