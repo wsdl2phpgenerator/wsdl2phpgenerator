@@ -83,7 +83,7 @@ abstract class Type implements ClassGenerator
     public function getClass()
     {
         if ($this->class == null) {
-            $this->generateClass();
+            $this->generateClass($this->config->get('propertyVisibility'));
         }
 
         return $this->class;
