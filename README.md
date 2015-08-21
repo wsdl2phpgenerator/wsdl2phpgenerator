@@ -195,7 +195,7 @@ Examples of third party SOAP client implementations which can be used:
 * [soap-plus](https://github.com/dcarbone/soap-plus)
 * [SoapClientEx](https://gist.github.com/RobThree/4117914)
 
-Note that is is the responsibility of the surrounding code to ensure that the base class is available during code generation and when calling web services.
+Note that it is the responsibility of the surrounding code to ensure that the base class is available during code generation and when calling web services.
 
 ##### Example usage
 
