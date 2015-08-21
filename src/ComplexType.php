@@ -57,9 +57,10 @@ class ComplexType extends Type
     /**
      * Implements the loading of the class object
      *
+     * @param string $propertyVisibility
      * @throws Exception if the class is already generated(not null)
      */
-    protected function generateClass()
+    protected function generateClass($propertyVisibility = 'protected')
     {
         if ($this->class != null) {
             throw new Exception("The class has already been generated");
@@ -112,8 +113,13 @@ class ComplexType extends Type
 
             $comment = new PhpDocComment();
             $comment->setVar(PhpDocElementFactory::getVar($type, $name, ''));
-            $var = new PhpVariable('protected', $name, 'null', $comment);
+            $var = new PhpVariable($propertyVisibility, $name, 'null', $comment);
             $class->addVariable($var);
+
+            // Skip unneeded getters and setters if properties are public
+            if ($propertyVisibility === 'public') {
+                continue;
+            }
 
             if (!$member->getNullable()) {
                 if ($type == '\DateTime') {
@@ -181,6 +187,13 @@ class ComplexType extends Type
                 $setterComment
             );
             $accessors[] = $setter;
+        }
+
+        // Skip creating unneeded constructor when properties are public
+        if ($propertyVisibility === 'public')
+        {
+            $this->class = $class;
+            return;
         }
 
         $constructor = new PhpFunction(
