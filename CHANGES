@@ -1,4 +1,13 @@
 
+3.2.1 / 2015-08-21 
+==================
+
+ * Fix detection of nullable members where minOccurs = 0
+ * Fixed issues with latest symfony throwing deprecated errors at runtime
+ * Allow setting nullable typed members to null using setter.
+ * Fix code generation when generate() is called multiple times
+ * Allow dots in wsdl function signatures
+
 3.2.0 / 2015-05-13 
 ==================
 
