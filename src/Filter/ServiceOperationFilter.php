@@ -39,9 +39,10 @@ class ServiceOperationFilter implements FilterInterface
      */
     public function filter(Service $service)
     {
-        $types = array();
         $operations = array();
+        $types  = array();
         foreach ($this->methods as $method) {
+            $methodTypes = array();
             $operation = $service->getOperation($method);
             if (!$operation) {
                 continue;
@@ -51,22 +52,22 @@ class ServiceOperationFilter implements FilterInterface
                 $arr = $operation->getPhpDocParams($param, $service->getTypes());
                 $type = $service->getType($arr['type']);
                 if (!empty($type)) {
-                    $types[] = $type;
+                    $methodTypes[] = $type;
                 }
             }
             // Discover types used in returns
             $returns = $operation->getReturns();
-            $types[] = $service->getType($returns);
+            $methodTypes[] = $service->getType($returns);
 
-            foreach ($types as $type) {
-                $types = array_merge($types, $this->findUsedTypes($service, $type)) ;
+            foreach ($methodTypes as $type) {
+                $methodTypes = array_merge($methodTypes, $this->findUsedTypes($service, $type)) ;
             }
-            // Remove duplicated using standard equality checks. Default string
-            // comparison does not work here.
-            $types = array_unique($types, SORT_REGULAR);
-
             $operations[] = $operation;
+            $types = array_merge($types, $methodTypes);
         }
+        // Remove duplicated using standard equality checks. Default string
+        // comparison does not work here.
+        $types = array_unique($types, SORT_REGULAR);
         $filteredService = new Service($this->config, $service->getIdentifier(), $types, $service->getDescription());
         // Pull created service with operations
         foreach ($operations as $operation) {
