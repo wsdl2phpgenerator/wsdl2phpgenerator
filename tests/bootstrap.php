@@ -6,5 +6,5 @@ use \VCR\VCR;
 require_once __DIR__ . '/../vendor/autoload.php';
 
 VCR::configure()
-  ->setCassettePath('tests/fixtures/vcr');
+  ->setCassettePath(__DIR__ . '/fixtures/vcr');
 VCR::turnOn();
