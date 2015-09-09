@@ -345,6 +345,11 @@ class CodeGenerationTestCase extends PHPUnit_Framework_TestCase
         }
 
         $parameterClass = ($parameter->getClass() instanceof ReflectionClass) ? $parameter->getClass()->getName() : '';
+
+        if ($parameter->isArray()) {
+            $parameterClass = 'array';
+        }
+
         $this->assertEquals(
             $type,
             $parameterClass,

@@ -63,4 +63,22 @@ class AbstractTest extends FunctionalTestCase
 
         $this->assertTrue($abstractClass->isAbstract());
     }
+
+    public function testInlineTypes()
+    {
+        $this->assertGeneratedClassExists('GetResponse');
+
+        $responseClass = new \ReflectionClass('GetResponse');
+
+        $this->assertClassSubclassOf($responseClass, 'GetResponseGeneral');
+        $this->assertSame(0, $responseClass->getConstructor()->getNumberOfParameters());
+        $this->assertClassHasMethod($responseClass, 'getUsers');
+        $this->assertClassHasMethod($responseClass, 'setUsers');
+        $this->assertClassHasMethod($responseClass, 'getLimitedBy');
+        $this->assertClassHasMethod($responseClass, 'setLimitedBy');
+        $this->assertMethodParameterHasType($responseClass->getMethod('setUsers'), 'Users', 'array');
+        $this->assertMethodParameterDocBlockHasType($responseClass->getMethod('setUsers'), 'Users', 'UserAuthor[]');
+        $this->assertMethodParameterHasType($responseClass->getMethod('setLimitedBy'), 'LimitedBy', null);
+        $this->assertMethodParameterDocBlockHasType($responseClass->getMethod('setLimitedBy'), 'LimitedBy', 'int');
+    }
 }

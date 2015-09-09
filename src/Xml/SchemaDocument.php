@@ -104,6 +104,17 @@ class SchemaDocument extends XmlNode
             }
         }
 
+        if (empty($type)) {
+            $elements = $this->xpath(
+                '//s:element[@name=%s]/s:complexType|//s:element[@name=%s]/s:simpleType',
+                $name,
+                $name
+            );
+            if ($elements->length > 0) {
+                $type = $elements->item(0);
+            }
+        }
+
         return $type;
     }
 }
