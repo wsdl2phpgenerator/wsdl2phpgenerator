@@ -1,5 +1,5 @@
 {
-    "name": "wsdl2phpgenerator/wsdl2phpgenerator",
+    "name": "sha1/wsdl2phpgenerator",
     "description": "Simple class library for generating php classes from a wsdl file.",
     "keywords": ["soap", "wsdl"],
     "license": "MIT",
