@@ -137,9 +137,6 @@ class Generator implements GeneratorInterface
 
         $types = $this->wsdl->getTypes();
 
-$pvpwdsllog = "/home/pvp/Temp/wsdlcreation-".date('YmdHis').".log";
-file_put_contents ( $pvpwdsllog , var_export($types, true));
-
         foreach ($types as $typeNode) {
             $type = null;
 
