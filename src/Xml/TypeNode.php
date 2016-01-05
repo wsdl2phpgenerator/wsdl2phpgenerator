@@ -50,16 +50,6 @@ class TypeNode extends XmlNode
     }
 
     /**
-     * Returns whether the type is an array.
-     *
-     * @return bool If the type is an array.
-     */
-    public function isArray()
-    {
-        return substr($this->name, -2, 2) == '[]' || substr($this->name, 0, 7) == 'ArrayOf';
-    }
-
-    /**
      * Returns whether a sub element of the type may be undefined for the type.
      *
      * @param string $name The name of the sub element.
@@ -227,6 +217,23 @@ class TypeNode extends XmlNode
         return
           $this->restriction == 'struct' ||
           $this->element->localName == 'complexType';
+    }
+
+    /**
+     * Returns whether the type is an array.
+     *
+     * @return bool If the type is an array.
+     */
+    public function isArray()
+    {
+        $parts = $this->getParts();
+
+        // Array types are complex types with one element, their names begins with 'ArrayOf'.
+        // So if not - that's not array. Only field must be array also.
+        return $this->isComplex()
+            && count($parts) == 1
+            && (substr($this->name, 0, 7) == 'ArrayOf')
+            && substr(reset($parts), -2, 2) == '[]';
     }
 
     /**
