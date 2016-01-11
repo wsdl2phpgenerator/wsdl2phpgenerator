@@ -149,6 +149,32 @@ class CodeGenerationTestCase extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Assert that a class implements a specific interface
+     *
+     * @param ReflectionClass|string $class The class or the name of it.
+     * @param ReflectionClass|string $interface The interface or the name of it.
+     * @param string $message The message to show if the assertion fails.
+     */
+    protected function assertClassImplementsInterface($class, $interface, $message = '')
+    {
+        $class = (!$class instanceof ReflectionClass) ? new ReflectionClass($class) : $class;
+        $interface = (!$interface instanceof ReflectionClass) ? new ReflectionClass($interface) : $interface;
+
+        $this->assertTrue($interface->isInterface(), sprintf(
+            '"%s" is not an interface',
+            $interface->getName()
+        ));
+
+        $message = (empty($message))
+            ? sprintf(
+                'Class "%s" does not implement interface "%s"',
+                $class->getName(),
+                $interface->getName())
+            : $message;
+        $this->assertTrue($class->implementsInterface($interface->getName()), $message);
+    }
+
+    /**
      * Assert that a class has a constant defined.
      *
      * @param string $constName The name of the constant.

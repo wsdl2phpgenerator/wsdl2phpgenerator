@@ -24,6 +24,9 @@ class ServerServiceTest extends CodeGenerationTestCase
     // Use our mock soap client. It allows to retrieve the configuration it was passed.
     protected $soapclientClass = '\Wsdl2PhpGenerator\Tests\Mock\SoapClient';
 
+    // Example Wsdl path.
+    protected $wsdl = '/tmp/some.wsdl';
+
     // Example options which can be passed as options to a \SoapClient instance.
     protected $soapclientOptions = array(
         'features' => SOAP_SINGLE_ELEMENT_ARRAYS,
@@ -45,7 +48,7 @@ class ServerServiceTest extends CodeGenerationTestCase
     public function testSoapConfig()
     {
         $clientConfig = new Config(array(
-                'inputFile' => null,
+                'inputFile' => $this->wsdl,
                 'outputDir' => null,
                 'namespaceName' => $this->namespace,
                 'soapClientClass' => $this->soapclientClass,
@@ -58,7 +61,7 @@ class ServerServiceTest extends CodeGenerationTestCase
         $this->assertClassExists('TestClientService', $this->namespace);
 
         $serverConfig = new Config(array(
-                'inputFile' => null,
+                'inputFile' => $this->wsdl,
                 'outputDir' => null,
                 'namespaceName' => $this->namespace,
                 'serverClassName' => 'TestAbstractServerService',
@@ -68,10 +71,13 @@ class ServerServiceTest extends CodeGenerationTestCase
 
         $serverService = new ServerService($serverConfig, $clientService->getClass()->getIdentifier(), array(), 'Service description');
         $this->generateServerServiceClass($serverService, $this->namespace);
+        // PHP-VCR wants us to define the class VCR\Util\SoapClientTest\TestAbstractServerService
+        // before creating \SoapClientTest\TestAbstractServerService.
+        $this->generateServerServiceClass($serverService, "VCR\\Util\\{$this->namespace}", "\\{$this->namespace}\\TestClientService as TestClientService");
 
         $this->assertClassExists('TestAbstractServerService', $this->namespace);
 
-        eval('namespace SoapClientTest; class TestServerService extends \SoapClientTest\TestAbstractServerService {}');
+        eval("namespace {$this->namespace}; class TestServerService extends \\{$this->namespace}\\TestAbstractServerService {}");
 
         $serverService = new \SoapClientTest\TestServerService();
 
@@ -85,10 +91,14 @@ class ServerServiceTest extends CodeGenerationTestCase
      *
      * @param ClassGenerator $generator The object from which to generate the class.
      * @param string $namespace The namespace to use for the class.
+     * @param string $useStatement The "use statement" to use for the class.
      */
-    private function generateServerServiceClass(ClassGenerator $generator, $namespace = null)
+    private function generateServerServiceClass(ClassGenerator $generator, $namespace = null, $useStatement = null)
     {
         $source = $generator->getClass()->getSource();
+        if (!empty($useStatement)) {
+            $source = 'use ' . $useStatement . ';' . PHP_EOL . $source;
+        }
         if (!empty($namespace)) {
             $source = 'namespace ' . $namespace . ';' . PHP_EOL . $source;
         }
@@ -109,9 +119,20 @@ class ServerServiceTest extends CodeGenerationTestCase
      */
     public function testSoapServerClass($service)
     {
-
         // The server service class should be a subclass of the configured soap server class.
-        $this->assertClassSubclassOf(new \ReflectionClass($service), $this->soapserverClass);
+        $this->assertClassSubclassOf(new \ReflectionClass($service), "{$this->namespace}\\TestAbstractServerService");
+        $this->assertClassSubclassOf("{$this->namespace}\\TestAbstractServerService", $this->soapserverClass);
+    }
+
+    /**
+     * Test configuration of SoapServer WSDL.
+     *
+     * @depends testSoapConfig
+     */
+    public function testSoapServerWsdl($service)
+    {
+        // The soap server WSDL should be the same as the ones passed to the configuration.
+        $this->assertEquals($this->wsdl, $service->wsdl);
     }
 
     /**
@@ -122,6 +143,6 @@ class ServerServiceTest extends CodeGenerationTestCase
     public function testSoapServerOptions($service)
     {
         // The soap server options should be the same as the ones passed to the configuration.
-        $this->assertEquals($this->soapserverOptions, $service->options);
+        $this->assertEquals($this->soapserverOptions, $service->computedOptions);
     }
 }

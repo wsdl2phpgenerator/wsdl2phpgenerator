@@ -45,7 +45,14 @@ class PhpClass extends PhpElement
 
     /**
      *
-     * @var const
+     * @var string[]
+     * @access private
+     */
+    private $implements;
+
+    /**
+     *
+     * @var string
      * @access private
      */
     private $default;
@@ -58,14 +65,14 @@ class PhpClass extends PhpElement
 
     /**
      *
-     * @var array Array of PhpVariable objects
+     * @var PhpVariable[]
      * @access private
      */
     private $variables;
 
     /**
      *
-     * @var array Array of PhpFunction objects
+     * @var PhpFunction[]
      * @access private
      */
     private $functions;
@@ -146,6 +153,10 @@ class PhpClass extends PhpElement
             $ret .= ' extends ' . $this->extends;
         }
 
+        if (count($this->implements) > 0) {
+            $ret .= ' implements ' . implode(', ', $this->implements);
+        }
+
         $ret .= PHP_EOL . '{' . PHP_EOL;
 
         if (isset($this->default)) {
@@ -193,6 +204,15 @@ class PhpClass extends PhpElement
         if (in_array($filename, $this->dependencies) == false) {
             $this->dependencies[] = $filename;
         }
+    }
+
+    /**
+     * @param string|\string[] $classes  $filename
+     */
+    public function addImplementation($classes)
+    {
+        $classes = (array)$classes;
+        $this->implements = array_merge((array)$this->implements, $classes);
     }
 
     /**

@@ -9,9 +9,17 @@ class SoapServer extends \SoapServer
 {
 
     /**
-     * The options passed to the SoapServer.
+     * The WSDL passed to the SoapServer.
      *
-     * Normally options passed to an SoapServer instance cannot be retrieved. This makes it possible.
+     * Normally parameters passed to an SoapServer instance cannot be retrieved. This makes it possible.
+     *
+     * @var string
+     */
+    public $wsdl;
+
+
+    /**
+     * The options passed to the SoapServer.
      *
      * @var array
      */
@@ -19,6 +27,7 @@ class SoapServer extends \SoapServer
 
     public function __construct($wsdl, $options = array())
     {
+        $this->wsdl = $wsdl;
         $this->options = $options;
     }
 

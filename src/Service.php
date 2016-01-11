@@ -163,9 +163,12 @@ class Service implements ClassGenerator
     }
   }' . PHP_EOL;
         $source .= '  $options = array_merge(' . var_export($this->config->get('soapClientOptions'), true) . ', $options);' . PHP_EOL;
+        $source .= '  if (!$wsdl) {' . PHP_EOL;
+        $source .= '    $wsdl = \'' . $this->config->get('inputFile') . '\';' . PHP_EOL;
+        $source .= '  }' . PHP_EOL;
         $source .= '  parent::__construct($wsdl, $options);' . PHP_EOL;
 
-        $function = new PhpFunction('public', '__construct', 'array $options = array(), $wsdl = \'' . $this->config->get('inputFile') . '\'', $source, $comment);
+        $function = new PhpFunction('public', '__construct', 'array $options = array(), $wsdl = null', $source, $comment);
 
         // Add the constructor
         $this->class->addFunction($function);
