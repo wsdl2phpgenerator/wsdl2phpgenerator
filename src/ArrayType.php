@@ -43,13 +43,13 @@ class ArrayType extends ComplexType
         // If it is child type, fallback to ComplexType. Can check this only when all
         // types are loaded. See Generator->loadTypes();
         if ($this->getBaseTypeClass() === null) {
-            $this->implementArrayAccessAndIterator();
+            $this->implementArrayInterfaces();
         }
     }
 
     protected function implementArrayAccess()
     {
-        $this->class->addImplementation('ArrayAccess');
+        $this->class->addImplementation('\\ArrayAccess');
         $description = 'ArrayAccess implementation';
 
         $offsetExistsDock = new PhpDocComment();
@@ -133,7 +133,7 @@ class ArrayType extends ComplexType
 
     protected function implementIterator()
     {
-        $this->class->addImplementation('Iterator');
+        $this->class->addImplementation('\\Iterator');
         $description = 'Iterator implementation';
 
         $currentDock = new PhpDocComment();
@@ -219,7 +219,7 @@ class ArrayType extends ComplexType
 
     protected function implementCountable()
     {
-        $this->class->addImplementation('Countable');
+        $this->class->addImplementation('\\Countable');
         $description = 'Countable implementation';
 
         $countDock = new PhpDocComment();
@@ -239,7 +239,7 @@ class ArrayType extends ComplexType
         $this->class->addFunction($count);
     }
 
-    protected function implementArrayAccessAndIterator()
+    protected function implementArrayInterfaces()
     {
         $members = array_values($this->members);
         $this->field = $members[0];
