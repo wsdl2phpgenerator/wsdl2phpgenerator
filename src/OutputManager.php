@@ -42,18 +42,20 @@ class OutputManager
      * Saves the service and types php code to file
      *
      * @param PhpClass $service
+     * @param PhpClass $serverService
      * @param array $types
      */
-    public function save(PhpClass $service, array $types)
+    public function save(PhpClass $service, PhpClass $serverService, array $types)
     {
         $this->setOutputDirectory();
 
         $this->saveClassToFile($service);
+        $this->saveClassToFile($serverService);
         foreach ($types as $type) {
             $this->saveClassToFile($type);
         }
 
-        $classes = array_merge(array($service), $types);
+        $classes = array_merge(array($service, $serverService), $types);
         $this->saveAutoloader($service->getIdentifier(), $classes);
     }
 
