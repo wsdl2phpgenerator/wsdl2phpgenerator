@@ -36,6 +36,8 @@ class PhpVariable extends PhpElement
      */
     public function __construct($access, $identifier, $initialization = '', PhpDocComment $comment = null)
     {
+        throw new \Exception('deprecated');
+
         $this->comment = $comment;
         $this->access = $access;
         $this->identifier = $identifier;

@@ -75,6 +75,8 @@ class PhpDocComment
      */
     public function __construct($description = '')
     {
+        throw new \Exception('deprecated');
+
         $this->description = $description;
         $this->access = null;
         $this->var = null;

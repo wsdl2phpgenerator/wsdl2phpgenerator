@@ -19,7 +19,8 @@
         "php": ">=5.3.0",
         "ext-soap": "*",
         "symfony/options-resolver": "~2.6|~3.0",
-        "symfony/polyfill-iconv": "^1.2"
+        "symfony/polyfill-iconv": "^1.2",
+        "zendframework/zend-code": "~3.0"
     },
     "require-dev": {
         "kasperg/phing-github": "0.2.*",

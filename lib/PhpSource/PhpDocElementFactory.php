@@ -28,6 +28,8 @@ class PhpDocElementFactory
      */
     public static function getParam($dataType, $name, $description)
     {
+        throw new \Exception('deprecated');
+
         if (strlen($name) == 0) {
             throw new Exception('A parameter must have a name!');
         }
