@@ -6,10 +6,16 @@
 namespace Wsdl2PhpGenerator;
 
 use Wsdl2PhpGenerator\PhpSource\PhpClass;
-use Wsdl2PhpGenerator\PhpSource\PhpDocComment;
-use Wsdl2PhpGenerator\PhpSource\PhpDocElementFactory;
-use Wsdl2PhpGenerator\PhpSource\PhpFunction;
-use Wsdl2PhpGenerator\PhpSource\PhpVariable;
+use Wsdl2PhpGenerator\ZendCode\VarTag;
+use Zend\Code\Generator\ClassGenerator as ZendClassGenerator;
+use Zend\Code\Generator\DocBlock\Tag\ParamTag;
+use Zend\Code\Generator\DocBlockGenerator;
+use Zend\Code\Generator\MethodGenerator;
+use Zend\Code\Generator\ParameterGenerator;
+use Zend\Code\Generator\PropertyGenerator;
+use Zend\Code\Generator\PropertyValueGenerator;
+use Zend\Code\Generator\ValueGenerator;
+use Zend\Code\Generator\DocBlock\Tag\ReturnTag;
 
 /**
  * Service represents the service in the wsdl
@@ -27,7 +33,7 @@ class Service implements ClassGenerator
     private $config;
 
     /**
-     * @var PhpClass The class used to create the service.
+     * @var ZendClassGenerator The class used to create the service.
      */
     private $class;
 
@@ -148,35 +154,54 @@ class Service implements ClassGenerator
         $name = ucfirst($name);
 
         // Create the class object
-        $comment = new PhpDocComment($this->description);
-        $this->class = new PhpClass($name, false, $this->config->get('soapClientClass'), $comment);
+        $this->class = new ZendClassGenerator();
+        $this->class->setName($name);
+        if ($this->config->get('namespaceName'))
+        {
+            $this->class->setNamespaceName($this->config->get('namespaceName'));
+        }
+        $this->class->setExtendedClass($this->config->get('soapClientClass'));
+        $this->class->setDocBlock(
+            (new DocBlockGenerator)
+                ->setLongDescription($this->description)
+        );
 
-        // Create the constructor
-        $comment = new PhpDocComment();
-        $comment->addParam(PhpDocElementFactory::getParam('array', 'options', 'A array of config values'));
-        $comment->addParam(PhpDocElementFactory::getParam('string', 'wsdl', 'The wsdl file to use'));
+        $constructorComment = new DocBlockGenerator();
+        $constructorComment->setTag(new ParamTag('options', 'array', 'A array of config values'));
+        $constructorComment->setTag(new ParamTag('wsdl', 'string', 'The wsdl file to use'));
 
         $source = '
-  foreach (self::$classmap as $key => $value) {
+foreach (self::$classmap as $key => $value) {
     if (!isset($options[\'classmap\'][$key])) {
-      $options[\'classmap\'][$key] = $value;
+        $options[\'classmap\'][$key] = $value;
     }
-  }' . PHP_EOL;
-        $source .= '  $options = array_merge(' . var_export($this->config->get('soapClientOptions'), true) . ', $options);' . PHP_EOL;
-        $source .= '  if (!$wsdl) {' . PHP_EOL;
+}' . PHP_EOL;
+        $source .= '$options = array_merge(' . var_export($this->config->get('soapClientOptions'), true) . ', $options);' . PHP_EOL;
+        $source .= 'if (!$wsdl) {' . PHP_EOL;
         $source .= '    $wsdl = \'' . $this->config->get('inputFile') . '\';' . PHP_EOL;
-        $source .= '  }' . PHP_EOL;
-        $source .= '  parent::__construct($wsdl, $options);' . PHP_EOL;
+        $source .= '}' . PHP_EOL;
+        $source .= 'parent::__construct($wsdl, $options);' . PHP_EOL;
 
-        $function = new PhpFunction('public', '__construct', 'array $options = array(), $wsdl = null', $source, $comment);
-
-        // Add the constructor
-        $this->class->addFunction($function);
-
-        // Generate the classmap
-        $name = 'classmap';
-        $comment = new PhpDocComment();
-        $comment->setVar(PhpDocElementFactory::getVar('array', $name, 'The defined classes'));
+        $this->class->addMethodFromGenerator(
+            (new MethodGenerator())
+                ->setBody($source)
+                ->setParameter(
+                    (new ParameterGenerator())
+                        ->setName('options')
+                        ->setType('array')
+                        ->setDefaultValue(array())
+                )
+                ->setParameter(
+                    (new ParameterGenerator())
+                        ->setName('wsdl')
+                        ->setDefaultValue(
+                            new ValueGenerator(null, ValueGenerator::TYPE_NULL)
+                        )
+                )
+                ->setDocBlock($constructorComment)
+                ->setName('__construct')
+                ->setFlags(MethodGenerator::FLAG_PUBLIC)
+        );
 
         $init = array();
         foreach ($this->types as $type) {
@@ -184,32 +209,64 @@ class Service implements ClassGenerator
                 $init[$type->getIdentifier()] = $this->config->get('namespaceName') . "\\" . $type->getPhpIdentifier();
             }
         }
-        $var = new PhpVariable('private static', $name, var_export($init, true), $comment);
 
-        // Add the classmap variable
-        $this->class->addVariable($var);
+        $classmapValue = new PropertyValueGenerator();
+        $classmapValue
+            ->setType(PropertyValueGenerator::TYPE_ARRAY)
+            ->setValue($init);
+
+        $this->class->addPropertyFromGenerator(
+            (new PropertyGenerator)
+                ->setDefaultValue($classmapValue)
+                ->setName('classmap')
+                ->setFlags(PropertyGenerator::FLAG_PRIVATE | PropertyGenerator::FLAG_STATIC)
+                ->setDocBlock(
+                    (new DocBlockGenerator)
+                        ->setTag(
+                            new VarTag('classmap', 'array', 'The defined classes')
+                        )
+                )
+        );
+
 
         // Add all methods
         foreach ($this->operations as $operation) {
             $name = Validator::validateOperation($operation->getName());
 
-            $comment = new PhpDocComment($operation->getDescription());
-            $comment->setReturn(PhpDocElementFactory::getReturn($operation->getReturns(), ''));
+            $docBlock = new DocBlockGenerator();
+            $docBlock->setTag(
+                new ReturnTag($operation->getReturns())
+            );
+
+            $method = new MethodGenerator();
+            $method->setName($name);
+            $method->setDocBlock($docBlock);
+            $method->setFlags(MethodGenerator::FLAG_PUBLIC);
 
             foreach ($operation->getParams() as $param => $hint) {
                 $arr = $operation->getPhpDocParams($param, $this->types);
-                $comment->addParam(PhpDocElementFactory::getParam($arr['type'], $arr['name'], $arr['desc']));
+
+                $docBlock->setTag(
+                    new ParamTag($arr['name'], $arr['type'], $arr['desc'])
+                );
+
+                $method->setParameter(
+                    (new ParameterGenerator())
+                        //TODO: realy need ltrim's here, or need to change Operation behaviour?
+                        ->setName(ltrim($param, '$'))
+                        ->setType(
+                            $this->class->getNamespaceName() . '\\' . $hint
+                        )
+                );
             }
 
-            $source = '  return $this->__soapCall(\'' . $operation->getName() . '\', array(' . $operation->getParamStringNoTypeHints() . '));' . PHP_EOL;
+            $source = 'return $this->__soapCall(\'' . $operation->getName() . '\', array(' . $operation->getParamStringNoTypeHints() . '));' . PHP_EOL;
 
-            $paramStr = $operation->getParamString($this->types);
-
-            $function = new PhpFunction('public', $name, $paramStr, $source, $comment);
-
-            if ($this->class->functionExists($function->getIdentifier()) == false) {
-                $this->class->addFunction($function);
+            if ($this->class->hasMethod($method->getName()) == false) {
+                $this->class->addMethodFromGenerator($method);
             }
+
+            $method->setBody($source);
         }
     }
 

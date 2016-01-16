@@ -46,6 +46,8 @@ class PhpDocElement
      */
     public function __construct($type, $dataType, $variableName, $description)
     {
+        throw new \Exception('deprecated');
+
         $this->type = $type;
         $this->datatype = $dataType;
         $this->variableName = $variableName;

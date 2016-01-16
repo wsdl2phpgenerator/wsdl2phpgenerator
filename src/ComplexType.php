@@ -6,11 +6,15 @@
 namespace Wsdl2PhpGenerator;
 
 use \Exception;
-use Wsdl2PhpGenerator\PhpSource\PhpClass;
-use Wsdl2PhpGenerator\PhpSource\PhpDocComment;
-use Wsdl2PhpGenerator\PhpSource\PhpDocElementFactory;
-use Wsdl2PhpGenerator\PhpSource\PhpFunction;
-use Wsdl2PhpGenerator\PhpSource\PhpVariable;
+use Wsdl2PhpGenerator\ZendCode\VarTag;
+use Zend\Code\Generator\ClassGenerator;
+use Zend\Code\Generator\DocBlock\Tag\ParamTag;
+use Zend\Code\Generator\DocBlock\Tag\ReturnTag;
+use Zend\Code\Generator\DocBlockGenerator;
+use Zend\Code\Generator\MethodGenerator;
+use Zend\Code\Generator\ParameterGenerator;
+use Zend\Code\Generator\PropertyGenerator;
+use Zend\Code\Generator\PropertyValueGenerator;
 
 /**
  * ComplexType
@@ -67,19 +71,26 @@ class ComplexType extends Type
 
         $classBaseType = $this->getBaseTypeClass();
 
-        $this->class = new PhpClass(
+        $this->class = new ClassGenerator(
             $this->phpIdentifier,
-            false,
-            $classBaseType,
             null,
-            false,
             $this->abstract
+                ? ClassGenerator::FLAG_ABSTRACT
+                : null,
+            $classBaseType
         );
 
-        $constructorComment = new PhpDocComment();
+        $constructor = new MethodGenerator('__construct');
+        $constructorDocBlock = new DocBlockGenerator();
+
         $constructorSource = '';
         $constructorParameters = array();
-        $accessors = array();
+
+        $constructor
+            ->setFlags(MethodGenerator::FLAG_PUBLIC)
+            ->setDocBlock($constructorDocBlock);
+
+        $this->class->addMethodFromGenerator($constructor);
 
         // Add base type members to constructor parameter list first and call base class constructor
         $parentMembers = $this->getBaseTypeMembers($this);
@@ -89,11 +100,19 @@ class ComplexType extends Type
                 $name = Validator::validateAttribute($member->getName());
 
                 if (!$member->getNullable()) {
-                    $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
-                    $constructorParameters[$name] = Validator::validateTypeHint($type);
+                    $constructorDocBlock->setTag(
+                        new ParamTag($name, $type)
+                    );
+
+                    $parameter = new ParameterGenerator();
+                    $parameter->setName($name);
+
+                    $parameter->setType(Validator::validateTypeHint($type));
+
+                    $constructor->setParameter($parameter);
                 }
             }
-            $constructorSource .= '  parent::__construct(' . $this->buildParametersString($constructorParameters, false) . ');' . PHP_EOL;
+            $constructorSource .= 'parent::__construct(' . $this->buildParametersString($constructorParameters, false) . ');' . PHP_EOL;
         }
 
         // Add member variables
@@ -102,27 +121,47 @@ class ComplexType extends Type
             $name = Validator::validateAttribute($member->getName());
             $typeHint = Validator::validateTypeHint($type);
 
-            $comment = new PhpDocComment();
-            $comment->setVar(PhpDocElementFactory::getVar($type, $name, ''));
-            $var = new PhpVariable('protected', $name, 'null', $comment);
-            $this->class->addVariable($var);
+            $property = new PropertyGenerator();
+            $property
+                ->setDefaultValue(null, PropertyValueGenerator::TYPE_NULL)
+                ->setDocBlock(
+                    (new DocBlockGenerator())
+                        ->setTag(new VarTag($name, $type))
+                )
+                ->setFlags(PropertyGenerator::FLAG_PROTECTED)
+                ->setName($name);
+
+            $this->class->addPropertyFromGenerator($property);
 
             if (!$member->getNullable()) {
                 if ($type == '\DateTime') {
                     if ($this->config->get('constructorParamsDefaultToNull')) {
-                        $constructorSource .= '  $this->' . $name . ' = $' . $name . ' ? $' . $name . '->format(\DateTime::ATOM) : null;' . PHP_EOL;
+                        $constructorSource .= '$this->' . $name . ' = $' . $name . ' ? $' . $name . '->format(\DateTime::ATOM) : null;' . PHP_EOL;
                     } else {
-                        $constructorSource .= '  $this->' . $name . ' = $' . $name . '->format(\DateTime::ATOM);' . PHP_EOL;
+                        $constructorSource .= '$this->' . $name . ' = $' . $name . '->format(\DateTime::ATOM);' . PHP_EOL;
                     }
                 } else {
-                    $constructorSource .= '  $this->' . $name . ' = $' . $name . ';' . PHP_EOL;
+                    $constructorSource .= '$this->' . $name . ' = $' . $name . ';' . PHP_EOL;
                 }
-                $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
-                $constructorParameters[$name] = $typeHint;
+
+                $constructorParameter = new ParameterGenerator();
+                $constructorParameter->setName($name);
+                if (!empty($typeHint)) {
+                    $constructorParameter->setType($typeHint);
+                }
+
+                $constructor->setParameter($constructorParameter);
+                $constructorDocBlock->setTag(new ParamTag($name, $type));
             }
 
-            $getterComment = new PhpDocComment();
-            $getterComment->setReturn(PhpDocElementFactory::getReturn($type, ''));
+            $getter = new MethodGenerator();
+            $getter
+                ->setName('get' . ucfirst($name))
+                ->setFlags(MethodGenerator::FLAG_PUBLIC)
+                ->setDocBlock((new DocBlockGenerator())
+                    ->setTag(new ReturnTag($type))
+                );
+
             if ($type == '\DateTime') {
                 $getterCode = '  if ($this->' . $name . ' == null) {' . PHP_EOL
                     . '    return null;' . PHP_EOL
@@ -136,59 +175,46 @@ class ComplexType extends Type
             } else {
                 $getterCode = '  return $this->' . $name . ';' . PHP_EOL;
             }
-            $getter = new PhpFunction('public', 'get' . ucfirst($name), '', $getterCode, $getterComment);
-            $accessors[] = $getter;
 
-            $setterComment = new PhpDocComment();
-            $setterComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
-            $setterComment->setReturn(PhpDocElementFactory::getReturn($this->phpNamespacedIdentifier, ''));
+            $getter->setBody($getterCode);
+            $this->class->addMethodFromGenerator($getter);
+
+            $setterParameter = new ParameterGenerator;
+            $setterParameter->setName($name);
+            if (isset($typeHint)) {
+                $setterParameter->setType($typeHint);
+            }
+
+            $setter =  new MethodGenerator();
+            $setter
+                ->setParameter($setterParameter)
+                ->setName('set' . ucfirst($name))
+                ->setFlags(MethodGenerator::FLAG_PUBLIC)
+                ->setDocBlock((new DocBlockGenerator())
+                    ->setTag(new ParamTag($name, $type))
+                    ->setTag(new ReturnTag($this->phpNamespacedIdentifier))
+                );
+
             if ($type == '\DateTime') {
                 if ($member->getNullable()) {
-                    $setterCode = '  if ($' . $name . ' == null) {' . PHP_EOL
-                        . '   $this->' . $name . ' = null;' . PHP_EOL
-                        . '  } else {' . PHP_EOL
+                    $setterCode = 'if ($' . $name . ' == null) {' . PHP_EOL
+                        . '     $this->' . $name . ' = null;' . PHP_EOL
+                        . '} else {' . PHP_EOL
                         . '    $this->' . $name . ' = $' . $name . '->format(\DateTime::ATOM);' . PHP_EOL
-                        . '  }' . PHP_EOL;
+                        . '}' . PHP_EOL;
                 } else {
                     $setterCode = '  $this->' . $name . ' = $' . $name . '->format(\DateTime::ATOM);' . PHP_EOL;
                 }
             } else {
-                $setterCode = '  $this->' . $name . ' = $' . $name . ';' . PHP_EOL;
+                $setterCode = '$this->' . $name . ' = $' . $name . ';' . PHP_EOL;
             }
-            $setterCode .= '  return $this;' . PHP_EOL;
-            $setter = new PhpFunction(
-                'public',
-                'set' . ucfirst($name),
-                $this->buildParametersString(
-                    array($name => $typeHint),
-                    true,
-                    // If the type of a member is nullable we should allow passing null to the setter. If the type
-                    // of the member is a class and not a primitive this is only possible if setter parameter has
-                    // a default null value. We can detect whether the type is a class by checking the type hint.
-                    $member->getNullable() && !empty($typeHint)
-                ),
-                $setterCode,
-                $setterComment
-            );
-            $accessors[] = $setter;
+            $setterCode .= 'return $this;' . PHP_EOL;
+
+            $setter->setBody($setterCode);
+            $this->class->addMethodFromGenerator($setter);
         }
 
-        $constructor = new PhpFunction(
-            'public',
-            '__construct',
-            $this->buildParametersString(
-                $constructorParameters,
-                true,
-                $this->config->get('constructorParamsDefaultToNull')
-            ),
-            $constructorSource,
-            $constructorComment
-        );
-        $this->class->addFunction($constructor);
-
-        foreach ($accessors as $accessor) {
-            $this->class->addFunction($accessor);
-        }
+        $constructor->setBody($constructorSource);
     }
 
     /**

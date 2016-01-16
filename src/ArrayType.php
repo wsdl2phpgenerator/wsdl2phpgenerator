@@ -249,8 +249,9 @@ class ArrayType extends ComplexType
         $this->field = $members[0];
         $this->arrayOf = substr($this->field->getType(), 0, -2);
 
-        $this->implementArrayAccess();
-        $this->implementIterator();
-        $this->implementCountable();
+        //TODO: use ZendCode
+//        $this->implementArrayAccess();
+//        $this->implementIterator();
+//        $this->implementCountable();
     }
 }

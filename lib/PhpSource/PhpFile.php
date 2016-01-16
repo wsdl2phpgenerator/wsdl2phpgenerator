@@ -51,6 +51,8 @@ class PhpFile
      */
     public function __construct($name)
     {
+        throw new \Exception('deprecated');
+
         $this->name = $name;
         $this->namespaces = array();
         $this->classes = array();

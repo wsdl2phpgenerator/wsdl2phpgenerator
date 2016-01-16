@@ -44,6 +44,8 @@ class PhpFunction extends PhpElement
      */
     public function __construct($access, $identifier, $params, $source, PhpDocComment $comment = null)
     {
+        throw new \Exception('deprecated');
+
         $this->access = $access;
         $this->identifier = $identifier;
         $this->params = $params;
