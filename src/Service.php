@@ -252,15 +252,17 @@ foreach (self::$classmap as $key => $value) {
                     new ParamTag($arr['name'], $arr['type'], $arr['desc'])
                 );
 
+                $typeHint = Validator::validateTypeHint($hint);
+                if (!empty($typeHint) && !empty($this->class->getNamespaceName()))
+                {
+                    $typeHint = $this->class->getNamespaceName() . '\\' . Validator::validateTypeHint($hint);
+                }
+
                 $method->setParameter(
-                    (new ParameterGenerator())
-                        //TODO: realy need ltrim's here, or need to change Operation behaviour?
-                        ->setName(ltrim($param, '$'))
-                        ->setType(
-                            empty($this->class->getNamespaceName())
-                                ? $hint
-                                : $this->class->getNamespaceName() . '\\' . $hint
-                        )
+                    new ParameterGenerator(
+                        ltrim($param, '$'),
+                        $typeHint
+                    )
                 );
             }
 
