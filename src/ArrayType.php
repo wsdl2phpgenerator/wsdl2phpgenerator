@@ -6,9 +6,11 @@
 namespace Wsdl2PhpGenerator;
 
 use \Exception;
-use Wsdl2PhpGenerator\PhpSource\PhpDocComment;
-use Wsdl2PhpGenerator\PhpSource\PhpDocElementFactory;
-use Wsdl2PhpGenerator\PhpSource\PhpFunction;
+use Zend\Code\Generator\DocBlock\Tag\ParamTag;
+use Zend\Code\Generator\DocBlock\Tag\ReturnTag;
+use Zend\Code\Generator\DocBlockGenerator;
+use Zend\Code\Generator\MethodGenerator;
+use Zend\Code\Generator\ParameterGenerator;
 
 /**
  * ArrayType
@@ -49,198 +51,179 @@ class ArrayType extends ComplexType
 
     protected function implementArrayAccess()
     {
-        $this->class->addImplementation('\\ArrayAccess');
+        $this->class->setImplementedInterfaces(
+            array_merge(
+                ['\\ArrayAccess'],
+                $this->class->getImplementedInterfaces()
+            )
+        );
         $description = 'ArrayAccess implementation';
 
-        $offsetExistsDock = new PhpDocComment();
-        $offsetExistsDock->setDescription($description);
-        $offsetExistsDock->addParam(PhpDocElementFactory::getParam('mixed', 'offset', 'An offset to check for'));
-        $offsetExistsDock->setReturn(PhpDocElementFactory::getReturn('boolean', 'true on success or false on failure'));
-        $offsetExists = new PhpFunction(
-            'public',
-            'offsetExists',
-            $this->buildParametersString(
-                array(
-                    'offset' => 'mixed'
-                ),
-                false,
-                false
-            ),
-            '  return isset($this->' . $this->field->getName() . '[$offset]);',
-            $offsetExistsDock
+        // offsetExists
+        $this->class->addMethodFromGenerator(
+            (new MethodGenerator())
+                ->setName('offsetExists')
+                ->setFlags(MethodGenerator::FLAG_PUBLIC)
+                ->setDocBlock(
+                    (new DocBlockGenerator())
+                        ->setShortDescription($description)
+                        ->setTag(new ParamTag('offset', 'mixed', 'An offset to check for'))
+                        ->setTag(new ReturnTag('boolean', 'true on success or false on failure'))
+                )
+                ->setParameter(new ParameterGenerator('offset'))
+                ->setBody('return isset($this->' . $this->field->getName() . '[$offset]);')
         );
-        $this->class->addFunction($offsetExists);
 
-        $offsetGetDock = new PhpDocComment();
-        $offsetGetDock->setDescription($description);
-        $offsetGetDock->addParam(PhpDocElementFactory::getParam('mixed', 'offset', 'The offset to retrieve'));
-        $offsetGetDock->setReturn(PhpDocElementFactory::getReturn($this->arrayOf, ''));
-        $offsetGet = new PhpFunction(
-            'public',
-            'offsetGet',
-            $this->buildParametersString(
-                array(
-                    'offset' => 'mixed'
-                ),
-                false,
-                false
-            ),
-            '  return $this->' . $this->field->getName() . '[$offset];',
-            $offsetGetDock
+        // offsetGet
+        $this->class->addMethodFromGenerator(
+            (new MethodGenerator())
+                ->setName('offsetGet')
+                ->setFlags(MethodGenerator::FLAG_PUBLIC)
+                ->setDocBlock(
+                    (new DocBlockGenerator())
+                        ->setShortDescription($description)
+                        ->setTag(new ParamTag('offset', 'mixed', 'The offset to retrieve'))
+                        ->setTag(new ReturnTag($this->arrayOf))
+                )
+                ->setParameter(new ParameterGenerator('offset'))
+                ->setBody('return $this->' . $this->field->getName() . '[$offset];')
         );
-        $this->class->addFunction($offsetGet);
 
-        $offsetSetDock = new PhpDocComment();
-        $offsetSetDock->setDescription($description);
-        $offsetSetDock->addParam(PhpDocElementFactory::getParam('mixed', 'offset', 'The offset to assign the value to'));
-        $offsetSetDock->addParam(PhpDocElementFactory::getParam($this->arrayOf, 'value', 'The value to set'));
-        $offsetSetDock->setReturn(PhpDocElementFactory::getReturn('void', ''));
-        $offsetSet = new PhpFunction(
-            'public',
-            'offsetSet',
-            $this->buildParametersString(
-                array(
-                    'offset' => 'mixed',
-                    'value' => $this->arrayOf
-                ),
-                false,
-                false
-            ),
-            '  if (!isset($offset)) {' . PHP_EOL .
-            '    $this->' . $this->field->getName() . '[] = $value;' . PHP_EOL .
-            '  } else {' . PHP_EOL .
-            '    $this->' . $this->field->getName() . '[$offset] = $value;' . PHP_EOL .
-            '  }',
-            $offsetSetDock
+        // offsetSet
+        $this->class->addMethodFromGenerator(
+            (new MethodGenerator())
+                ->setName('offsetSet')
+                ->setFlags(MethodGenerator::FLAG_PUBLIC)
+                ->setDocBlock(
+                    (new DocBlockGenerator())
+                        ->setShortDescription($description)
+                        ->setTag(new ParamTag('offset', 'mixed', 'The offset to assign the value to'))
+                        ->setTag(new ParamTag('value', $this->arrayOf, 'The value to set'))
+                        ->setTag(new ReturnTag('void'))
+                )
+                ->setParameter(new ParameterGenerator('offset'))
+                ->setParameter(new ParameterGenerator('value'))
+                ->setBody(
+                    '  if (!isset($offset)) {' . PHP_EOL .
+                    '    $this->' . $this->field->getName() . '[] = $value;' . PHP_EOL .
+                    '  } else {' . PHP_EOL .
+                    '    $this->' . $this->field->getName() . '[$offset] = $value;' . PHP_EOL .
+                    '  }'
+                )
         );
-        $this->class->addFunction($offsetSet);
 
-        $offsetUnsetDock = new PhpDocComment();
-        $offsetUnsetDock->setDescription($description);
-        $offsetUnsetDock->addParam(PhpDocElementFactory::getParam('mixed', 'offset', 'The offset to unset'));
-        $offsetUnsetDock->setReturn(PhpDocElementFactory::getReturn('void', ''));
-        $offsetUnset = new PhpFunction(
-            'public',
-            'offsetUnset',
-            $this->buildParametersString(
-                array(
-                    'offset' => 'mixed',
-                ),
-                false,
-                false
-            ),
-            '  unset($this->' . $this->field->getName() . '[$offset]);',
-            $offsetUnsetDock
+        // offsetUnset
+        $this->class->addMethodFromGenerator(
+            (new MethodGenerator())
+                ->setName('offsetUnset')
+                ->setFlags(MethodGenerator::FLAG_PUBLIC)
+                ->setDocBlock(
+                    (new DocBlockGenerator())
+                        ->setShortDescription($description)
+                        ->setTag(new ParamTag('offset', 'mixed', 'The offset to unset'))
+                        ->setTag(new ReturnTag('void'))
+                )
+                ->setParameter(new ParameterGenerator('offset'))
+                ->setBody('unset($this->' . $this->field->getName() . '[$offset]);')
         );
-        $this->class->addFunction($offsetUnset);
     }
 
     protected function implementIterator()
     {
-        $this->class->addImplementation('\\Iterator');
+        $this->class->setImplementedInterfaces(
+            array_merge(
+                ['\\Iterator'],
+                $this->class->getImplementedInterfaces()
+            )
+        );
         $description = 'Iterator implementation';
 
-        $currentDock = new PhpDocComment();
-        $currentDock->setDescription($description);
-        $currentDock->setReturn(PhpDocElementFactory::getReturn($this->arrayOf, 'Return the current element'));
-        $current = new PhpFunction(
-            'public',
-            'current',
-            $this->buildParametersString(
-                array(),
-                false,
-                false
-            ),
-            '  return current($this->' . $this->field->getName() . ');',
-            $currentDock
+        // current
+        $this->class->addMethodFromGenerator(
+            (new MethodGenerator())
+                ->setName('current')
+                ->setFlags(MethodGenerator::FLAG_PUBLIC)
+                ->setDocBlock(
+                    (new DocBlockGenerator())
+                        ->setShortDescription($description)
+                        ->setTag(new ReturnTag($this->arrayOf, 'Return the current element'))
+                )
+                ->setBody('return current($this->' . $this->field->getName() . ');')
         );
-        $this->class->addFunction($current);
 
-        $nextDock = new PhpDocComment();
-        $nextDock->setDescription($description . PHP_EOL . 'Move forward to next element');
-        $nextDock->setReturn(PhpDocElementFactory::getReturn('void', ''));
-        $next = new PhpFunction(
-            'public',
-            'next',
-            $this->buildParametersString(
-                array(),
-                false,
-                false
-            ),
-            '  next($this->' . $this->field->getName() . ');',
-            $nextDock
+        // next
+        $this->class->addMethodFromGenerator(
+            (new MethodGenerator())
+                ->setName('next')
+                ->setFlags(MethodGenerator::FLAG_PUBLIC)
+                ->setDocBlock(
+                    (new DocBlockGenerator())
+                        ->setShortDescription($description . PHP_EOL . 'Move forward to next element')
+                        ->setTag(new ReturnTag('void'))
+                )
+                ->setBody('next($this->' . $this->field->getName() . ');')
         );
-        $this->class->addFunction($next);
 
-        $keyDock = new PhpDocComment();
-        $keyDock->setDescription($description);
-        $keyDock->setReturn(PhpDocElementFactory::getReturn('string|null', 'Return the key of the current element or null'));
-        $key = new PhpFunction(
-            'public',
-            'key',
-            $this->buildParametersString(
-                array(),
-                false,
-                false
-            ),
-            '  return key($this->' . $this->field->getName() . ');',
-            $keyDock
+        // key
+        $this->class->addMethodFromGenerator(
+            (new MethodGenerator())
+                ->setName('key')
+                ->setFlags(MethodGenerator::FLAG_PUBLIC)
+                ->setDocBlock(
+                    (new DocBlockGenerator())
+                        ->setShortDescription($description)
+                        ->setTag(new ReturnTag('string|null', 'Return the key of the current element or null'))
+                )
+                ->setBody('return key($this->' . $this->field->getName() . ');')
         );
-        $this->class->addFunction($key);
 
-        $validDock = new PhpDocComment();
-        $validDock->setDescription($description);
-        $validDock->setReturn(PhpDocElementFactory::getReturn('boolean', 'Return the validity of the current position'));
-        $valid = new PhpFunction(
-            'public',
-            'valid',
-            $this->buildParametersString(
-                array(),
-                false,
-                false
-            ),
-            '  return $this->key() !== null;',
-            $validDock
+        // valid
+        $this->class->addMethodFromGenerator(
+            (new MethodGenerator())
+                ->setName('valid')
+                ->setFlags(MethodGenerator::FLAG_PUBLIC)
+                ->setDocBlock(
+                    (new DocBlockGenerator())
+                        ->setShortDescription($description)
+                        ->setTag(new ReturnTag('boolean', 'Return the validity of the current position'))
+                )
+                ->setBody('return $this->key() !== null;')
         );
-        $this->class->addFunction($valid);
 
-        $rewindDock = new PhpDocComment();
-        $rewindDock->setDescription($description . PHP_EOL . 'Rewind the Iterator to the first element');
-        $rewindDock->setReturn(PhpDocElementFactory::getReturn('void', ''));
-        $rewind = new PhpFunction(
-            'public',
-            'rewind',
-            $this->buildParametersString(
-                array(),
-                false,
-                false
-            ),
-            '  reset($this->' . $this->field->getName() . ');',
-            $rewindDock
+        // rewind
+        $this->class->addMethodFromGenerator(
+            (new MethodGenerator())
+                ->setName('rewind')
+                ->setFlags(MethodGenerator::FLAG_PUBLIC)
+                ->setDocBlock(
+                    (new DocBlockGenerator())
+                        ->setShortDescription($description . PHP_EOL . 'Rewind the Iterator to the first element')
+                        ->setTag(new ReturnTag('void'))
+                )
+                ->setBody('reset($this->' . $this->field->getName() . ');')
         );
-        $this->class->addFunction($rewind);
     }
 
     protected function implementCountable()
     {
-        $this->class->addImplementation('\\Countable');
-        $description = 'Countable implementation';
-
-        $countDock = new PhpDocComment();
-        $countDock->setDescription($description);
-        $countDock->setReturn(PhpDocElementFactory::getReturn($this->arrayOf, 'Return count of elements'));
-        $count = new PhpFunction(
-            'public',
-            'count',
-            $this->buildParametersString(
-                array(),
-                false,
-                false
-            ),
-            '  return count($this->' . $this->field->getName() . ');',
-            $countDock
+        $this->class->setImplementedInterfaces(
+            array_merge(
+                ['\\Countable'],
+                $this->class->getImplementedInterfaces()
+            )
         );
-        $this->class->addFunction($count);
+
+        $this->class->addMethodFromGenerator(
+            (new MethodGenerator())
+                ->setName('count')
+                ->setFlags(MethodGenerator::FLAG_PUBLIC)
+                ->setDocBlock(
+                    (new DocBlockGenerator())
+                        ->setShortDescription('Countable implementation')
+                        ->setTag(new ReturnTag('int', 'Return count of elements'))
+                )
+                ->setBody('return count($this->' . $this->field->getName() . ');')
+        );
     }
 
     protected function implementArrayInterfaces()
@@ -249,9 +232,8 @@ class ArrayType extends ComplexType
         $this->field = $members[0];
         $this->arrayOf = substr($this->field->getType(), 0, -2);
 
-        //TODO: use ZendCode
-//        $this->implementArrayAccess();
-//        $this->implementIterator();
-//        $this->implementCountable();
+        $this->implementArrayAccess();
+        $this->implementIterator();
+        $this->implementCountable();
     }
 }

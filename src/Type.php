@@ -6,6 +6,7 @@
 namespace Wsdl2PhpGenerator;
 
 use Wsdl2PhpGenerator\PhpSource\PhpClass;
+use Zend\Code\Generator\ClassGenerator as ZendClassGenerator;
 
 /**
  * Type is an abstract baseclass for all types in the wsdl
@@ -23,7 +24,7 @@ abstract class Type implements ClassGenerator
     protected $config;
 
     /**
-     * @var PhpClass The class used to create the type. This is not used by patterns
+     * @var ZendClassGenerator The class used to create the type. This is not used by patterns
      */
     protected $class;
 
