@@ -131,12 +131,12 @@ class ComplexTypeTest extends CodeGenerationTestCase
             ));
         // Iterator is an existing interface.
         $complexType = new ComplexType($config, 'Iterator');
-        $this->generateClass($complexType, $this->namespace);
+        $this->generateClass($complexType);
         $this->assertClassExists('Iterator', $this->namespace);
 
         // stdClass is an existing class name.
         $complexType = new ComplexType($config, 'stdClass');
-        $this->generateClass($complexType, $this->namespace);
+        $this->generateClass($complexType);
         $this->assertClassExists('stdClass', $this->namespace);
     }
 

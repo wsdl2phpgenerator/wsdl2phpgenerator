@@ -74,7 +74,9 @@ class ComplexType extends Type
 
         $this->class = new ClassGenerator(
             $this->phpIdentifier,
-            null,
+            empty($this->config->get('namespaceName'))
+                ? null
+                : $this->config->get('namespaceName'),
             $this->abstract
                 ? ClassGenerator::FLAG_ABSTRACT
                 : null,
@@ -85,7 +87,7 @@ class ComplexType extends Type
         $constructorDocBlock = new DocBlockGenerator();
 
         $constructorSource = '';
-        $constructorParameters = array();
+        $parentConstructorParameters = array();
 
         $constructor
             ->setFlags(MethodGenerator::FLAG_PUBLIC)
@@ -108,12 +110,23 @@ class ComplexType extends Type
                     $parameter = new ParameterGenerator();
                     $parameter->setName($name);
 
-                    $parameter->setType(Validator::validateTypeHint($type));
+                    $typeHint = Validator::validateTypeHint($type);
+                    if (!empty($typeHint))
+                    {
+                        $parameter->setType($typeHint);
+                    }
+
+                    if ($type == '\DateTime' || $this->config->get('constructorParamsDefaultToNull')) {
+                        $parameter->setDefaultValue(
+                            new ValueGenerator(null, ValueGenerator::TYPE_NULL)
+                        );
+                    }
 
                     $constructor->setParameter($parameter);
+                    $parentConstructorParameters[$name] = Validator::validateTypeHint($type);
                 }
             }
-            $constructorSource .= 'parent::__construct(' . $this->buildParametersString($constructorParameters, false) . ');' . PHP_EOL;
+            $constructorSource .= 'parent::__construct(' . $this->buildParametersString($parentConstructorParameters, false) . ');' . PHP_EOL;
         }
 
         // Add member variables
@@ -150,7 +163,7 @@ class ComplexType extends Type
                 if (!empty($typeHint)) {
                     $constructorParameter->setType($typeHint);
                 }
-                if ($type == '\DateTime') {
+                if ($type == '\DateTime' || $this->config->get('constructorParamsDefaultToNull')) {
                     $constructorParameter->setDefaultValue(
                         new ValueGenerator(null, ValueGenerator::TYPE_NULL)
                     );
