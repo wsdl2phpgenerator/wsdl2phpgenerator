@@ -15,6 +15,7 @@ use Zend\Code\Generator\MethodGenerator;
 use Zend\Code\Generator\ParameterGenerator;
 use Zend\Code\Generator\PropertyGenerator;
 use Zend\Code\Generator\PropertyValueGenerator;
+use Zend\Code\Generator\ValueGenerator;
 
 /**
  * ComplexType
@@ -123,7 +124,7 @@ class ComplexType extends Type
 
             $property = new PropertyGenerator();
             $property
-                ->setDefaultValue(null, PropertyValueGenerator::TYPE_NULL)
+                ->setDefaultValue(new PropertyValueGenerator(null, ValueGenerator::TYPE_NULL))
                 ->setDocBlock(
                     (new DocBlockGenerator())
                         ->setTag(new VarTag($name, $type))
@@ -148,6 +149,11 @@ class ComplexType extends Type
                 $constructorParameter->setName($name);
                 if (!empty($typeHint)) {
                     $constructorParameter->setType($typeHint);
+                }
+                if ($type == '\DateTime') {
+                    $constructorParameter->setDefaultValue(
+                        new ValueGenerator(null, ValueGenerator::TYPE_NULL)
+                    );
                 }
 
                 $constructor->setParameter($constructorParameter);
@@ -183,6 +189,11 @@ class ComplexType extends Type
             $setterParameter->setName($name);
             if (isset($typeHint)) {
                 $setterParameter->setType($typeHint);
+            }
+            if ($type == '\DateTime') {
+                $setterParameter->setDefaultValue(
+                    new ValueGenerator(null, ValueGenerator::TYPE_NULL)
+                );
             }
 
             $setter =  new MethodGenerator();

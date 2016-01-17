@@ -79,7 +79,7 @@ abstract class Type implements ClassGenerator
     /**
      * Getter for the class. Generates the class if it's null
      *
-     * @return PhpClass
+     * @return ZendClassGenerator
      */
     public function getClass()
     {

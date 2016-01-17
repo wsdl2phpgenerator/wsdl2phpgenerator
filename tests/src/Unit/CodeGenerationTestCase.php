@@ -445,11 +445,13 @@ class CodeGenerationTestCase extends PHPUnit_Framework_TestCase
      */
     protected function generateClass(ClassGenerator $generator, $namespace = null)
     {
-        $source = $generator->getClass()->getSource();
+        $source = $generator->getClass()->generate();
         if (!empty($namespace)) {
             $source = 'namespace ' . $namespace . ';' . PHP_EOL . $source;
         }
 
+        //TODO: still need eval?
+        //
         // Eval the source for the generated class. This is now pretty but currently the only way we can test whether
         // the generated code is as expected. Our own code generation library does not allow us to retrieve functions
         // from the representing class.

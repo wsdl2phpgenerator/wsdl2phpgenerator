@@ -6,7 +6,7 @@
 namespace Wsdl2PhpGenerator;
 
 use \InvalidArgumentException;
-use Wsdl2PhpGenerator\PhpSource\PhpClass;
+use Zend\Code\Generator\ClassGenerator as ZendClassGenerator;
 
 /**
  * Enum represents a simple type with enumerated values
@@ -38,15 +38,15 @@ class Enum extends Type
     /**
      * Implements the loading of the class object
      *
-     * @throws Exception if the class is already generated(not null)
+     * @throws \Exception if the class is already generated(not null)
      */
     protected function generateClass()
     {
         if ($this->class != null) {
-            throw new Exception("The class has already been generated");
+            throw new \Exception("The class has already been generated");
         }
 
-        $this->class = new PhpClass($this->phpIdentifier, false);
+        $this->class = new ZendClassGenerator($this->phpIdentifier);
 
         $first = true;
 
@@ -59,11 +59,11 @@ class Enum extends Type
             });
 
             if ($first) {
-                $this->class->addConstant($name, '__default');
+                $this->class->addConstant('__default', $name);
                 $first = false;
             }
 
-            $this->class->addConstant($value, $name);
+            $this->class->addConstant($name, $value);
             $names[] = $name;
         }
     }
