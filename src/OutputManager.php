@@ -91,6 +91,7 @@ class OutputManager
 
             $namespace = $this->config->get('namespaceName');
             if (!empty($namespace)) {
+                // This will _overwrite_ attached class namespace no _null_!
                 $file->setNamespace($this->config->get('namespaceName'));
             }
 
@@ -134,7 +135,7 @@ class OutputManager
         // First we generate a string containing the known classes and the paths they map to. One line for each string.
         $autoloadedClasses = array();
         foreach ($classes as $class) {
-            $className = $class->getNamespaceName() . '\\' . $class->getName();
+            $className = $this->config->get('namespaceName') . '\\' . $class->getName();
             $className = ltrim($className, '\\');
             $autoloadedClasses[] = "'" . $className . "' => __DIR__ .'/" . $class->getName() . ".php'";
         }

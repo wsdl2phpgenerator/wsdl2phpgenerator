@@ -161,10 +161,14 @@ class Service implements ClassGenerator
             $this->class->setNamespaceName($this->config->get('namespaceName'));
         }
         $this->class->setExtendedClass($this->config->get('soapClientClass'));
-        $this->class->setDocBlock(
-            (new DocBlockGenerator)
-                ->setLongDescription($this->description)
-        );
+
+        if (!empty($this->description))
+        {
+            $this->class->setDocBlock(
+                (new DocBlockGenerator)
+                    ->setLongDescription($this->description)
+            );
+        }
 
         $constructorComment = new DocBlockGenerator();
         $constructorComment->setTag(new ParamTag('options', 'array', 'A array of config values'));
@@ -234,9 +238,7 @@ foreach (self::$classmap as $key => $value) {
             $name = Validator::validateOperation($operation->getName());
 
             $docBlock = new DocBlockGenerator();
-            $docBlock->setTag(
-                new ReturnTag($operation->getReturns())
-            );
+            $docBlock->setShortDescription(trim($operation->getDescription()));
 
             $method = new MethodGenerator();
             $method->setName($name);
@@ -255,11 +257,16 @@ foreach (self::$classmap as $key => $value) {
                         //TODO: realy need ltrim's here, or need to change Operation behaviour?
                         ->setName(ltrim($param, '$'))
                         ->setType(
-                            $this->class->getNamespaceName() . '\\' . $hint
+                            empty($this->class->getNamespaceName())
+                                ? $hint
+                                : $this->class->getNamespaceName() . '\\' . $hint
                         )
                 );
             }
 
+            $docBlock->setTag(
+                new ReturnTag($operation->getReturns())
+            );
             $source = 'return $this->__soapCall(\'' . $operation->getName() . '\', array(' . $operation->getParamStringNoTypeHints() . '));' . PHP_EOL;
 
             if ($this->class->hasMethod($method->getName()) == false) {

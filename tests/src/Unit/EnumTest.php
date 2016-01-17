@@ -42,7 +42,7 @@ class EnumTest extends CodeGenerationTestCase
             $enum->addValue($value);
         }
 
-        $this->generateClass($enum, $this->namespace);
+        $this->generateClass($enum);
 
         foreach (array_values($valueNames) as $name) {
             $this->assertClassHasConst($name, '\EnumTest\Enum');

@@ -46,7 +46,12 @@ class Enum extends Type
             throw new \Exception("The class has already been generated");
         }
 
-        $this->class = new ZendClassGenerator($this->phpIdentifier);
+        $this->class = new ZendClassGenerator(
+            $this->phpIdentifier,
+            empty($this->config->get('namespaceName'))
+                ? null
+                : $this->config->get('namespaceName')
+        );
 
         $first = true;
 
