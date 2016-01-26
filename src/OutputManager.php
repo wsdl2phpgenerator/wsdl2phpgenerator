@@ -6,7 +6,6 @@
 namespace Wsdl2PhpGenerator;
 
 use \Exception;
-use Wsdl2PhpGenerator\PhpSource\PhpClass;
 use Zend\Code\Generator\ClassGenerator as ZendClassGenerator;
 use Zend\Code\Generator\FileGenerator;
 
