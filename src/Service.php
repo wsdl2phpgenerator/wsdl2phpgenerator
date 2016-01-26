@@ -149,7 +149,7 @@ class Service implements ClassGenerator
 
         // Create the class object
         $comment = new PhpDocComment($this->description);
-        $this->class = new PhpClass($name, false, $this->config->get('soapClientClass'), $comment);
+        $this->class = new PhpClass($name, false, $this->config->get('soapClientClass'),array(),array(), $comment);
 
         // Create the constructor
         $comment = new PhpDocComment();

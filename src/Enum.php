@@ -46,7 +46,19 @@ class Enum extends Type
             throw new Exception("The class has already been generated");
         }
 
-        $this->class = new PhpClass($this->phpIdentifier, false);
+		$traits=$this->config->get("traits");
+        $trait_details=$this->config->get("trait_details")[$this->phpIdentifier];
+
+        if(isset($traits[$this->phpIdentifier]) && !empty($traits[$this->phpIdentifier]) && isset($traits[$this->phpIdentifier])){
+            $traits=$traits[$this->phpIdentifier];
+            if(isset($trait_details[$this->phpIdentifier]) && !empty($trait_details) && isset($trait_details[$this->phpIdentifier]))
+                $trait_details=$trait_details[$this->phpIdentifier];
+        }else{
+            $traits=array();
+            $trait_details=array();
+        }
+		
+        $this->class = new PhpClass($this->phpIdentifier, false,'',$traits,$trait_details);
 
         $first = true;
 
