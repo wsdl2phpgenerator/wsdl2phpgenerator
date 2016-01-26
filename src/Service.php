@@ -252,10 +252,10 @@ foreach (self::$classmap as $key => $value) {
                     new ParamTag($arr['name'], $arr['type'], $arr['desc'])
                 );
 
-                $typeHint = Validator::validateTypeHint($hint);
+                $typeHint = Validator::validateTypeHint($hint, true);
                 if (!empty($typeHint) && !empty($this->class->getNamespaceName()))
                 {
-                    $typeHint = $this->class->getNamespaceName() . '\\' . Validator::validateTypeHint($hint);
+                    $typeHint = $this->class->getNamespaceName() . '\\' . $typeHint;
                 }
 
                 $method->setParameter(

@@ -84,14 +84,12 @@ class ComplexType extends Type
         );
 
         $constructor = new MethodGenerator('__construct');
+        $constructor->setFlags(MethodGenerator::FLAG_PUBLIC);
+
         $constructorDocBlock = new DocBlockGenerator();
 
         $constructorSource = '';
         $parentConstructorParameters = array();
-
-        $constructor
-            ->setFlags(MethodGenerator::FLAG_PUBLIC)
-            ->setDocBlock($constructorDocBlock);
 
         $this->class->addMethodFromGenerator($constructor);
 
@@ -200,13 +198,15 @@ class ComplexType extends Type
 
             $setterParameter = new ParameterGenerator;
             $setterParameter->setName($name);
+
             if (isset($typeHint)) {
                 $setterParameter->setType($typeHint);
-            }
-            if ($type == '\DateTime') {
-                $setterParameter->setDefaultValue(
-                    new ValueGenerator(null, ValueGenerator::TYPE_NULL)
-                );
+
+                if ($member->getNullable()) {
+                    $setterParameter->setDefaultValue(
+                        new ValueGenerator(null, ValueGenerator::TYPE_NULL)
+                    );
+                }
             }
 
             $setter =  new MethodGenerator();
@@ -227,7 +227,7 @@ class ComplexType extends Type
                         . '    $this->' . $name . ' = $' . $name . '->format(\DateTime::ATOM);' . PHP_EOL
                         . '}' . PHP_EOL;
                 } else {
-                    $setterCode = '  $this->' . $name . ' = $' . $name . '->format(\DateTime::ATOM);' . PHP_EOL;
+                    $setterCode = '$this->' . $name . ' = $' . $name . '->format(\DateTime::ATOM);' . PHP_EOL;
                 }
             } else {
                 $setterCode = '$this->' . $name . ' = $' . $name . ';' . PHP_EOL;
@@ -236,6 +236,10 @@ class ComplexType extends Type
 
             $setter->setBody($setterCode);
             $this->class->addMethodFromGenerator($setter);
+        }
+
+        if (!empty($constructorDocBlock->getTags())) {
+            $constructor->setDocBlock($constructorDocBlock);
         }
 
         $constructor->setBody($constructorSource);

@@ -6,11 +6,7 @@ namespace Wsdl2PhpGenerator;
 
 /**
  * Class that contains functionality to validate a string as valid php
- * Contains functionf for validating Type, Classname and Naming convention
- *
- * @package Wsdl2PhpGenerator
- * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
- * @license http://www.opensource.org/licenses/mit-license.php MIT License
+ * Contains functions for validating Type, Classname and Naming convention
  */
 class Validator
 {
@@ -246,15 +242,12 @@ class Validator
      * Validates a type to be used as a method parameter type hint.
      *
      * @param string $typeName The name of the type to test.
+     * @param bool $allowClass Allow class type hints or not
      * @return null|string Returns a valid type hint for the type or null if there is no valid type hint.
      */
-    public static function validateTypeHint($typeName)
+    public static function validateTypeHint($typeName, $allowClass = false)
     {
-        $typeHint = null;
-
-
-        if (self::isInternalPhpType($typeName))
-        {
+        if (self::isInternalPhpType($typeName)) {
             return null;
         }
 
@@ -263,17 +256,23 @@ class Validator
             return null;
         }
 
-        if (self::isKeyword($typeHint)) {
-            $typeHint .= self::NAME_SUFFIX;
-        }
-
         // We currently only support type hints for arrays and DateTimes.
         // Going forward we could support it for generated types. The challenge here are enums as they are actually
         // strings and not class instances and we have no way of determining whether the type is an enum at this point.
         if (substr($typeName, -2) == "[]") {
-            $typeHint = 'array';
+            return 'array';
         } elseif ($typeName == '\DateTime') {
             $typeHint = $typeName;
+        } else {
+            if ($allowClass) {
+                $typeHint = $typeName;
+            } else {
+                $typeHint = null;
+            }
+        }
+
+        if (self::isKeyword($typeHint)) {
+            $typeHint .= self::NAME_SUFFIX;
         }
 
         return $typeHint;
