@@ -5,7 +5,6 @@
  */
 namespace Wsdl2PhpGenerator;
 
-use Wsdl2PhpGenerator\PhpSource\PhpClass;
 use Wsdl2PhpGenerator\ZendCode\VarTag;
 use Zend\Code\Generator\ClassGenerator as ZendClassGenerator;
 use Zend\Code\Generator\DocBlock\Tag\ParamTag;
@@ -76,7 +75,7 @@ class Service implements ClassGenerator
     }
 
     /**
-     * @return PhpClass Returns the class, generates it if not done
+     * @inheritdoc
      */
     public function getClass()
     {

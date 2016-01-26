@@ -5,7 +5,6 @@
  */
 namespace Wsdl2PhpGenerator;
 
-use Wsdl2PhpGenerator\PhpSource\PhpClass;
 use Zend\Code\Generator\ClassGenerator as ZendClassGenerator;
 
 /**
@@ -77,9 +76,7 @@ abstract class Type implements ClassGenerator
     abstract protected function generateClass();
 
     /**
-     * Getter for the class. Generates the class if it's null
-     *
-     * @return ZendClassGenerator
+     * @inheritdoc
      */
     public function getClass()
     {
