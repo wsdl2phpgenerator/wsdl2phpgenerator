@@ -67,8 +67,8 @@ class ComplexType extends Type
 
         $classBaseType = $this->getBaseTypeClass();
 		
-		$traits=$this->config->get("traits");
-        $trait_details=$this->config->get("trait_details")
+	$traits=$this->config->get("traits");
+        $trait_details=$this->config->get("trait_details");
 
         if(isset($traits[$this->phpIdentifier]) && !empty($traits[$this->phpIdentifier]) && isset($traits[$this->phpIdentifier])){
             $traits=$traits[$this->phpIdentifier];
