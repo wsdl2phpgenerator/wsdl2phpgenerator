@@ -47,7 +47,7 @@ class Enum extends Type
         }
 
 		$traits=$this->config->get("traits");
-        $trait_details=$this->config->get("trait_details")[$this->phpIdentifier];
+        $trait_details=$this->config->get("trait_details");
 
         if(isset($traits[$this->phpIdentifier]) && !empty($traits[$this->phpIdentifier]) && isset($traits[$this->phpIdentifier])){
             $traits=$traits[$this->phpIdentifier];
