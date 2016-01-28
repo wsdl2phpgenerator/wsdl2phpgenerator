@@ -59,7 +59,7 @@ class Service implements ClassGenerator
     /**
      * @param ConfigInterface $config Configuration
      * @param string $identifier The name of the service
-     * @param array $types The types the service knows about
+     * @param Type[] $types The types the service knows about
      * @param string $description The description of the service
      */
     public function __construct(ConfigInterface $config, $identifier, array $types, $description)
@@ -187,7 +187,10 @@ foreach (self::$classmap as $key => $value) {
 
         $this->class->addMethodFromGenerator(
             (new MethodGenerator())
+                ->setName('__construct')
+                ->setFlags(MethodGenerator::FLAG_PUBLIC)
                 ->setBody($source)
+                ->setDocBlock($constructorComment)
                 ->setParameter(
                     (new ParameterGenerator())
                         ->setName('options')
@@ -201,9 +204,6 @@ foreach (self::$classmap as $key => $value) {
                             new ValueGenerator(null, ValueGenerator::TYPE_NULL)
                         )
                 )
-                ->setDocBlock($constructorComment)
-                ->setName('__construct')
-                ->setFlags(MethodGenerator::FLAG_PUBLIC)
         );
 
         $init = array();
@@ -220,9 +220,9 @@ foreach (self::$classmap as $key => $value) {
 
         $this->class->addPropertyFromGenerator(
             (new PropertyGenerator)
-                ->setDefaultValue($classmapValue)
                 ->setName('classmap')
                 ->setFlags(PropertyGenerator::FLAG_PRIVATE | PropertyGenerator::FLAG_STATIC)
+                ->setDefaultValue($classmapValue)
                 ->setDocBlock(
                     (new DocBlockGenerator)
                         ->setTag(

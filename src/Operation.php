@@ -113,8 +113,8 @@ class Operation
     /**
      *
      * @param string $name The param to get
-     * @param array An array of Type objects with valid types for typehinting
-     * @return array A array with three keys 'type' => the typehint to use 'name' => the name of the param and 'desc' => A description of the param
+     * @param Type[] $validTypes An array of Type objects with valid types for typehinting
+     * @return array An array with three keys 'type' => the typehint to use 'name' => the name of the param and 'desc' => A description of the param
      */
     public function getPhpDocParams($name, array $validTypes)
     {

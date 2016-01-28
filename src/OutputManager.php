@@ -40,7 +40,7 @@ class OutputManager
     /**
      * Saves the service and types php code to file
      *
-     * @param PhpClass $service
+     * @param ZendClassGenerator $service
      * @param array $types
      */
     public function save($service, array $types)
