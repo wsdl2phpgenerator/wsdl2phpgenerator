@@ -89,7 +89,7 @@ class ComplexType extends Type
         $constructorDocBlock = new DocBlockGenerator();
 
         $constructorSource = '';
-        $parentConstructorParameters = array();
+        $parentConstructorParameters = [];
 
         $this->class->addMethodFromGenerator($constructor);
 
@@ -109,8 +109,7 @@ class ComplexType extends Type
                     $parameter->setName($name);
 
                     $typeHint = Validator::validateTypeHint($type);
-                    if (!empty($typeHint))
-                    {
+                    if (!empty($typeHint)) {
                         $parameter->setType($typeHint);
                     }
 
@@ -121,10 +120,17 @@ class ComplexType extends Type
                     }
 
                     $constructor->setParameter($parameter);
-                    $parentConstructorParameters[$name] = Validator::validateTypeHint($type);
+
+                    $parentConstructorParameter = new ParameterGenerator();
+                    $parentConstructorParameter->setName($name);
+                    if (!empty($typeHint)) {
+                        $parentConstructorParameter->setType($typeHint);
+                    }
+                    $parentConstructorParameters[] = $parentConstructorParameter;
                 }
             }
-            $constructorSource .= 'parent::__construct(' . $this->buildParametersString($parentConstructorParameters, false) . ');' . PHP_EOL;
+
+            $constructorSource .= 'parent::__construct(' . $this->buildParametersString($parentConstructorParameters) . ');' . PHP_EOL;
         }
 
         // Add member variables
@@ -327,27 +333,20 @@ class ComplexType extends Type
     /**
      * Generate a string representing the parameters for a function e.g. "type1 $param1, type2 $param2, $param3"
      *
-     * @param array $parameters A map of parameters. Keys are parameter names and values are parameter types.
-     *                          Parameter types may be empty. In that case they are not used.
-     * @param bool $includeType Whether to include the parameters types in the string
-     * @param bool $defaultNull Whether to set the default value of parameters to null.
+     * @param ParameterGenerator[] $parameters A map of parameters
      * @return string The parameter string.
      */
-    protected function buildParametersString(array $parameters, $includeType = true, $defaultNull = false)
+    protected static function buildParametersString(array $parameters)
     {
-        $parameterStrings = array();
-        foreach ($parameters as $name => $type) {
-            $parameterString = '$' . $name;
-            if (!empty($type) && $includeType) {
-                $parameterString = $type . ' ' . $parameterString;
+        $parameterOutput = [];
+
+        if (!empty($parameters)) {
+            foreach ($parameters as $parameter) {
+                $parameterOutput[] = $parameter->generate();
             }
-            if ($defaultNull) {
-                $parameterString .= ' = null';
-            }
-            $parameterStrings[] = $parameterString;
         }
 
-        return implode(', ', $parameterStrings);
+        return implode(', ', $parameterOutput);
     }
 
     /**
