@@ -46,18 +46,22 @@ class Enum extends Type
             throw new Exception("The class has already been generated");
         }
 
-	$traits=$this->config->get("traits");
-        $trait_details=$this->config->get("trait_details");
+        $traits=$this->config->get("traits");
+        $trait_details=$this->config->get("trait_details")[$this->phpIdentifier];
 
-        if(isset($traits[$this->phpIdentifier]) && !empty($traits[$this->phpIdentifier]) && isset($traits[$this->phpIdentifier])){
-            $traits=$traits[$this->phpIdentifier];
-            if(isset($trait_details[$this->phpIdentifier]) && !empty($trait_details) && isset($trait_details[$this->phpIdentifier]))
-                $trait_details=$trait_details[$this->phpIdentifier];
+        $trait_id=$this->phpIdentifier;
+        if(isset($traits["*"]))
+            $trait_id="*";
+
+        if(isset($traits[$trait_id]) && !empty($traits[$trait_id]) && isset($traits[$trait_id])){
+            $traits=$traits[$trait_id];
+            if(isset($trait_details[$trait_id]) && !empty($trait_details) && isset($trait_details[$trait_id]))
+                $trait_details=$trait_details[$trait_id];
         }else{
             $traits=array();
             $trait_details=array();
         }
-		
+
         $this->class = new PhpClass($this->phpIdentifier, false,'',$traits,$trait_details);
 
         $first = true;
@@ -67,7 +71,7 @@ class Enum extends Type
             $name = Validator::validateConstant($value);
 
             $name = Validator::validateUnique($name, function ($name) use ($names) {
-                    return !in_array($name, $names);
+                return !in_array($name, $names);
             });
 
             if ($first) {

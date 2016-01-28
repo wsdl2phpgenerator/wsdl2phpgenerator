@@ -183,7 +183,7 @@ class PhpClass extends PhpElement
                         .$this->getIndentionStr(). implode(';'.PHP_EOL, $this->trait_details).";"
 				. PHP_EOL . ' } ' . PHP_EOL;
 			}else
-                $ret .= ' ; ' . PHP_EOL;
+                $ret .= ' ; ' . PHP_EOL. PHP_EOL;
         }
 
         if (isset($this->default)) {
