@@ -141,9 +141,6 @@ class OutputManager
         $autoloadedClasses = implode(',' . PHP_EOL . str_repeat(' ', 8), $autoloadedClasses);
 
         // Assemble the source of the autoloader function containing the classes and the check to include.
-        // Our custom code generation library does not support generating code outside of functions and we need to
-        // register the autoloader in the global scope. Consequently we manually insert a } to end the autoloader
-        // function, register it and finish with a {. This means our generated code ends with a no-op {} statement.
         $autoloaderSource = <<<EOF
 function $autoloaderName(\$class)
 {
