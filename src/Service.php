@@ -5,7 +5,6 @@
  */
 namespace Wsdl2PhpGenerator;
 
-use Wsdl2PhpGenerator\ZendCode\VarTag;
 use Zend\Code\Generator\ClassGenerator as ZendClassGenerator;
 use Zend\Code\Generator\DocBlock\Tag\ParamTag;
 use Zend\Code\Generator\DocBlockGenerator;
@@ -236,13 +235,13 @@ foreach (self::$classmap as $key => $value) {
         foreach ($this->operations as $operation) {
             $name = Validator::validateOperation($operation->getName());
 
-            $docBlock = new DocBlockGenerator();
-            $docBlock->setShortDescription(trim($operation->getDescription()));
+            $docBlock = (new DocBlockGenerator())
+                ->setShortDescription(trim($operation->getDescription()));
 
-            $method = new MethodGenerator();
-            $method->setName($name);
-            $method->setDocBlock($docBlock);
-            $method->setFlags(MethodGenerator::FLAG_PUBLIC);
+            $method = (new MethodGenerator())
+                ->setName($name)
+                ->setDocBlock($docBlock)
+                ->setFlags(MethodGenerator::FLAG_PUBLIC);
 
             foreach ($operation->getParams() as $param => $hint) {
                 $arr = $operation->getPhpDocParams($param, $this->types);
@@ -252,8 +251,7 @@ foreach (self::$classmap as $key => $value) {
                 );
 
                 $typeHint = Validator::validateTypeHint($hint, true);
-                if (!empty($typeHint) && !empty($this->class->getNamespaceName()))
-                {
+                if (!empty($typeHint) && !empty($this->class->getNamespaceName())) {
                     $typeHint = $this->class->getNamespaceName() . '\\' . $typeHint;
                 }
 

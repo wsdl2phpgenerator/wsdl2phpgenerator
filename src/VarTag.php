@@ -1,9 +1,6 @@
 <?php
 
-/**
- * @package ZendCode
- */
-namespace Wsdl2PhpGenerator\ZendCode;
+namespace Wsdl2PhpGenerator;
 
 use Zend\Code\Generator\DocBlock\Tag\ParamTag;
 

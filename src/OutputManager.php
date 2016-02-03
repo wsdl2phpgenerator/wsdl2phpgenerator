@@ -43,7 +43,7 @@ class OutputManager
      * @param ZendClassGenerator $service
      * @param array $types
      */
-    public function save($service, array $types)
+    public function save(ZendClassGenerator $service, array $types)
     {
         $this->setOutputDirectory();
 
@@ -82,22 +82,15 @@ class OutputManager
      *
      * @param ZendClassGenerator $class
      */
-    private function saveClassToFile($class)
+    private function saveClassToFile(ZendClassGenerator $class)
     {
         if ($this->isValidClass($class)) {
             $file = new FileGenerator();
             $file->setFilename($class->getName() . '.php');
 
-            $namespace = $this->config->get('namespaceName');
-            if (!empty($namespace)) {
-                // This will _overwrite_ attached class namespace no _null_!
-                $file->setNamespace($this->config->get('namespaceName'));
-            }
-
-            $file->setClass($class);
-            $code = $file->generate();
-
-            file_put_contents($this->dir . DIRECTORY_SEPARATOR . $class->getName() . '.php', $code);
+            $file->setClass($class)
+                ->setFilename($this->dir . DIRECTORY_SEPARATOR . $class->getName() . '.php')
+                ->write();
         }
     }
 
