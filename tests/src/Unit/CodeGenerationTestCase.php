@@ -8,7 +8,6 @@ use ReflectionMethod;
 use ReflectionParameter;
 use ReflectionProperty;
 use Wsdl2PhpGenerator\ClassGenerator;
-use Wsdl2PhpGenerator\Type;
 
 /**
  * Base class for testing code generation.
@@ -446,10 +445,8 @@ class CodeGenerationTestCase extends PHPUnit_Framework_TestCase
     {
         $source = $generator->getClass()->generate();
 
-        //TODO: still need eval?
-        //
         // Eval the source for the generated class. This is now pretty but currently the only way we can test whether
-        // the generated code is as expected. Our own code generation library does not allow us to retrieve functions
+        // the generated code is as expected. \Zend\Code does not allow us to retrieve executable functions
         // from the representing class.
         eval($source);
     }

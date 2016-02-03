@@ -6,7 +6,6 @@
 namespace Wsdl2PhpGenerator;
 
 use \Exception;
-use Wsdl2PhpGenerator\ZendCode\VarTag;
 use Zend\Code\Generator\ClassGenerator;
 use Zend\Code\Generator\DocBlock\Tag\ParamTag;
 use Zend\Code\Generator\DocBlock\Tag\ReturnTag;
@@ -72,16 +71,17 @@ class ComplexType extends Type
 
         $classBaseType = $this->getBaseTypeClass();
 
-        $this->class = new ClassGenerator(
-            $this->phpIdentifier,
-            empty($this->config->get('namespaceName'))
-                ? null
-                : $this->config->get('namespaceName'),
-            $this->abstract
-                ? ClassGenerator::FLAG_ABSTRACT
-                : null,
-            $classBaseType
-        );
+        $this->class = (new ClassGenerator())
+            ->setName($this->phpIdentifier)
+            ->setNamespaceName(
+                empty($this->config->get('namespaceName'))
+                    ? null
+                    : $this->config->get('namespaceName'))
+            ->setFlags(
+                $this->abstract
+                    ? ClassGenerator::FLAG_ABSTRACT
+                    : null)
+            ->setExtendedClass($classBaseType);
 
         $constructor = new MethodGenerator('__construct');
         $constructor->setFlags(MethodGenerator::FLAG_PUBLIC);
@@ -340,10 +340,8 @@ class ComplexType extends Type
     {
         $parameterOutput = [];
 
-        if (!empty($parameters)) {
-            foreach ($parameters as $parameter) {
-                $parameterOutput[] = $parameter->generate();
-            }
+        foreach ($parameters as $parameter) {
+            $parameterOutput[] = $parameter->generate();
         }
 
         return implode(', ', $parameterOutput);
