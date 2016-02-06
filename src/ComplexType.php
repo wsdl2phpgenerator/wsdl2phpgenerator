@@ -6,7 +6,7 @@
 namespace Wsdl2PhpGenerator;
 
 use \Exception;
-use Zend\Code\Generator\ClassGenerator;
+use Zend\Code\Generator\ClassGenerator as ZendClassGenerator;
 use Zend\Code\Generator\DocBlock\Tag\ParamTag;
 use Zend\Code\Generator\DocBlock\Tag\ReturnTag;
 use Zend\Code\Generator\DocBlockGenerator;
@@ -71,7 +71,7 @@ class ComplexType extends Type
 
         $classBaseType = $this->getBaseTypeClass();
 
-        $this->class = (new ClassGenerator())
+        $this->class = (new ZendClassGenerator())
             ->setName($this->phpIdentifier)
             ->setNamespaceName(
                 empty($this->config->get('namespaceName'))
@@ -79,7 +79,7 @@ class ComplexType extends Type
                     : $this->config->get('namespaceName'))
             ->setFlags(
                 $this->abstract
-                    ? ClassGenerator::FLAG_ABSTRACT
+                    ? ZendClassGenerator::FLAG_ABSTRACT
                     : null)
             ->setExtendedClass($classBaseType);
 
