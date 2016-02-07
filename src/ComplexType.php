@@ -68,6 +68,7 @@ class ComplexType extends Type
         if ($this->class != null) {
             throw new Exception("The class has already been generated");
         }
+        $constructorParamsDefaultToNull = $this->config->get('constructorParamsDefaultToNull');
 
         $classBaseType = $this->getBaseTypeClass();
 
@@ -83,10 +84,10 @@ class ComplexType extends Type
                     : null)
             ->setExtendedClass($classBaseType);
 
-        $constructor = new MethodGenerator('__construct');
-        $constructor->setFlags(MethodGenerator::FLAG_PUBLIC);
-
-        $constructorDocBlock = new DocBlockGenerator();
+        $constructor = (new MethodGenerator('__construct'));
+        $constructor
+            ->setFlags(MethodGenerator::FLAG_PUBLIC)
+            ->setDocBlock(new DocBlockGenerator());
 
         $constructorSource = '';
         $parentConstructorParameters = [];
@@ -99,38 +100,19 @@ class ComplexType extends Type
             foreach ($parentMembers as $member) {
                 $type = Validator::validateType($member->getType());
                 $name = Validator::validateAttribute($member->getName());
+                $typeHint = Validator::validateTypeHint($type);
 
                 if (!$member->getNullable()) {
-                    $constructorDocBlock->setTag(
-                        new ParamTag($name, $type)
-                    );
-
-                    $parameter = new ParameterGenerator();
-                    $parameter->setName($name);
-
-                    $typeHint = Validator::validateTypeHint($type);
-                    if (!empty($typeHint)) {
-                        $parameter->setType($typeHint);
-                    }
-
-                    if ($type == '\DateTime' || $this->config->get('constructorParamsDefaultToNull')) {
-                        $parameter->setDefaultValue(
-                            new ValueGenerator(null, ValueGenerator::TYPE_NULL)
+                    $parentConstructorParameters[] =
+                        $this->addParentConstructorParameter(
+                            $constructor,
+                            $name, $type, $typeHint,
+                            $constructorParamsDefaultToNull
                         );
-                    }
-
-                    $constructor->setParameter($parameter);
-
-                    $parentConstructorParameter = new ParameterGenerator();
-                    $parentConstructorParameter->setName($name);
-                    if (!empty($typeHint)) {
-                        $parentConstructorParameter->setType($typeHint);
-                    }
-                    $parentConstructorParameters[] = $parentConstructorParameter;
                 }
             }
 
-            $constructorSource .= 'parent::__construct(' . $this->buildParametersString($parentConstructorParameters) . ');' . PHP_EOL;
+            $constructorSource .= 'parent::__construct(' . self::buildParametersString($parentConstructorParameters) . ');' . PHP_EOL;
         }
 
         // Add member variables
@@ -138,117 +120,229 @@ class ComplexType extends Type
             $type = Validator::validateType($member->getType());
             $name = Validator::validateAttribute($member->getName());
             $typeHint = Validator::validateTypeHint($type);
+            $nullable = $member->getNullable();
 
-            $property = new PropertyGenerator();
-            $property
-                ->setDefaultValue(new PropertyValueGenerator(null, ValueGenerator::TYPE_NULL))
-                ->setDocBlock(
-                    (new DocBlockGenerator())
-                        ->setTag(new VarTag($name, $type))
-                )
-                ->setFlags(PropertyGenerator::FLAG_PROTECTED)
-                ->setName($name);
-
-            $this->class->addPropertyFromGenerator($property);
-
-            if (!$member->getNullable()) {
-                if ($type == '\DateTime') {
-                    if ($this->config->get('constructorParamsDefaultToNull')) {
-                        $constructorSource .= '$this->' . $name . ' = $' . $name . ' ? $' . $name . '->format(\DateTime::ATOM) : null;' . PHP_EOL;
-                    } else {
-                        $constructorSource .= '$this->' . $name . ' = $' . $name . '->format(\DateTime::ATOM);' . PHP_EOL;
-                    }
-                } else {
-                    $constructorSource .= '$this->' . $name . ' = $' . $name . ';' . PHP_EOL;
-                }
-
-                $constructorParameter = new ParameterGenerator();
-                $constructorParameter->setName($name);
-                if (!empty($typeHint)) {
-                    $constructorParameter->setType($typeHint);
-                }
-                if ($type == '\DateTime' || $this->config->get('constructorParamsDefaultToNull')) {
-                    $constructorParameter->setDefaultValue(
-                        new ValueGenerator(null, ValueGenerator::TYPE_NULL)
-                    );
-                }
-
-                $constructor->setParameter($constructorParameter);
-                $constructorDocBlock->setTag(new ParamTag($name, $type));
+            if (!$nullable) {
+                $constructorSource .= $this->addConstructorParameter(
+                    $constructor,
+                    $name,
+                    $type,
+                    $typeHint,
+                    $nullable,
+                    $constructorParamsDefaultToNull
+                );
             }
 
-            $getter = new MethodGenerator();
-            $getter
+            $this->addProperty($name, $type);
+            $this->addGetter($name, $type);
+            $this->addSetter($name, $type, $typeHint, $nullable);
+        }
+
+        $constructor->setBody($constructorSource);
+    }
+
+    /**
+     * Add parameter to method
+     *
+     * @param MethodGenerator $method
+     * @param $name
+     * @param $type
+     * @param $typeHint
+     * @param $defaultToNull
+     */
+    private static function addMethodParameter(MethodGenerator $method, $name, $type, $typeHint, $defaultToNull)
+    {
+        $parameter = new ParameterGenerator();
+        $parameter->setName($name);
+
+        $method->getDocBlock()->setTag(new ParamTag($name, $type));
+
+        if (!empty($typeHint)) {
+            $parameter->setType($typeHint);
+        }
+        if ($defaultToNull) {
+            $parameter->setDefaultValue(
+                new ValueGenerator(null, ValueGenerator::TYPE_NULL)
+            );
+        }
+        $method->setParameter($parameter);
+    }
+
+    /**
+     * Add inherited parameter to constructor
+     *
+     * @param MethodGenerator $constructor
+     * @param $name
+     * @param $type
+     * @param $typeHint
+     * @param $constructorParamsDefaultToNull
+     * @return ParameterGenerator
+     */
+    private static function addParentConstructorParameter(
+        MethodGenerator $constructor,
+        $name, $type, $typeHint, $constructorParamsDefaultToNull
+    )
+    {
+        self::addMethodParameter($constructor, $name, $type, $typeHint, $constructorParamsDefaultToNull);
+
+        $parentConstructorParameter = new ParameterGenerator();
+        $parentConstructorParameter->setName($name);
+        if (!empty($typeHint)) {
+            $parentConstructorParameter->setType($typeHint);
+        }
+
+        return $parentConstructorParameter;
+    }
+
+    /**
+     * Add parameter to constructor
+     *
+     * @param MethodGenerator $constructor
+     * @param $name
+     * @param $type
+     * @param $typeHint
+     * @param $nullable
+     * @return string Source code to add to constructor
+     */
+    private static function addConstructorParameter(
+        MethodGenerator $constructor,
+        $name, $type, $typeHint, $nullable, $constructorParamsDefaultToNull)
+    {
+        self::addMethodParameter($constructor, $name, $type, $typeHint, $constructorParamsDefaultToNull);
+
+        $constructorSource = self::generateSetterSource(
+            $name, $type, $nullable || $constructorParamsDefaultToNull
+        );
+
+        return $constructorSource;
+    }
+
+    /**
+     * Add property to generated class
+     *
+     * @param string $name
+     * @param string $type
+     */
+    private function addProperty($name, $type)
+    {
+        $property = new PropertyGenerator();
+        $property
+            ->setDefaultValue(new PropertyValueGenerator(null, ValueGenerator::TYPE_NULL))
+            ->setDocBlock(
+                (new DocBlockGenerator())
+                    ->setTag(new VarTag($name, $type))
+            )
+            ->setFlags(PropertyGenerator::FLAG_PROTECTED)
+            ->setName($name);
+        $this->class->addPropertyFromGenerator($property);
+    }
+
+    /**
+     * Add setter method to generated class
+     *
+     * @param $name
+     * @param $type
+     * @param $typeHint
+     * @param $nullable
+     */
+    private function addSetter($name, $type, $typeHint, $nullable)
+    {
+        $setterParameter = new ParameterGenerator;
+        $setterParameter->setName($name);
+
+        if (isset($typeHint)) {
+            $setterParameter->setType($typeHint);
+
+            if ($nullable) {
+                $setterParameter->setDefaultValue(
+                    new ValueGenerator(null, ValueGenerator::TYPE_NULL)
+                );
+            }
+        }
+
+        $setter = new MethodGenerator();
+        $setter
+            ->setParameter($setterParameter)
+            ->setName('set' . ucfirst($name))
+            ->setFlags(MethodGenerator::FLAG_PUBLIC)
+            ->setDocBlock(new DocBlockGenerator())
+            ->setBody(
+                self::generateSetterSource($name, $type, $nullable) .
+                'return $this;' . PHP_EOL
+            );
+
+        self::addMethodParameter($setter, $name, $type, $typeHint, $nullable && !empty($typeHint));
+        $setter->getDocBlock()->setTag(new ReturnTag($this->phpNamespacedIdentifier));
+
+        $this->class->addMethodFromGenerator($setter);
+
+
+    }
+
+    /**
+     * Add getter method to generated class
+     *
+     * @param string $name
+     * @param string $type
+     */
+    private function addGetter($name, $type)
+    {
+        $this->class->addMethodFromGenerator(
+            (new MethodGenerator())
                 ->setName('get' . ucfirst($name))
                 ->setFlags(MethodGenerator::FLAG_PUBLIC)
                 ->setDocBlock((new DocBlockGenerator())
                     ->setTag(new ReturnTag($type))
-                );
+                )
+                ->setBody(self::generateGetterSource($name, $type))
+        );
+    }
 
-            if ($type == '\DateTime') {
-                $getterCode = '  if ($this->' . $name . ' == null) {' . PHP_EOL
-                    . '    return null;' . PHP_EOL
-                    . '  } else {' . PHP_EOL
-                    . '    try {' . PHP_EOL
-                    . '      return new \DateTime($this->' . $name . ');' . PHP_EOL
-                    . '    } catch (\Exception $e) {' . PHP_EOL
-                    . '      return false;' . PHP_EOL
-                    . '    }' . PHP_EOL
-                    . '  }' . PHP_EOL;
+    /**
+     * Generate source code for setting value in constructor and setter methods
+     *
+     * @param $name
+     * @param $type
+     * @param $nullable
+     * @return string
+     */
+    private static function generateSetterSource($name, $type, $nullable)
+    {
+        if ($type == '\DateTime') {
+            if ($nullable) {
+                return '$this->' . $name . ' = $' . $name . ' ? $' . $name . '->format(\DateTime::ATOM) : null;' . PHP_EOL;
             } else {
-                $getterCode = '  return $this->' . $name . ';' . PHP_EOL;
+                return '$this->' . $name . ' = $' . $name . '->format(\DateTime::ATOM);' . PHP_EOL;
             }
-
-            $getter->setBody($getterCode);
-            $this->class->addMethodFromGenerator($getter);
-
-            $setterParameter = new ParameterGenerator;
-            $setterParameter->setName($name);
-
-            if (isset($typeHint)) {
-                $setterParameter->setType($typeHint);
-
-                if ($member->getNullable()) {
-                    $setterParameter->setDefaultValue(
-                        new ValueGenerator(null, ValueGenerator::TYPE_NULL)
-                    );
-                }
-            }
-
-            $setter =  new MethodGenerator();
-            $setter
-                ->setParameter($setterParameter)
-                ->setName('set' . ucfirst($name))
-                ->setFlags(MethodGenerator::FLAG_PUBLIC)
-                ->setDocBlock((new DocBlockGenerator())
-                    ->setTag(new ParamTag($name, $type))
-                    ->setTag(new ReturnTag($this->phpNamespacedIdentifier))
-                );
-
-            if ($type == '\DateTime') {
-                if ($member->getNullable()) {
-                    $setterCode = 'if ($' . $name . ' == null) {' . PHP_EOL
-                        . '     $this->' . $name . ' = null;' . PHP_EOL
-                        . '} else {' . PHP_EOL
-                        . '    $this->' . $name . ' = $' . $name . '->format(\DateTime::ATOM);' . PHP_EOL
-                        . '}' . PHP_EOL;
-                } else {
-                    $setterCode = '$this->' . $name . ' = $' . $name . '->format(\DateTime::ATOM);' . PHP_EOL;
-                }
-            } else {
-                $setterCode = '$this->' . $name . ' = $' . $name . ';' . PHP_EOL;
-            }
-            $setterCode .= 'return $this;' . PHP_EOL;
-
-            $setter->setBody($setterCode);
-            $this->class->addMethodFromGenerator($setter);
+        } else {
+            return  '$this->' . $name . ' = $' . $name . ';' . PHP_EOL;
         }
+    }
 
-        if (!empty($constructorDocBlock->getTags())) {
-            $constructor->setDocBlock($constructorDocBlock);
+    /**
+     * Generate source code for getter method
+     *
+     * @param Variable $member
+     * @param string $name validated parameter name
+     * @param string $type validated parameter type
+     * @return string
+     */
+    private static function generateGetterSource($name, $type)
+    {
+        if ($type == '\DateTime') {
+            return
+                  'if ($this->' . $name . ' == null) {' . PHP_EOL
+                . '    return null;' . PHP_EOL
+                . '} else {' . PHP_EOL
+                . '    try {' . PHP_EOL
+                . '        return new \DateTime($this->' . $name . ');' . PHP_EOL
+                . '    } catch (\Exception $e) {' . PHP_EOL
+                . '        return false;' . PHP_EOL
+                . '    }' . PHP_EOL
+                . '}' . PHP_EOL;
+        } else {
+            return '  return $this->' . $name . ';' . PHP_EOL;
         }
-
-        $constructor->setBody($constructorSource);
     }
 
     /**
