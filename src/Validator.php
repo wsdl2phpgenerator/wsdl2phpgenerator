@@ -85,6 +85,7 @@ class Validator
         'namespace',
         'new',
         'or',
+        'parent',
         'print',
         'private',
         'protected',
