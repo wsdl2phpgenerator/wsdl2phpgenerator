@@ -148,11 +148,15 @@ class ComplexType extends Type
     /**
      * Add parameter to method
      *
-     * @param MethodGenerator $method
-     * @param $name
-     * @param $type
-     * @param $typeHint
-     * @param $defaultToNull
+     * @param MethodGenerator $method The method to add the parametet to.
+     * @param string $name The parameter name
+     * @param string $type The PHP type of the parameter value. This is primarily used in DocBlocks.
+     * @param string $typeHint
+     *   The typehint for the parameter. Note that this can be different than the parameter type
+     *   as both we and PHP cannot typehint against all types.
+     * @param bool $defaultToNull Whether the parameter should have a default null value.
+     *
+     * @return ParameterGenerator The added parameter.
      */
     private static function addMethodParameter(MethodGenerator $method, $name, $type, $typeHint, $defaultToNull)
     {
@@ -177,8 +181,8 @@ class ComplexType extends Type
     /**
      * Add property to generated class
      *
-     * @param string $name
-     * @param string $type
+     * @param string $name The name of the property to add.
+     * @param string $type The PHP type of the property value.
      */
     private function addProperty($name, $type)
     {
@@ -196,10 +200,10 @@ class ComplexType extends Type
     /**
      * Add setter method to generated class
      *
-     * @param $name
-     * @param $type
-     * @param $typeHint
-     * @param $nullable
+     * @param string $name The name of the property to create a setter for.
+     * @param string $type The PHP type for the value of the property.
+     * @param string $typeHint The typehint for the property.
+     * @param bool $nullable Whether the property can have the null value.
      */
     private function addSetter($name, $type, $typeHint, $nullable)
     {
@@ -223,8 +227,8 @@ class ComplexType extends Type
     /**
      * Add getter method to generated class
      *
-     * @param string $name
-     * @param string $type
+     * @param string $name The name of the property to get.
+     * @param string $type The PHP type of the property to get.
      */
     private function addGetter($name, $type)
     {
@@ -242,10 +246,10 @@ class ComplexType extends Type
     /**
      * Generate source code for setting value in constructor and setter methods
      *
-     * @param $name
-     * @param $type
-     * @param $nullable
-     * @return string
+     * @param string $name The name of the property to set.
+     * @param string $type The PHP type of the property value.
+     * @param bool $nullable Whether the property can have the null value.
+     * @return string PHP source code for setting the property.
      */
     private static function generateSetterSource($name, $type, $nullable)
     {
@@ -265,7 +269,7 @@ class ComplexType extends Type
      *
      * @param string $name validated parameter name
      * @param string $type validated parameter type
-     * @return string
+     * @return string PHP source code for getting the property.
      */
     private static function generateGetterSource($name, $type)
     {
