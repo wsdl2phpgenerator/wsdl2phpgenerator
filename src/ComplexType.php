@@ -160,8 +160,6 @@ class ComplexType extends Type
      */
     private static function addMethodParameter(MethodGenerator $method, $name, $type, $typeHint, $defaultToNull)
     {
-
-        $method->getDocBlock()->setTag(new ParamTag($name, $type));
         $parameter = (new ParameterGenerator())
             ->setName($name);
 
@@ -173,7 +171,9 @@ class ComplexType extends Type
                 new ValueGenerator(null, ValueGenerator::TYPE_NULL)
             );
         }
-        $method->setParameter($parameter);
+        $method
+            ->setParameter($parameter)
+            ->getDocBlock()->setTag(new ParamTag($name, $type));
 
         return $parameter;
     }
