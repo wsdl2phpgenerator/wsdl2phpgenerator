@@ -276,7 +276,6 @@ class ComplexType extends Type
     /**
      * Generate source code for getter method
      *
-     * @param Variable $member
      * @param string $name validated parameter name
      * @param string $type validated parameter type
      * @return string
