@@ -84,8 +84,7 @@ class ComplexType extends Type
                     : null)
             ->setExtendedClass($classBaseType);
 
-        $constructor = (new MethodGenerator('__construct'));
-        $constructor
+        $constructor = (new MethodGenerator('__construct'))
             ->setFlags(MethodGenerator::FLAG_PUBLIC)
             ->setDocBlock(new DocBlockGenerator());
 
@@ -152,10 +151,10 @@ class ComplexType extends Type
      */
     private static function addMethodParameter(MethodGenerator $method, $name, $type, $typeHint, $defaultToNull)
     {
-        $parameter = new ParameterGenerator();
-        $parameter->setName($name);
 
         $method->getDocBlock()->setTag(new ParamTag($name, $type));
+        $parameter = (new ParameterGenerator())
+            ->setName($name);
 
         if (!empty($typeHint)) {
             $parameter->setType($typeHint);
@@ -225,8 +224,7 @@ class ComplexType extends Type
      */
     private function addProperty($name, $type)
     {
-        $property = new PropertyGenerator();
-        $property
+        $property = (new PropertyGenerator())
             ->setDefaultValue(new PropertyValueGenerator(null, ValueGenerator::TYPE_NULL))
             ->setDocBlock(
                 (new DocBlockGenerator())
@@ -260,9 +258,7 @@ class ComplexType extends Type
             }
         }
 
-        $setter = new MethodGenerator();
-        $setter
-            ->setParameter($setterParameter)
+        $setter = (new MethodGenerator())
             ->setName('set' . ucfirst($name))
             ->setFlags(MethodGenerator::FLAG_PUBLIC)
             ->setDocBlock(new DocBlockGenerator())
