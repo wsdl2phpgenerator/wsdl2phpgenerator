@@ -215,13 +215,10 @@ class ComplexType extends Type
                 self::generateSetterSource($name, $type, $nullable) .
                 'return $this;' . PHP_EOL
             );
-
         self::addMethodParameter($setter, $name, $type, $typeHint, $nullable && !empty($typeHint));
         $setter->getDocBlock()->setTag(new ReturnTag($this->phpNamespacedIdentifier));
 
         $this->class->addMethodFromGenerator($setter);
-
-
     }
 
     /**
