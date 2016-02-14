@@ -103,7 +103,7 @@ class ComplexType extends Type
 
                 if (!$member->getNullable()) {
                     $parentConstructorParameters[] =
-                        $this->addParentConstructorParameter(
+                        self::addMethodParameter(
                             $constructor,
                             $name, $type, $typeHint,
                             $constructorParamsDefaultToNull
@@ -111,7 +111,10 @@ class ComplexType extends Type
                 }
             }
 
-            $constructorSource .= 'parent::__construct(' . self::buildParametersString($parentConstructorParameters) . ');' . PHP_EOL;
+            $parentConstructorParameters = array_map(function (ParameterGenerator $parameter) {
+                return '$' . $parameter->getName();
+            }, $parentConstructorParameters);
+            $constructorSource .= 'parent::__construct(' . implode(', ', $parentConstructorParameters) . ');' . PHP_EOL;
         }
 
         // Add member variables
@@ -122,13 +125,15 @@ class ComplexType extends Type
             $nullable = $member->getNullable();
 
             if (!$nullable) {
-                $constructorSource .= $this->addConstructorParameter(
+                self::addMethodParameter(
                     $constructor,
                     $name,
                     $type,
                     $typeHint,
-                    $nullable,
                     $constructorParamsDefaultToNull
+                );
+                $constructorSource .= self::generateSetterSource(
+                    $name, $type, $constructorParamsDefaultToNull
                 );
             }
 
@@ -165,55 +170,8 @@ class ComplexType extends Type
             );
         }
         $method->setParameter($parameter);
-    }
 
-    /**
-     * Add inherited parameter to constructor
-     *
-     * @param MethodGenerator $constructor
-     * @param $name
-     * @param $type
-     * @param $typeHint
-     * @param $constructorParamsDefaultToNull
-     * @return ParameterGenerator
-     */
-    private static function addParentConstructorParameter(
-        MethodGenerator $constructor,
-        $name, $type, $typeHint, $constructorParamsDefaultToNull
-    )
-    {
-        self::addMethodParameter($constructor, $name, $type, $typeHint, $constructorParamsDefaultToNull);
-
-        $parentConstructorParameter = new ParameterGenerator();
-        $parentConstructorParameter->setName($name);
-        if (!empty($typeHint)) {
-            $parentConstructorParameter->setType($typeHint);
-        }
-
-        return $parentConstructorParameter;
-    }
-
-    /**
-     * Add parameter to constructor
-     *
-     * @param MethodGenerator $constructor
-     * @param $name
-     * @param $type
-     * @param $typeHint
-     * @param $nullable
-     * @return string Source code to add to constructor
-     */
-    private static function addConstructorParameter(
-        MethodGenerator $constructor,
-        $name, $type, $typeHint, $nullable, $constructorParamsDefaultToNull)
-    {
-        self::addMethodParameter($constructor, $name, $type, $typeHint, $constructorParamsDefaultToNull);
-
-        $constructorSource = self::generateSetterSource(
-            $name, $type, $nullable || $constructorParamsDefaultToNull
-        );
-
-        return $constructorSource;
+        return $parameter;
     }
 
     /**
@@ -418,23 +376,6 @@ class ComplexType extends Type
     public function getMembers()
     {
         return $this->members;
-    }
-
-    /**
-     * Generate a string representing the parameters for a function e.g. "type1 $param1, type2 $param2, $param3"
-     *
-     * @param ParameterGenerator[] $parameters A map of parameters
-     * @return string The parameter string.
-     */
-    protected static function buildParametersString(array $parameters)
-    {
-        $parameterOutput = [];
-
-        foreach ($parameters as $parameter) {
-            $parameterOutput[] = $parameter->generate();
-        }
-
-        return implode(', ', $parameterOutput);
     }
 
     /**
