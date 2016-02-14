@@ -89,13 +89,14 @@ class ComplexType extends Type
             ->setDocBlock(new DocBlockGenerator());
 
         $constructorSource = '';
-        $parentConstructorParameters = [];
 
         $this->class->addMethodFromGenerator($constructor);
 
         // Add base type members to constructor parameter list first and call base class constructor
         $parentMembers = $this->getBaseTypeMembers($this);
         if (!empty($parentMembers)) {
+            $parentConstructorParameters = [];
+
             foreach ($parentMembers as $member) {
                 $type = Validator::validateType($member->getType());
                 $name = Validator::validateAttribute($member->getName());
