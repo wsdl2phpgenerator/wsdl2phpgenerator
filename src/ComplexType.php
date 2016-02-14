@@ -203,19 +203,6 @@ class ComplexType extends Type
      */
     private function addSetter($name, $type, $typeHint, $nullable)
     {
-        $setterParameter = new ParameterGenerator;
-        $setterParameter->setName($name);
-
-        if (isset($typeHint)) {
-            $setterParameter->setType($typeHint);
-
-            if ($nullable) {
-                $setterParameter->setDefaultValue(
-                    new ValueGenerator(null, ValueGenerator::TYPE_NULL)
-                );
-            }
-        }
-
         $setter = (new MethodGenerator())
             ->setName('set' . ucfirst($name))
             ->setFlags(MethodGenerator::FLAG_PUBLIC)
