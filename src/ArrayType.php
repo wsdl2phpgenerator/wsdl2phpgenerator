@@ -106,7 +106,11 @@ class ArrayType extends ComplexType
                 false,
                 false
             ),
-            '  $this->' . $this->field->getName() . '[$offset] = $value;',
+            '  if (!isset($offset)) {' . PHP_EOL .
+            '    $this->' . $this->field->getName() . '[] = $value;' . PHP_EOL .
+            '  } else {' . PHP_EOL .
+            '    $this->' . $this->field->getName() . '[$offset] = $value;' . PHP_EOL .
+            '  }',
             $offsetSetDock
         );
         $this->class->addFunction($offsetSet);

@@ -89,6 +89,10 @@ class ArrayTypeTest extends CodeGenerationTestCase
         // Tests offsetSet()
         $this->class['newItem'] = 'newValue';
         $this->assertSame('newValue', $this->class['newItem']);
+        $this->class[] = 'newValue2';
+        $this->assertSame('newValue2', $this->class[0]);
+        $this->class[] = 'newValue3';
+        $this->assertSame('newValue3', $this->class[1]);
 
         // Tests offsetUnset()
         unset($this->class['newItem']);
