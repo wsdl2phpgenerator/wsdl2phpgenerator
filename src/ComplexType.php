@@ -69,6 +69,7 @@ class ComplexType extends Type
 
         $traits=$this->config->get("traits");
         $trait_details_arr=$this->config->get("trait_details");
+		$trait_details=array();
 		
 		if(isset($traits) && !empty($traits)){
 			$trait_details=$trait_details_arr[$this->phpIdentifier];
