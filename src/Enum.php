@@ -47,22 +47,24 @@ class Enum extends Type
         }
 
         $traits=$this->config->get("traits");
-        $trait_details_arr=$this->config->get("trait_details");
-		$trait_details=$trait_details_arr[$this->phpIdentifier];
+        $trait_details=array();
+		
+		if(isset($traits) && !empty($traits)){
 
-        $trait_id=$this->phpIdentifier;
-        if(isset($traits["*"]))
-            $trait_id="*";
+			$trait_id=$this->phpIdentifier;
+			if(isset($traits["*"]))
+				$trait_id="*";
 
-        if(isset($traits[$trait_id]) && !empty($traits[$trait_id]) && isset($traits[$trait_id])){
-            $traits=$traits[$trait_id];
-            if(isset($trait_details[$trait_id]) && !empty($trait_details) && isset($trait_details[$trait_id]))
-                $trait_details=$trait_details[$trait_id];
-        }else{
-            $traits=array();
-            $trait_details=array();
-        }
-
+			if(isset($traits[$trait_id]) && !empty($traits[$trait_id]) && isset($traits[$trait_id])){
+				$traits=$traits[$trait_id];
+				if(isset($trait_details[$trait_id]) && !empty($trait_details) && isset($trait_details[$trait_id]))
+					$trait_details=$trait_details[$trait_id];
+			}else{
+				$traits=array();
+				$trait_details=array();
+			}
+		}
+		
         $this->class = new PhpClass($this->phpIdentifier, false,'',$traits,$trait_details);
 
         $first = true;
