@@ -15,7 +15,7 @@ env:
 sudo: false
 
 before_script:
-  - composer update --dev --no-interaction $PREFER_LOWEST
+  - composer update --no-interaction $PREFER_LOWEST
 
 script:
   - mkdir -p build/logs
