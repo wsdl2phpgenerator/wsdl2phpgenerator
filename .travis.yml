@@ -15,11 +15,7 @@ env:
 sudo: false
 
 before_script:
-  # Use --prefer-source to download dependencies via git and avoid GitHub API
-  # rate limits resulting in 502 HTTP responses, build errors and
-  # Composer\Downloader\TransportException.
-  # https://github.com/symfony/symfony/issues/4687
-  - composer update --dev --no-interaction --prefer-source $PREFER_LOWEST
+  - composer update --dev --no-interaction $PREFER_LOWEST
 
 script:
   - mkdir -p build/logs
