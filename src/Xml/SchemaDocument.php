@@ -31,7 +31,7 @@ class SchemaDocument extends XmlNode
      *
      * @var SchemaDocument[]
      */
-    protected $referereces;
+    protected $references;
 
     /**
      * The urls of schemas which have already been loaded.
@@ -59,13 +59,13 @@ class SchemaDocument extends XmlNode
 
         parent::__construct($document, $document->documentElement);
         // Register the schema to avoid cyclic imports.
-        self::$loadedUrls[] = $xsdUrl;
+        self::$loadedUrls[$xsdUrl] = $this;
 
         // Locate and instantiate schemas which are referenced by the current schema.
         // A reference in this context can either be
         // - an import from another namespace: http://www.w3.org/TR/xmlschema-1/#composition-schemaImport
         // - an include within the same namespace: http://www.w3.org/TR/xmlschema-1/#compound-schema
-        $this->referereces = array();
+        $this->references = array();
         foreach ($this->xpath(  '//wsdl:import/@location|' .
                                 '//s:import/@schemaLocation|' .
                                 '//s:include/@schemaLocation') as $reference) {
@@ -74,8 +74,11 @@ class SchemaDocument extends XmlNode
                 $referenceUrl = dirname($xsdUrl) . '/' . $referenceUrl;
             }
 
-            if (!in_array($referenceUrl, self::$loadedUrls)) {
-                $this->referereces[] = new SchemaDocument($config, $referenceUrl);
+            if (!array_key_exists($referenceUrl, self::$loadedUrls)) {
+                $this->references[] = new SchemaDocument($config, $referenceUrl);
+            } else {
+                // Refer to the previously loaded schema.
+                $this->references[] = self::$loadedUrls[$referenceUrl];
             }
         }
     }
@@ -96,7 +99,7 @@ class SchemaDocument extends XmlNode
         }
 
         if (empty($type)) {
-            foreach ($this->referereces as $import) {
+            foreach ($this->references as $import) {
                 $type = $import->findTypeElement($name);
                 if (!empty($type)) {
                     break;
