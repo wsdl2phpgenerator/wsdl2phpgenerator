@@ -141,6 +141,7 @@ class Service implements ClassGenerator
     public function generateClass()
     {
         $this->class = $this->createPhpClass();
+        $this->class->addVariable($this->createClassmapVariable());
 
         // Create the constructor
         $comment = new PhpDocComment();
@@ -163,22 +164,6 @@ class Service implements ClassGenerator
 
         // Add the constructor
         $this->class->addFunction($function);
-
-        // Generate the classmap
-        $name = 'classmap';
-        $comment = new PhpDocComment();
-        $comment->setVar(PhpDocElementFactory::getVar('array', $name, 'The defined classes'));
-
-        $init = array();
-        foreach ($this->types as $type) {
-            if ($type instanceof ComplexType) {
-                $init[$type->getIdentifier()] = $this->getConfigValue('namespaceName') . "\\" . $type->getPhpIdentifier();
-            }
-        }
-        $var = new PhpVariable('private static', $name, var_export($init, true), $comment);
-
-        // Add the classmap variable
-        $this->class->addVariable($var);
 
         // Add all methods
         foreach ($this->getOperations() as $operation) {
@@ -266,5 +251,26 @@ class Service implements ClassGenerator
     protected function getServiceParentClass()
     {
         return $this->getConfigValue('soapClientClass');
+    }
+
+    /**
+     * Create the classmap static variable for the generated serivce class.
+     *
+     * @return PhpVariable
+     */
+    protected function createClassmapVariable()
+    {
+        $name = 'classmap';
+        $comment = new PhpDocComment();
+        $comment->setVar(PhpDocElementFactory::getVar('array', $name, 'The defined classes'));
+
+        $init = array();
+        foreach ($this->types as $type) {
+            if ($type instanceof ComplexType) {
+                $init[$type->getIdentifier()] = $this->getConfigValue('namespaceName') . "\\" . $type->getPhpIdentifier();
+            }
+        }
+
+        return new PhpVariable('private static', $name, var_export($init, true), $comment);
     }
 }
