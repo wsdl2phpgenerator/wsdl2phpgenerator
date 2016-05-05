@@ -229,14 +229,29 @@ class Service implements ClassGenerator
         $comment = new PhpDocComment();
         $comment->setVar(PhpDocElementFactory::getVar('array', $name, 'The defined classes'));
 
+        return new PhpVariable(
+            'private static',
+            $name,
+            var_export($this->typesToClassmap(), true),
+            $comment
+        );
+    }
+
+    /**
+     * Transform the `types` property into something suitable for a classmap.
+     *
+     * @return array
+     */
+    protected function typesToClassmap()
+    {
         $init = array();
-        foreach ($this->types as $type) {
+        foreach ($this->getTypes() as $type) {
             if ($type instanceof ComplexType) {
                 $init[$type->getIdentifier()] = $this->getConfigValue('namespaceName') . "\\" . $type->getPhpIdentifier();
             }
         }
 
-        return new PhpVariable('private static', $name, var_export($init, true), $comment);
+        return $init;
     }
 
     /**
