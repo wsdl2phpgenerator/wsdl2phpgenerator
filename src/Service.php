@@ -190,7 +190,7 @@ class Service implements ClassGenerator
         $this->class->addVariable($var);
 
         // Add all methods
-        foreach ($this->operations as $operation) {
+        foreach ($this->getOperations() as $operation) {
             $name = Validator::validateOperation($operation->getName());
 
             $comment = new PhpDocComment($operation->getDescription());
@@ -221,6 +221,16 @@ class Service implements ClassGenerator
     public function addOperation(Operation $operation)
     {
         $this->operations[$operation->getName()] = $operation;
+    }
+
+    /**
+     * Get all the operations registered with the service.
+     *
+     * @return Operation[]
+     */
+    public function getOperations()
+    {
+        return $this->operations;
     }
 
     /**
