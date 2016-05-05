@@ -75,7 +75,7 @@ class Service implements ClassGenerator
     public function getClass()
     {
         if ($this->class == null) {
-            $this->generateClass();
+            $this->class = $this->generateClass();
         }
 
         return $this->class;
@@ -140,16 +140,18 @@ class Service implements ClassGenerator
      */
     public function generateClass()
     {
-        $this->class = $this->createPhpClass();
-        $this->class->addVariable($this->createClassmapVariable());
-        $this->class->addFunction($this->createConstructor());
+        $class = $this->createPhpClass();
+        $class->addVariable($this->createClassmapVariable());
+        $class->addFunction($this->createConstructor());
 
         foreach ($this->getOperations() as $operation) {
             $func = $this->createOperationMethod($operation);
-            if (!$this->class->functionExists($func->getIdentifier())) {
-                $this->class->addFunction($func);
+            if (!$class->functionExists($func->getIdentifier())) {
+                $class->addFunction($func);
             }
         }
+
+        return $class;
     }
 
     /**
