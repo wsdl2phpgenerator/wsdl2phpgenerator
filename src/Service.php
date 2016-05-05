@@ -144,26 +144,10 @@ class Service implements ClassGenerator
         $this->class->addVariable($this->createClassmapVariable());
         $this->class->addFunction($this->createConstructor());
 
-        // Add all methods
         foreach ($this->getOperations() as $operation) {
-            $name = Validator::validateOperation($operation->getName());
-
-            $comment = new PhpDocComment($operation->getDescription());
-            $comment->setReturn(PhpDocElementFactory::getReturn($operation->getReturns(), ''));
-
-            foreach ($operation->getParams() as $param => $hint) {
-                $arr = $operation->getPhpDocParams($param, $this->types);
-                $comment->addParam(PhpDocElementFactory::getParam($arr['type'], $arr['name'], $arr['desc']));
-            }
-
-            $source = '  return $this->__soapCall(\'' . $operation->getName() . '\', array(' . $operation->getParamStringNoTypeHints() . '));' . PHP_EOL;
-
-            $paramStr = $operation->getParamString($this->types);
-
-            $function = new PhpFunction('public', $name, $paramStr, $source, $comment);
-
-            if ($this->class->functionExists($function->getIdentifier()) == false) {
-                $this->class->addFunction($function);
+            $func = $this->createOperationMethod($operation);
+            if (!$this->class->functionExists($func->getIdentifier())) {
+                $this->class->addFunction($func);
             }
         }
     }
@@ -277,5 +261,30 @@ class Service implements ClassGenerator
         $source .= '  parent::__construct($wsdl, $options);' . PHP_EOL;
 
         return new PhpFunction('public', '__construct', 'array $options = array(), $wsdl = null', $source, $comment);
+    }
+
+    /**
+     * Create a PhpFunction object for the given operation.
+     *
+     * @param $operation The operation for which the method will be created
+     * @return PhpFunction
+     */
+    protected function createOperationMethod(Operation $operation)
+    {
+        $name = Validator::validateOperation($operation->getName());
+
+        $comment = new PhpDocComment($operation->getDescription());
+        $comment->setReturn(PhpDocElementFactory::getReturn($operation->getReturns(), ''));
+
+        foreach ($operation->getParams() as $param => $hint) {
+            $arr = $operation->getPhpDocParams($param, $this->types);
+            $comment->addParam(PhpDocElementFactory::getParam($arr['type'], $arr['name'], $arr['desc']));
+        }
+
+        $source = '  return $this->__soapCall(\'' . $operation->getName() . '\', array(' . $operation->getParamStringNoTypeHints() . '));' . PHP_EOL;
+
+        $paramStr = $operation->getParamString($this->types);
+
+        return  new PhpFunction('public', $name, $paramStr, $source, $comment);
     }
 }
