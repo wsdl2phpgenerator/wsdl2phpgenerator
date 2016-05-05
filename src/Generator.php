@@ -9,6 +9,7 @@ use \Exception;
 use Psr\Log\LoggerInterface;
 use Wsdl2PhpGenerator\Filter\FilterFactory;
 use Wsdl2PhpGenerator\Xml\WsdlDocument;
+use Wsdl2PhpGenerator\Xml\ServiceNode;
 
 /**
  * Class that contains functionality for generating classes from a wsdl file
@@ -114,10 +115,10 @@ class Generator implements GeneratorInterface
      */
     protected function loadService()
     {
-        $service = $this->wsdl->getService();
-        $this->log('Starting to load service ' . $service->getName());
+        $definition = $this->wsdl->getService();
+        $this->log('Starting to load service ' . $definition->getName());
 
-        $this->service = new Service($this->config, $service->getName(), $this->types, $service->getDocumentation());
+        $this->service = $this->createServiceFor($definition);
 
         foreach ($this->wsdl->getOperations() as $function) {
             $this->log('Loading function ' . $function->getName());
@@ -125,7 +126,24 @@ class Generator implements GeneratorInterface
             $this->service->addOperation(new Operation($function->getName(), $function->getParams(), $function->getDocumentation(), $function->getReturns()));
         }
 
-        $this->log('Done loading service ' . $service->getName());
+        $this->log('Done loading service ' . $definition->getName());
+    }
+
+    /**
+     * Create a new service object for the given service defnition node. This
+     * is provided so subclasses may override it to create custom service objects.
+     *
+     * @param $definition The service node from a WSDL
+     * @return Service a newly crate service object
+     */
+    protected function createServiceFor(ServiceNode $definition)
+    {
+        return new Service(
+            $this->config,
+            $definition->getName(),
+            $this->types,
+            $definition->getDocumentation()
+        );
     }
 
     /**
