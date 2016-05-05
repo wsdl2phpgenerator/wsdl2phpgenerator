@@ -142,28 +142,7 @@ class Service implements ClassGenerator
     {
         $this->class = $this->createPhpClass();
         $this->class->addVariable($this->createClassmapVariable());
-
-        // Create the constructor
-        $comment = new PhpDocComment();
-        $comment->addParam(PhpDocElementFactory::getParam('array', 'options', 'A array of config values'));
-        $comment->addParam(PhpDocElementFactory::getParam('string', 'wsdl', 'The wsdl file to use'));
-
-        $source = '
-  foreach (self::$classmap as $key => $value) {
-    if (!isset($options[\'classmap\'][$key])) {
-      $options[\'classmap\'][$key] = $value;
-    }
-  }' . PHP_EOL;
-        $source .= '  $options = array_merge(' . var_export($this->getConfigValue('soapClientOptions'), true) . ', $options);' . PHP_EOL;
-        $source .= '  if (!$wsdl) {' . PHP_EOL;
-        $source .= '    $wsdl = \'' . $this->getConfigValue('inputFile') . '\';' . PHP_EOL;
-        $source .= '  }' . PHP_EOL;
-        $source .= '  parent::__construct($wsdl, $options);' . PHP_EOL;
-
-        $function = new PhpFunction('public', '__construct', 'array $options = array(), $wsdl = null', $source, $comment);
-
-        // Add the constructor
-        $this->class->addFunction($function);
+        $this->class->addFunction($this->createConstructor());
 
         // Add all methods
         foreach ($this->getOperations() as $operation) {
@@ -272,5 +251,31 @@ class Service implements ClassGenerator
         }
 
         return new PhpVariable('private static', $name, var_export($init, true), $comment);
+    }
+
+    /**
+     * Create the constructor for the generated service class.
+     *
+     * @return PhpFunction
+     */
+    protected function createConstructor()
+    {
+        $comment = new PhpDocComment();
+        $comment->addParam(PhpDocElementFactory::getParam('array', 'options', 'A array of config values'));
+        $comment->addParam(PhpDocElementFactory::getParam('string', 'wsdl', 'The wsdl file to use'));
+
+        $source = '
+  foreach (self::$classmap as $key => $value) {
+    if (!isset($options[\'classmap\'][$key])) {
+      $options[\'classmap\'][$key] = $value;
+    }
+  }' . PHP_EOL;
+        $source .= '  $options = array_merge(' . var_export($this->getConfigValue('soapClientOptions'), true) . ', $options);' . PHP_EOL;
+        $source .= '  if (!$wsdl) {' . PHP_EOL;
+        $source .= '    $wsdl = \'' . $this->getConfigValue('inputFile') . '\';' . PHP_EOL;
+        $source .= '  }' . PHP_EOL;
+        $source .= '  parent::__construct($wsdl, $options);' . PHP_EOL;
+
+        return new PhpFunction('public', '__construct', 'array $options = array(), $wsdl = null', $source, $comment);
     }
 }
