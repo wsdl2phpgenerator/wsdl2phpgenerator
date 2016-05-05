@@ -124,6 +124,7 @@ class Service implements ClassGenerator
     {
         return isset($this->types[$identifier])? $this->types[$identifier]: null;
     }
+
     /**
      * Returns all types defined by the service.
      *
