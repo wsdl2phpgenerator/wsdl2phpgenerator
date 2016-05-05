@@ -142,14 +142,14 @@ class Service implements ClassGenerator
         $name = $this->identifier;
 
         // Generate a valid classname
-        $name = Validator::validateClass($name, $this->config->get('namespaceName'));
+        $name = Validator::validateClass($name, $this->getConfigValue('namespaceName'));
 
         // uppercase the name
         $name = ucfirst($name);
 
         // Create the class object
         $comment = new PhpDocComment($this->description);
-        $this->class = new PhpClass($name, false, $this->config->get('soapClientClass'), $comment);
+        $this->class = new PhpClass($name, false, $this->getConfigValue('soapClientClass'), $comment);
 
         // Create the constructor
         $comment = new PhpDocComment();
@@ -162,9 +162,9 @@ class Service implements ClassGenerator
       $options[\'classmap\'][$key] = $value;
     }
   }' . PHP_EOL;
-        $source .= '  $options = array_merge(' . var_export($this->config->get('soapClientOptions'), true) . ', $options);' . PHP_EOL;
+        $source .= '  $options = array_merge(' . var_export($this->getConfigValue('soapClientOptions'), true) . ', $options);' . PHP_EOL;
         $source .= '  if (!$wsdl) {' . PHP_EOL;
-        $source .= '    $wsdl = \'' . $this->config->get('inputFile') . '\';' . PHP_EOL;
+        $source .= '    $wsdl = \'' . $this->getConfigValue('inputFile') . '\';' . PHP_EOL;
         $source .= '  }' . PHP_EOL;
         $source .= '  parent::__construct($wsdl, $options);' . PHP_EOL;
 
@@ -181,7 +181,7 @@ class Service implements ClassGenerator
         $init = array();
         foreach ($this->types as $type) {
             if ($type instanceof ComplexType) {
-                $init[$type->getIdentifier()] = $this->config->get('namespaceName') . "\\" . $type->getPhpIdentifier();
+                $init[$type->getIdentifier()] = $this->getConfigValue('namespaceName') . "\\" . $type->getPhpIdentifier();
             }
         }
         $var = new PhpVariable('private static', $name, var_export($init, true), $comment);
@@ -221,5 +221,16 @@ class Service implements ClassGenerator
     public function addOperation(Operation $operation)
     {
         $this->operations[$operation->getName()] = $operation;
+    }
+
+    /**
+     * get a value out of the configuration.
+     *
+     * @param string $key The configuration key to look up
+     * @return mixed
+     */
+    protected function getConfigValue($key)
+    {
+        return $this->config->get($key);
     }
 }
