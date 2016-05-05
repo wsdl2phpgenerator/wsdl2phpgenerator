@@ -140,17 +140,7 @@ class Service implements ClassGenerator
      */
     public function generateClass()
     {
-        $name = $this->identifier;
-
-        // Generate a valid classname
-        $name = Validator::validateClass($name, $this->getConfigValue('namespaceName'));
-
-        // uppercase the name
-        $name = ucfirst($name);
-
-        // Create the class object
-        $comment = new PhpDocComment($this->description);
-        $this->class = new PhpClass($name, false, $this->getConfigValue('soapClientClass'), $comment);
+        $this->class = $this->createPhpClass();
 
         // Create the constructor
         $comment = new PhpDocComment();
@@ -243,5 +233,38 @@ class Service implements ClassGenerator
     protected function getConfigValue($key)
     {
         return $this->config->get($key);
+    }
+
+    /**
+     * Create a `PhpClass` object representing the service. This is used as part
+     * of the code generation.
+     *
+     * @return PhpClass
+     */
+    protected function createPhpClass()
+    {
+        // Generate a valid classname
+        $name = Validator::validateClass($this->getIdentifier(), $this->getConfigValue('namespaceName'));
+
+        // uppercase the name
+        $name = ucfirst($name);
+
+        // Create the class object
+        return  new PhpClass(
+            $name,
+            false,
+            $this->getServiceParentClass(),
+            new PhpDocComment($this->getDescription())
+        );
+    }
+
+    /**
+     * Get the parent class for the generated service.
+     *
+     * @return string
+     */
+    protected function getServiceParentClass()
+    {
+        return $this->getConfigValue('soapClientClass');
     }
 }
