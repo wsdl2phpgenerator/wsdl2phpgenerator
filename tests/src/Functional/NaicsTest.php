@@ -42,7 +42,9 @@ class NaicsTest extends FunctionalTestCase
             $this->assertAttributeInternalType('object', 'NAICSData', $response->getNAICSData());
             $this->assertAttributeTypeConsistency('object', 'NAICSData', $response->getNAICSData());
             $this->assertAttributeTypeConsistency('array', 'NAICS', $response->getNAICSData()->getNAICSData());
+            $arrayOfNaics = $response->getNAICSData()->getNAICSData();
             $naicsArray = $response->getNAICSData()->getNAICSData()->getNAICS();
+            $this->checkArray($arrayOfNaics, $naicsArray);
             foreach ($naicsArray as $naics) {
                 $this->assertAttributeTypeConsistency('string', 'NAICSCode', $naics);
                 $this->assertAttributeTypeConsistency('string', 'Title', $naics);
@@ -54,6 +56,26 @@ class NaicsTest extends FunctionalTestCase
             $this->assertContains('timeout', $e->getMessage());
         }
 
+    }
+
+    /**
+     * Check ArrayAccess, Iterator and Countable implementations
+     */
+    protected function checkArray($arrayClass, $array)
+    {
+        $this->assertClassImplementsInterface($arrayClass, 'ArrayAccess');
+        $this->assertClassImplementsInterface($arrayClass, 'Iterator');
+        $this->assertClassImplementsInterface($arrayClass, 'Countable');
+
+        $this->assertEquals(count($arrayClass), count($array));
+
+        foreach ($arrayClass as $key => $value) {
+            $this->assertArrayHasKey($key, $arrayClass);
+            $this->assertEquals($arrayClass[$key], $array[$key]);
+
+            $this->assertArrayHasKey($key, $array);
+            $this->assertEquals($value, $array[$key]);
+        }
     }
 
     /**

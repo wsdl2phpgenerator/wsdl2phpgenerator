@@ -141,7 +141,12 @@ class Generator implements GeneratorInterface
             $type = null;
 
             if ($typeNode->isComplex()) {
-                $type = new ComplexType($this->config, $typeNode->getName());
+                if ($typeNode->isArray()) {
+                    $type = new ArrayType($this->config, $typeNode->getName());
+                } else {
+                    $type = new ComplexType($this->config, $typeNode->getName());
+                }
+
                 $this->log('Loading type ' . $type->getPhpIdentifier());
 
                 $type->setAbstract($typeNode->isAbstract());

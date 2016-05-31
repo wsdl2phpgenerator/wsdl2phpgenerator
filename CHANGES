@@ -1,4 +1,17 @@
 
+3.3.1 / 2016-01-13 
+==================
+
+ * Fix array interfaces implementation
+
+3.3.0 / 2016-01-05
+==================
+
+ * Make array types implement ArrayAccess and Iterator
+ * Allow constructor overloading without loss of default WSDL URL
+ * Added support basic authentication.
+ * Speed up service operation filtration.
+
 3.2.1 / 2015-08-21 
 ==================
 

@@ -22,6 +22,9 @@ class ServiceTest extends CodeGenerationTestCase
     // Use our mock soap client. It allows to to retrieve the configuration is was passed.
     protected $soapclientClass = '\Wsdl2PhpGenerator\Tests\Mock\SoapClient';
 
+    // Example Wsdl path.
+    protected $wsdl = '/tmp/some.wsdl';
+
     // Example options which can be passed as options to a \SoapClient instance.
     protected $soapclientOptions = array(
         'features' => SOAP_SINGLE_ELEMENT_ARRAYS,
@@ -34,7 +37,7 @@ class ServiceTest extends CodeGenerationTestCase
     public function testSoapConfig()
     {
         $config = new Config(array(
-                'inputFile' => null,
+                'inputFile' => $this->wsdl,
                 'outputDir' => null,
                 'namespaceName' => $this->namespace,
                 'soapClientClass' => $this->soapclientClass,
@@ -46,9 +49,7 @@ class ServiceTest extends CodeGenerationTestCase
 
         $this->assertClassExists('TestService', $this->namespace);
 
-        $service = new \SoapClientTest\TestService();
-
-        return $service;
+        return new \SoapClientTest\TestService();
     }
 
     /**
@@ -58,9 +59,19 @@ class ServiceTest extends CodeGenerationTestCase
      */
     public function testSoapClientClass($service)
     {
-
         // The service class should be a subclass of the configured soap client class.
         $this->assertClassSubclassOf(new \ReflectionClass($service), $this->soapclientClass);
+    }
+
+    /**
+     * Test configuration of SoapClient WSDL.
+     *
+     * @depends testSoapConfig
+     */
+    public function testSoapClientWsdl($service)
+    {
+        // The soap client WSDL should be the same as the ones passed to the configuration.
+        $this->assertEquals($this->wsdl, $service->wsdl);
     }
 
     /**

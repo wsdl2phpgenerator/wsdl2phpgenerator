@@ -9,9 +9,17 @@ class SoapClient extends \SoapClient
 {
 
     /**
-     * The options passed to the SoapClient.
+     * The WSDL passed to the SoapClient.
      *
-     * Normally options passed to an SoapClient instance cannot be retrieved. This makes it possible.
+     * Normally parameters passed to an SoapClient instance cannot be retrieved. This makes it possible.
+     *
+     * @var string
+     */
+    public $wsdl;
+
+
+    /**
+     * The options passed to the SoapClient.
      *
      * @var array
      */
@@ -19,6 +27,7 @@ class SoapClient extends \SoapClient
 
     public function __construct($wsdl, $options = array())
     {
+        $this->wsdl = $wsdl;
         $this->options = $options;
     }
 

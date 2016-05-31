@@ -26,19 +26,19 @@ class ComplexType extends Type
      *
      * @var ComplexType
      */
-    private $baseType;
+    protected $baseType;
 
     /**
      * The members in the type
      *
      * @var Variable[]
      */
-    private $members;
+    protected $members;
 
     /**
      * @var
      */
-    private $abstract;
+    protected $abstract;
 
     /**
      * Construct the object
@@ -65,17 +65,9 @@ class ComplexType extends Type
             throw new Exception("The class has already been generated");
         }
 
-        // Determine parent class
-        $classBaseType = null;
-        // If we have a base type which is different than the current class then extend that.
-        // It is actually possible to have different classes with the same name as PHP SoapClient has a poor
-        // understanding of namespaces. Two types with the same name but in different namespaces will have the same
-        // identifier.
-        if ($this->baseType !== null && $this->baseType !== $this) {
-            $classBaseType = $this->baseType->getPhpIdentifier();
-        }
+        $classBaseType = $this->getBaseTypeClass();
 
-        $class = new PhpClass(
+        $this->class = new PhpClass(
             $this->phpIdentifier,
             false,
             $classBaseType,
@@ -113,7 +105,7 @@ class ComplexType extends Type
             $comment = new PhpDocComment();
             $comment->setVar(PhpDocElementFactory::getVar($type, $name, ''));
             $var = new PhpVariable('protected', $name, 'null', $comment);
-            $class->addVariable($var);
+            $this->class->addVariable($var);
 
             if (!$member->getNullable()) {
                 if ($type == '\DateTime') {
@@ -131,7 +123,6 @@ class ComplexType extends Type
 
             $getterComment = new PhpDocComment();
             $getterComment->setReturn(PhpDocElementFactory::getReturn($type, ''));
-            $getterCode = '';
             if ($type == '\DateTime') {
                 $getterCode = '  if ($this->' . $name . ' == null) {' . PHP_EOL
                     . '    return null;' . PHP_EOL
@@ -151,7 +142,6 @@ class ComplexType extends Type
             $setterComment = new PhpDocComment();
             $setterComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
             $setterComment->setReturn(PhpDocElementFactory::getReturn($this->phpNamespacedIdentifier, ''));
-            $setterCode = '';
             if ($type == '\DateTime') {
                 if ($member->getNullable()) {
                     $setterCode = '  if ($' . $name . ' == null) {' . PHP_EOL
@@ -194,13 +184,31 @@ class ComplexType extends Type
             $constructorSource,
             $constructorComment
         );
-        $class->addFunction($constructor);
+        $this->class->addFunction($constructor);
 
         foreach ($accessors as $accessor) {
-            $class->addFunction($accessor);
+            $this->class->addFunction($accessor);
+        }
+    }
+
+    /**
+     * Determine parent class
+     *
+     * @return string|null
+     *   Returns a string containing the PHP identifier for the parent class
+     *   or null if there is no applicable parent class.
+     */
+    public function getBaseTypeClass()
+    {
+        // If we have a base type which is different than the current class then extend that.
+        // It is actually possible to have different classes with the same name as PHP SoapClient has a poor
+        // understanding of namespaces. Two types with the same name but in different namespaces will have the same
+        // identifier.
+        if ($this->baseType !== null && $this->baseType !== $this) {
+            return $this->baseType->getPhpIdentifier();
         }
 
-        $this->class = $class;
+        return null;
     }
 
     /**
