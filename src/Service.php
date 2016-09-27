@@ -134,11 +134,24 @@ class Service implements ClassGenerator
         return $this->types;
     }
 
+	/**
+	 * @param $content
+	 *
+	 * @return mixed
+	 */
+	protected function adjustArrayNotation($content)
+	{
+		return $this->config->get('php7Arrays')? str_replace(['array (', ')'], ['[', ']'], $content): $content;
+	}
+
     /**
      * Generates the class if not already generated
      */
     public function generateClass()
     {
+    	$arrayPrefix = $this->config->get('php7Arrays')? '[': 'array(';
+		$arraySuffix = $this->config->get('php7Arrays')? ']': ')';
+
         $name = $this->identifier;
 
         // Generate a valid classname
@@ -162,13 +175,13 @@ class Service implements ClassGenerator
       $options[\'classmap\'][$key] = $value;
     }
   }' . PHP_EOL;
-        $source .= '  $options = array_merge(' . var_export($this->config->get('soapClientOptions'), true) . ', $options);' . PHP_EOL;
+        $source .= '  $options = array_merge(' . $this->adjustArrayNotation(var_export($this->config->get('soapClientOptions'), true)) . ', $options);' . PHP_EOL;
         $source .= '  if (!$wsdl) {' . PHP_EOL;
         $source .= '    $wsdl = \'' . $this->config->get('inputFile') . '\';' . PHP_EOL;
         $source .= '  }' . PHP_EOL;
         $source .= '  parent::__construct($wsdl, $options);' . PHP_EOL;
 
-        $function = new PhpFunction('public', '__construct', 'array $options = array(), $wsdl = null', $source, $comment);
+        $function = new PhpFunction('public', '__construct', 'array $options = ' . $arrayPrefix.$arraySuffix . ', $wsdl = null', $source, $comment);
 
         // Add the constructor
         $this->class->addFunction($function);
@@ -184,7 +197,7 @@ class Service implements ClassGenerator
                 $init[$type->getIdentifier()] = $this->config->get('namespaceName') . "\\" . $type->getPhpIdentifier();
             }
         }
-        $var = new PhpVariable('private static', $name, var_export($init, true), $comment);
+        $var = new PhpVariable('private static', $name, $this->adjustArrayNotation(var_export($init, true)), $comment);
 
         // Add the classmap variable
         $this->class->addVariable($var);
@@ -201,7 +214,7 @@ class Service implements ClassGenerator
                 $comment->addParam(PhpDocElementFactory::getParam($arr['type'], $arr['name'], $arr['desc']));
             }
 
-            $source = '  return $this->__soapCall(\'' . $operation->getName() . '\', array(' . $operation->getParamStringNoTypeHints() . '));' . PHP_EOL;
+            $source = '  return $this->__soapCall(\'' . $operation->getName() . '\', ' . $arrayPrefix . $operation->getParamStringNoTypeHints() . $arraySuffix . ');' . PHP_EOL;
 
             $paramStr = $operation->getParamString($this->types);
 
