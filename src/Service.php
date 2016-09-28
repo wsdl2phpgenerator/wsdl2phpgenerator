@@ -141,7 +141,7 @@ class Service implements ClassGenerator
      */
     protected function adjustArrayNotation($content)
     {
-        return $this->config->get('php7Arrays')? str_replace(['array (', ')'], ['[', ']'], $content): $content;
+        return $this->config->get('bracketedArrays')? str_replace(['array (', ')'], ['[', ']'], $content): $content;
     }
 
     /**
@@ -149,8 +149,8 @@ class Service implements ClassGenerator
      */
     public function generateClass()
     {
-        $arrayPrefix = $this->config->get('php7Arrays')? '[': 'array(';
-        $arraySuffix = $this->config->get('php7Arrays')? ']': ')';
+        $arrayPrefix = $this->config->get('bracketedArrays')? '[': 'array(';
+        $arraySuffix = $this->config->get('bracketedArrays')? ']': ')';
 
         $name = $this->identifier;
 
