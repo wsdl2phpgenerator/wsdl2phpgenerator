@@ -75,7 +75,7 @@ class Config implements ConfigInterface
             'soapClientClass'               => '\SoapClient',
             'soapClientOptions'             => array(),
             'proxy'                         => false,
-            'php7Arrays'                    => false
+            'bracketedArrays'               => false
         ));
 
         // A set of configuration options names and normalizer callables.
