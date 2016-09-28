@@ -141,7 +141,7 @@ class Service implements ClassGenerator
      */
     protected function adjustArrayNotation($content)
     {
-        return $this->config->get('bracketedArrays')? str_replace(['array (', ')'], ['[', ']'], $content): $content;
+        return $this->config->get('bracketedArrays')? str_replace(array('array (', ')'), array('[', ']'), $content): $content;
     }
 
     /**
