@@ -134,23 +134,23 @@ class Service implements ClassGenerator
         return $this->types;
     }
 
-	/**
-	 * @param $content
-	 *
-	 * @return mixed
-	 */
-	protected function adjustArrayNotation($content)
-	{
-		return $this->config->get('php7Arrays')? str_replace(['array (', ')'], ['[', ']'], $content): $content;
-	}
+    /**
+     * @param $content
+     *
+     * @return mixed
+     */
+    protected function adjustArrayNotation($content)
+    {
+        return $this->config->get('php7Arrays')? str_replace(['array (', ')'], ['[', ']'], $content): $content;
+    }
 
     /**
      * Generates the class if not already generated
      */
     public function generateClass()
     {
-    	$arrayPrefix = $this->config->get('php7Arrays')? '[': 'array(';
-		$arraySuffix = $this->config->get('php7Arrays')? ']': ')';
+        $arrayPrefix = $this->config->get('php7Arrays')? '[': 'array(';
+        $arraySuffix = $this->config->get('php7Arrays')? ']': ')';
 
         $name = $this->identifier;
 
