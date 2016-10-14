@@ -9,6 +9,8 @@ Simple WSDL to PHP classes converter. Takes a WSDL file and outputs class files 
 
 Uses the [MIT license](http://www.opensource.org/licenses/mit-license.php).
 
+> **Announcement**: We are looking to add one or two co-maintainers with commit access to help bring this project forward, review pull requests and respond to issues. If you have contributed to this project or are otherwise actively involved in open source and have a GitHub profile for review, ping [@kasperg](https://github.com/kasperg) to express your interest.
+
 ## New major version: 3.0
 
 A new major version of wsdl2phpgenerator has recently been released: 3.0.
