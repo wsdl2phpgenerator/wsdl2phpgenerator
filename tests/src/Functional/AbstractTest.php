@@ -21,11 +21,22 @@ class AbstractTest extends FunctionalTestCase
         // AbstractServiceService contains an operation called echo. This is a PHP keyword and should thus have been
         // renamed in the generation process to avoid conflicts.
         $serviceClass = new \ReflectionClass('AbstractServiceService');
+
         $methods = array_map(function (\ReflectionMethod $method) {
             return $method->getName();
         }, $serviceClass->getMethods());
         $this->assertNotContains('echo', $methods, 'Class should not contain a method called echo. It is a reserved keyword');
         $this->assertContains('aEcho', $methods, 'Class should contain a method with a derived name for echo since it is a reserved keyword');
+
+        // Validate UTF8 names on opeartions
+        $this->assertContains('validarContrasena', $methods, 'Class should contain a method from an UToperation name, translited');
+
+        // Valid file name for UTF8 named type
+        $this->assertGeneratedFileExists('MsgContrasena.php');
+
+        // Valid class name for UTF8 named type
+        $this->assertGeneratedClassExists('MsgContrasena');
+
 
         // Complex types UserAuthor and NonUserAuthor extends the User type. That relationship should be converted to
         // subclasses in the generated code.
@@ -53,6 +64,8 @@ class AbstractTest extends FunctionalTestCase
         foreach ($subClassConstructor->getParameters() as $parameter) {
             $this->assertMethodHasParameter($subSubClassConstructor, $parameter, $parameter->getPosition());
         }
+
+
 
     }
 
