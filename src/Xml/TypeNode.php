@@ -73,7 +73,10 @@ class TypeNode extends XmlNode
     public function isElementArray($name)
     {
         foreach ($this->element->getElementsByTagName('element') as $element) {
-            if ($element->getAttribute('name') == $name && $element->getAttribute('maxOccurs') == 'unbounded') {
+            if ($element->getAttribute('name') == $name &&
+                  ($element->getAttribute('maxOccurs') == 'unbounded'
+                    || $element->getAttribute('maxOccurs') >= 2)
+              ) {
                 return true;
             }
         }
