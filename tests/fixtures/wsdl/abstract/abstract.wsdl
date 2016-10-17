@@ -66,14 +66,6 @@
         </sequence>
       </complexType>
 
-      <complexType name="MsgContraseña">
-        <sequence>
-          <element name="id" type="xsd:unsignedInt" minOccurs="1"
-            maxOccurs="1"/>
-        </sequence>
-      </complexType>
-
-
       <complexType name="DerivedClass1">
         <complexContent>
           <extension base="tns:BaseClass">
@@ -123,15 +115,6 @@
     <wsdl:part name="return" type="tns:BaseClass"/>
   </wsdl:message>
 
-
-  <wsdl:message name="validarContraseñaRequest">
-    <wsdl:part name="parameter" type="tns:MsgContraseña"/>
-  </wsdl:message>
-
-  <wsdl:message name="validarContraseñaResponse">
-    <wsdl:part name="return" type="tns:MsgContraseña"/>
-  </wsdl:message>
-
   <wsdl:portType name="AbstractService">
     <wsdl:operation name="echo" parameterOrder="obj typename">
       <wsdl:input message="tns:echoRequest" name="echoRequest"/>
@@ -147,12 +130,6 @@
       <wsdl:input message="tns:echoDerivedRequest" name="echoDerivedRequest"/>
       <wsdl:output message="tns:echoDerivedResponse" name="echoDerivedResponse"/>
     </wsdl:operation>
-
-    <wsdl:operation name="validarContraseña">
-      <wsdl:input message="tns:validarContraseñaRequest" name="validarContraseñaRequest"/>
-      <wsdl:output message="tns:validarContraseñaResponse" name="validarContraseñaResponse"/>
-    </wsdl:operation>
-
   </wsdl:portType>
 
   <wsdl:binding name="AbstractServiceSoapBinding"
@@ -197,21 +174,6 @@
           namespace="urn:www.example.org:abstract" use="encoded"/>
       </wsdl:output>
     </wsdl:operation>
-
-    <wsdl:operation name="validarContraseña">
-      <wsdlsoap:operation style="rpc" soapAction=""/>
-      <wsdl:input name="validarContraseñaRequest">
-        <wsdlsoap:body
-          encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-          namespace="urn:www.example.org:abstract" use="encoded"/>
-      </wsdl:input>
-      <wsdl:output name="validarContraseñaResponse">
-        <wsdlsoap:body
-          encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-          namespace="urn:www.example.org:abstract" use="encoded"/>
-      </wsdl:output>
-    </wsdl:operation>
-
   </wsdl:binding>
 
   <wsdl:service name="AbstractServiceService">

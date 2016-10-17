@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions
+        name="utf8"
+        targetNamespace="urn:www.example.org:utf8"
+        xmlns="http://schemas.xmlsoap.org/wsdl/"
+        xmlns:tns="urn:www.example.org:utf8"
+        xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+        xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+        xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <wsdl:types>
+        <schema targetNamespace="urn:www.example.org:utf8"
+                xmlns="http://www.w3.org/2001/XMLSchema">
+            <import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+
+            <complexType name="MsgContraseña">
+                <sequence>
+                    <element name="id" type="xsd:unsignedInt" minOccurs="1"
+                             maxOccurs="1"/>
+                </sequence>
+            </complexType>
+        </schema>
+    </wsdl:types>
+
+    <wsdl:message name="validarContraseñaRequest">
+        <wsdl:part name="parameter" type="tns:MsgContraseña"/>
+    </wsdl:message>
+
+    <wsdl:message name="validarContraseñaResponse">
+        <wsdl:part name="return" type="tns:MsgContraseña"/>
+    </wsdl:message>
+
+    <wsdl:portType name="Utf8Service">
+
+        <wsdl:operation name="validarContraseña">
+            <wsdl:input message="tns:validarContraseñaRequest" name="validarContraseñaRequest"/>
+            <wsdl:output message="tns:validarContraseñaResponse" name="validarContraseñaResponse"/>
+        </wsdl:operation>
+
+    </wsdl:portType>
+
+    <wsdl:binding name="Utf8ServiceSoapBinding"
+                  type="tns:Utf8Service">
+
+        <wsdlsoap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+
+        <wsdl:operation name="validarContraseña">
+            <wsdlsoap:operation style="rpc" soapAction=""/>
+            <wsdl:input name="validarContraseñaRequest">
+                <wsdlsoap:body
+                        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                        namespace="urn:www.example.org:utf8" use="encoded"/>
+            </wsdl:input>
+            <wsdl:output name="validarContraseñaResponse">
+                <wsdlsoap:body
+                        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                        namespace="urn:www.example.org:utf8" use="encoded"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+    </wsdl:binding>
+
+    <wsdl:service name="Utf8ServiceService">
+        <wsdl:port name="Utf8Service"
+                   binding="tns:Utf8ServiceSoapBinding">
+            <wsdlsoap:address location="http://localhost:8080/"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
