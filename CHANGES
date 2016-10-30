@@ -1,4 +1,13 @@
 
+3.4.0 / 2016-10-30 
+==================
+
+ * Support for UTF8 strings on names (attributes, operations etc.)
+ * Classify elements with max occurs > 1 as arrays
+ * Detect more PHP keywords
+ * Support setting array values without offset
+ * Add support for Symfony 3.x
+
 3.3.1 / 2016-01-13 
 ==================
 
