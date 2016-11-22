@@ -29,7 +29,7 @@ abstract class FunctionalTestCase extends CodeGenerationTestCase
      */
     protected $config;
 
-    protected $fixtureDir = 'tests/fixtures/wsdl';
+    protected $fixtureDir;
 
     /**
      * Storage of already generated classes from WSDL to avoid double declaring and fatals
@@ -51,8 +51,11 @@ abstract class FunctionalTestCase extends CodeGenerationTestCase
 
     protected function setup()
     {
+        $testsDir = realpath(__DIR__ . '/../..');
+
         $class = new ReflectionClass($this);
-        $this->outputDir = 'tests/generated/' . $class->getShortName();
+        $this->outputDir = $testsDir . '/generated/' . $class->getShortName();
+        $this->fixtureDir = $testsDir . '/fixtures/wsdl';
         $this->generator = new Generator();
         $this->config = new Config(array(
             'inputFile' => $this->getWsdlPath(),

@@ -36,7 +36,7 @@ class CommentsGenerationTest extends FunctionalTestCase
         $this->assertContains('/**
      * To die, to sleep
      *
-     * @param ToBe $parameters', $method->getDocComment());
+     * @param ToBe $parameters', $this->normalizeEOL($method->getDocComment()));
     }
 
     /**
@@ -47,7 +47,7 @@ class CommentsGenerationTest extends FunctionalTestCase
         $this->markTestIncomplete('Enable after generated classes will have docs');
         $this->assertContains('
      * And by opposing end them?
-     */', $mainClass->getDocComment());
+     */', $this->normalizeEOL($mainClass->getDocComment()));
     }
 
     /**
@@ -57,6 +57,21 @@ class CommentsGenerationTest extends FunctionalTestCase
     {
         $property = $mainClass->getProperty('classmap');
         $this->assertContains('/**
-     * @var array', $property->getDocComment());
+     * @var array', $this->normalizeEOL($property->getDocComment()));
+    }
+
+    /**
+     * Normalizes the newline.
+     *
+     * Windows uses CR+LF for the newline.
+     * This method converts the newline to UNIX style.
+     *
+     * @param string $string
+     *
+     * @return string
+     */
+    private function normalizeEOL($string)
+    {
+        return str_replace("\r", '', $string);
     }
 }
