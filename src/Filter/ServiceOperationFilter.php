@@ -5,6 +5,7 @@ namespace Wsdl2PhpGenerator\Filter;
 use Wsdl2PhpGenerator\ComplexType;
 use Wsdl2PhpGenerator\ConfigInterface;
 use Wsdl2PhpGenerator\Enum;
+use Wsdl2PhpGenerator\ServiceInterface;
 use Wsdl2PhpGenerator\Service;
 use Wsdl2PhpGenerator\Type;
 use Wsdl2PhpGenerator\Variable;
@@ -37,7 +38,7 @@ class ServiceOperationFilter implements FilterInterface
     /**
      * @inheritdoc
      */
-    public function filter(Service $service)
+    public function filter(ServiceInterface $service)
     {
         $operations = array();
         $types  = array();

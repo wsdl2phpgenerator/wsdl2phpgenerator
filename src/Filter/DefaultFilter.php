@@ -2,7 +2,7 @@
 namespace Wsdl2PhpGenerator\Filter;
 
 
-use Wsdl2PhpGenerator\Service;
+use Wsdl2PhpGenerator\ServiceInterface;
 
 /**
  * Default filter implementation.
@@ -14,7 +14,7 @@ class DefaultFilter implements FilterInterface
     /**
      * @inheritdoc
      */
-    public function filter(Service $service)
+    public function filter(ServiceInterface $service)
     {
         return $service;
     }
