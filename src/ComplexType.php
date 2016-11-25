@@ -71,18 +71,25 @@ class ComplexType extends Type
         $constructorParamsDefaultToNull = $this->config->get('constructorParamsDefaultToNull');
 
         $classBaseType = $this->getBaseTypeClass();
+        $namespace = empty($this->config->get('namespaceName'))
+            ? null
+            : $this->config->get('namespaceName');
 
         $this->class = (new ZendClassGenerator())
             ->setName($this->phpIdentifier)
-            ->setNamespaceName(
-                empty($this->config->get('namespaceName'))
-                    ? null
-                    : $this->config->get('namespaceName'))
+            ->setNamespaceName($namespace)
             ->setFlags(
                 $this->abstract
                     ? ZendClassGenerator::FLAG_ABSTRACT
-                    : null)
-            ->setExtendedClass($classBaseType);
+                    : null);
+
+        if (isset($classBaseType)) {
+            if (isset($namespace)) {
+                $this->class->setExtendedClass($namespace . '\\' . $classBaseType);
+            } else {
+                $this->class->setExtendedClass($classBaseType);
+            }
+        }
 
         $constructor = (new MethodGenerator('__construct'))
             ->setFlags(MethodGenerator::FLAG_PUBLIC)
