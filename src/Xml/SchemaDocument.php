@@ -33,16 +33,7 @@ class SchemaDocument extends XmlNode
      */
     protected $referereces;
 
-    /**
-     * The urls of schemas which have already been loaded.
-     *
-     * We keep a record of these to avoid cyclic imports.
-     *
-     * @var string[]
-     */
-    protected static $loadedUrls;
-
-    public function __construct(ConfigInterface $config, $xsdUrl)
+    public function __construct(ConfigInterface $config, $xsdUrl, SchemaContext $context)
     {
         $this->url = $xsdUrl;
 
@@ -58,8 +49,8 @@ class SchemaDocument extends XmlNode
         }
 
         parent::__construct($document, $document->documentElement);
-        // Register the schema to avoid cyclic imports.
-        self::$loadedUrls[] = $xsdUrl;
+
+        $context->loaded($xsdUrl);
 
         // Locate and instantiate schemas which are referenced by the current schema.
         // A reference in this context can either be
@@ -74,8 +65,8 @@ class SchemaDocument extends XmlNode
                 $referenceUrl = dirname($xsdUrl) . '/' . $referenceUrl;
             }
 
-            if (!in_array($referenceUrl, self::$loadedUrls)) {
-                $this->referereces[] = new SchemaDocument($config, $referenceUrl);
+            if ($context->needToLoad($referenceUrl)) {
+                $this->referereces[] = new SchemaDocument($config, $referenceUrl, $context);
             }
         }
     }
