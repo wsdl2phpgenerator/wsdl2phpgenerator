@@ -2,7 +2,6 @@
 
 namespace Wsdl2PhpGenerator\Tests\Unit\Xml;
 
-use Wsdl2PhpGenerator\Config;
 use Wsdl2PhpGenerator\Xml\SchemaContext;
 use Wsdl2PhpGenerator\Xml\SchemaDocument;
 
@@ -10,13 +9,9 @@ class SchemaDocumentTest extends \PHPUnit_Framework_TestCase
 {
     public function testAllSchemasShouldBeLoaded()
     {
-        $config = new Config([
-            'inputFile' => null,
-            'outputDir' => null,
-        ]);
-        $context = new SchemaContext();
+        $context = new SchemaContext($this->getMock('Wsdl2PhpGenerator\ConfigInterface'));
 
-        $schema = new SchemaDocument($config, 'tests/fixtures/wsdl/references/references.wsdl', $context);
+        $schema = new SchemaDocument($context, 'tests/fixtures/wsdl/references/references.wsdl');
 
         $this->assertFalse($context->needToLoad('tests/fixtures/wsdl/references/import.xsd'));
         $this->assertFalse($context->needToLoad('tests/fixtures/wsdl/references/include.xsd'));
@@ -28,14 +23,10 @@ class SchemaDocumentTest extends \PHPUnit_Framework_TestCase
 
     public function testKnownSchemaInContextShouldNotBeLoaded()
     {
-        $config = new Config([
-            'inputFile' => null,
-            'outputDir' => null,
-        ]);
-        $context = new SchemaContext();
+        $context = new SchemaContext($this->getMock('Wsdl2PhpGenerator\ConfigInterface'));
         $context->loaded('tests/fixtures/wsdl/references/include.xsd');
 
-        $schema = new SchemaDocument($config, 'tests/fixtures/wsdl/references/references.wsdl', $context);
+        $schema = new SchemaDocument($context, 'tests/fixtures/wsdl/references/references.wsdl');
 
         $this->assertNotNull($schema->findTypeElement('Book'), 'Type from references.wsdl');
         $this->assertNotNull($schema->findTypeElement('UserAuthor'), 'Type from import.xsd');

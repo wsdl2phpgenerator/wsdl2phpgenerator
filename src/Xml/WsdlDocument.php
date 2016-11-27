@@ -43,8 +43,8 @@ class WsdlDocument extends SchemaDocument
         try {
             $soapClientClass = new \ReflectionClass($this->config->get('soapClientClass'));
             $this->soapClient = $soapClientClass->newInstance($wsdlUrl, $options);
-            // we need to pass $config for proxy settings
-            parent::__construct($config, $wsdlUrl, new SchemaContext());
+
+            parent::__construct(new SchemaContext($config), $wsdlUrl);
         } catch (SoapFault $e) {
             throw new Exception('Unable to load WSDL: ' . $e->getMessage(), $e->getCode(), $e);
         }
