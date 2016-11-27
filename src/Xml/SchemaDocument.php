@@ -31,7 +31,7 @@ class SchemaDocument extends XmlNode
      *
      * @var SchemaDocument[]
      */
-    protected $referereces;
+    protected $references;
 
     public function __construct(ConfigInterface $config, $xsdUrl, SchemaContext $context)
     {
@@ -56,7 +56,7 @@ class SchemaDocument extends XmlNode
         // A reference in this context can either be
         // - an import from another namespace: http://www.w3.org/TR/xmlschema-1/#composition-schemaImport
         // - an include within the same namespace: http://www.w3.org/TR/xmlschema-1/#compound-schema
-        $this->referereces = array();
+        $this->references = array();
         foreach ($this->xpath(  '//wsdl:import/@location|' .
                                 '//s:import/@schemaLocation|' .
                                 '//s:include/@schemaLocation') as $reference) {
@@ -66,7 +66,7 @@ class SchemaDocument extends XmlNode
             }
 
             if ($context->needToLoad($referenceUrl)) {
-                $this->referereces[] = new SchemaDocument($config, $referenceUrl, $context);
+                $this->references[] = new SchemaDocument($config, $referenceUrl, $context);
             }
         }
     }
@@ -87,7 +87,7 @@ class SchemaDocument extends XmlNode
         }
 
         if (empty($type)) {
-            foreach ($this->referereces as $import) {
+            foreach ($this->references as $import) {
                 $type = $import->findTypeElement($name);
                 if (!empty($type)) {
                     break;
