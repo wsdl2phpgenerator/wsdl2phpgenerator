@@ -5,29 +5,6 @@
         url: 'http://www.webservicex.net/CurrencyConvertor.asmx'
         headers:
             Host: www.webservicex.net
-            Content-Type: 'text/xml; charset=utf-8; action="http://www.webserviceX.NET/ConversionRate"'
-        body: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ns1=\"http://www.webserviceX.NET/\"><SOAP-ENV:Body><ns1:ConversionRate><ns1:FromCurrency>USD</ns1:FromCurrency><ns1:ToCurrency>EUR</ns1:ToCurrency></ns1:ConversionRate></SOAP-ENV:Body></SOAP-ENV:Envelope>\n"
-    response:
-        status:
-            http_version: '1.1'
-            code: '200'
-            message: OK
-        headers:
-            Cache-Control: 'private, max-age=0'
-            Content-Length: '382'
-            Content-Type: 'text/xml; charset=utf-8'
-            Server: Microsoft-IIS/7.0
-            X-AspNet-Version: 4.0.30319
-            X-Powered-By: ASP.NET
-            Date: 'Wed, 05 Aug 2015 17:48:18 GMT'
-        body: '<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body><ConversionRateResponse xmlns="http://www.webserviceX.NET/"><ConversionRateResult>0.9167</ConversionRateResult></ConversionRateResponse></soap:Body></soap:Envelope>'
-
--
-    request:
-        method: POST
-        url: 'http://www.webservicex.net/CurrencyConvertor.asmx'
-        headers:
-            Host: www.webservicex.net
             Content-Type: 'text/xml; charset=utf-8;'
             SOAPAction: 'http://www.webserviceX.NET/ConversionRate'
         body: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ns1=\"http://www.webserviceX.NET/\"><SOAP-ENV:Body><ns1:ConversionRate><ns1:FromCurrency>USD</ns1:FromCurrency><ns1:ToCurrency>EUR</ns1:ToCurrency></ns1:ConversionRate></SOAP-ENV:Body></SOAP-ENV:Envelope>\n"
