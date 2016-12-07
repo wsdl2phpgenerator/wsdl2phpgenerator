@@ -6,9 +6,8 @@
 namespace Wsdl2PhpGenerator;
 
 use \Exception;
-use Wsdl2PhpGenerator\PhpSource\PhpClass;
-use Wsdl2PhpGenerator\PhpSource\PhpFile;
-use Wsdl2PhpGenerator\PhpSource\PhpFunction;
+use Zend\Code\Generator\ClassGenerator as ZendClassGenerator;
+use Zend\Code\Generator\FileGenerator;
 
 /**
  * Manages the output of php files from the generator
@@ -41,10 +40,10 @@ class OutputManager
     /**
      * Saves the service and types php code to file
      *
-     * @param PhpClass $service
+     * @param ZendClassGenerator $service
      * @param array $types
      */
-    public function save(PhpClass $service, array $types)
+    public function save(ZendClassGenerator $service, array $types)
     {
         $this->setOutputDirectory();
 
@@ -54,7 +53,7 @@ class OutputManager
         }
 
         $classes = array_merge(array($service), $types);
-        $this->saveAutoloader($service->getIdentifier(), $classes);
+        $this->saveAutoloader($service->getName(), $classes);
     }
 
     /**
@@ -81,20 +80,17 @@ class OutputManager
      * Append a class to a file and save it
      * If no file is created the name of the class is the filename
      *
-     * @param PhpClass $class
+     * @param ZendClassGenerator $class
      */
-    private function saveClassToFile(PhpClass $class)
+    private function saveClassToFile(ZendClassGenerator $class)
     {
         if ($this->isValidClass($class)) {
-            $file = new PhpFile($class->getIdentifier());
+            $file = new FileGenerator();
+            $file->setFilename($class->getName() . '.php');
 
-            $namespace = $this->config->get('namespaceName');
-            if (!empty($namespace)) {
-                $file->addNamespace($namespace);
-            }
-
-            $file->addClass($class);
-            $file->save($this->dir);
+            $file->setClass($class)
+                ->setFilename($this->dir . DIRECTORY_SEPARATOR . $class->getName() . '.php')
+                ->write();
         }
     }
 
@@ -102,14 +98,13 @@ class OutputManager
      * Checks if the class is approved
      * Removes the prefix and suffix for namechecking
      *
-     * @param PhpClass $class
+     * @param ZendClassGenerator $class
      * @return bool Returns true if the class is ok to add to file
      */
-    private function isValidClass(PhpClass $class)
+    private function isValidClass($class)
     {
-        $classNames = $this->config->get('classNames');
         return (empty($classNames) || in_array(
-            $class->getIdentifier(),
+            $class->getName(),
             $classNames
         ));
     }
@@ -119,7 +114,7 @@ class OutputManager
      * generated classes.
      *
      * @param string $name The name of the autoloader. Should be unique for the service to avoid name clashes.
-     * @param PhpClass[] $classes The classes to include in the autoloader.
+     * @param ZendClassGenerator[] $classes The classes to include in the autoloader.
      */
     private function saveAutoloader($name, array $classes)
     {
@@ -132,17 +127,16 @@ class OutputManager
         // First we generate a string containing the known classes and the paths they map to. One line for each string.
         $autoloadedClasses = array();
         foreach ($classes as $class) {
-            $className = $this->config->get('namespaceName') . '\\' . $class->getIdentifier();
+            $className = $this->config->get('namespaceName') . '\\' . $class->getName();
             $className = ltrim($className, '\\');
-            $autoloadedClasses[] = "'" . $className . "' => __DIR__ .'/" . $class->getIdentifier() . ".php'";
+            $autoloadedClasses[] = "'" . $className . "' => __DIR__ .'/" . $class->getName() . ".php'";
         }
         $autoloadedClasses = implode(',' . PHP_EOL . str_repeat(' ', 8), $autoloadedClasses);
 
         // Assemble the source of the autoloader function containing the classes and the check to include.
-        // Our custom code generation library does not support generating code outside of functions and we need to
-        // register the autoloader in the global scope. Consequently we manually insert a } to end the autoloader
-        // function, register it and finish with a {. This means our generated code ends with a no-op {} statement.
         $autoloaderSource = <<<EOF
+function $autoloaderName(\$class)
+{
     \$classes = array(
         $autoloadedClasses
     );
@@ -152,14 +146,11 @@ class OutputManager
 }
 
 spl_autoload_register('$autoloaderName');
-
-// Do nothing. The rest is just leftovers from the code generation.
-{
 EOF;
 
-        $autoloader = new PhpFunction(null, $autoloaderName, '$class', $autoloaderSource);
-        $file = new PhpFile('autoload');
-        $file->addFunction($autoloader);
-        $file->save($this->dir);
+        $file = new FileGenerator();
+        $file->setBody($autoloaderSource);
+
+        file_put_contents($this->dir . DIRECTORY_SEPARATOR . 'autoload.php', $file->generate());
     }
 }

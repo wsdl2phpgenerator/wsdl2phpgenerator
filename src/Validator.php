@@ -6,11 +6,7 @@ namespace Wsdl2PhpGenerator;
 
 /**
  * Class that contains functionality to validate a string as valid php
- * Contains functionf for validating Type, Classname and Naming convention
- *
- * @package Wsdl2PhpGenerator
- * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
- * @license http://www.opensource.org/licenses/mit-license.php MIT License
+ * Contains functions for validating Type, Classname and Naming convention
  */
 class Validator
 {
@@ -110,6 +106,13 @@ class Validator
     );
 
     /**
+     * @var string[]
+     *
+     * @link http://php.net/manual/en/functions.arguments.php#functions.arguments.type-declaration
+     */
+    private static $internalPhpTypes = ['int', 'float', 'string', 'bool', 'array', 'callable'];
+
+    /**
      * Validates a class name against PHP naming conventions and already defined classes.
      *
      * @param string $name the name of the class to test
@@ -123,12 +126,7 @@ class Validator
         $prefix = !empty($namespace) ? $namespace . '\\' : '';
 
         $name = self::validateUnique($name, function ($name) use ($prefix) {
-                // Use reflection to get access to private isKeyword method.
-                // @todo Remove this when we stop supporting PHP 5.3.
-                $isKeywordMethod = new \ReflectionMethod(__CLASS__, 'isKeyword');
-                $isKeywordMethod->setAccessible(true);
-                $isKeyword = $isKeywordMethod->invoke(null, $name);
-             return !$isKeyword &&
+             return !self::isKeyword($name) &&
                 !interface_exists($prefix . $name) &&
                 !class_exists($prefix . $name);
         }, self::NAME_SUFFIX);
@@ -239,11 +237,15 @@ class Validator
      * Validates a type to be used as a method parameter type hint.
      *
      * @param string $typeName The name of the type to test.
+     * @param bool $allowClass Allow class type hints or not
      * @return null|string Returns a valid type hint for the type or null if there is no valid type hint.
      */
-    public static function validateTypeHint($typeName)
+    public static function validateTypeHint($typeName, $allowClass = false)
     {
-        $typeHint = null;
+        //TODO: scalar type hints are avalible in PHP7 only
+        if (self::isInternalPhpType($typeName)) {
+            return null;
+        }
 
         // We currently only support type hints for arrays and DateTimes.
         // Going forward we could support it for generated types. The challenge here are enums as they are actually
@@ -252,6 +254,12 @@ class Validator
             $typeHint = 'array';
         } elseif ($typeName == '\DateTime') {
             $typeHint = $typeName;
+        } else {
+            if ($allowClass) {
+                $typeHint = $typeName;
+            } else {
+                $typeHint = null;
+            }
         }
 
         return $typeHint;
@@ -262,7 +270,7 @@ class Validator
      *
      * If a name is not unique then append a suffix and numbering.
      *
-     * @param $name The name to test.
+     * @param string $name The name to test.
      * @param callable $function A callback which should return true if the element is unique. Otherwise false.
      * @param string $suffix A suffix to append between the name and numbering.
      * @return string A unique name.
@@ -313,4 +321,16 @@ class Validator
     {
         return in_array(strtolower($string), self::$keywords);
     }
+
+    /**
+     * Checks if a string is internal PHP type, e.g. 'int' or 'string'
+     *
+     * @param string $type
+     * @return bool
+     */
+    public static function isInternalPhpType($type)
+    {
+        return in_array(strtolower($type), self::$internalPhpTypes, true);
+    }
+
 }

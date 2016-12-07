@@ -45,7 +45,7 @@ class ServiceTest extends CodeGenerationTestCase
             ));
 
         $service = new Service($config, 'TestService', array(), 'Service description');
-        $this->generateClass($service, $this->namespace);
+        $this->generateClass($service);
 
         $this->assertClassExists('TestService', $this->namespace);
 

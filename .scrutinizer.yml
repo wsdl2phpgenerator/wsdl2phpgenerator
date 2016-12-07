@@ -4,6 +4,10 @@ filter:
         - 'tests/generated/*'
 
 build:
+    environment:
+        php:
+            # Available versions: https://scrutinizer-ci.com/docs/build/environment
+            version: "5.5.25"
     dependencies:
         override:
             -
