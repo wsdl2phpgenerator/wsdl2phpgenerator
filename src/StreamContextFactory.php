@@ -49,6 +49,19 @@ class StreamContextFactory
         if (count($headers) > 0) {
             $options['http']['header'] = $headers;
         }
+		
+		 if(isset($soapOptions["stream_context"])){
+        	$clientStreamContext =  $soapOptions["stream_context"];
+        	$clientStreamContextOptions = stream_context_get_options($clientStreamContext);
+              if(isset($clientStreamContextOptions['http']['header'])){
+              	if(isset($options['http']['header'])){
+              		$options['http']['header'] .= '/r/n'.$clientStreamContextOptions['http']['header'];
+              	}else{
+              		$options['http']['header'] = $clientStreamContextOptions['http']['header'];
+              	}
+              }
+        }
+
 
         return stream_context_create($options);
     }
