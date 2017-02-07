@@ -132,7 +132,7 @@ class OutputManager
         // First we generate a string containing the known classes and the paths they map to. One line for each string.
         $autoloadedClasses = array();
         foreach ($classes as $class) {
-            $className = $this->config->get('namespaceName') . '\\' . $class->getIdentifier();
+            $className = $this->config->get('namespaceName') . '\\' . $class->getPrefix() . $class->getIdentifier();
             $className = ltrim($className, '\\');
             $autoloadedClasses[] = "'" . $className . "' => __DIR__ .'/" . $class->getIdentifier() . ".php'";
         }

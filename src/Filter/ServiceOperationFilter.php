@@ -58,9 +58,10 @@ class ServiceOperationFilter implements FilterInterface
             // Discover types used in returns
             $returns = $operation->getReturns();
             $methodTypes[] = $service->getType($returns);
-
             foreach ($methodTypes as $type) {
-                $methodTypes = array_merge($methodTypes, $this->findUsedTypes($service, $type)) ;
+                if ($type !== null) {
+                    $methodTypes = array_merge($methodTypes, $this->findUsedTypes($service, $type));
+                }
             }
             $operations[] = $operation;
             $types = array_merge($types, $methodTypes);

@@ -46,6 +46,16 @@ abstract class Type implements ClassGenerator
      * @var string The datatype the simple type is of. This not used by complex types
      */
     protected $datatype;
+    
+    /**
+     * @var string Class prefix to append to all classes
+     */
+    protected $classPrefix;
+    
+    /**
+     * @var string A base class that each type class will extend at it's core
+     */
+    protected $baseClass;
 
     /**
      * The minimum construction
@@ -60,11 +70,20 @@ abstract class Type implements ClassGenerator
         $this->class = null;
         $this->datatype = $datatype;
         $this->identifier = $name;
+        $this->classPrefix = '';
+        $this->baseClass = '';
 
         $this->phpIdentifier = Validator::validateClass($name, $this->config->get('namespaceName'));
         $this->phpNamespacedIdentifier = $name;
         if ($this->config->get('namespaceName')) {
             $this->phpNamespacedIdentifier = '\\' . $this->config->get('namespaceName') . '\\' . $name;
+        }
+        
+        if ($this->config->get('classPrefix')) {
+          $this->classPrefix = $this->config->get('classPrefix');
+        }
+        if ($this->config->get('baseClass')) {
+          $this->baseClass = $this->config->get('baseClass');
         }
     }
 

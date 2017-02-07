@@ -50,12 +50,18 @@ class Service implements ClassGenerator
      * @var Type[] An array of Types
      */
     private $types;
+    
+    /**
+     * @var string
+     */
+    private $classPrefix;
 
     /**
      * @param ConfigInterface $config Configuration
      * @param string $identifier The name of the service
      * @param array $types The types the service knows about
      * @param string $description The description of the service
+     * @param string $classPrefix Optional class prefix
      */
     public function __construct(ConfigInterface $config, $identifier, array $types, $description)
     {
@@ -65,7 +71,13 @@ class Service implements ClassGenerator
         $this->operations = array();
         $this->types = array();
         foreach ($types as $type) {
-            $this->types[$type->getIdentifier()] = $type;
+            if ($type !== null) {
+                $this->types[$type->getIdentifier()] = $type;
+            }
+        }
+        $this->classPrefix = "";
+        if ($this->config->get('classPrefix')) {
+          $this->classPrefix = $this->config->get('classPrefix');
         }
     }
 
@@ -149,7 +161,7 @@ class Service implements ClassGenerator
 
         // Create the class object
         $comment = new PhpDocComment($this->description);
-        $this->class = new PhpClass($name, false, $this->config->get('soapClientClass'), $comment);
+        $this->class = new PhpClass($name, false, $this->config->get('soapClientClass'), $comment, false, false, $this->classPrefix);
 
         // Create the constructor
         $comment = new PhpDocComment();

@@ -65,15 +65,18 @@ class ComplexType extends Type
             throw new Exception("The class has already been generated");
         }
 
-        $classBaseType = $this->getBaseTypeClass();
+        if  (!($baseClass = $this->getBaseTypeClass())) {
+          $baseClass = $this->baseClass;
+        }
 
         $this->class = new PhpClass(
             $this->phpIdentifier,
             false,
-            $classBaseType,
+            $baseClass,
             null,
             false,
-            $this->abstract
+            $this->abstract,
+            $this->classPrefix
         );
 
         $constructorComment = new PhpDocComment();
