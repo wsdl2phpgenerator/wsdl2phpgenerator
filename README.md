@@ -98,7 +98,6 @@ The directory to place the generated classes in. It will be created if it does n
 
 The [namespace](http://php.net/manual/en/language.namespaces.php) to use for the generated classes. If not set classes will be generated without a namespace.
 
-
 ##### Example usage
 
 The following configuration will place generated code from the [CDYNE Weather web service](http://wiki.cdyne.com/?title=CDYNE_Weather) under the `CDyne\Weather` namespace:
@@ -113,6 +112,14 @@ $generator->generate(
     ))
 );
 ```
+
+#### `classPrefix`
+
+A class prefix to use for all classes (eg: `My_Module_Which_Does_Not_Support_Namespaces_`).
+
+#### `baseClass`
+
+A base class name that all classes will extend (for types that extend another type, only the base one will extend this one).
 
 #### `classNames`
 
