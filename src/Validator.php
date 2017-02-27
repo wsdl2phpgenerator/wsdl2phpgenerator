@@ -189,7 +189,7 @@ class Validator
     public static function validateType($typeName)
     {
         if (substr($typeName, -2) == "[]") {
-            return $typeName;
+            return self::validateNamingConvention(substr($typeName, 0, -2)) . "[]";
         }
 
         switch (strtolower($typeName)) {
