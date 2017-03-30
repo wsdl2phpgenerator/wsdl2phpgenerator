@@ -20,6 +20,12 @@
                              maxOccurs="1"/>
                 </sequence>
             </complexType>
+
+            <complexType name="ArrayOfMsgContraseña">
+                <sequence>
+                    <element maxOccurs="unbounded" minOccurs="0" name="Item" type="xsd:MsgContraseña"/>
+                </sequence>
+            </complexType>
         </schema>
     </wsdl:types>
 
