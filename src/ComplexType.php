@@ -229,7 +229,10 @@ class ComplexType extends Type
      */
     public function setBaseType(ComplexType $type)
     {
-        $this->baseType = $type;
+        if($type->getPhpIdentifier() !== $this->getPhpIdentifier())
+        {
+            $this->baseType = $type;
+        }
     }
 
     /**
