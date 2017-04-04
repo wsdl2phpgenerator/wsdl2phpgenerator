@@ -50,12 +50,28 @@ class Generator implements GeneratorInterface
     protected $logger;
 
     /**
+     * @var Generator 
+     */
+    protected static $_instance;
+
+    /**
      * Construct the generator
      */
     public function __construct()
     {
         $this->service = null;
         $this->types = array();
+    }
+
+    /**
+     * Singleton
+     * @return Generator class instance
+     */
+    public static function getInstance() {
+        if (!( self::$_instance instanceof self)) {
+            self::$_instance = new self();
+        }
+        return self::$_instance;
     }
 
     /**
