@@ -110,7 +110,7 @@ class ComplexType extends Type
                 $defaultValue = '[]';
             } elseif ($type === 'string') {
                 $defaultValue = "''";
-            }else{
+            } else {
                 $defaultValue = 'null';
             }
 
