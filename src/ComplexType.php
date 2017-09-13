@@ -88,10 +88,9 @@ class ComplexType extends Type
                 $type = Validator::validateType($member->getType());
                 $name = Validator::validateAttribute($member->getName());
 
-                if (!$member->getNullable()) {
-                    $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
-                    $constructorParameters[$name] = Validator::validateTypeHint($type);
-                }
+                $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
+                $constructorParameters[$name] = Validator::validateTypeHint($type);
+
             }
             $constructorSource .= '  parent::__construct(' . $this->buildParametersString($constructorParameters, false) . ');' . PHP_EOL;
         }
@@ -161,7 +160,7 @@ class ComplexType extends Type
                 'set' . ucfirst($name),
                 $this->buildParametersString(
                     array($name => $typeHint),
-                    true,
+                    !$this->config->get('excludeMethodParamTypeHints'),
                     // If the type of a member is nullable we should allow passing null to the setter. If the type
                     // of the member is a class and not a primitive this is only possible if setter parameter has
                     // a default null value. We can detect whether the type is a class by checking the type hint.
@@ -178,7 +177,7 @@ class ComplexType extends Type
             '__construct',
             $this->buildParametersString(
                 $constructorParameters,
-                true,
+                !$this->config->get('excludeMethodParamTypeHints'),
                 $this->config->get('constructorParamsDefaultToNull')
             ),
             $constructorSource,

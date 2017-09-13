@@ -160,6 +160,10 @@ If enabled this makes all types with the same identify use the same class and on
 
 If enabled this sets the default value of all parameters in all constructors to `null`. If this is used then properties must be set using accessors.
 
+#### `excludeMethodParamTypeHints`
+
+If enabled, type hints will not be generated for method parameters.
+
 #### `proxy`
 
 Specify a proxy to use when accessing the WSDL and other external ressources. This option should be used instead of [the proxy options support by the PHP `SoapClient`] (http://php.net/manual/en/soapclient.soapclient.php) as wsdl2phpgenerator uses more than the SOAP client to extract information.
@@ -193,7 +197,7 @@ The base class to use for generated services. This should be a subclass of the [
 Examples of third party SOAP client implementations which can be used:
 
 * [BeSimpleSoapClient](https://github.com/BeSimple/BeSimpleSoapClient)
-* [ZendFramework2 SOAP Component](https://github.com/zendframework/Component_ZendSoap) 
+* [ZendFramework2 SOAP Component](https://github.com/zendframework/Component_ZendSoap)
 * [soap-plus](https://github.com/dcarbone/soap-plus)
 * [SoapClientEx](https://gist.github.com/RobThree/4117914)
 
