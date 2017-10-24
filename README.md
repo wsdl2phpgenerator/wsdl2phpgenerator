@@ -241,6 +241,10 @@ $generator->generate(
 ));
 ````
 
+#### `conflictMap`
+
+An associative array that indicates how conflicting keywords should be renamed.
+
 ## Versioning
 
 This project aims to use [semantic versioning](http://semver.org/). The following constitutes the public API:

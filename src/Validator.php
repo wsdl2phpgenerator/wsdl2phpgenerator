@@ -35,7 +35,7 @@ class Validator
      * @var array
      * @link http://www.php.net/manual/en/reserved.keywords.php
      */
-    private static $keywords = array(
+    private $keywords = array(
         '__halt_compiler',
         'abstract',
         'and',
@@ -110,24 +110,56 @@ class Validator
     );
 
     /**
+     * @var ConfigInterface
+     */
+    private $config;
+
+    /**
+     * @param ConfigInterface $config Configuration
+     */
+    public function __construct(ConfigInterface $config)
+    {
+        $this->config = $config;
+    }
+
+    /**
+     * Validates a class name against PHP naming conventions and already defined classes.
+     *
+     * @param string $name the name to lookup
+     * @return string The original name if it is not in the map otherwise the replacement.
+     */
+    protected function renameConflictWithCustomOverride($name)
+    {
+        $conflictMap = $this->config->get('conflictMap');
+        if ($this->isKeyword($name) && $conflictMap) {
+            if (array_key_exists($name, $conflictMap)) {
+                $name = $conflictMap[$name];
+            }
+        }
+        return $name;
+    }
+
+    /**
      * Validates a class name against PHP naming conventions and already defined classes.
      *
      * @param string $name the name of the class to test
-     * @param string $namespace the name of the namespace
      * @return string The validated version of the submitted class name
      */
-    public static function validateClass($name, $namespace = null)
+    public function validateClass($name)
     {
-        $name = self::validateNamingConvention($name);
+        $name = $this->validateNamingConvention($name);
+        $name = $this->renameConflictWithCustomOverride($name);
 
+        $namespace = $this->config->get('namespaceName');
         $prefix = !empty($namespace) ? $namespace . '\\' : '';
 
-        $name = self::validateUnique($name, function ($name) use ($prefix) {
+
+        $name = $this->validateUnique($name, function ($name) use ($prefix) {
                 // Use reflection to get access to private isKeyword method.
                 // @todo Remove this when we stop supporting PHP 5.3.
                 $isKeywordMethod = new \ReflectionMethod(__CLASS__, 'isKeyword');
                 $isKeywordMethod->setAccessible(true);
-                $isKeyword = $isKeywordMethod->invoke(null, $name);
+                $isKeyword = $isKeywordMethod->invoke($this, $name);
              return !$isKeyword &&
                 !interface_exists($prefix . $name) &&
                 !class_exists($prefix . $name);
@@ -142,10 +174,12 @@ class Validator
      * @param string $name the name of the operation to test
      * @return string The validated version of the submitted operation name
      */
-    public static function validateOperation($name)
+    public function validateOperation($name)
     {
-        $name = self::validateNamingConvention($name);
-        if (self::isKeyword($name)) {
+        $name = $this->validateNamingConvention($name);
+        $name = $this->renameConflictWithCustomOverride($name);
+
+        if ($this->isKeyword($name)) {
             $name = self::NAME_PREFIX . ucfirst($name);
         }
         return $name;
@@ -157,11 +191,11 @@ class Validator
      * @param string $name the name of the attribute to test
      * @return string The validated version of the submitted attribute name
      */
-    public static function validateAttribute($name)
+    public function validateAttribute($name)
     {
         // Contrary to other validations attributes can have names which are also keywords. Thus no need to check for
         // this here.
-        return self::validateNamingConvention($name);
+        return $this->validateNamingConvention($name);
     }
 
     /**
@@ -170,10 +204,12 @@ class Validator
      * @param string $name the name of the constant to test
      * @return string The validated version of the submitted constant name
      */
-    public static function validateConstant($name)
+    public function validateConstant($name)
     {
-        $name = self::validateNamingConvention($name);
-        if (self::isKeyword($name)) {
+        $name = $this->validateNamingConvention($name);
+        $name = $this->renameConflictWithCustomOverride($name);
+
+        if ($this->isKeyword($name)) {
             $name = self::NAME_PREFIX . ucfirst($name);
         }
         return $name;
@@ -186,10 +222,10 @@ class Validator
      * @param string $typeName the type to test
      * @return string the validated version of the submitted type
      */
-    public static function validateType($typeName)
+    public function validateType($typeName)
     {
         if (substr($typeName, -2) == "[]") {
-            return self::validateNamingConvention(substr($typeName, 0, -2)) . "[]";
+            return $this->validateNamingConvention(substr($typeName, 0, -2)) . "[]";
         }
 
         switch (strtolower($typeName)) {
@@ -224,11 +260,13 @@ class Validator
                 return  '\DateTime';
                 break;
             default:
-                $typeName = self::validateNamingConvention($typeName);
+                $typeName = $this->validateNamingConvention($typeName);
                 break;
         }
 
-        if (self::isKeyword($typeName)) {
+        $typeName = $this->renameConflictWithCustomOverride($typeName);
+
+        if ($this->isKeyword($typeName)) {
             $typeName .= self::NAME_SUFFIX;
         }
 
@@ -241,7 +279,7 @@ class Validator
      * @param string $typeName The name of the type to test.
      * @return null|string Returns a valid type hint for the type or null if there is no valid type hint.
      */
-    public static function validateTypeHint($typeName)
+    public function validateTypeHint($typeName)
     {
         $typeHint = null;
 
@@ -267,7 +305,7 @@ class Validator
      * @param string $suffix A suffix to append between the name and numbering.
      * @return string A unique name.
      */
-    public static function validateUnique($name, $function, $suffix = null)
+    public function validateUnique($name, $function, $suffix = null)
     {
         $i = 1;
         $newName = $name;
@@ -291,7 +329,7 @@ class Validator
      * @param string $name the name to validate
      * @return string the validated version of the submitted name
      */
-    private static function validateNamingConvention($name)
+    private function validateNamingConvention($name)
     {
         $name = iconv("UTF-8", "ASCII//TRANSLIT", $name);
 
@@ -309,8 +347,8 @@ class Validator
      * @param string $string the string to check..
      * @return boolean Whether the string is a restricted keyword.
      */
-    private static function isKeyword($string)
+    private function isKeyword($string)
     {
-        return in_array(strtolower($string), self::$keywords);
+        return in_array(strtolower($string), $this->keywords);
     }
 }

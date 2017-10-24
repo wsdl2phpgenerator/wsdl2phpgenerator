@@ -46,15 +46,17 @@ class Enum extends Type
             throw new Exception("The class has already been generated");
         }
 
+        $validator = new Validator($this->config);
+
         $this->class = new PhpClass($this->phpIdentifier, false);
 
         $first = true;
 
         $names = array();
         foreach ($this->values as $value) {
-            $name = Validator::validateConstant($value);
+            $name = $validator->validateConstant($value);
 
-            $name = Validator::validateUnique($name, function ($name) use ($names) {
+            $name = $validator->validateUnique($name, function ($name) use ($names) {
                     return !in_array($name, $names);
             });
 
