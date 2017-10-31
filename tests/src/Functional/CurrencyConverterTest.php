@@ -25,6 +25,7 @@ class CurrencyConverterTest extends FunctionalTestCase
     protected function configureOptions()
     {
         $this->config->set('namespaceName', 'CC');
+        $this->config->set('soapFaultsCreatePhpExceptions', true);
     }
 
     /**
@@ -70,6 +71,26 @@ class CurrencyConverterTest extends FunctionalTestCase
             $this->assertContains('timeout', $e->getMessage());
         }
 
+    }
+
+    /**
+     * Tests that the generated exceptions inherit from PHP's \Exception and
+     * that methods that specify 'wsdl:fault' contain @throw annotations if
+     * the correct configuration option is specified.
+     */
+    public function testCurrencyConvertorExceptionsInheritFromPhpException()
+    {
+        $this->assertGeneratedClassExists(
+            'CurrencyException', $this->config->get('namespaceName'));
+        $this->assertClassSubclassOf('\\CC\\CurrencyException', '\\Exception');
+
+        $currencyConvertorClass =
+            new \ReflectionClass('\\CC\\CurrencyConvertor');
+        $this->assertMethodHasThrowable(
+            $currencyConvertorClass->getMethod('ConversionRate'),
+            '\\CC\\CurrencyException'
+        );
+        $this->assertClassHasProperty('\\CC\\CurrencyException', 'message2');
     }
 
 }

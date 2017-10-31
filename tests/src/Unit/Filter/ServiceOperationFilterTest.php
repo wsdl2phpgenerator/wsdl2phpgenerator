@@ -90,7 +90,7 @@ class ServiceOperationFilterTest extends \PHPUnit_Framework_TestCase
         $requestGetBook = new ComplexType($this->config, 'Get_Book_Type_Request');
         $requestGetBook->addMember('Method_Get_Book_Request_BOOK', 'book_request', false);
         // Operation GetBook
-        $getBookOperation = new Operation('GetBook', 'Get_Book_Type_Request $request', 'Get Book', 'Get_Book_Type_Response');
+        $getBookOperation = new Operation('GetBook', 'Get_Book_Type_Request $request', 'Get Book', 'Get_Book_Type_Response', array());
         // Response GetAuthors type
         $responseAuthor = new ComplexType($this->config, 'Get_Authors_Response_Author');
         $responseAuthor->addMember('int', 'authorId', false);
@@ -101,11 +101,11 @@ class ServiceOperationFilterTest extends \PHPUnit_Framework_TestCase
         $requestGetAuthor = new ComplexType($this->config, 'Method_Get_Authors_Request');
         $requestGetAuthor->addMember('Method_Get_Book_Request_BOOK', 'book_request', false);
         // Operation GetAuthors
-        $getAuthorsOperator = new Operation('GetAuthor', 'Method_Get_Authors_Request $request', 'Get Authors', 'Method_Get_Authors_Response');
+        $getAuthorsOperator = new Operation('GetAuthor', 'Method_Get_Authors_Request $request', 'Get Authors', 'Method_Get_Authors_Response', array());
         // Request SetVersion
         $requestSetVersion = new ComplexType($this->config, 'Method_Set_Version_Request');
         // Operation SetVersion
-        $setVersionOperator = new Operation('SetVersion', 'Method_Set_Version_Request $request', 'Set version', null);
+        $setVersionOperator = new Operation('SetVersion', 'Method_Set_Version_Request $request', 'Set version', null, array());
         // Service creation
         $types = array(
             $responseBookName,

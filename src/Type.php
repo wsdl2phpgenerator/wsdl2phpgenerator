@@ -59,12 +59,21 @@ abstract class Type implements ClassGenerator
         $this->config = $config;
         $this->class = null;
         $this->datatype = $datatype;
-        $this->identifier = $name;
 
-        $this->phpIdentifier = Validator::validateClass($name, $this->config->get('namespaceName'));
-        $this->phpNamespacedIdentifier = $this->phpIdentifier;
-        if ($this->config->get('namespaceName')) {
-            $this->phpNamespacedIdentifier = '\\' . $this->config->get('namespaceName') . '\\' . $this->phpIdentifier;
+        // There's a backslash in the name so it's already a PHP type (i.e. \Exception)
+        // no need to validate.
+        if (strpos($name, '\\') !== false && strpos($name, '\\') === 0) {
+            $this->identifier = ltrim($name, '\\');
+            $this->phpIdentifier = ltrim($name, '\\');
+            $this->phpNamespacedIdentifier = $name;
+        } else {
+            $this->identifier = $name;
+
+            $this->phpIdentifier = Validator::validateClass($name, $this->config->get('namespaceName'));
+            $this->phpNamespacedIdentifier = $this->phpIdentifier;
+            if ($this->config->get('namespaceName')) {
+                $this->phpNamespacedIdentifier = '\\' . $this->config->get('namespaceName') . '\\' . $this->phpIdentifier;
+            }
         }
     }
 
@@ -115,5 +124,12 @@ abstract class Type implements ClassGenerator
     public function getPhpIdentifier()
     {
         return $this->phpIdentifier;
+    }
+
+    /**
+     * @return string The namespaced validated name of the type
+     */
+    public function getPhpNamespacedIdentifier() {
+        return $this->phpNamespacedIdentifier;
     }
 }

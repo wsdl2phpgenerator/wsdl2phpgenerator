@@ -240,6 +240,9 @@ $generator->generate(
     ))
 ));
 ````
+#### `soapFaultsCreatePhpExceptions`
+
+Specifies whether or not soap faults should be emitted as PHP Exceptions.
 
 ## Versioning
 
