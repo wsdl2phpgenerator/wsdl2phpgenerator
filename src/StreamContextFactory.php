@@ -38,6 +38,10 @@ class StreamContextFactory
 
         $soapOptions = $config->get('soapClientOptions');
 
+        if (isset($soapOptions['stream_context'])) {
+            return $soapOptions['stream_context'];
+        }
+
         if ((!isset($soapOptions['authentication']) || $soapOptions['authentication'] === SOAP_AUTHENTICATION_BASIC) &&
             isset($soapOptions['login']) &&
             isset($soapOptions['password'])
