@@ -1,4 +1,5 @@
 <?php
+
 namespace Wsdl2PhpGenerator\Tests\Unit\Filter;
 
 use Wsdl2PhpGenerator\ComplexType;
@@ -8,11 +9,12 @@ use Wsdl2PhpGenerator\Enum;
 use Wsdl2PhpGenerator\Filter\ServiceOperationFilter;
 use Wsdl2PhpGenerator\Operation;
 use Wsdl2PhpGenerator\Service;
+use Wsdl2PhpGenerator\Tests\Unit\Wsdl2PhpGeneratorTestCase;
 
 /**
  * Use test for the ServiceOperationFilter class.
  */
-class ServiceOperationFilterTest extends \PHPUnit_Framework_TestCase
+class ServiceOperationFilterTest extends Wsdl2PhpGeneratorTestCase
 {
     /**
      * @var ConfigInterface

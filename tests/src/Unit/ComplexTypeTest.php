@@ -1,14 +1,12 @@
 <?php
 
-
 namespace Wsdl2PhpGenerator\Tests\Unit;
-
 
 use Wsdl2PhpGenerator\ComplexType;
 use Wsdl2PhpGenerator\Config;
 
 /**
- * Unit test for the ComplexType class.
+ * Class ComplexTypeTest
  */
 class ComplexTypeTest extends CodeGenerationTestCase
 {
