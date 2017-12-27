@@ -2,7 +2,6 @@
 
 namespace Wsdl2PhpGenerator\Tests\Unit;
 
-use PHPUnit_Framework_TestCase;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
@@ -15,7 +14,7 @@ use Wsdl2PhpGenerator\Type;
  *
  * Contains various assertions for examining code.
  */
-class CodeGenerationTestCase extends PHPUnit_Framework_TestCase
+class CodeGenerationTestCase extends Wsdl2PhpGeneratorTestCase
 {
 
     /**
@@ -450,7 +449,7 @@ class CodeGenerationTestCase extends PHPUnit_Framework_TestCase
             $source = 'namespace ' . $namespace . ';' . PHP_EOL . $source;
         }
 
-        // Eval the source for the generated class. This is now pretty but currently the only way we can test whether
+        // Eval the source for the generated class. This is not pretty but currently the only way we can test whether
         // the generated code is as expected. Our own code generation library does not allow us to retrieve functions
         // from the representing class.
         eval($source);

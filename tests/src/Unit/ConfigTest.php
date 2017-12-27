@@ -2,10 +2,12 @@
 
 namespace Wsdl2PhpGenerator\Tests\Unit;
 
-use PHPUnit_Framework_TestCase;
 use Wsdl2PhpGenerator\Config;
 
-class ConfigTest extends PHPUnit_Framework_TestCase
+/**
+ * Class ConfigTest
+ */
+class ConfigTest extends Wsdl2PhpGeneratorTestCase
 {
     protected $options;
     protected $config;

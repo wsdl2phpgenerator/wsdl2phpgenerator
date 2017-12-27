@@ -1,8 +1,5 @@
 <?php
 
-/**
- * @package Wsdl2PhpGenerator
- */
 namespace Wsdl2PhpGenerator;
 
 use Wsdl2PhpGenerator\PhpSource\PhpClass;
