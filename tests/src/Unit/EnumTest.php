@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Wsdl2PhpGenerator\Tests\Unit;
-
 
 use Wsdl2PhpGenerator\Config;
 use Wsdl2PhpGenerator\Enum;

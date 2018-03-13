@@ -15,7 +15,7 @@ use Wsdl2PhpGenerator\Type;
  *
  * Contains various assertions for examining code.
  */
-class CodeGenerationTestCase extends PHPUnit_Framework_TestCase
+class CodeGenerationTestCase extends Wsdl2PhpGeneratorTestCase
 {
 
     /**

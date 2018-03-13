@@ -1,4 +1,5 @@
 <?php
+
 namespace Wsdl2PhpGenerator\Tests\Functional;
 
 use RecursiveDirectoryIterator;
@@ -9,11 +10,11 @@ use Wsdl2PhpGenerator\Generator;
 use Wsdl2PhpGenerator\Tests\Unit\CodeGenerationTestCase;
 
 /**
+ * Class FunctionalTestCase
  * Base class for functional tests for wsdl2phpgenerator.
  */
 abstract class FunctionalTestCase extends CodeGenerationTestCase
 {
-
     /**
      * @var string Path to the directory which will contain the generated code.
      */
@@ -29,6 +30,9 @@ abstract class FunctionalTestCase extends CodeGenerationTestCase
      */
     protected $config;
 
+    /**
+     * @var string
+     */
     protected $fixtureDir = 'tests/fixtures/wsdl';
 
     /**

@@ -20,7 +20,7 @@ class PhpClass extends PhpElement
      * @var array An array of strings, contains all the filenames to include for the class
      * @access private
      */
-    private $dependencies;
+    private $dependencies = [];
 
     /**
      *
@@ -48,7 +48,7 @@ class PhpClass extends PhpElement
      * @var string[]
      * @access private
      */
-    private $implements;
+    private $implements = [];
 
     /**
      *
@@ -61,21 +61,21 @@ class PhpClass extends PhpElement
      *
      * @var array Array of constants key = name of constant value = value of constant
      */
-    private $constants;
+    private $constants = [];
 
     /**
      *
      * @var PhpVariable[]
      * @access private
      */
-    private $variables;
+    private $variables = [];
 
     /**
      *
      * @var PhpFunction[]
      * @access private
      */
-    private $functions;
+    private $functions = [];
 
     /**
      *
