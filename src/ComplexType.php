@@ -1,8 +1,5 @@
 <?php
 
-/**
- * @package Generator
- */
 namespace Wsdl2PhpGenerator;
 
 use \Exception;

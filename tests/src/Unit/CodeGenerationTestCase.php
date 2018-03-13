@@ -15,7 +15,7 @@ use Wsdl2PhpGenerator\Type;
  *
  * Contains various assertions for examining code.
  */
-class CodeGenerationTestCase extends PHPUnit_Framework_TestCase
+class CodeGenerationTestCase extends Wsdl2PhpGeneratorTestCase
 {
 
     /**
@@ -274,7 +274,7 @@ class CodeGenerationTestCase extends PHPUnit_Framework_TestCase
      * @param ReflectionParameter|string $parameter The parameter or the name of it
      * @param int $position The expected position (from 0) of the parameter in the list of parameters for the method.
      */
-    protected function assertMethodHasParameter(\ReflectionMethod $method, $parameter, $position = NULL, $type = NULL)
+    protected function assertMethodHasParameter(\ReflectionMethod $method, $parameter, $position = null, $type = NULL)
     {
         $parameterName = ($parameter instanceof ReflectionParameter) ? $parameter->getName() : $parameter;
 
