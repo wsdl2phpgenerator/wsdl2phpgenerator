@@ -142,7 +142,7 @@ class Service implements ClassGenerator
         $name = $this->identifier;
 
         // Generate a valid classname
-        $name = Validator::validateClass($name, $this->config->get('namespaceName'));
+        $name = Validator::validateClass($name, $this->config->get('namespaceName'), $this->config->get('checkForExistingClasses'));
 
         // uppercase the name
         $name = ucfirst($name);
