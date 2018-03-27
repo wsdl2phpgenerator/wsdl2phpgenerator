@@ -61,7 +61,7 @@ abstract class Type implements ClassGenerator
         $this->datatype = $datatype;
         $this->identifier = $name;
 
-        $this->phpIdentifier = Validator::validateClass($name, $this->config->get('namespaceName'));
+        $this->phpIdentifier = Validator::validateClass($name, $this->config->get('namespaceName'), $this->config->get('addPostfixIfClassExists'));
         $this->phpNamespacedIdentifier = $this->phpIdentifier;
         if ($this->config->get('namespaceName')) {
             $this->phpNamespacedIdentifier = '\\' . $this->config->get('namespaceName') . '\\' . $this->phpIdentifier;
