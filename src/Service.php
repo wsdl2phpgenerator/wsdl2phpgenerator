@@ -60,7 +60,7 @@ class Service implements ClassGenerator
     public function __construct(ConfigInterface $config, $identifier, array $types, $description)
     {
         $this->config = $config;
-        $this->identifier = $identifier;
+        $this->identifier = $identifier . $config->get('serviceSuffix');
         $this->description = $description;
         $this->operations = array();
         $this->types = array();
