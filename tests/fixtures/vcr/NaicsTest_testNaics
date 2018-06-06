@@ -5,8 +5,7 @@
         url: 'http://www.webservicex.net/GenericNAICS.asmx'
         headers:
             Host: www.webservicex.net
-            Content-Type: 'text/xml; charset=utf-8;'
-            SOAPAction: 'http://www.webservicex.net/GetNAICSByIndustry'
+            Content-Type: 'text/xml; charset=utf-8; action="http://www.webservicex.net/GetNAICSByIndustry"'
         body: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ns1=\"http://www.webservicex.net/\"><SOAP-ENV:Body><ns1:GetNAICSByIndustry><ns1:IndustryName>Computer Systems</ns1:IndustryName></ns1:GetNAICSByIndustry></SOAP-ENV:Body></SOAP-ENV:Envelope>\n"
     response:
         status:

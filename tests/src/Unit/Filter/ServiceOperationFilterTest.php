@@ -33,11 +33,12 @@ class ServiceOperationFilterTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->config = new Config([
-            'inputFile'      => 'tst.wsdl',
-            'outputDir'      => 'test',
-            'operationNames' => 'GetBook,SetVersion',
-        ]);
+        $this->config = new Config(array(
+            'inputFile' => 'tst.wsdl',
+            'outputDir' => 'test',
+            'operationNames' => 'GetBook, SetVersion'
+
+        ));
         $this->sut = new ServiceOperationFilter($this->config);
     }
 
@@ -64,9 +65,7 @@ class ServiceOperationFilterTest extends TestCase
         $this->assertEquals($sourceService->getType('Get_Book_Type_Response'), $actualService->getType('Get_Book_Type_Response'));
         $this->assertEquals($sourceService->getType('Method_Get_Book_Request_BOOK'), $actualService->getType('Method_Get_Book_Request_BOOK'));
         $this->assertEquals($sourceService->getType('Get_Book_Type_Request'), $actualService->getType('Get_Book_Type_Request'));
-        // Check that setVersion and types exists
-        $this->assertEquals($sourceService->getOperation('SetVersion'), $actualService->getOperation('SetVersion'));
-        $this->assertEquals($sourceService->getType('Method_Set_Version_Request'), $actualService->getType('Method_Set_Version_Request'));
+
     }
 
     /**

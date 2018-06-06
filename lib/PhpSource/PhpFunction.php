@@ -57,10 +57,14 @@ class PhpFunction extends PhpElement
             $ret .= $this->getSourceRow($this->comment->getSource());
         }
 
-        $ret .= $this->getSourceRow($this->access.' function '.$this->identifier.'('.$this->params.')');
-        $ret .= $this->getSourceRow('{');
-        $ret .= $this->getSourceRow($this->source);
-        $ret .= $this->getSourceRow('}');
+        $ret .= $this->getSourceRow($this->access . ' function ' . $this->identifier . '(' . $this->params . ')');
+        if ($this->source !== null) {
+            $ret .= $this->getSourceRow('{');
+            $ret .= $this->getSourceRow($this->source);
+            $ret .= $this->getSourceRow('}');
+        } else {
+            $ret .= $this->getSourceRow(';');
+        }
 
         return $ret;
     }

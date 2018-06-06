@@ -39,18 +39,23 @@ class OutputManager
     }
 
     /**
-     * Saves the service and types php code to file.
+     * Saves the service and types php code to file
+     *
+     * @param PhpClass $service
+     * @param PhpClass $serverService
+     * @param array $types
      */
-    public function save(PhpClass $service, array $types)
+    public function save(PhpClass $service, PhpClass $serverService, array $types)
     {
         $this->setOutputDirectory();
 
         $this->saveClassToFile($service);
+        $this->saveClassToFile($serverService);
         foreach ($types as $type) {
             $this->saveClassToFile($type);
         }
 
-        $classes = array_merge([$service], $types);
+        $classes = array_merge([$service, $serverService], $types);
         $this->saveAutoloader($service->getIdentifier(), $classes);
     }
 
@@ -137,7 +142,7 @@ class OutputManager
         // Our custom code generation library does not support generating code outside of functions and we need to
         // register the autoloader in the global scope. Consequently we manually insert a } to end the autoloader
         // function, register it and finish with a {. This means our generated code ends with a no-op {} statement.
-        $autoloaderSource = <<<EOF
+        $autoloaderSource = <<<EOFq
     \$classes = array(
         $autoloadedClasses
     );

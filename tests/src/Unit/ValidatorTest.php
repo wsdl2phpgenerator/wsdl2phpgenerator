@@ -73,7 +73,5 @@ class ValidatorTest extends TestCase
         $this->assertEquals('Foo[]', Validator::validateType('Foo[]'));
 
         $this->assertEquals('andCustom', Validator::validateType('and')); // and is reserved keyword
-
-        $this->assertEquals('validarContrasena[]', Validator::validateType('validarContraseña[]')); //UTF-8 array type
     }
 }

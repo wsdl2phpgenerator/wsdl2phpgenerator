@@ -26,6 +26,11 @@ class Generator implements GeneratorInterface
     protected $wsdl;
 
     /**
+     * @var ServerService
+     */
+    protected $serverService;
+
+    /**
      * @var Service
      */
     protected $service;
@@ -55,7 +60,8 @@ class Generator implements GeneratorInterface
     public function __construct()
     {
         $this->service = null;
-        $this->types   = [];
+        $this->serverService = null;
+        $this->types = [];
     }
 
     /**
@@ -75,8 +81,16 @@ class Generator implements GeneratorInterface
         if (empty($options['features']) ||
             (($options['features'] & SOAP_SINGLE_ELEMENT_ARRAYS) != SOAP_SINGLE_ELEMENT_ARRAYS)) {
             $message = ['SoapClient option feature SOAP_SINGLE_ELEMENT_ARRAYS is not set.',
-                             'This is not recommended as data types in DocBlocks for array properties will not be ',
-                             'valid if the array only contains a single value.', ];
+                'This is not recommended as data types in DocBlocks for array properties will not be ',
+                'valid if the array only contains a single value.',];
+            $this->log(implode(PHP_EOL, $message), 'warning');
+        }
+        $options = $this->config->get('soapServerOptions');
+        if (empty($options['features']) ||
+            (($options['features'] & SOAP_SINGLE_ELEMENT_ARRAYS) != SOAP_SINGLE_ELEMENT_ARRAYS)) {
+            $message = array('SoapServer option feature SOAP_SINGLE_ELEMENT_ARRAYS is not set.',
+                'This is not recommended as data types in DocBlocks for array properties will not be ',
+                'valid if the array only contains a single value.');
             $this->log(implode(PHP_EOL, $message), 'warning');
         }
 
@@ -115,17 +129,19 @@ class Generator implements GeneratorInterface
     protected function loadService()
     {
         $service = $this->wsdl->getService();
-        $this->log('Starting to load service '.$service->getName());
+        $this->log('Starting to load service ' . $service->getName());
 
         $this->service = new Service($this->config, $service->getName(), $this->types, $service->getDocumentation());
+        $this->serverService = new ServerService($this->config, $service->getName(), $this->types, $service->getDocumentation());
 
         foreach ($this->wsdl->getOperations() as $function) {
-            $this->log('Loading function '.$function->getName());
+            $this->log('Loading function ' . $function->getName());
 
             $this->service->addOperation(new Operation($function->getName(), $function->getParams(), $function->getDocumentation(), $function->getReturns()));
+            $this->serverService->addOperation(new Operation($function->getName(), $function->getParams(), $function->getDocumentation(), $function->getReturns()));
         }
 
-        $this->log('Done loading service '.$service->getName());
+        $this->log('Done loading service ' . $service->getName());
     }
 
     /**
@@ -147,7 +163,7 @@ class Generator implements GeneratorInterface
                     $type = new ComplexType($this->config, $typeNode->getName());
                 }
 
-                $this->log('Loading type '.$type->getPhpIdentifier());
+                $this->log('Loading type ' . $type->getPhpIdentifier());
 
                 $type->setAbstract($typeNode->isAbstract());
 
@@ -203,12 +219,14 @@ class Generator implements GeneratorInterface
      */
     protected function savePhp()
     {
-        $factory         = new FilterFactory();
-        $filter          = $factory->create($this->config);
+        $factory = new FilterFactory();
+        $filter = $factory->create($this->config);
         $filteredService = $filter->filter($this->service);
-        $service         = $filteredService->getClass();
-        $filteredTypes   = $filteredService->getTypes();
-        if ($service == null) {
+        $service = $filteredService->getClass();
+        $filteredServerService = $filter->filter($this->serverService);
+        $serverService = $filteredServerService->getClass();
+        $filteredTypes = $filteredService->getTypes();
+        if ($service == null || $serverService == null) {
             throw new Exception('No service loaded');
         }
 
@@ -223,7 +241,7 @@ class Generator implements GeneratorInterface
             }
         }
 
-        $output->save($service, $types);
+        $output->save($service, $serverService, $types);
     }
 
     /**

@@ -24,13 +24,13 @@ class CodeGenerationTestCase extends TestCase
     /**
      * Assert that a class is defined.
      *
-     * @param string $className     the name of the class
+     * @param string $className the name of the class
      * @param string $namespaceName the namespace for the class
-     * @param string $message       the Message to show if the assertion fails
+     * @param string $message the Message to show if the assertion fails
      */
     protected function assertClassExists($className, $namespaceName = null, $message = '')
     {
-        $this->assertTrue(class_exists($namespaceName.'\\'.$className), $message);
+        $this->assertTrue(class_exists($namespaceName . '\\' . $className), $message);
     }
 
     /**
@@ -73,7 +73,7 @@ class CodeGenerationTestCase extends TestCase
                     $docBlockType
                 );
             }
-            $attributeValue = $object->{'get'.ucfirst($attributeName)}();
+            $attributeValue = $object->{'get' . ucfirst($attributeName)}();
             if (!empty($attributeValue)) {
                 if (class_exists($docBlockType)) {
                     $this->assertContainsOnlyInstancesOf($docBlockType, $attributeValue, $message);
@@ -86,7 +86,7 @@ class CodeGenerationTestCase extends TestCase
             if (class_exists($docBlockType)) {
                 // If the DocBlock declares that the value should be a class then check
                 // that the return value of the attribute getter matches.
-                $attributeValue = $object->{'get'.ucfirst($attributeName)}();
+                $attributeValue = $object->{'get' . ucfirst($attributeName)}();
                 if (empty($message)) {
                     $message = sprintf(
                         'Attribute %s on %s is of type %s. DocBlock says it should be %s.',
@@ -141,7 +141,7 @@ class CodeGenerationTestCase extends TestCase
         $docBlockType = null;
 
         $attribute = new ReflectionProperty($object, $attributeName);
-        $comment   = $attribute->getDocComment();
+        $comment = $attribute->getDocComment();
         // Attempt to do some simple extraction of type declaration from the
         // DocBlock.
         if (preg_match('/@var ([\w\[\]]+)/', $comment, $matches)) {
@@ -154,13 +154,13 @@ class CodeGenerationTestCase extends TestCase
     /**
      * Assert that a class implements a specific interface.
      *
-     * @param ReflectionClass|string $class     the class or the name of it
+     * @param ReflectionClass|string $class the class or the name of it
      * @param ReflectionClass|string $interface the interface or the name of it
-     * @param string                 $message   the message to show if the assertion fails
+     * @param string $message the message to show if the assertion fails
      */
     protected function assertClassImplementsInterface($class, $interface, $message = '')
     {
-        $class     = (!$class instanceof ReflectionClass) ? new ReflectionClass($class) : $class;
+        $class = (!$class instanceof ReflectionClass) ? new ReflectionClass($class) : $class;
         $interface = (!$interface instanceof ReflectionClass) ? new ReflectionClass($interface) : $interface;
 
         $this->assertTrue($interface->isInterface(), sprintf(
@@ -182,7 +182,7 @@ class CodeGenerationTestCase extends TestCase
      *
      * @param string $constName the name of the constant
      * @param string $className the name of the class
-     * @param string $message   the message to show if the assertion fails
+     * @param string $message the message to show if the assertion fails
      */
     protected function assertClassHasConst($constName, $className, $message = '')
     {
@@ -193,13 +193,13 @@ class CodeGenerationTestCase extends TestCase
     /**
      * Assert that a class has a property defined.
      *
-     * @param ReflectionClass|string    $class    the class or the name of it
+     * @param ReflectionClass|string $class the class or the name of it
      * @param ReflectionProperty|string $property the property or the name of it
-     * @param string                    $message  the message to show if the assertion fails
+     * @param string $message the message to show if the assertion fails
      */
     protected function assertClassHasProperty($class, $property, $message = '')
     {
-        $class    = (!$class instanceof ReflectionClass) ? new ReflectionClass($class) : $class;
+        $class = (!$class instanceof ReflectionClass) ? new ReflectionClass($class) : $class;
         $property = ($property instanceof ReflectionProperty) ? $property->getName() : $property;
 
         $classPropertyNames = [];
@@ -222,15 +222,15 @@ class CodeGenerationTestCase extends TestCase
     /**
      * Assert that a class has a method defined.
      *
-     * @param ReflectionClass|string  $class   the class or the name of it
-     * @param ReflectionMethod|string $method  the method or the name of it
-     * @param string                  $message the message to show if the assertion fails
+     * @param ReflectionClass|string $class the class or the name of it
+     * @param ReflectionMethod|string $method the method or the name of it
+     * @param string $message the message to show if the assertion fails
      */
     protected function assertClassHasMethod($class, $method, $message = '')
     {
         $method = ($method instanceof ReflectionMethod) ? $method->getName() : $method;
 
-        $class            = (!$class instanceof ReflectionClass) ? new ReflectionClass($class) : $class;
+        $class = (!$class instanceof ReflectionClass) ? new ReflectionClass($class) : $class;
         $classMethodNames = [];
         foreach ($class->getMethods() as $classMethod) {
             $classMethodNames[] = $classMethod->getName();
@@ -247,13 +247,13 @@ class CodeGenerationTestCase extends TestCase
     /**
      * Assert that a class does not have a method defined.
      *
-     * @param ReflectionClass|string  $class   the class or the name of it
-     * @param ReflectionMethod|string $method  the method or the name of it
-     * @param string                  $message the message to show if the assertion fails
+     * @param ReflectionClass|string $class the class or the name of it
+     * @param ReflectionMethod|string $method the method or the name of it
+     * @param string $message the message to show if the assertion fails
      */
     protected function assertClassNotHasMethod($class, $method, $message = '')
     {
-        $class  = (!$class instanceof ReflectionClass) ? new ReflectionClass($class) : $class;
+        $class = (!$class instanceof ReflectionClass) ? new ReflectionClass($class) : $class;
         $method = ($method instanceof ReflectionMethod) ? $method->getName() : $method;
 
         $classMethodNames = [];
@@ -272,9 +272,9 @@ class CodeGenerationTestCase extends TestCase
     /**
      * Assert that a method has a property defined.
      *
-     * @param ReflectionMethod           $method    the method
+     * @param ReflectionMethod $method the method
      * @param ReflectionParameter|string $parameter The parameter or the name of it
-     * @param int                        $position  the expected position (from 0) of the parameter in the list of parameters for the method
+     * @param int $position the expected position (from 0) of the parameter in the list of parameters for the method
      */
     protected function assertMethodHasParameter(\ReflectionMethod $method, $parameter, $position = null, $type = null)
     {
@@ -296,7 +296,7 @@ class CodeGenerationTestCase extends TestCase
 
         if ($position !== null) {
             $parameterNames = array_keys($parameters);
-            $message        = sprintf(
+            $message = sprintf(
                 'Parameter "%s" not found at position %s for parameters for method "%s->%s" ("%s")',
                 $parameterName,
                 $position,
@@ -328,9 +328,9 @@ class CodeGenerationTestCase extends TestCase
     /**
      * Assert that a named parameter for a method has the expected type defined as a type hint.
      *
-     * @param ReflectionMethod $method        the method to test
-     * @param string           $parameterName the name of the parameter
-     * @param string           $type          the name of the expected type
+     * @param ReflectionMethod $method the method to test
+     * @param string $parameterName the name of the parameter
+     * @param string $type the name of the expected type
      */
     protected function assertMethodParameterHasType(\ReflectionMethod $method, $parameterName, $type)
     {
@@ -364,16 +364,16 @@ class CodeGenerationTestCase extends TestCase
     /**
      * Assert that a named parameter for a method has the expected type defined in the DocBlock.
      *
-     * @param ReflectionMethod $method        the method to test
-     * @param string           $parameterName the name of the parameter
-     * @param string           $type          the name of the expected type
+     * @param ReflectionMethod $method the method to test
+     * @param string $parameterName the name of the parameter
+     * @param string $type the name of the expected type
      */
     protected function assertMethodParameterDocBlockHasType(\ReflectionMethod $method, $parameterName, $type)
     {
         // Attempt to do some simple extraction of type declaration from the
         // DocBlock.
         $docBlockParameterType = null;
-        if (preg_match('/@param (\S+) \$'.$parameterName.'/', $method->getDocComment(), $matches)) {
+        if (preg_match('/@param (\S+) \$' . $parameterName . '/', $method->getDocComment(), $matches)) {
             $docBlockParameterType = $matches[1];
         }
 
@@ -395,7 +395,7 @@ class CodeGenerationTestCase extends TestCase
      * Assert that a method has the expected type defined as the return type in the DocBlock.
      *
      * @param ReflectionMethod $method the method to test
-     * @param string           $type   the expected return type
+     * @param string $type the expected return type
      */
     protected function assertMethodHasReturnType(\ReflectionMethod $method, $type)
     {
@@ -422,13 +422,13 @@ class CodeGenerationTestCase extends TestCase
     /**
      * Assert that a class is a subclass of another class.
      *
-     * @param ReflectionClass|string $class     the subclass of the name of it
+     * @param ReflectionClass|string $class the subclass of the name of it
      * @param ReflectionClass|string $baseClass the parent class of the name of it
-     * @param string                 $message   the message to show if the assertion fails
+     * @param string $message the message to show if the assertion fails
      */
     protected function assertClassSubclassOf($class, $baseClass, $message = '')
     {
-        $class     = (!$class instanceof ReflectionClass) ? new ReflectionClass($class) : $class;
+        $class = (!$class instanceof ReflectionClass) ? new ReflectionClass($class) : $class;
         $baseClass = (!$baseClass instanceof ReflectionClass) ? new ReflectionClass($baseClass) : $baseClass;
 
         $this->assertTrue(
@@ -442,14 +442,14 @@ class CodeGenerationTestCase extends TestCase
      *
      * This will cause the class to be available for subsequent code.
      *
-     * @param ClassGenerator $generator the object from with to generate the class
-     * @param string         $namespace the namespace to use for the class
+     * @param ClassGenerator $generator The object from which to generate the class.
+     * @param string $namespace The namespace to use for the class.
      */
     protected function generateClass(ClassGenerator $generator, $namespace = null)
     {
         $source = $generator->getClass()->getSource();
         if (!empty($namespace)) {
-            $source = 'namespace '.$namespace.';'.PHP_EOL.$source;
+            $source = 'namespace ' . $namespace . ';' . PHP_EOL . $source;
         }
 
         // Include the source for the generated class. This is the  way we can test whether the generated code is as expected.
@@ -459,11 +459,11 @@ class CodeGenerationTestCase extends TestCase
 
     private function streamSource($source, $addOpening = true)
     {
-        $tmp         = tmpfile();
+        $tmp = tmpfile();
         $tmpFileName = stream_get_meta_data($tmp);
         $tmpFileName = $tmpFileName['uri'];
         if ($addOpening) {
-            $source = '<?php '.PHP_EOL.$source;
+            $source = '<?php ' . PHP_EOL . $source;
         }
         $source = trim($source);
         fwrite($tmp, $source);

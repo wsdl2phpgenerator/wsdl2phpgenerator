@@ -50,21 +50,21 @@ abstract class Type implements ClassGenerator
     /**
      * The minimum construction.
      *
-     * @param ConfigInterface $config   The configuration
-     * @param string          $name     The identifier for the type
-     * @param string          $datatype The restriction(DataType)
+     * @param ConfigInterface $config The configuration
+     * @param string $name The identifier for the type
+     * @param string $datatype The restriction(DataType)
      */
     public function __construct(ConfigInterface $config, $name, $datatype)
     {
-        $this->config     = $config;
-        $this->class      = null;
-        $this->datatype   = $datatype;
+        $this->config = $config;
+        $this->class = null;
+        $this->datatype = $datatype;
         $this->identifier = $name;
 
-        $this->phpIdentifier           = Validator::validateClass($name, $this->config->get('namespaceName'));
-        $this->phpNamespacedIdentifier = $this->phpIdentifier;
+        $this->phpIdentifier = Validator::validateClass($name, $this->config->get('namespaceName'));
+        $this->phpNamespacedIdentifier = $this->phpIdentifier;;
         if ($this->config->get('namespaceName')) {
-            $this->phpNamespacedIdentifier = '\\'.$this->config->get('namespaceName').'\\'.$this->phpIdentifier;
+            $this->phpNamespacedIdentifier = '\\' . $this->config->get('namespaceName') . '\\' . $this->phpIdentifier;;
         }
     }
 

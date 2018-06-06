@@ -35,9 +35,9 @@ class Config implements ConfigInterface
      *
      * @param $key
      *
+     * @return mixed
      * @throws \InvalidArgumentException
      *
-     * @return mixed
      */
     public function get($key)
     {
@@ -71,24 +71,29 @@ class Config implements ConfigInterface
         ]);
 
         $resolver->setDefaults([
-            'verbose'                        => false,
-            'namespaceName'                  => '',
-            'classNames'                     => '',
-            'operationNames'                 => '',
-            'sharedTypes'                    => false,
-            'constructorParamsDefaultToNull' => false,
-            'soapClientClass'                => '\SoapClient',
-            'soapClientOptions'              => [],
-            'proxy'                          => false,
-        ]);
+                'verbose' => false,
+                'namespaceName' => '',
+                'classNames' => '',
+                'operationNames' => '',
+                'sharedTypes' => false,
+                'constructorParamsDefaultToNull' => false,
+                'soapClientClass' => '\SoapClient',
+                'soapClientOptions' => [],
+                'soapServerClass' => '\SoapServer',
+                'soapServerOptions' => [],
+                'serverClassName' => '',
+                'proxy' => false
+            ]
+        );
 
         // A set of configuration options names and normalizer callables.
-        $normalizers = [
-            'classNames'        => [$this, 'normalizeArray'],
-            'operationNames'    => [$this, 'normalizeArray'],
+        $normalizers = array(
+            'classNames' => [$this, 'normalizeArray'],
+            'operationNames' => [$this, 'normalizeArray'],
             'soapClientOptions' => [$this, 'normalizeSoapClientOptions'],
-            'proxy'             => [$this, 'normalizeProxy'],
-        ];
+            'soapServerOptions' => [$this, 'normalizeSoapServerOptions'],
+            'proxy' => [$this, 'normalizeProxy'],
+        );
         // Convert each callable to a closure as that is required by OptionsResolver->setNormalizer().
         $normalizers = array_map(function ($callable) {
             return function (Options $options, $value) use ($callable) {
@@ -154,6 +159,35 @@ class Config implements ConfigInterface
     }
 
     /**
+     * Normalize the soapServerOptions configuration option.
+     *
+     * @see http://php.net/manual/en/soapserver.soapserver.php.
+     *
+     * @param Options $options
+     * @param array $value The value to be normalized.
+     *
+     * @return array An array of normalized values.
+     */
+    protected function normalizeSoapServerOptions(Options $options, array $value)
+    {
+        // The SOAP_SINGLE_ELEMENT_ARRAYS feature should be enabled by default if no other option has been set
+        // explicitly while leaving this out. This cannot be handled in the defaults as soapServerOptions is a
+        // nested array.
+        if (!isset($value['features'])) {
+            $value['features'] = SOAP_SINGLE_ELEMENT_ARRAYS;
+        }
+
+        // Merge proxy options into soapServerOptions to propagate general configuration options into the
+        // SoapServer. It is important that the proxy configuration has been normalized before it is merged.
+        // The OptionResolver ensures this by normalizing values on access.
+        if (!empty($options['proxy'])) {
+            $value = array_merge($options['proxy'], $value);
+        }
+
+        return $value;
+    }
+
+    /**
      * Normalize the proxy configuration option.
      *
      * The normalized value is an array with the following keys:
@@ -194,7 +228,7 @@ class Config implements ConfigInterface
         } elseif (is_array($value)) {
             foreach ($value as $k => $v) {
                 // Prepend proxy_ to each key to match the expended proxy option names of the PHP SoapClient.
-                $value['proxy_'.$k] = $v;
+                $value['proxy_' . $k] = $v;
                 unset($value[$k]);
             }
 
@@ -202,7 +236,7 @@ class Config implements ConfigInterface
                 throw new InvalidOptionsException('"proxy" configuration setting must contain at least keys "host" and "port');
             }
         } else {
-            throw new InvalidOptionsException('"proxy" configuration setting must be either a string containing the proxy url '.'or an array containing at least a key "host" and "port"');
+            throw new InvalidOptionsException('"proxy" configuration setting must be either a string containing the proxy url ' . 'or an array containing at least a key "host" and "port"');
         }
 
         // Make sure port is an integer
