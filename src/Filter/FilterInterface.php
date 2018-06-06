@@ -1,7 +1,7 @@
 <?php
 namespace Wsdl2PhpGenerator\Filter;
 
-use Wsdl2PhpGenerator\Service;
+use Wsdl2PhpGenerator\ServiceInterface;
 
 /**
  * A filter implementation allows modification of a service.
@@ -16,5 +16,5 @@ interface FilterInterface
      * @param Service $service The initial service.
      * @return Service The altered service.
      */
-    public function filter(Service $service);
+    public function filter(ServiceInterface $service);
 }
