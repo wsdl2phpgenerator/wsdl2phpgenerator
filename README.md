@@ -46,12 +46,10 @@ To generate classes create a `Generator` instance and pass it a `Config` instanc
 
 ```php
 $generator = new \Wsdl2PhpGenerator\Generator();
-$generator->generate(
-	new \Wsdl2PhpGenerator\Config(array(
-        'inputFile' => 'input.wsdl',
-        'outputDir' => '/tmp/output'
-    ))
-);
+$generator->generate(new \Wsdl2PhpGenerator\Config(array(
+    'inputFile' => 'input.wsdl',
+    'outputDir' => '/tmp/output',
+)));
 ```
 
 After generating the code then configure your existing autoloader accordingly. The generated code also comes with a simple `autoload.php` file which can be included directly. This registers a simple autoloader for the generated classes.
@@ -62,12 +60,10 @@ The following example will generate code from a web service, load the generated 
 
 ```php
 $generator = new \Wsdl2PhpGenerator\Generator();
-$generator->generate(
-	new \Wsdl2PhpGenerator\Config(array(
-        'inputFile' => 'http://www.webservicex.net/CurrencyConvertor.asmx?WSDL',
-        'outputDir' => '/tmp/CurrencyConverter'
-    ))
-);
+$generator->generate(new \Wsdl2PhpGenerator\Config(array(
+    'inputFile' => 'http://www.webservicex.net/CurrencyConvertor.asmx?WSDL',
+    'outputDir' => '/tmp/CurrencyConverter',
+)));
 
 require '/tmp/CurrencyConverter/autoload.php';
 
@@ -105,13 +101,11 @@ The following configuration will place generated code from the [CDYNE Weather we
 
 ```php
 $generator = new \Wsdl2PhpGenerator\Generator();
-$generator->generate(
-    new \Wsdl2PhpGenerator\Config(array(
-        'inputFile' => 'http://wsf.cdyne.com/WeatherWS/Weather.asmx?wsdl',
-        'outputDir' => '/tmp/weather',
-        'namespaceName' => 'CDyne\Weather'
-    ))
-);
+$generator->generate(new \Wsdl2PhpGenerator\Config(array(
+    'inputFile' => 'http://wsf.cdyne.com/WeatherWS/Weather.asmx?wsdl',
+    'outputDir' => '/tmp/weather',
+    'namespaceName' => 'CDyne\Weather',
+)));
 ```
 
 #### `classNames`
@@ -126,13 +120,11 @@ The following configuration will only generate `AmazonEC2` and `CopyImageType` c
 
 ```php
 $generator = new \Wsdl2PhpGenerator\Generator();
-$generator->generate(
-    new \Wsdl2PhpGenerator\Config(array(
-        'inputFile' => 'https://s3.amazonaws.com/ec2-downloads/2013-10-01.ec2.wsdl',
-        'outputDir' => '/tmp/amazon',
-        'classNames' => 'AmazonEC2, CopyImageType'
-    ))
-);
+$generator->generate(new \Wsdl2PhpGenerator\Config(array(
+    'inputFile' => 'https://s3.amazonaws.com/ec2-downloads/2013-10-01.ec2.wsdl',
+    'outputDir' => '/tmp/amazon',
+    'classNames' => 'AmazonEC2, CopyImageType',
+)));
 ```
 #### `operationNames`
 
@@ -144,13 +136,11 @@ The following configuration will generate operations and types for `ReplaceRoute
 
 ```php
 $generator = new \Wsdl2PhpGenerator\Generator();
-$generator->generate(
-    new \Wsdl2PhpGenerator\Config(array(
-        'inputFile' => 'https://s3.amazonaws.com/ec2-downloads/2013-10-01.ec2.wsdl',
-        'outputDir' => '/tmp/amazon',
-        'operationNames' => 'ReplaceRouteTableAssociation, RequestSpotInstances'
-    ))
-);
+$generator->generate(new \Wsdl2PhpGenerator\Config(array(
+    'inputFile' => 'https://s3.amazonaws.com/ec2-downloads/2013-10-01.ec2.wsdl',
+    'outputDir' => '/tmp/amazon',
+    'operationNames' => 'ReplaceRouteTableAssociation, RequestSpotInstances',
+)));
 ```
 #### `sharedTypes`
 
@@ -177,13 +167,11 @@ The following configuration will use a proxy to access the [Google DoubleClick A
 
 ```php
 $generator = new \Wsdl2PhpGenerator\Generator();
-$generator->generate(
-    new \Wsdl2PhpGenerator\Config(array(
-        'inputFile' => 'https://ads.google.com/apis/ads/publisher/v201306/ActivityService?wsdl',
-        'outputDir' => '/tmp/amazon',
-        'proxy' => 'tcp://user:secret@192.168.0.1:8080'
-    ))
-);
+$generator->generate(new \Wsdl2PhpGenerator\Config(array(
+    'inputFile' => 'https://ads.google.com/apis/ads/publisher/v201306/ActivityService?wsdl',
+    'outputDir' => '/tmp/amazon',
+    'proxy' => 'tcp://user:secret@192.168.0.1:8080',
+)));
 ```
 
 #### `soapClientClass`
@@ -205,13 +193,11 @@ The following configuration will use the BeSimple SOAP client as base class:
 
 ```php
 $generator = new \Wsdl2PhpGenerator\Generator();
-$generator->generate(
-    new \Wsdl2PhpGenerator\Config(array(
-        'inputFile' => 'input.wsdl',
-        'outputDir' => '/tmp/output',
-        'soapClientClass' => '\BeSimple\SoapClient\SoapClient'
-    ))
-);
+$generator->generate(new \Wsdl2PhpGenerator\Config(array(
+    'inputFile' => 'input.wsdl',
+    'outputDir' => '/tmp/output',
+    'soapClientClass' => '\BeSimple\SoapClient\SoapClient',
+)));
 ```
 
 #### `soapClientOptions`
@@ -228,17 +214,16 @@ The following configuration will enable basic authentication and set the connect
 
 ```php
 $generator = new \Wsdl2PhpGenerator\Generator();
-$generator->generate(
-    new \Wsdl2PhpGenerator\Config(array(
-        'inputFile' => 'input.wsdl',
-        'outputDir' => '/tmp/output',
-        'soapClientOptions' => array(
-        	'authentication' => SOAP_AUTHENTICATION_BASIC,
-        	'login' => 'username',
-        	'password' => 'secret',
-        	'connection_timeout' => 60
-    ))
-));
+$generator->generate(new \Wsdl2PhpGenerator\Config(array(
+    'inputFile' => 'input.wsdl',
+    'outputDir' => '/tmp/output',
+    'soapClientOptions' => array(
+        'authentication' => SOAP_AUTHENTICATION_BASIC,
+        'login' => 'username',
+        'password' => 'secret',
+        'connection_timeout' => 60,
+    )
+)));
 ````
 
 ## Versioning
