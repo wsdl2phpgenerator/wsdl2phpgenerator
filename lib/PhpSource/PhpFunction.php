@@ -60,7 +60,11 @@ class PhpFunction extends PhpElement
         $ret .= $this->getSourceRow($this->access . ' function ' . $this->identifier . '(' . $this->params . ')');
         if ($this->source !== null) {
             $ret .= $this->getSourceRow('{');
-            $ret .= $this->getSourceRow($this->source);
+        // do not create function empty space function PSR-2
+        if ($this->source != '') {
+            // Use 4 spaces as indention, as requested by PSR-2
+            $ret .= $this->getSourceRow(str_replace('  ', '    ', $this->source));
+        }
             $ret .= $this->getSourceRow('}');
         } else {
             $ret .= $this->getSourceRow(';');
