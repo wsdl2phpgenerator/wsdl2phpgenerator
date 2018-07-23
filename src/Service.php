@@ -3,6 +3,7 @@
 /**
  * @package Wsdl2PhpGenerator
  */
+
 namespace Wsdl2PhpGenerator;
 
 use Wsdl2PhpGenerator\PhpSource\PhpClass;
@@ -90,7 +91,7 @@ class Service implements ServiceInterface
      */
     public function getOperation($operationName)
     {
-        return isset($this->operations[$operationName])? $this->operations[$operationName]: null;
+        return isset($this->operations[$operationName]) ? $this->operations[$operationName] : null;
     }
 
     /**
@@ -122,8 +123,9 @@ class Service implements ServiceInterface
      */
     public function getType($identifier)
     {
-        return isset($this->types[$identifier])? $this->types[$identifier]: null;
+        return isset($this->types[$identifier]) ? $this->types[$identifier] : null;
     }
+
     /**
      * Returns all types defined by the service.
      *
@@ -162,13 +164,18 @@ class Service implements ServiceInterface
       $options[\'classmap\'][$key] = $value;
     }
   }' . PHP_EOL;
-        $source .= '  $options = array_merge(' . var_export($this->config->get('soapClientOptions'), true) . ', $options);' . PHP_EOL;
+        $source .= '  $options = array_merge(' . trim(preg_replace("/^/m", "  ", var_export($this->config->get('soapClientOptions'), true), 4)) . ', $options);' . PHP_EOL;
         $source .= '  if (!$wsdl) {' . PHP_EOL;
         $source .= '    $wsdl = \'' . $this->config->get('inputFile') . '\';' . PHP_EOL;
         $source .= '  }' . PHP_EOL;
         $source .= '  parent::__construct($wsdl, $options);' . PHP_EOL;
 
+        //replace array () to array()
+        $source = str_replace('array (', 'array(', $source);
         $function = new PhpFunction('public', '__construct', 'array $options = array(), $wsdl = null', $source, $comment);
+
+
+
 
         // Add the constructor
         $this->class->addFunction($function);
@@ -202,6 +209,7 @@ class Service implements ServiceInterface
             }
 
             $source = '  return $this->__soapCall(\'' . $operation->getName() . '\', array(' . $operation->getParamStringNoTypeHints() . '));' . PHP_EOL;
+
 
             $paramStr = $operation->getParamString($this->types);
 

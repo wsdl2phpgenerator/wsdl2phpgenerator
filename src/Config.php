@@ -7,7 +7,6 @@ use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Wsdl2PhpGenerator\ConfigInterface;
 
 /**
  * This class contains configurable key/value pairs.
@@ -66,18 +65,18 @@ class Config implements ConfigInterface
         ));
 
         $resolver->setDefaults(array(
-            'verbose'                        => false,
-            'namespaceName'                  => '',
-            'classNames'                     => '',
-            'operationNames'                 => '',
-            'sharedTypes'                    => false,
+            'verbose' => false,
+            'namespaceName' => '',
+            'classNames' => '',
+            'operationNames' => '',
+            'sharedTypes' => false,
             'constructorParamsDefaultToNull' => false,
-            'soapClientClass'               => '\SoapClient',
-            'soapClientOptions'             => array(),
-            'soapServerClass'               => '\SoapServer',
-            'soapServerOptions'             => array(),
-            'serverClassName'               => '',
-            'proxy'                         => false
+            'soapClientClass' => '\SoapClient',
+            'soapClientOptions' => array(),
+            'soapServerClass' => '\SoapServer',
+            'soapServerOptions' => array(),
+            'serverClassName' => '',
+            'proxy' => false
         ));
 
         // A set of configuration options names and normalizer callables.

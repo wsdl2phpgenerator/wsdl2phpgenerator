@@ -160,11 +160,11 @@ class ServerService implements ServiceInterface
         $comment->addParam(PhpDocElementFactory::getParam('string', 'wsdl', 'The wsdl file to use'));
 
         $source = '
-  foreach (self::$classmap as $key => $value) {
-    if (!isset($options[\'classmap\'][$key])) {
-      $options[\'classmap\'][$key] = $value;
-    }
-  }' . PHP_EOL;
+   foreach (self::$classmap as $key => $value) {
+     if (!isset($options[\'classmap\'][$key])) {
+       $options[\'classmap\'][$key] = $value;
+     }
+   }' . PHP_EOL;
         $source .= '  $options = array_merge(' . var_export($this->config->get('soapServerOptions'), true) . ', $options);' . PHP_EOL;
         $source .= '  if (!$wsdl) {' . PHP_EOL;
         $source .= '    $wsdl = \'' . $this->config->get('inputFile') . '\';' . PHP_EOL;
