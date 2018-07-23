@@ -13,7 +13,7 @@ use Exception;
  * Class that represents the source code for a class in php.
  *
  * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
- * @license http://www.opensource.org/licenses/mit-license.php MIT License
+ *  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 class PhpClass extends PhpElement
 {
@@ -73,28 +73,28 @@ class PhpClass extends PhpElement
     private $abstract;
 
     /**
-     * @param string        $identifier
-     * @param bool          $classExists
-     * @param string        $extends     A string of the class that this class extends
+     * @param string $identifier
+     * @param bool $classExists
+     * @param string $extends A string of the class that this class extends
      * @param PhpDocComment $comment
-     * @param bool          $final
-     * @param bool          $abstract
+     * @param bool $final
+     * @param bool $abstract
      */
     public function __construct($identifier, $classExists = false, $extends = '', PhpDocComment $comment = null, $final = false, $abstract = false)
     {
         $this->dependencies = [];
-        $this->classExists  = $classExists;
-        $this->comment      = $comment;
-        $this->final        = $final;
-        $this->identifier   = $identifier;
-        $this->access       = '';
-        $this->extends      = $extends;
-        $this->constants    = [];
-        $this->variables    = [];
-        $this->functions    = [];
-        $this->implements   = [];
+        $this->classExists = $classExists;
+        $this->comment = $comment;
+        $this->final = $final;
+        $this->identifier = $identifier;
+        $this->access = '';
+        $this->extends = $extends;
+        $this->constants = [];
+        $this->variables = [];
+        $this->functions = [];
+        $this->implements = [];
         $this->indentionStr = '    '; // Use 4 spaces as indention, as requested by PSR-2
-        $this->abstract     = $abstract;
+        $this->abstract = $abstract;
     }
 
     /**
@@ -105,12 +105,12 @@ class PhpClass extends PhpElement
         $ret = '';
 
         if ($this->classExists) {
-            $ret .= 'if (!class_exists("'.$this->identifier.'", false)) '.PHP_EOL.'{'.PHP_EOL;
+            $ret .= 'if (!class_exists("' . $this->identifier . '", false)) ' . PHP_EOL . '{' . PHP_EOL;
         }
 
         if (count($this->dependencies) > 0) {
             foreach ($this->dependencies as $file) {
-                $ret .= 'include_once(\''.$file.'\');'.PHP_EOL;
+                $ret .= 'include_once(\'' . $file . '\');' . PHP_EOL;
             }
             $ret .= PHP_EOL;
         }
@@ -127,25 +127,26 @@ class PhpClass extends PhpElement
             $ret .= 'abstract ';
         }
 
-        $ret .= 'class '.$this->identifier;
+        $ret .= 'class ' . $this->identifier;
 
         if (strlen($this->extends) > 0) {
-            $ret .= ' extends '.$this->extends;
+            $ret .= ' extends ' . $this->extends;
+        }
+        
+        if ($this->implements && count($this->implements) > 0) {
+            $ret .= ' implements ' . implode(', ', $this->implements);
+
         }
 
-        if (count($this->implements) > 0) {
-            $ret .= ' implements '.implode(', ', $this->implements);
-        }
-
-        $ret .= PHP_EOL.'{'.PHP_EOL;
+        $ret .= PHP_EOL . '{' . PHP_EOL;
 
         if (isset($this->default)) {
-            $ret .= $this->getIndentionStr().'const __default = '.$this->default.';'.PHP_EOL;
+            $ret .= $this->getIndentionStr() . 'const __default = ' . $this->default . ';' . PHP_EOL;
         }
 
         if (count($this->constants) > 0) {
             foreach ($this->constants as $name => $value) {
-                $ret .= $this->getIndentionStr().'const '.$name.' = \''.$value.'\';'.PHP_EOL;
+                $ret .= $this->getIndentionStr() . 'const ' . $name . ' = \'' . $value . '\';' . PHP_EOL;
             }
             $ret .= PHP_EOL;
         }
@@ -164,10 +165,10 @@ class PhpClass extends PhpElement
             }
         }
 
-        $ret .= PHP_EOL.'}'.PHP_EOL;
+        $ret .= PHP_EOL . '}' . PHP_EOL;
 
         if ($this->classExists) {
-            $ret .= PHP_EOL.'}'.PHP_EOL;
+            $ret .= PHP_EOL . '}' . PHP_EOL;
         }
 
         return $ret;
@@ -191,8 +192,8 @@ class PhpClass extends PhpElement
      */
     public function addImplementation($classes)
     {
-        $classes          = (array) $classes;
-        $this->implements = array_merge((array) $this->implements, $classes);
+        $classes = (array)$classes;
+        $this->implements = array_merge((array)$this->implements, $classes);
     }
 
     /**
@@ -208,7 +209,7 @@ class PhpClass extends PhpElement
     /**
      * Adds a constant to the class. If no name is supplied and the value is a string the value is used as name otherwise exception is raised.
      *
-     * @param mixed  $value
+     * @param mixed $value
      * @param string $name
      *
      * @throws Exception
@@ -229,7 +230,7 @@ class PhpClass extends PhpElement
         }
 
         if (array_key_exists($name, $this->constants)) {
-            throw new Exception('A constant of the name ('.$name.') does already exist.');
+            throw new Exception('A constant of the name (' . $name . ') does already exist.');
         }
 
         $this->constants[$name] = $value;
@@ -246,7 +247,7 @@ class PhpClass extends PhpElement
     public function addVariable(PhpVariable $variable)
     {
         if ($this->variableExists($variable->getIdentifier())) {
-            throw new Exception('A variable of the name ('.$variable->getIdentifier().') does already exist.');
+            throw new Exception('A variable of the name (' . $variable->getIdentifier() . ') does already exist.');
         }
 
         $this->variables[$variable->getIdentifier()] = $variable;
@@ -263,7 +264,7 @@ class PhpClass extends PhpElement
     public function addFunction(PhpFunction $function)
     {
         if ($this->functionExists($function->getIdentifier())) {
-            throw new Exception('A function of the name ('.$function->getIdentifier().') does already exist.');
+            throw new Exception('A function of the name (' . $function->getIdentifier() . ') does already exist.');
         }
 
         $this->functions[$function->getIdentifier()] = $function;
