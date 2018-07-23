@@ -160,6 +160,53 @@ class ConfigTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test that the soapServerOptions normalizer sets the SOAP_SINGLE_ELEMENT_ARRAYS by default.
+     */
+    public function testSoapServerOptionsNormalizer()
+    {
+        $defaults = array(
+            'inputFile' => null,
+            'outputDir' => null,
+        );
+
+        $config = new Config($defaults);
+        $options = $config->get('soapServerOptions');
+        $this->assertEquals(
+            SOAP_SINGLE_ELEMENT_ARRAYS,
+            $options['features'],
+            'SOAP_SINGLE_ELEMENT_ARRAYS should be enabled by default.'
+            );
+
+        $config = new Config(array_merge($defaults, array('soapServerOptions' => array('trace' => true))));
+        $options = $config->get('soapServerOptions');
+        $this->assertEquals(
+            SOAP_SINGLE_ELEMENT_ARRAYS,
+            $options['features'],
+            'SOAP_SINGLE_ELEMENT_ARRAYS should be enabled by default even if other SoapServer options are set.'
+            );
+
+        $config = new Config(
+            array_merge($defaults, array('soapServerOptions' => array('features' => SOAP_SINGLE_ELEMENT_ARRAYS)))
+            );
+        $options = $config->get('soapServerOptions');
+        $this->assertEquals(
+            SOAP_SINGLE_ELEMENT_ARRAYS,
+            $options['features'],
+            'SOAP_SINGLE_ELEMENT_ARRAYS should be enabled if set explicitly.'
+            );
+
+        $config = new Config(
+            array_merge($defaults, array('soapServerOptions' => array('features' => SOAP_USE_XSI_ARRAY_TYPE)))
+            );
+        $options = $config->get('soapServerOptions');
+        $this->assertNotEquals(
+            SOAP_SINGLE_ELEMENT_ARRAYS,
+            $options['features'],
+            'SOAP_SINGLE_ELEMENT_ARRAYS should not be enabled if other options have been enabled explicitly.'
+            );
+    }
+
+    /**
      * Test the proxy normalizer
      */
     public function testProxyNormalizer()
