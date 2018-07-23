@@ -52,18 +52,18 @@ class Service implements ServiceInterface
     private $types;
 
     /**
-     * @param ConfigInterface $config      Configuration
-     * @param string          $identifier  The name of the service
-     * @param array           $types       The types the service knows about
-     * @param string          $description The description of the service
+     * @param ConfigInterface $config Configuration
+     * @param string $identifier The name of the service
+     * @param array $types The types the service knows about
+     * @param string $description The description of the service
      */
     public function __construct(ConfigInterface $config, $identifier, array $types, $description)
     {
-        $this->config      = $config;
-        $this->identifier  = $identifier;
+        $this->config = $config;
+        $this->identifier = $identifier;
         $this->description = $description;
-        $this->operations  = [];
-        $this->types       = [];
+        $this->operations = [];
+        $this->types = [];
         foreach ($types as $type) {
             $this->types[$type->getIdentifier()] = $type;
         }
@@ -149,7 +149,7 @@ class Service implements ServiceInterface
         $name = ucfirst($name);
 
         // Create the class object
-        $comment     = new PhpDocComment($this->description);
+        $comment = new PhpDocComment($this->description);
         $this->class = new PhpClass($name, false, $this->config->get('soapClientClass'), $comment);
 
         // Create the constructor
@@ -162,27 +162,31 @@ class Service implements ServiceInterface
     if (!isset($options[\'classmap\'][$key])) {
       $options[\'classmap\'][$key] = $value;
     }
-  }'.PHP_EOL;
-        $source .= '  $options = array_merge('.var_export($this->config->get('soapClientOptions'), true).', $options);'.PHP_EOL;
-        $source .= '  if (!$wsdl) {'.PHP_EOL;
-        $source .= '    $wsdl = \''.$this->config->get('inputFile').'\';'.PHP_EOL;
-        $source .= '  }'.PHP_EOL;
-        $source .= '  parent::__construct($wsdl, $options);'.PHP_EOL;
+  }' . PHP_EOL;
+        $source .= '  $options = array_merge(' . var_export($this->config->get('soapClientOptions'), true) . ', $options);' . PHP_EOL;
+        $source .= '  if (!$wsdl) {' . PHP_EOL;
+        $source .= '    $wsdl = \'' . $this->config->get('inputFile') . '\';' . PHP_EOL;
+        $source .= '  }' . PHP_EOL;
+        $source .= '  parent::__construct($wsdl, $options);' . PHP_EOL;
 
+
+        //replace array () to array()
+        $source = str_replace('array (', 'array(', $source);
         $function = new PhpFunction('public', '__construct', 'array $options = array(), $wsdl = null', $source, $comment);
+
 
         // Add the constructor
         $this->class->addFunction($function);
 
         // Generate the classmap
-        $name    = 'classmap';
+        $name = 'classmap';
         $comment = new PhpDocComment();
         $comment->setVar(PhpDocElementFactory::getVar('array', $name, 'The defined classes'));
 
         $init = [];
         foreach ($this->types as $type) {
             if ($type instanceof ComplexType) {
-                $init[$type->getIdentifier()] = $this->config->get('namespaceName').'\\'.$type->getPhpIdentifier();
+                $init[$type->getIdentifier()] = $this->config->get('namespaceName') . '\\' . $type->getPhpIdentifier();
             }
         }
         $var = new PhpVariable('private static', $name, var_export($init, true), $comment);
@@ -202,7 +206,8 @@ class Service implements ServiceInterface
                 $comment->addParam(PhpDocElementFactory::getParam($arr['type'], $arr['name'], $arr['desc']));
             }
 
-            $source = '  return $this->__soapCall(\''.$operation->getName().'\', array('.$operation->getParamStringNoTypeHints().'));'.PHP_EOL;
+            $source = '  return $this->__soapCall(\'' . $operation->getName() . '\', array(' . $operation->getParamStringNoTypeHints() . '));' . PHP_EOL;
+
 
             $paramStr = $operation->getParamString($this->types);
 

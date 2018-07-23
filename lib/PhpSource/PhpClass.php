@@ -13,8 +13,7 @@ use Exception;
  * Class that represents the source code for a class in php.
  *
  * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
- *  * @license http://www.opensource.org/licenses/mit-license.php MIT License
- */
+ * @license http://www.opensource.org/licenses/mit-license.php MIT License */
 class PhpClass extends PhpElement
 {
     /**
@@ -132,7 +131,7 @@ class PhpClass extends PhpElement
         if (strlen($this->extends) > 0) {
             $ret .= ' extends ' . $this->extends;
         }
-        
+
         if ($this->implements && count($this->implements) > 0) {
             $ret .= ' implements ' . implode(', ', $this->implements);
 
@@ -172,6 +171,9 @@ class PhpClass extends PhpElement
         if ($this->classExists) {
             $ret .= PHP_EOL . '}' . PHP_EOL;
         }
+
+        //replace array () to array()
+        $ret = str_replace('array (', 'array(', $ret);
 
         return $ret;
     }

@@ -11,7 +11,7 @@ namespace Wsdl2PhpGenerator\PhpSource;
  * Class that represents the source code for a function in php.
  *
  * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
- * @license http://www.opensource.org/licenses/mit-license.php MIT License
+ * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 class PhpFunction extends PhpElement
 {
@@ -60,14 +60,17 @@ class PhpFunction extends PhpElement
         $ret .= $this->getSourceRow($this->access . ' function ' . $this->identifier . '(' . $this->params . ')');
         if ($this->source !== null) {
             $ret .= $this->getSourceRow('{');
-        // do not create function empty space function PSR-2
-        if ($this->source != '') {
-            // Use 4 spaces as indention, as requested by PSR-2
-            $ret .= $this->getSourceRow(str_replace('  ', '    ', $this->source));
-        }
+            // do not create function empty space function PSR-2
+            if ($this->source != '') {
+                // Use 4 spaces as indention, as requested by PSR-2
+                $ret .= $this->getSourceRow(str_replace('  ', '    ', $this->source));
+            }
             $ret .= $this->getSourceRow('}');
         } else {
             $ret .= $this->getSourceRow(';');
+
+            // if it has a row with only ; we need to put them at the end of the function
+            $ret = str_replace(PHP_EOL . '    ;', ';', $ret);
         }
 
         return $ret;

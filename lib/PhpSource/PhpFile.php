@@ -14,7 +14,7 @@ use Exception;
  * A file can contain namespaces, classes and global functions.
  *
  * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
- * @license http://www.opensource.org/licenses/mit-license.php MIT License
+ * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 class PhpFile
 {

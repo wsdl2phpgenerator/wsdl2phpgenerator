@@ -11,7 +11,7 @@ namespace Wsdl2PhpGenerator\PhpSource;
  * Abstract base class for all PHP elements, variables, functions and classes etc.
  *
  * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
- * @license http://www.opensource.org/licenses/mit-license.php MIT License
+ * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 abstract class PhpElement
 {
