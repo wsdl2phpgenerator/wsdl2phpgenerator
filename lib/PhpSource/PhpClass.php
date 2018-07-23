@@ -165,6 +165,8 @@ class PhpClass extends PhpElement
             }
         }
 
+        // no empty space before closing empty class file PSR-2
+        $ret = trim($ret);
         $ret .= PHP_EOL . '}' . PHP_EOL;
 
         if ($this->classExists) {
