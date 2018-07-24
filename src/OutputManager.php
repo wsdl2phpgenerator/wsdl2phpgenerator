@@ -44,6 +44,7 @@ class OutputManager
      * @param PhpClass $service
      * @param PhpClass $serverService
      * @param array $types
+     * @throws Exception
      */
     public function save(PhpClass $service, PhpClass $serverService, array $types)
     {
@@ -69,7 +70,7 @@ class OutputManager
     {
         $outputDirectory = $this->config->get('outputDir');
 
-        //Try to create output dir if non existing
+        // Try to create output dir if non existing
         if (is_dir($outputDirectory) == false) {
             if (mkdir($outputDirectory, 0777, true) == false) {
                 throw new Exception('Could not create output directory and it does not exist!');
@@ -84,6 +85,7 @@ class OutputManager
      * If no file is created the name of the class is the filename
      *
      * @param PhpClass $class
+     * @throws Exception
      */
     private function saveClassToFile(PhpClass $class)
     {
@@ -122,6 +124,7 @@ class OutputManager
      *
      * @param string $name The name of the autoloader. Should be unique for the service to avoid name clashes.
      * @param PhpClass[] $classes The classes to include in the autoloader.
+     * @throws Exception
      */
     private function saveAutoloader($name, array $classes)
     {
