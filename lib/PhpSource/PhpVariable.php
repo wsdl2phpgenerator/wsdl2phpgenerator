@@ -42,7 +42,10 @@ class PhpVariable extends PhpElement
         $this->identifier = $identifier;
         $this->initialization = '';
         if (strlen($initialization)) {
-            $this->initialization = ' = ' . $initialization;
+            // Add some space for '$classmap = array(' definition
+            if($this->identifier === "classmap") {
+                $this->initialization = ' = ' . str_replace("  '", "      '", $initialization);
+            }
         }
     }
 
@@ -60,6 +63,7 @@ class PhpVariable extends PhpElement
         }
 
         $ret .= $this->getSourceRow($this->access . ' $' . $this->identifier . $this->initialization . ';');
+
 
         return $ret;
     }

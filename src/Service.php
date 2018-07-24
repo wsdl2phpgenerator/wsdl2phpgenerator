@@ -175,8 +175,6 @@ class Service implements ServiceInterface
         $function = new PhpFunction('public', '__construct', 'array $options = array(), $wsdl = null', $source, $comment);
 
 
-
-
         // Add the constructor
         $this->class->addFunction($function);
 
@@ -191,6 +189,7 @@ class Service implements ServiceInterface
                 $init[$type->getIdentifier()] = $this->config->get('namespaceName') . "\\" . $type->getPhpIdentifier();
             }
         }
+
         $var = new PhpVariable('private static', $name, var_export($init, true), $comment);
 
         // Add the classmap variable

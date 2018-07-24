@@ -3,9 +3,10 @@
 /**
  * @package Wsdl2PhpGenerator
  */
+
 namespace Wsdl2PhpGenerator;
 
-use \Exception;
+use Exception;
 use Wsdl2PhpGenerator\PhpSource\PhpClass;
 use Wsdl2PhpGenerator\PhpSource\PhpFile;
 use Wsdl2PhpGenerator\PhpSource\PhpFunction;
@@ -113,9 +114,9 @@ class OutputManager
     {
         $classNames = $this->config->get('classNames');
         return (empty($classNames) || in_array(
-            $class->getIdentifier(),
-            $classNames
-        ));
+                $class->getIdentifier(),
+                $classNames
+            ));
     }
 
     /**
@@ -139,21 +140,21 @@ class OutputManager
         foreach ($classes as $class) {
             $className = $this->config->get('namespaceName') . '\\' . $class->getIdentifier();
             $className = ltrim($className, '\\');
-            $autoloadedClasses[] = "'" . $className . "' => __DIR__ .'/" . $class->getIdentifier() . ".php'";
+            $autoloadedClasses[] = "'" . $className . "' => __DIR__ . '/" . $class->getIdentifier() . ".php'";
         }
-        $autoloadedClasses = implode(',' . PHP_EOL . str_repeat(' ', 8), $autoloadedClasses);
+        $autoloadedClasses = implode(',' . PHP_EOL . str_repeat(' ', 4), $autoloadedClasses);
 
         // Assemble the source of the autoloader function containing the classes and the check to include.
         // Our custom code generation library does not support generating code outside of functions and we need to
         // register the autoloader in the global scope. Consequently we manually insert a } to end the autoloader
         // function, register it and finish with a {. This means our generated code ends with a no-op {} statement.
         $autoloaderSource = <<<EOF
-    \$classes = array(
-        $autoloadedClasses
-    );
-    if (!empty(\$classes[\$class])) {
-        include \$classes[\$class];
-    };
+  \$classes = array(
+    $autoloadedClasses
+  );
+  if (!empty(\$classes[\$class])) {
+    include \$classes[\$class];
+  };
 }
 
 spl_autoload_register('$autoloaderName');
