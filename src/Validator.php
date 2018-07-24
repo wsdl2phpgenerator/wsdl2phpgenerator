@@ -12,7 +12,7 @@ namespace Wsdl2PhpGenerator;
  * Contains functionf for validating Type, Classname and Naming convention.
  *
  * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
- * @license http://www.opensource.org/licenses/mit-license.php MIT License
+ *  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 class Validator
 {
@@ -124,7 +124,6 @@ class Validator
         $name = self::validateNamingConvention($name);
 
         $prefix = !empty($namespace) ? $namespace.'\\' : '';
-
         $name = self::validateUnique($name, function ($name) use ($prefix) {
             // Use reflection to get access to private isKeyword method.
             // @todo Remove this when we stop supporting PHP 5.3.
@@ -136,6 +135,7 @@ class Validator
                 !interface_exists($prefix.$name) &&
                 !class_exists($prefix.$name);
         }, self::NAME_SUFFIX);
+
 
         return $name;
     }
@@ -217,22 +217,18 @@ class Validator
             case 'unsignedlong':
             case 'unsignedshort':
                 return 'int';
-                break;
             case 'float':
             case 'double':
             case 'decimal':
                 return 'float';
-                break;
             case '<anyxml>':
             case 'string':
             case 'token':
             case 'normalizedstring':
             case 'hexbinary':
                 return 'string';
-                break;
             case 'datetime':
                 return  '\DateTime';
-                break;
             default:
                 $typeName = self::validateNamingConvention($typeName);
                 break;
