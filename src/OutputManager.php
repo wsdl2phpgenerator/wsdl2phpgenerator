@@ -39,24 +39,18 @@ class OutputManager
     }
 
     /**
-     * Saves the service and types php code to file
-     *
-     * @param PhpClass $service
-     * @param PhpClass $serverService
-     * @param array $types
-     * @throws Exception
+     * Saves the service and types php code to file.
      */
-    public function save(PhpClass $service, PhpClass $serverService, array $types)
+    public function save(PhpClass $service, array $types)
     {
         $this->setOutputDirectory();
 
         $this->saveClassToFile($service);
-        $this->saveClassToFile($serverService);
         foreach ($types as $type) {
             $this->saveClassToFile($type);
         }
 
-        $classes = array_merge([$service, $serverService], $types);
+        $classes = array_merge([$service], $types);
         $this->saveAutoloader($service->getIdentifier(), $classes);
     }
 
@@ -70,7 +64,7 @@ class OutputManager
     {
         $outputDirectory = $this->config->get('outputDir');
 
-        // Try to create output dir if non existing
+        //Try to create output dir if non existing
         if (is_dir($outputDirectory) == false) {
             if (mkdir($outputDirectory, 0777, true) == false) {
                 throw new Exception('Could not create output directory and it does not exist!');
@@ -82,10 +76,7 @@ class OutputManager
 
     /**
      * Append a class to a file and save it
-     * If no file is created the name of the class is the filename
-     *
-     * @param PhpClass $class
-     * @throws Exception
+     * If no file is created the name of the class is the filename.
      */
     private function saveClassToFile(PhpClass $class)
     {
@@ -113,18 +104,17 @@ class OutputManager
         $classNames = $this->config->get('classNames');
 
         return empty($classNames) || in_array(
-            $class->getIdentifier(),
-            $classNames
-        );
+                $class->getIdentifier(),
+                $classNames
+            );
     }
 
     /**
      * Save a file containing an autoloader for the generated files. Developers can include this when using the
      * generated classes.
      *
-     * @param string $name The name of the autoloader. Should be unique for the service to avoid name clashes.
-     * @param PhpClass[] $classes The classes to include in the autoloader.
-     * @throws Exception
+     * @param string     $name    The name of the autoloader. Should be unique for the service to avoid name clashes.
+     * @param PhpClass[] $classes the classes to include in the autoloader
      */
     private function saveAutoloader($name, array $classes)
     {
@@ -155,7 +145,9 @@ class OutputManager
         include \$classes[\$class];
     };
 }
+
 spl_autoload_register('$autoloaderName');
+
 // Do nothing. The rest is just leftovers from the code generation.
 {
 EOF;

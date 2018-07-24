@@ -57,7 +57,7 @@ class PhpFunction extends PhpElement
             $ret .= $this->getSourceRow($this->comment->getSource());
         }
 
-        $ret .= $this->getSourceRow($this->access . ' function ' . $this->identifier . '(' . $this->params . ')');
+        $ret .= $this->getSourceRow(trim($this->access . ' function ' . $this->identifier . '(' . $this->params . ')'));
         if ($this->source !== null) {
             $ret .= $this->getSourceRow('{');
             // do not create function empty space function PSR-2

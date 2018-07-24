@@ -189,6 +189,7 @@ class Service implements ServiceInterface
                 $init[$type->getIdentifier()] = $this->config->get('namespaceName') . '\\' . $type->getPhpIdentifier();
             }
         }
+
         $var = new PhpVariable('private static', $name, var_export($init, true), $comment);
 
         // Add the classmap variable
