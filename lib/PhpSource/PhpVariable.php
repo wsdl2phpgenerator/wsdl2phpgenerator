@@ -41,7 +41,7 @@ class PhpVariable extends PhpElement
             $this->initialization = ' = '.$initialization;
             // Add some space for '$classmap = array(' definition
             if($this->identifier === "classmap") {
-                $this->initialization = ' = ' . str_replace("  '", "      '", $initialization);
+                $this->initialization = ' = ' . str_replace("  '", "    '", $initialization);
             }
         }
     }

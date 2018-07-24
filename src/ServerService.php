@@ -3,6 +3,7 @@
 /**
  * @package Wsdl2PhpGenerator
  */
+
 namespace Wsdl2PhpGenerator;
 
 use Wsdl2PhpGenerator\PhpSource\PhpClass;
@@ -93,7 +94,7 @@ class ServerService implements ServiceInterface
      */
     public function getOperation($operationName)
     {
-        return isset($this->operations[$operationName])? $this->operations[$operationName]: null;
+        return isset($this->operations[$operationName]) ? $this->operations[$operationName] : null;
     }
 
     /**
@@ -125,8 +126,9 @@ class ServerService implements ServiceInterface
      */
     public function getType($identifier)
     {
-        return isset($this->types[$identifier])? $this->types[$identifier]: null;
+        return isset($this->types[$identifier]) ? $this->types[$identifier] : null;
     }
+
     /**
      * Returns all types defined by the service.
      *
@@ -160,12 +162,12 @@ class ServerService implements ServiceInterface
         $comment->addParam(PhpDocElementFactory::getParam('string', 'wsdl', 'The wsdl file to use'));
 
         $source = '
-   foreach (self::$classmap as $key => $value) {
-     if (!isset($options[\'classmap\'][$key])) {
-       $options[\'classmap\'][$key] = $value;
-     }
-   }' . PHP_EOL;
-        $source .= '  $options = array_merge(' . var_export($this->config->get('soapServerOptions'), true) . ', $options);' . PHP_EOL;
+  foreach (self::$classmap as $key => $value) {
+    if (!isset($options[\'classmap\'][$key])) {
+      $options[\'classmap\'][$key] = $value;
+    }
+  }' . PHP_EOL;
+        $source .= '  $options = array_merge(' . trim(preg_replace("/^/m", "  ", var_export($this->config->get('soapServerOptions'), true), 4)) . ', $options);' . PHP_EOL;
         $source .= '  if (!$wsdl) {' . PHP_EOL;
         $source .= '    $wsdl = \'' . $this->config->get('inputFile') . '\';' . PHP_EOL;
         $source .= '  }' . PHP_EOL;
