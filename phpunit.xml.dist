@@ -14,6 +14,7 @@
         convertWarningsToExceptions="true"
         processIsolation="false"
         stopOnFailure="false"
+        syntaxCheck="false"
         bootstrap="tests/bootstrap.php">
 
     <testsuites>
@@ -26,7 +27,7 @@
     </testsuites>
 
     <listeners>
-        <listener class="VCR\PHPUnit\TestListener\VCRTestListener" file="vendor/php-vcr/phpunit-testlistener-vcr/src/VCRTestListener.php" />
+        <listener class="PHPUnit_Util_Log_VCR" file="vendor/php-vcr/phpunit-testlistener-vcr/PHPUnit/Util/Log/VCR.php"/>
     </listeners>
 
     <logging>
