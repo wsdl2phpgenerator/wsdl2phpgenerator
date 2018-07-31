@@ -7,6 +7,10 @@ php:
   - 7.0
   - 7.1
 
+cache:
+  directories:
+    - $HOME/.composer/cache
+
 env:
   - PREFER_LOWEST="--prefer-lowest"
   - PREFER_LOWEST=""
