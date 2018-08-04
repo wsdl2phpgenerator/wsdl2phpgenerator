@@ -65,6 +65,8 @@ class ComplexType extends Type
             throw new Exception("The class has already been generated");
         }
 
+        $validator = new Validator($this->config);
+
         $classBaseType = $this->getBaseTypeClass();
 
         $this->class = new PhpClass(
@@ -85,12 +87,12 @@ class ComplexType extends Type
         $parentMembers = $this->getBaseTypeMembers($this);
         if (!empty($parentMembers)) {
             foreach ($parentMembers as $member) {
-                $type = Validator::validateType($member->getType());
-                $name = Validator::validateAttribute($member->getName());
+                $type = $validator->validateType($member->getType());
+                $name = $validator->validateAttribute($member->getName());
 
                 if (!$member->getNullable()) {
                     $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
-                    $constructorParameters[$name] = Validator::validateTypeHint($type);
+                    $constructorParameters[$name] = $validator->validateTypeHint($type);
                 }
             }
             $constructorSource .= '  parent::__construct(' . $this->buildParametersString($constructorParameters, false) . ');' . PHP_EOL;
@@ -98,9 +100,9 @@ class ComplexType extends Type
 
         // Add member variables
         foreach ($this->members as $member) {
-            $type = Validator::validateType($member->getType());
-            $name = Validator::validateAttribute($member->getName());
-            $typeHint = Validator::validateTypeHint($type);
+            $type = $validator->validateType($member->getType());
+            $name = $validator->validateAttribute($member->getName());
+            $typeHint = $validator->validateTypeHint($type);
 
             $comment = new PhpDocComment();
             $comment->setVar(PhpDocElementFactory::getVar($type, $name, ''));

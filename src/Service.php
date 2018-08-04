@@ -140,9 +140,10 @@ class Service implements ClassGenerator
     public function generateClass()
     {
         $name = $this->identifier;
+        $validator = new Validator($this->config);
 
         // Generate a valid classname
-        $name = Validator::validateClass($name, $this->config->get('namespaceName'));
+        $name = $validator->validateClass($name, $this->config->get('namespaceName'));
 
         // uppercase the name
         $name = ucfirst($name);
@@ -191,7 +192,7 @@ class Service implements ClassGenerator
 
         // Add all methods
         foreach ($this->operations as $operation) {
-            $name = Validator::validateOperation($operation->getName());
+            $name = $validator->validateOperation($operation->getName());
 
             $comment = new PhpDocComment($operation->getDescription());
             $comment->setReturn(PhpDocElementFactory::getReturn($operation->getReturns(), ''));
