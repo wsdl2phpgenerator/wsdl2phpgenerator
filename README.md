@@ -164,6 +164,10 @@ If enabled this sets the default value of all parameters in all constructors to 
 
 If enabled, type hints will not be generated for method parameters.
 
+#### `constructorParamsIncludeNullable`
+
+If enabled, constructors will include parameters for nullable field values.
+
 #### `proxy`
 
 Specify a proxy to use when accessing the WSDL and other external ressources. This option should be used instead of [the proxy options support by the PHP `SoapClient`] (http://php.net/manual/en/soapclient.soapclient.php) as wsdl2phpgenerator uses more than the SOAP client to extract information.
