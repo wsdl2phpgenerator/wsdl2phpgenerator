@@ -1,7 +1,6 @@
 <?php
 
-use \Composer\Autoload\ClassLoader;
-use \VCR\VCR;
+use VCR\VCR;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 

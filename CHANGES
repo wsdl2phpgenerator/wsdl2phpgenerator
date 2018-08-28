@@ -1,5 +1,10 @@
+3.4.1 / 2018-08-28
+==================
 
-3.4.0 / 2016-10-30 
+ * Support constants with empty strings as values
+
+
+3.4.0 / 2016-10-30
 ==================
 
  * Support for UTF8 strings on names (attributes, operations etc.)
@@ -8,7 +13,7 @@
  * Support setting array values without offset
  * Add support for Symfony 3.x
 
-3.3.1 / 2016-01-13 
+3.3.1 / 2016-01-13
 ==================
 
  * Fix array interfaces implementation
@@ -21,7 +26,7 @@
  * Added support basic authentication.
  * Speed up service operation filtration.
 
-3.2.1 / 2015-08-21 
+3.2.1 / 2015-08-21
 ==================
 
  * Fix detection of nullable members where minOccurs = 0
@@ -30,35 +35,35 @@
  * Fix code generation when generate() is called multiple times
  * Allow dots in wsdl function signatures
 
-3.2.0 / 2015-05-13 
+3.2.0 / 2015-05-13
 ==================
 
  * Eliminate infinite recursion caused by self-referencing type.
  * Create a class abstract when defined in the wsdl.
 
-3.1.2 / 2015-01-15 
+3.1.2 / 2015-01-15
 ==================
 
  * Fix enum generation on operationName filter.
 
-3.1.1 / 2015-01-12 
+3.1.1 / 2015-01-12
 ==================
 
  * More flexible conversion of dateTime values to DateTime objects
 
-3.1.0 / 2015-01-02 
+3.1.0 / 2015-01-02
 ==================
 
  * Add new proxy setting to use with SoapClient and when loading XSDs
  * Add ability to filter generated types by operation names.
 
-3.0.1 / 2014-12-12 
+3.0.1 / 2014-12-12
 ==================
 
  * Fix null pointer exception when combining DateTime attributes and constructorParamsDefaultToNull configuration.
  * Fix simple type inheritance.
 
-3.0.0 / 2014-11-25 
+3.0.0 / 2014-11-25
 ==================
 
 For a walkthrough of the changes in 3.x see https://github.com/wsdl2phpgenerator/wsdl2phpgenerator/blob/3.x/docs/whats-new-in-3.0.md.
@@ -85,53 +90,53 @@ For a walkthrough of the changes in 3.x see https://github.com/wsdl2phpgenerator
  * Refactored Config and ConfigInterface to use an OptionsResolver instead of fixed string inputs.
  * Members are protected if accessor methods are being used
 
-2.5.5 / 2014-11-17 
+2.5.5 / 2014-11-17
 ==================
 
  * Ensure that values are unique for Enums.
  * Fix syntax error when service contains no types to map.
 
-2.5.4 / 2014-11-06 
+2.5.4 / 2014-11-06
 ==================
 
  * Fix phar file generation.
  * Fix calling parent constructor in class inheritance. The first parameters should be parent ones.
 
-2.5.3 / 2014-11-03 
+2.5.3 / 2014-11-03
 ==================
 
  * Fix constructor creation for multilevel inheritance.
 
-2.5.2 / 2014-10-22 
+2.5.2 / 2014-10-22
 ==================
 
  * Fix making parent::__construct params with --constructorNull option
  * Fix extracting information from XSD includes.
 
-2.5.1 / 2014-09-11 
+2.5.1 / 2014-09-11
 ==================
 
  * Fix autoloading in Phar files.
 
-2.5.0 / 2014-09-09 
+2.5.0 / 2014-09-09
 ==================
 
  * Support method chaining for setters when using the createAccessors option.
  * Avoid empty comments and unnecessary new line after description.
  * Fixed path to composer autoloader when included in a composer.json from another project.
 
-2.4.2 / 2014-08-13 
+2.4.2 / 2014-08-13
 ==================
 
  * Fixed default null value for subclass constructors when using the ConstructorParamsDefaultToNull configuration option.
  * Disable PHP WSDL cache when extracting information.
 
-2.4.1 / 2014-07-24 
+2.4.1 / 2014-07-24
 ==================
 
  * Fix generation of accessors for nillable properties.
 
-2.4.0 / 2014-04-22 
+2.4.0 / 2014-04-22
 ==================
 
  * Add support for base types
@@ -139,7 +144,7 @@ For a walkthrough of the changes in 3.x see https://github.com/wsdl2phpgenerator
  * Fix location of type nodes if no prefix is used.
  * Fix description for CLI option to set default value of construction parameters to null.
  * Fix kherge/Amend dependency
- 
+
 2.3.0 / 2014-02-23
 ==================
 
@@ -152,12 +157,12 @@ For a walkthrough of the changes in 3.x see https://github.com/wsdl2phpgenerator
  * Use PHP VCR for mocking HTTP requests.
  * Code and documentation cleanup
 
-2.2.2 / 2014-01-08 
+2.2.2 / 2014-01-08
 ==================
 
  * Convert <anyXML> to string
 
-2.2.1 / 2014-01-01 
+2.2.1 / 2014-01-01
 ==================
 
  * Fix imports with relative URLs.
@@ -165,12 +170,12 @@ For a walkthrough of the changes in 3.x see https://github.com/wsdl2phpgenerator
  * Fix support for non-standard WSDL namespace aliases.
  * Fix setting Symfony Console application version when releasing.
 
-2.2.0 / 2013-12-13 
+2.2.0 / 2013-12-13
 ==================
 
  * Support all minor releases of Symfony Console 2.*.
 
-2.1.0 / 2013-12-09 
+2.1.0 / 2013-12-09
 ==================
 
  * Create a GitHub release and upload resulting phar file when releasing.
@@ -179,12 +184,12 @@ For a walkthrough of the changes in 3.x see https://github.com/wsdl2phpgenerator
  * Add Phing build script to automate releases.
  * Refactor to use Symfony Console component instead of custom CLI code.
 
-2.0.3 / 2013-10-30 
+2.0.3 / 2013-10-30
 ==================
 
  * Remove leftover usage of gettext functions.
 
-2.0.2 / 2013-10-29 
+2.0.2 / 2013-10-29
 ==================
 
  * Correct way to use composer autoloader.
