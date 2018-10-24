@@ -235,6 +235,13 @@ class TypeNode extends XmlNode
           $this->element->localName == 'complexType';
     }
 
+    public function isSimple(){
+        // If array is defined as inherited from array type it has restriction to array elements type, but still is simpleType
+        return
+            $this->restriction == 'struct' ||
+            $this->element->localName == 'simpleType';
+    }
+
     /**
      * Returns whether the type is an array.
      *

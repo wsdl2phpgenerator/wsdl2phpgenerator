@@ -174,6 +174,28 @@ class Generator implements GeneratorInterface
                     $nullable = $typeNode->isElementNillable($name) || $typeNode->getElementMinOccurs($name) === 0;
                     $type->addMember($typeName, $name, $nullable);
                 }
+            } elseif ($typeNode->isSimple()) {
+                if ($typeNode->isArray()) {
+                    $type = new ArrayType($this->config, $typeNode->getName());
+                } else {
+                    $type = new SimpleType($this->config, $typeNode->getName());
+                }
+
+                $this->log('Loading type ' . $type->getPhpIdentifier());
+
+                $type->setAbstract($typeNode->isAbstract());
+                $name = $typeNode->getName();
+
+                // check if php support this valid type, otherwise we change them to string
+                if (in_array(Validator::validateType($typeNode->getName()), array('string', 'int', 'float', 'boolean'))) {
+                    $typeName = $typeNode->getName();
+                } else {
+                    $typeName = "string";
+                }
+
+                $nullable = $typeNode->isElementNillable($name) || $typeNode->getElementMinOccurs($name) === 0;
+                $type->addMember($typeName, $name, $nullable);
+
             } elseif ($enumValues = $typeNode->getEnumerations()) {
                 $type = new Enum($this->config, $typeNode->getName(), $typeNode->getRestriction());
                 array_walk($enumValues, function ($value) use ($type) {
