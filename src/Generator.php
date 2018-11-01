@@ -9,6 +9,7 @@ use \Exception;
 use Psr\Log\LoggerInterface;
 use Wsdl2PhpGenerator\Filter\FilterFactory;
 use Wsdl2PhpGenerator\Xml\WsdlDocument;
+use Wsdl2PhpGenerator\PluginInterface;
 
 /**
  * Class that contains functionality for generating classes from a wsdl file
@@ -213,6 +214,15 @@ class Generator implements GeneratorInterface
         }
 
         $output = new OutputManager($this->config);
+
+        foreach ((array) $this->config->get('pluginClassList') as $pluginClassName) {
+            if (!is_subclass_of($pluginClassName, '\Wsdl2PhpGenerator\PluginInterface')) {
+                continue;
+            }
+            /** @var PluginInterface $pluginClass */
+            $pluginClass = new $pluginClassName();
+            $pluginClass->process($this->config, $filteredService, $filteredTypes);
+        }
 
         // Generate all type classes
         $types = array();
