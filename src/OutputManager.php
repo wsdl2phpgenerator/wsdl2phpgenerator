@@ -47,14 +47,21 @@ class OutputManager
     public function save(PhpClass $service, array $types)
     {
         $this->setOutputDirectory();
+        $classes = array();
 
-        $this->saveClassToFile($service);
-        foreach ($types as $type) {
-            $this->saveClassToFile($type);
+        if ($this->config->get('generateService')) {
+            $this->saveClassToFile($service);
+            $classes[] = $service;
         }
 
-        $classes = array_merge(array($service), $types);
-        $this->saveAutoloader($service->getIdentifier(), $classes);
+        foreach ($types as $type) {
+            $this->saveClassToFile($type);
+            $classes[] = $type;
+        }
+
+        if ($this->config->get('generateAutoloader')) {
+            $this->saveAutoloader($service->getIdentifier(), $classes);
+        }
     }
 
     /**
@@ -87,6 +94,7 @@ class OutputManager
     {
         if ($this->isValidClass($class)) {
             $file = new PhpFile($class->getIdentifier());
+            $file->addDisclaimer($this->config->get('disclaimer'));
 
             $namespace = $this->config->get('namespaceName');
             if (!empty($namespace)) {
