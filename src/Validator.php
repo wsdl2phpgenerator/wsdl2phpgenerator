@@ -190,7 +190,7 @@ class Validator
     {
         $arraySuffix = "[]";
         if (substr($typeName, -2) == $arraySuffix) {
-            return  self::validateNamingConvention(substr($typeName, 0, -2)) . $arraySuffix;;
+            return  self::validateNamingConvention(substr($typeName, 0, -2)) . $arraySuffix;
         }
 
         switch (strtolower($typeName)) {
