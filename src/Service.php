@@ -210,6 +210,32 @@ class Service implements ClassGenerator
             if ($this->class->functionExists($function->getIdentifier()) == false) {
                 $this->class->addFunction($function);
             }
+
+
+            if ($this->config->get('async')) {
+                $comment = new PhpDocComment($operation->getDescription());
+
+                foreach ($operation->getParams() as $param => $hint) {
+                    $arr = $operation->getPhpDocParams($param, $this->types);
+                    $comment->addParam(PhpDocElementFactory::getParam($arr['type'], $arr['name'], $arr['desc']));
+                }
+                $comment->addParam(PhpDocElementFactory::getParam('callable', '$callback',
+                    'Callback that will get called on completion of the operation. Callback parameters: (' . $operation->getReturns() . ' $success, $error)'));
+
+                $source = '  $this->__soapCallAsync(\'' . $operation->getName() . '\', array(' . $operation->getParamStringNoTypeHints() . '), $callback);' . PHP_EOL;
+
+                $paramStr = $operation->getParamString($this->types);
+                if ($paramStr) {
+                    $paramStr .= ', ';
+                }
+                $paramStr .= 'callable $callback';
+
+                $function = new PhpFunction('public', $name . 'Async', $paramStr, $source, $comment);
+
+                if ($this->class->functionExists($function->getIdentifier()) == false) {
+                    $this->class->addFunction($function);
+                }
+            }
         }
     }
 

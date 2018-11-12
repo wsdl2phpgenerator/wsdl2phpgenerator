@@ -241,6 +241,104 @@ $generator->generate(
 ));
 ````
 
+#### `async`
+
+Boolean, defaults to `false`. When set to `true` enables asynchronous capability for the SOAP service. NOTE: "asynchronous"
+**DOES NOT** mean  "multithreaded". All the requests are still processed on the same single thread, but there can be
+several of them in progress simultaneously which dramatically reduces the time spent while waiting on the network.
+
+Enabling this option generates an additional method for each operation that ends in `Async`. So, for example, an
+operation named `foo` would get methods `foo()` and `fooAsync()`. This async method takes another
+parameter which is a callback with two parameters - `$success` and `$failure`. `$success` is the response object for when
+the request succeeds. `$failure` is an error value for when the operation fails. The error value can be different things - 
+`SoapFault`, `Exception`, whatever. It depends on the base SOAP client class. Note that only one will ever be set - either
+`$success` or `$failure`, but not both.
+
+For this to work the base class must support async operations. In particular, it must implement a method
+`__soapCallAsync($methodName, $parameters, callable $callback, $options = null, $input_headers = null, &$output_headers = null)`.
+This is an extension to the default `SoapClient` class which has a method called `__soapCall` with the same parameters
+(except for the callback). Obviously PHP's default `SoapClient` class does not support this so you must provide an
+implementation of your own.
+
+A basic yet useful implementation can be obtained with a call to `generateAsyncBaseClass()` method. It has three parameters:
+
+  * `$fileName` - specifies the file name and path where to save the generated class;
+  * `$namespace` (optional) - specifies the namespace for the generated class;
+  * `$name` (optional, defaults to `SoapClientAsync`) - specifies the name for the generated class. 
+
+You can use this class as-is or you can customize it to further suit your needs. Or just write your own from scratch.
+
+This default implementation also adds a few more noteworthy features:
+
+  * The method `__waitForAll()` waits until all operations in progress have completed - either success or failure.
+  * The method `__waitForAny($timeout)` waits for any activity for just a little while (specified by `$timeout`). This
+    can be used to do other things in parallel. Simply call `__waitForAny()` periodically while you're doing other things,
+    and the requests will be processed at the earliest opportunity.
+  * The constructor can take a curl_multi handle (obtained via a call to [`curl_multi_init()`](http://php.net/manual/en/function.curl-multi-init.php)).
+    When you have several services that ALL inherit from this base class, they can all share it and a single call to
+    `__waitForAll()` or `__waitForAny()` will wait on all of them. NOTE: it **must** be the exact same base class or
+    it won't work.
+  * The network-related options for the `SoapClient` are largely ignored except for the `location` option. Instead a new
+    option is provided - `curl`. This should contain all extra parameters needed for CURL to work. The value should be
+    an array in the same format as for [`curl_setopt_array()`](http://php.net/manual/en/function.curl-setopt-array.php)
+    and all the many, many available options are documented in the [`curl_setopt()`](http://php.net/manual/en/function.curl-setopt.php) page.
+    It should be noted however that the options `CURLOPT_RETURNTRANSFER`, `CURLOPT_POST`, `CURLOPT_POSTFIELDS` and `CURLOPT_PRIVATE`
+    are used internally by the implementation, so trying to set them will have no effect.
+
+##### Example usage
+
+The following example generates an async base class and then uses it to generate an async-capable SOAP class.
+
+```php
+$generator = new \Wsdl2PhpGenerator\Generator();
+
+$generator->generateAsyncBaseClass('/tmp/output/AsyncSoapBase.php', null, 'AsyncSoapBase');
+
+// The class must be included manually so that the generator can examine it.
+require '/tmp/output/AsyncSoapBase.php'; 
+
+$generator->generate(
+    new \Wsdl2PhpGenerator\Config(array(
+        'inputFile' => 'input.wsdl',
+        'outputDir' => '/tmp/output',
+        'async' => true,
+        'soapClientClass' => '\AsyncSoapBase'
+    ))
+));
+````
+
+##### Example usage of the generated class
+ 
+```php
+$service = new MySoapService();
+
+$service->operationA(new operationA(), function (operationAResponse $success, $failure) {
+    if ( $success ) {
+        echo "Operation A is a success!";
+        var_dump($success);
+    } else {
+        echo "Operation A is a failure!";
+        var_dump($failure);
+    }
+});
+
+$service->operationB(new operationB(), function (operationBResponse $success, $failure) {
+    if ( $success ) {
+        echo "Operation B is a success!";
+        var_dump($success);
+    } else {
+        echo "Operation B is a failure!";
+        var_dump($failure);
+    }
+});
+
+
+// Waits until both requests are finished. Both callback will be called here. 
+// This is a method for the default implementation.
+// When using a custom implementation, there may be a different method.
+$service->__waitForAll();
+```
+
 ## Versioning
 
 This project aims to use [semantic versioning](http://semver.org/). The following constitutes the public API:
