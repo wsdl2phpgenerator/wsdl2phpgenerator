@@ -66,6 +66,13 @@ class PhpClass extends PhpElement
 
     /**
      *
+     * @var string[]
+     * @access private
+     */
+    private $traits;
+
+    /**
+     *
      * @var string
      * @access private
      */
@@ -124,6 +131,7 @@ class PhpClass extends PhpElement
         $this->identifier = $identifier;
         $this->access = '';
         $this->extends = $extends;
+        $this->traits = array();
         $this->constants = array();
         $this->variables = array();
         $this->functions = array();
@@ -180,6 +188,13 @@ class PhpClass extends PhpElement
         }
 
         $ret .= PHP_EOL . '{';
+
+        if (count($this->traits) > 0) {
+            $ret .= PHP_EOL;
+            foreach ($this->traits as $trait) {
+                $ret .= $this->getIndentionStr() . 'use ' . $trait . ';' . PHP_EOL;
+            }
+        }
 
         if (isset($this->default)) {
             $ret .= PHP_EOL;
@@ -275,6 +290,21 @@ class PhpClass extends PhpElement
     {
         $classes = (array)$classes;
         $this->implements = array_merge((array)$this->implements, $classes);
+    }
+
+    /**
+     * Adds a trait import to the class
+     *
+     * @param string $value
+     * @throws Exception
+     */
+    public function addTrait($value)
+    {
+        if (in_array($value, $this->traits)) {
+            throw new Exception('A trait of the name (' . $value . ') does already exist.');
+        }
+
+        $this->traits[] = $value;
     }
 
     /**
