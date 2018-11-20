@@ -107,6 +107,7 @@ class ComplexType extends Type
             $type = Validator::validateType($member->getType());
             $name = Validator::validateAttribute($member->getName());
             $typeHint = Validator::validateTypeHint($type);
+            $isDateTime = strtolower($member->getType()) === 'datetime';
 
             $comment = new PhpDocComment();
             $comment->setVar(PhpDocElementFactory::getVar($type, $name, ''));
@@ -114,12 +115,8 @@ class ComplexType extends Type
             $this->class->addVariable($var);
 
             if (!$member->getNullable()) {
-                if ($type == '\DateTime') {
-                    if ($this->config->get('constructorParamsDefaultToNull')) {
-                        $constructorSource .= $indentionStr . '$this->' . $name . ' = $' . $name . ' ? $' . $name . '->format(\DateTime::ATOM) : null;' . PHP_EOL;
-                    } else {
-                        $constructorSource .= $indentionStr . '$this->' . $name . ' = $' . $name . '->format(\DateTime::ATOM);' . PHP_EOL;
-                    }
+                if ($isDateTime) {
+                    $constructorSource .= $indentionStr . '$this->set' . ucfirst($name) . '($' . $name . ');' . PHP_EOL;
                 } else {
                     $constructorSource .= $indentionStr . '$this->' . $name . ' = $' . $name . ';' . PHP_EOL;
                 }
@@ -129,35 +126,20 @@ class ComplexType extends Type
 
             $getterComment = new PhpDocComment();
             $getterComment->setReturn(PhpDocElementFactory::getReturn($type, ''));
-            if ($type == '\DateTime') {
-                $getterCode = $indentionStr . 'if ($this->' . $name . ' == null) {' . PHP_EOL
-                    . str_repeat($indentionStr, 2) . 'return null;' . PHP_EOL
-                    . $indentionStr . '} else {' . PHP_EOL
-                    . str_repeat($indentionStr, 2) . 'try {' . PHP_EOL
-                    . str_repeat($indentionStr, 3) . 'return new \DateTime($this->' . $name . ');' . PHP_EOL
-                    . str_repeat($indentionStr, 2) . '} catch (\Exception $e) {' . PHP_EOL
-                    . str_repeat($indentionStr, 3) . 'return false;' . PHP_EOL
-                    . str_repeat($indentionStr, 2) . '}' . PHP_EOL
-                    . $indentionStr . '}' . PHP_EOL;
-            } else {
-                $getterCode = $indentionStr . 'return $this->' . $name . ';' . PHP_EOL;
-            }
+            $getterCode = $indentionStr . 'return $this->' . $name . ';' . PHP_EOL;
             $getter = new PhpFunction('public', 'get' . ucfirst($name), '', $getterCode, $getterComment);
             $accessors[] = $getter;
 
+            $additionalType = $isDateTime ? '|\DateTime' : '';
             $setterComment = new PhpDocComment();
-            $setterComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
+            $setterComment->addParam(PhpDocElementFactory::getParam($type . $additionalType, $name, ''));
             $setterComment->setReturn(PhpDocElementFactory::getReturn($this->phpNamespacedIdentifier, ''));
-            if ($type == '\DateTime') {
-                if ($member->getNullable()) {
-                    $setterCode = $indentionStr . 'if ($' . $name . ' == null) {' . PHP_EOL
-                        . str_repeat($indentionStr, 2) . '$this->' . $name . ' = null;' . PHP_EOL
-                        . $indentionStr . '} else {' . PHP_EOL
-                        . str_repeat($indentionStr, 2) . '$this->' . $name . ' = $' . $name . '->format(\DateTime::ATOM);' . PHP_EOL
-                        . $indentionStr . '}' . PHP_EOL;
-                } else {
-                    $setterCode = $indentionStr . '$this->' . $name . ' = $' . $name . '->format(\DateTime::ATOM);' . PHP_EOL;
-                }
+            if ($isDateTime) {
+                $setterCode = $indentionStr . 'if ($' . $name . ' instanceof \DateTime) {' . PHP_EOL
+                    . str_repeat($indentionStr, 2) . '$this->' . $name . ' = $' . $name . '->format(\DateTime::ATOM);' . PHP_EOL
+                    . $indentionStr . '} else {' . PHP_EOL
+                    . str_repeat($indentionStr, 2) . '$this->' . $name . ' = $' . $name . ';' . PHP_EOL
+                    . $indentionStr . '}' . PHP_EOL;
             } else {
                 $setterCode = $indentionStr . '$this->' . $name . ' = $' . $name . ';' . PHP_EOL;
             }
