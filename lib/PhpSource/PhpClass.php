@@ -48,7 +48,7 @@ class PhpClass extends PhpElement
      * @var string[]
      * @access private
      */
-    private $implements;
+    private $implements = array();
 
     /**
      *
