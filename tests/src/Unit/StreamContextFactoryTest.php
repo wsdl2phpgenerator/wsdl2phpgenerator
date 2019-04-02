@@ -3,7 +3,6 @@
 
 namespace Wsdl2PhpGenerator\Tests\Unit;
 
-
 use Wsdl2PhpGenerator\Config;
 use Wsdl2PhpGenerator\StreamContextFactory;
 
@@ -113,5 +112,66 @@ class StreamContextFactoryTest extends \PHPUnit_Framework_TestCase
 
         $header = 'Proxy-Authorization: Basic ' . base64_encode($proxy['login'] . ':' . $proxy['password']);
         $this->assertContains($header, $options['http']['header']);
+    }
+    
+    /**
+     * Test that <Config> accepts libxmlStreamContext both as array or resource
+     * @
+     */
+    public function testStreamContextOverrideAlternatives()
+    {
+        $libxmlStreamContext = array(
+            'ssl' => array(
+                'verify_peer'		 => false,
+                'verify_peer_name'	 => false,
+                'allow_self_signed'	 => true
+            )
+        );
+        
+        new Config(array(
+            'inputFile' => null,
+            'outputDir' => null,
+            'libxmlStreamContext' => $libxmlStreamContext
+        ));
+        $this->addToAssertionCount(1);
+        
+        new Config(array(
+            'inputFile' => null,
+            'outputDir' => null,
+            'libxmlStreamContext' => stream_context_create($libxmlStreamContext)
+        ));
+        $this->addToAssertionCount(1);
+    }
+    
+    /**
+     * Test that the generated stream context matches the options passed to the <Config>
+     */
+    public function testStreamContextOverrideResult()
+    {
+        $config = new Config(array(
+            'inputFile' => null,
+            'outputDir' => null,
+            'libxmlStreamContext' => array(
+                'ssl' => array(
+                    'verify_peer'		 => false,
+                    'verify_peer_name'	 => false,
+                    'allow_self_signed'	 => true
+                )
+            
+        )));
+        
+        $streamContextFactory = new StreamContextFactory();
+        $resource = $streamContextFactory->create($config);
+
+        $options = stream_context_get_options($resource);
+        
+        $this->assertArrayHasKey('ssl', $options);
+        $this->assertArrayHasKey('verify_peer', $options['ssl']);
+        $this->assertArrayHasKey('verify_peer_name', $options['ssl']);
+        $this->assertArrayHasKey('allow_self_signed', $options['ssl']);
+        
+        $this->assertEquals($options['ssl']['verify_peer'], false);
+        $this->assertEquals($options['ssl']['verify_peer_name'], false);
+        $this->assertEquals($options['ssl']['allow_self_signed'], true);
     }
 }
