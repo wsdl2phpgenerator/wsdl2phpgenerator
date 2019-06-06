@@ -48,7 +48,7 @@ class PhpClass extends PhpElement
      * @var string[]
      * @access private
      */
-    private $implements;
+    private $implements = array();
 
     /**
      *
@@ -61,21 +61,21 @@ class PhpClass extends PhpElement
      *
      * @var array Array of constants key = name of constant value = value of constant
      */
-    private $constants;
+    private $constants = array();
 
     /**
      *
      * @var PhpVariable[]
      * @access private
      */
-    private $variables;
+    private $variables = array();
 
     /**
      *
      * @var PhpFunction[]
      * @access private
      */
-    private $functions;
+    private $functions = array();
 
     /**
      *
