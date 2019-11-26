@@ -41,10 +41,10 @@ class TypeNode extends XmlNode
         $this->wsdlType = $wsdlType;
 
         // The first line of the WSDL type contains the type name and restriction. Extract them.
-        $lines             = $this->getWsdlLines();
+        $lines = $this->getWsdlLines();
         $firstLineElements = explode(' ', $lines[0]);
         $this->restriction = $firstLineElements[0];
-        $this->name        = $firstLineElements[1];
+        $this->name = $firstLineElements[1];
         if (substr($this->name, -2, 2) == '[]') {
             $this->name = substr($this->name, 0, -2);
         }
@@ -81,9 +81,9 @@ class TypeNode extends XmlNode
     {
         foreach ($this->element->getElementsByTagName('element') as $element) {
             if ($element->getAttribute('name') == $name &&
-                  ($element->getAttribute('maxOccurs') == 'unbounded'
+                ($element->getAttribute('maxOccurs') == 'unbounded'
                     || $element->getAttribute('maxOccurs') >= 2)
-              ) {
+            ) {
                 return true;
             }
         }
@@ -106,12 +106,18 @@ class TypeNode extends XmlNode
                 if ($minOccurs === '') {
                     return null;
                 }
+                return (int)$minOccurs;
 
-                return (int) $minOccurs;
             }
         }
 
         return null;
+    }
+
+    public function getDocument()
+    {
+
+        return print_r($this->document->saveXML(), 1);
     }
 
     /**
@@ -149,14 +155,14 @@ class TypeNode extends XmlNode
         // If array is defied as inherited from array type it have only one line and looks like "Type ArrayOfType[]"
         if (sizeof($wsdlLines) == 1 && substr($wsdlLines[0], -2, 2) == '[]') {
             list($typeName, $name) = explode(' ', $wsdlLines[0]);
-            $name                  = substr($name, 0, -2);
+            $name = substr($name, 0, -2);
             $typeName .= '[]';
 
             $parts[$name] = $typeName;
         }
 
         for ($i = 1; $i < sizeof($wsdlLines) - 1; ++$i) {
-            $wsdlLines[$i]         = trim($wsdlLines[$i]);
+            $wsdlLines[$i] = trim($wsdlLines[$i]);
             list($typeName, $name) = explode(' ', substr($wsdlLines[$i], 0, strlen($wsdlLines[$i]) - 1));
 
             if ($this->isElementArray($name)) {
@@ -231,11 +237,12 @@ class TypeNode extends XmlNode
     {
         // If array is defied as inherited from array type it has restricton to array elements type, but still is complexType
         return
-          $this->restriction == 'struct' ||
-          $this->element->localName == 'complexType';
+            $this->restriction == 'struct' ||
+            $this->element->localName == 'complexType';
     }
 
-    public function isSimple(){
+    public function isSimple()
+    {
         // If array is defined as inherited from array type it has restriction to array elements type, but still is simpleType
         return
             $this->restriction == 'struct' ||
