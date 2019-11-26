@@ -5,7 +5,7 @@
 
 namespace Wsdl2PhpGenerator;
 
-use \Exception;
+use Exception;
 use Psr\Log\LoggerInterface;
 use Wsdl2PhpGenerator\Filter\FilterFactory;
 use Wsdl2PhpGenerator\Xml\WsdlDocument;
@@ -24,6 +24,11 @@ class Generator implements GeneratorInterface
      * @var WsdlDocument
      */
     protected $wsdl;
+
+    /**
+     * @var ServerService
+     */
+    protected $serverService;
 
     /**
      * @var Service
@@ -55,6 +60,7 @@ class Generator implements GeneratorInterface
     public function __construct()
     {
         $this->service = null;
+        $this->serverService = null;
         $this->types = array();
     }
 
@@ -75,8 +81,16 @@ class Generator implements GeneratorInterface
         if (empty($options['features']) ||
             (($options['features'] & SOAP_SINGLE_ELEMENT_ARRAYS) != SOAP_SINGLE_ELEMENT_ARRAYS)) {
             $message = array('SoapClient option feature SOAP_SINGLE_ELEMENT_ARRAYS is not set.',
-                             'This is not recommended as data types in DocBlocks for array properties will not be ',
-                             'valid if the array only contains a single value.');
+                'This is not recommended as data types in DocBlocks for array properties will not be ',
+                'valid if the array only contains a single value.');
+            $this->log(implode(PHP_EOL, $message), 'warning');
+        }
+        $options = $this->config->get('soapServerOptions');
+        if (empty($options['features']) ||
+            (($options['features'] & SOAP_SINGLE_ELEMENT_ARRAYS) != SOAP_SINGLE_ELEMENT_ARRAYS)) {
+            $message = array('SoapServer option feature SOAP_SINGLE_ELEMENT_ARRAYS is not set.',
+                'This is not recommended as data types in DocBlocks for array properties will not be ',
+                'valid if the array only contains a single value.');
             $this->log(implode(PHP_EOL, $message), 'warning');
         }
 
@@ -118,11 +132,13 @@ class Generator implements GeneratorInterface
         $this->log('Starting to load service ' . $service->getName());
 
         $this->service = new Service($this->config, $service->getName(), $this->types, $service->getDocumentation());
+        $this->serverService = new ServerService($this->config, $service->getName(), $this->types, $service->getDocumentation());
 
         foreach ($this->wsdl->getOperations() as $function) {
             $this->log('Loading function ' . $function->getName());
 
             $this->service->addOperation(new Operation($function->getName(), $function->getParams(), $function->getDocumentation(), $function->getReturns()));
+            $this->serverService->addOperation(new Operation($function->getName(), $function->getParams(), $function->getDocumentation(), $function->getReturns()));
         }
 
         $this->log('Done loading service ' . $service->getName());
@@ -158,10 +174,32 @@ class Generator implements GeneratorInterface
                     $nullable = $typeNode->isElementNillable($name) || $typeNode->getElementMinOccurs($name) === 0;
                     $type->addMember($typeName, $name, $nullable);
                 }
+            } elseif ($typeNode->isSimple()) {
+                if ($typeNode->isArray()) {
+                    $type = new ArrayType($this->config, $typeNode->getName());
+                } else {
+                    $type = new SimpleType($this->config, $typeNode->getName());
+                }
+
+                $this->log('Loading type ' . $type->getPhpIdentifier());
+
+                $type->setAbstract($typeNode->isAbstract());
+                $name = $typeNode->getName();
+
+                // check if php support this valid type, otherwise we change them to string
+                if (in_array(Validator::validateType($typeNode->getName()), array('string', 'int', 'float', 'boolean'))) {
+                    $typeName = $typeNode->getName();
+                } else {
+                    $typeName = "string";
+                }
+
+                $nullable = $typeNode->isElementNillable($name) || $typeNode->getElementMinOccurs($name) === 0;
+                $type->addMember($typeName, $name, $nullable);
+
             } elseif ($enumValues = $typeNode->getEnumerations()) {
                 $type = new Enum($this->config, $typeNode->getName(), $typeNode->getRestriction());
                 array_walk($enumValues, function ($value) use ($type) {
-                      $type->addValue($value);
+                    $type->addValue($value);
                 });
             } elseif ($pattern = $typeNode->getPattern()) {
                 $type = new Pattern($this->config, $typeNode->getName(), $typeNode->getRestriction());
@@ -207,8 +245,10 @@ class Generator implements GeneratorInterface
         $filter = $factory->create($this->config);
         $filteredService = $filter->filter($this->service);
         $service = $filteredService->getClass();
+        $filteredServerService = $filter->filter($this->serverService);
+        $serverService = $filteredServerService->getClass();
         $filteredTypes = $filteredService->getTypes();
-        if ($service == null) {
+        if ($service == null || $serverService == null) {
             throw new Exception('No service loaded');
         }
 
@@ -223,7 +263,7 @@ class Generator implements GeneratorInterface
             }
         }
 
-        $output->save($service, $types);
+        $output->save($service, $serverService, $types);
     }
 
     /**

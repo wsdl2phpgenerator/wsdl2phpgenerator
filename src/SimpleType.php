@@ -1,11 +1,8 @@
 <?php
 
-/**
- * @package Generator
- */
 namespace Wsdl2PhpGenerator;
 
-use \Exception;
+use Exception;
 use Wsdl2PhpGenerator\PhpSource\PhpClass;
 use Wsdl2PhpGenerator\PhpSource\PhpDocComment;
 use Wsdl2PhpGenerator\PhpSource\PhpDocElementFactory;
@@ -13,18 +10,18 @@ use Wsdl2PhpGenerator\PhpSource\PhpFunction;
 use Wsdl2PhpGenerator\PhpSource\PhpVariable;
 
 /**
- * ComplexType
+ * SimpleType
  *
  * @package Wsdl2PhpGenerator
  * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
-class ComplexType extends Type
+class SimpleType extends Type
 {
     /**
      * Base type that the type extends
      *
-     * @var ComplexType
+     * @var SimpleType
      */
     protected $baseType;
 
@@ -85,6 +82,7 @@ class ComplexType extends Type
         $parentMembers = $this->getBaseTypeMembers($this);
         if (!empty($parentMembers)) {
             foreach ($parentMembers as $member) {
+                var_dump($member);
                 $type = Validator::validateType($member->getType());
                 $name = Validator::validateAttribute($member->getName());
 
@@ -214,7 +212,7 @@ class ComplexType extends Type
     /**
      * Returns the base type for the type if any.
      *
-     * @return ComplexType|null
+     * @return SimpleType|null
      *   The base type or null if the type has no base type.
      */
     public function getBaseType()
@@ -225,9 +223,9 @@ class ComplexType extends Type
     /**
      * Set the base type
      *
-     * @param ComplexType $type
+     * @param SimpleType $type
      */
-    public function setBaseType(ComplexType $type)
+    public function setBaseType(SimpleType $type)
     {
         $this->baseType = $type;
     }
@@ -299,10 +297,10 @@ class ComplexType extends Type
     /**
      * Get members from base types all the way through the type hierarchy.
      *
-     * @param ComplexType $type The type to retrieve base type members from.
+     * @param SimpleType $type The type to retrieve base type members from.
      * @return Variable[] Member variables from all base types.
      */
-    protected function getBaseTypeMembers(ComplexType $type)
+    protected function getBaseTypeMembers(SimpleType $type)
     {
         if (empty($type->baseType)) {
             return array();

@@ -7,7 +7,6 @@ use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Wsdl2PhpGenerator\ConfigInterface;
 
 /**
  * This class contains configurable key/value pairs.
@@ -66,15 +65,18 @@ class Config implements ConfigInterface
         ));
 
         $resolver->setDefaults(array(
-            'verbose'                        => false,
-            'namespaceName'                  => '',
-            'classNames'                     => '',
-            'operationNames'                 => '',
-            'sharedTypes'                    => false,
+            'verbose' => false,
+            'namespaceName' => '',
+            'classNames' => '',
+            'operationNames' => '',
+            'sharedTypes' => false,
             'constructorParamsDefaultToNull' => false,
-            'soapClientClass'               => '\SoapClient',
-            'soapClientOptions'             => array(),
-            'proxy'                         => false
+            'soapClientClass' => '\SoapClient',
+            'soapClientOptions' => array(),
+            'soapServerClass' => '\SoapServer',
+            'soapServerOptions' => array(),
+            'serverClassName' => '',
+            'proxy' => false
         ));
 
         // A set of configuration options names and normalizer callables.
@@ -82,6 +84,7 @@ class Config implements ConfigInterface
             'classNames' => array($this, 'normalizeArray'),
             'operationNames' => array($this, 'normalizeArray'),
             'soapClientOptions' => array($this, 'normalizeSoapClientOptions'),
+            'soapServerOptions' => array($this, 'normalizeSoapServerOptions'),
             'proxy' => array($this, 'normalizeProxy'),
         );
         // Convert each callable to a closure as that is required by OptionsResolver->setNormalizer().
@@ -141,6 +144,35 @@ class Config implements ConfigInterface
 
         // Merge proxy options into soapClientOptions to propagate general configuration options into the
         // SoapClient. It is important that the proxy configuration has been normalized before it is merged.
+        // The OptionResolver ensures this by normalizing values on access.
+        if (!empty($options['proxy'])) {
+            $value = array_merge($options['proxy'], $value);
+        }
+
+        return $value;
+    }
+
+    /**
+     * Normalize the soapServerOptions configuration option.
+     *
+     * @see http://php.net/manual/en/soapserver.soapserver.php.
+     *
+     * @param Options $options
+     * @param array $value The value to be normalized.
+     *
+     * @return array An array of normalized values.
+     */
+    protected function normalizeSoapServerOptions(Options $options, array $value)
+    {
+        // The SOAP_SINGLE_ELEMENT_ARRAYS feature should be enabled by default if no other option has been set
+        // explicitly while leaving this out. This cannot be handled in the defaults as soapServerOptions is a
+        // nested array.
+        if (!isset($value['features'])) {
+            $value['features'] = SOAP_SINGLE_ELEMENT_ARRAYS;
+        }
+
+        // Merge proxy options into soapServerOptions to propagate general configuration options into the
+        // SoapServer. It is important that the proxy configuration has been normalized before it is merged.
         // The OptionResolver ensures this by normalizing values on access.
         if (!empty($options['proxy'])) {
             $value = array_merge($options['proxy'], $value);

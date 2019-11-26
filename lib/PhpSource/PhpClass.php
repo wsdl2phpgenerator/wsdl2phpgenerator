@@ -2,6 +2,7 @@
 /**
  * @package phpSource
  */
+
 namespace Wsdl2PhpGenerator\PhpSource;
 
 use Exception;
@@ -11,7 +12,7 @@ use Exception;
  *
  * @package phpSource
  * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
- * @license http://www.opensource.org/licenses/mit-license.php MIT License
+ * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 class PhpClass extends PhpElement
 {
@@ -112,6 +113,7 @@ class PhpClass extends PhpElement
         $this->constants = array();
         $this->variables = array();
         $this->functions = array();
+        $this->implements = array();
         $this->indentionStr = '    '; // Use 4 spaces as indention, as requested by PSR-2
         $this->abstract = $abstract;
     }
@@ -184,11 +186,16 @@ class PhpClass extends PhpElement
             }
         }
 
+        // no empty space before closing empty class file PSR-2
+        $ret = trim($ret);
         $ret .= PHP_EOL . '}' . PHP_EOL;
 
         if ($this->classExists) {
             $ret .= PHP_EOL . '}' . PHP_EOL;
         }
+
+        //replace array () to array()
+        $ret = str_replace('array (', 'array(', $ret);
 
         return $ret;
     }
@@ -207,7 +214,7 @@ class PhpClass extends PhpElement
     }
 
     /**
-     * @param string|\string[] $classes  $filename
+     * @param string|\string[] $classes $filename
      */
     public function addImplementation($classes)
     {

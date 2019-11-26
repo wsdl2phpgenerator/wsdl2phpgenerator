@@ -2,6 +2,7 @@
 /**
  * @package phpSource
  */
+
 namespace Wsdl2PhpGenerator\PhpSource;
 
 use Exception;
@@ -12,7 +13,7 @@ use Exception;
  *
  * @package phpSource
  * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
- * @license http://www.opensource.org/licenses/mit-license.php MIT License
+ * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 class PhpFile
 {

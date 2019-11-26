@@ -2,6 +2,7 @@
 /**
  * @package phpSource
  */
+
 namespace Wsdl2PhpGenerator\PhpSource;
 
 /**
@@ -9,7 +10,7 @@ namespace Wsdl2PhpGenerator\PhpSource;
  *
  * @package phpSource
  * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
- * @license http://www.opensource.org/licenses/mit-license.php MIT License
+ * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 class PhpVariable extends PhpElement
 {
@@ -41,7 +42,10 @@ class PhpVariable extends PhpElement
         $this->identifier = $identifier;
         $this->initialization = '';
         if (strlen($initialization)) {
-            $this->initialization = ' = ' . $initialization;
+            // Add some space for '$classmap = array(' definition
+            if($this->identifier === "classmap") {
+                $this->initialization = ' = ' . str_replace("  '", "    '", $initialization);
+            }
         }
     }
 
@@ -59,6 +63,7 @@ class PhpVariable extends PhpElement
         }
 
         $ret .= $this->getSourceRow($this->access . ' $' . $this->identifier . $this->initialization . ';');
+
 
         return $ret;
     }

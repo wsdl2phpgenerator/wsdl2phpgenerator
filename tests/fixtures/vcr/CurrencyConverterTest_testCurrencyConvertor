@@ -5,8 +5,7 @@
         url: 'http://www.webservicex.net/CurrencyConvertor.asmx'
         headers:
             Host: www.webservicex.net
-            Content-Type: 'text/xml; charset=utf-8;'
-            SOAPAction: 'http://www.webserviceX.NET/ConversionRate'
+            Content-Type: 'text/xml; charset=utf-8; action="http://www.webserviceX.NET/ConversionRate"'
         body: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ns1=\"http://www.webserviceX.NET/\"><SOAP-ENV:Body><ns1:ConversionRate><ns1:FromCurrency>USD</ns1:FromCurrency><ns1:ToCurrency>EUR</ns1:ToCurrency></ns1:ConversionRate></SOAP-ENV:Body></SOAP-ENV:Envelope>\n"
     response:
         status:

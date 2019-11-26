@@ -20,7 +20,7 @@ This introduces changes to both configuration and generated code. The changes ma
 2.x users are encourage to read [a walkthrough of what is new in 3.0](docs/whats-new-in-3.0.md).
 
 ## Contributors
-Originally developed by [@walle](https://github.com/walle) and includes bug fixes and improvements from [@vakopian](https://github.com/vakopian), [@statikbe](https://github.com/statikbe/), [@ecolinet](https://github.com/ecolinet), [@nuth](https://github.com/nuth/), [@chriskl](https://github.com/chriskl/), [@RSully](https://github.com/RSully/), [@jrbasso](https://github.com/jrbasso/), [@dypa](https://github.com/dypa/), [@Lafriks](https://github.com/Lafriks/), [@SamMousa](https://github.com/SamMousa/), [@xstefanox](https://github.com/xstefanox/), [@garex](https://github.com/garex/), [@honzap](https://github.com/honzap/), [@jk](https://github.com/jk/), [@sheeep](https://github.com/sheeep/), [@colinodell](https://github.com/colinodell/), [@red-led](https://github.com/red-led/), [@ivol84](https://github.com/ivol84/), [@wasinger](https://github.com/wasinger/), [@devlead](https://github.com/devlead/), [@NoUseFreak](https://github.com/nousefreak/), [@HighOnMikey](https://github.com/highonmikey/), [@theHarvester](https://github.com/theHarvester), [@fduch](https://github.com/fduch), [@methodin](https://github.com/methodin), [@nkm](https://github.com/nkm/), [@jongotlin](https://github.com/jongotlin/), [@yethee](https://github.com/yethee/), [@rindeal](https://github.com/rindeal/), [@vtsao](https://github.com/vtsao/), [@xoeoro](https://github.com/xoeoro/), [@lunetics](https://github.com/lunetics/), [@peter-vanpoucke](https://github.com/peter-vanpoucke/), [@jabiinfante](https://github.com/jabiinfante/), [@renatomefi](https://github.com/renatomefi/)
+Originally developed by [@walle](https://github.com/walle) and includes bug fixes and improvements from [@vakopian](https://github.com/vakopian), [@statikbe](https://github.com/statikbe/), [@ecolinet](https://github.com/ecolinet), [@nuth](https://github.com/nuth/), [@chriskl](https://github.com/chriskl/), [@RSully](https://github.com/RSully/), [@jrbasso](https://github.com/jrbasso/), [@dypa](https://github.com/dypa/), [@Lafriks](https://github.com/Lafriks/), [@SamMousa](https://github.com/SamMousa/), [@xstefanox](https://github.com/xstefanox/), [@garex](https://github.com/garex/), [@honzap](https://github.com/honzap/), [@jk](https://github.com/jk/), [@sheeep](https://github.com/sheeep/), [@colinodell](https://github.com/colinodell/), [@red-led](https://github.com/red-led/), [@ivol84](https://github.com/ivol84/), [@wasinger](https://github.com/wasinger/), [@devlead](https://github.com/devlead/), [@NoUseFreak](https://github.com/nousefreak/), [@HighOnMikey](https://github.com/highonmikey/), [@theHarvester](https://github.com/theHarvester), [@fduch](https://github.com/fduch), [@methodin](https://github.com/methodin), [@nkm](https://github.com/nkm/), [@jongotlin](https://github.com/jongotlin/), [@yethee](https://github.com/yethee/), [@rindeal](https://github.com/rindeal/), [@vtsao](https://github.com/vtsao/), [@xoeoro](https://github.com/xoeoro/), [@lunetics](https://github.com/lunetics/), [@peter-vanpoucke](https://github.com/peter-vanpoucke/), [@jabiinfante](https://github.com/jabiinfante/), [@renatomefi](https://github.com/renatomefi/), [@tbl0605](https://github.com/tbl0605/)
 and [@kasperg](https://github.com/kasperg/).
 
 Pull requests are very welcome. Please read [our guidelines for contributing](https://github.com/wsdl2phpgenerator/wsdl2phpgenerator/blob/master/CONTRIBUTING.md).
@@ -188,12 +188,12 @@ $generator->generate(
 
 #### `soapClientClass`
 
-The base class to use for generated services. This should be a subclass of the [PHP `SoapClient`](http://php.net/manual/en/class.soapclient.php).
+The base class to use for generated client services. This should be a subclass of the [PHP `SoapClient`](http://php.net/manual/en/class.soapclient.php).
 
 Examples of third party SOAP client implementations which can be used:
 
 * [BeSimpleSoapClient](https://github.com/BeSimple/BeSimpleSoapClient)
-* [ZendFramework2 SOAP Component](https://github.com/zendframework/Component_ZendSoap) 
+* [ZendFramework2 SOAP Component](https://github.com/zendframework/zend-soap) 
 * [soap-plus](https://github.com/dcarbone/soap-plus)
 * [SoapClientEx](https://gist.github.com/RobThree/4117914)
 
@@ -240,6 +240,20 @@ $generator->generate(
     ))
 ));
 ````
+
+#### `soapServerClass`
+
+The base class to use for generated server services. This should be a subclass of the [PHP `SoapServer`](http://php.net/manual/en/class.soapserver.php).
+
+Note that it is the responsibility of the surrounding code to ensure that the base class is available during code generation and when delivering web services.
+
+#### `soapServerOptions`
+
+An array of configuration options to pass to the SoapServer. They will be used as defaults for all responses from the SOAP service. The PHP documentation has [a list of supported options](http://php.net/manual/en/soapserver.soapserver.php#refsect1-soapserver.soapserver-parameters).
+
+The list of options for the server can be extended by using more advanced `SoapServer` implementations.
+
+Note that wsdl2phpgenerator expects the `features` option to contain `SOAP_SINGLE_ELEMENT_ARRAYS`. [This ensures that type hints are consistent even if sequences only contain one element](http://php.net/manual/en/soapclient.soapclient.php#73082). If the `features` option is set explicitly in `soapServerOptions` the `SOAP_SINGLE_ELEMENT_ARRAYS` must also be added explicitly.
 
 ## Versioning
 
