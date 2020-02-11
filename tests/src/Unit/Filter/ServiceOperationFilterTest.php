@@ -25,7 +25,7 @@ class ServiceOperationFilterTest extends TestCase
      */
     private $sut;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->config = new Config(array(
             'inputFile' => 'tst.wsdl',
