@@ -3,9 +3,10 @@
 /**
  * @package Generator
  */
+
 namespace Wsdl2PhpGenerator;
 
-use \Exception;
+use Exception;
 use Wsdl2PhpGenerator\PhpSource\PhpClass;
 use Wsdl2PhpGenerator\PhpSource\PhpDocComment;
 use Wsdl2PhpGenerator\PhpSource\PhpDocElementFactory;
@@ -104,7 +105,16 @@ class ComplexType extends Type
 
             $comment = new PhpDocComment();
             $comment->setVar(PhpDocElementFactory::getVar($type, $name, ''));
-            $var = new PhpVariable('protected', $name, 'null', $comment);
+ 
+            if ($member->isArray()) {
+                $defaultValue = '[]';
+            } elseif ($type === 'string') {
+                $defaultValue = "''";
+            } else {
+                $defaultValue = 'null';
+            }
+
+            $var = new PhpVariable('protected', $name, $defaultValue, $comment);
             $this->class->addVariable($var);
 
             if (!$member->getNullable()) {
