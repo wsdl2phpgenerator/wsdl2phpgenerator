@@ -1,22 +1,22 @@
 <?php
 
-/**
- * @package Wsdl2PhpGenerator
+/*
+ * This file is part of the WSDL2PHPGenerator package.
+ * (c) WSDL2PHPGenerator.
  */
+
 namespace Wsdl2PhpGenerator;
 
 use Wsdl2PhpGenerator\PhpSource\PhpClass;
 
 /**
- * Type is an abstract baseclass for all types in the wsdl
+ * Type is an abstract baseclass for all types in the wsdl.
  *
- * @package Wsdl2PhpGenerator
  * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 abstract class Type implements ClassGenerator
 {
-
     /**
      * @var ConfigInterface
      */
@@ -41,42 +41,42 @@ abstract class Type implements ClassGenerator
      * @var string The name of the type used in php code with namespace (if needed) ie. the validated name
      */
     protected $phpNamespacedIdentifier;
-    
+
     /**
      * @var string The datatype the simple type is of. This not used by complex types
      */
     protected $datatype;
 
     /**
-     * The minimum construction
+     * The minimum construction.
      *
-     * @param ConfigInterface $config The configuration
-     * @param string $name The identifier for the type
-     * @param string $datatype The restriction(DataType)
+     * @param ConfigInterface $config   The configuration
+     * @param string          $name     The identifier for the type
+     * @param string          $datatype The restriction(DataType)
      */
     public function __construct(ConfigInterface $config, $name, $datatype)
     {
-        $this->config = $config;
-        $this->class = null;
-        $this->datatype = $datatype;
+        $this->config     = $config;
+        $this->class      = null;
+        $this->datatype   = $datatype;
         $this->identifier = $name;
 
-        $this->phpIdentifier = Validator::validateClass($name, $this->config->get('namespaceName'));
+        $this->phpIdentifier           = Validator::validateClass($name, $this->config->get('namespaceName'));
         $this->phpNamespacedIdentifier = $this->phpIdentifier;
         if ($this->config->get('namespaceName')) {
-            $this->phpNamespacedIdentifier = '\\' . $this->config->get('namespaceName') . '\\' . $this->phpIdentifier;
+            $this->phpNamespacedIdentifier = '\\'.$this->config->get('namespaceName').'\\'.$this->phpIdentifier;
         }
     }
 
     /**
      * The abstract function for subclasses to implement
      * This should load the class data into $class
-     * This is called by getClass if not previously called
+     * This is called by getClass if not previously called.
      */
     abstract protected function generateClass();
 
     /**
-     * Getter for the class. Generates the class if it's null
+     * Getter for the class. Generates the class if it's null.
      *
      * @return PhpClass
      */
@@ -90,7 +90,7 @@ abstract class Type implements ClassGenerator
     }
 
     /**
-     * Getter for the datatype
+     * Getter for the datatype.
      *
      * @return string
      */
@@ -100,7 +100,7 @@ abstract class Type implements ClassGenerator
     }
 
     /**
-     * Getter for the name
+     * Getter for the name.
      *
      * @return string
      */

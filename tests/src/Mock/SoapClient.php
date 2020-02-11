@@ -1,5 +1,10 @@
 <?php
 
+/*
+ * This file is part of the WSDL2PHPGenerator package.
+ * (c) WSDL2PHPGenerator.
+ */
+
 namespace Wsdl2PhpGenerator\Tests\Mock;
 
 /**
@@ -7,7 +12,6 @@ namespace Wsdl2PhpGenerator\Tests\Mock;
  */
 class SoapClient extends \SoapClient
 {
-
     /**
      * The WSDL passed to the SoapClient.
      *
@@ -17,7 +21,6 @@ class SoapClient extends \SoapClient
      */
     public $wsdl;
 
-
     /**
      * The options passed to the SoapClient.
      *
@@ -25,10 +28,9 @@ class SoapClient extends \SoapClient
      */
     public $options;
 
-    public function __construct($wsdl, $options = array())
+    public function __construct($wsdl, $options = [])
     {
-        $this->wsdl = $wsdl;
+        $this->wsdl    = $wsdl;
         $this->options = $options;
     }
-
 }

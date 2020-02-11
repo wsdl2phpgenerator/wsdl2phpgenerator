@@ -1,13 +1,15 @@
 <?php
-/**
- * @package Wsdl2PhpGenerator
+
+/*
+ * This file is part of the WSDL2PHPGenerator package.
+ * (c) WSDL2PHPGenerator.
  */
+
 namespace Wsdl2PhpGenerator;
 
 /**
- * Very stupid datatype to use instead of array
+ * Very stupid datatype to use instead of array.
  *
- * @package Wsdl2PhpGenerator
  * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
@@ -24,19 +26,19 @@ class Variable
     private $name;
 
     /**
-     * @var boolean nullable
+     * @var bool nullable
      */
     private $nullable;
 
     /**
      * @param string $type
      * @param string $name
-     * @param bool $nullable
+     * @param bool   $nullable
      */
     public function __construct($type, $name, $nullable)
     {
-        $this->type = $type;
-        $this->name = $name;
+        $this->type     = $type;
+        $this->name     = $name;
         $this->nullable = $nullable;
     }
 
@@ -57,7 +59,7 @@ class Variable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getNullable()
     {
@@ -65,7 +67,7 @@ class Variable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isArray()
     {

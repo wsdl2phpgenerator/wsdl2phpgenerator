@@ -1,6 +1,11 @@
 <?php
-namespace Wsdl2PhpGenerator\Filter;
 
+/*
+ * This file is part of the WSDL2PHPGenerator package.
+ * (c) WSDL2PHPGenerator.
+ */
+
+namespace Wsdl2PhpGenerator\Filter;
 
 use Wsdl2PhpGenerator\ConfigInterface;
 
@@ -12,8 +17,9 @@ class FilterFactory
     /**
      * Returns a filter matching the provided configuration.
      *
-     * @param ConfigInterface $config The configuration to create a filter for.
-     * @return FilterInterface A matching filter.
+     * @param ConfigInterface $config the configuration to create a filter for
+     *
+     * @return FilterInterface a matching filter
      */
     public function create(ConfigInterface $config)
     {

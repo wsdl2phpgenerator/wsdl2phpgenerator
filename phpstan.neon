@@ -1,0 +1,5 @@
+includes:
+	- phpstan-baseline.neon
+
+parameters:
+	bootstrap: vendor/autoload.php

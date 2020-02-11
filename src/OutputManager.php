@@ -1,19 +1,20 @@
 <?php
 
-/**
- * @package Wsdl2PhpGenerator
+/*
+ * This file is part of the WSDL2PHPGenerator package.
+ * (c) WSDL2PHPGenerator.
  */
+
 namespace Wsdl2PhpGenerator;
 
-use \Exception;
+use Exception;
 use Wsdl2PhpGenerator\PhpSource\PhpClass;
 use Wsdl2PhpGenerator\PhpSource\PhpFile;
 use Wsdl2PhpGenerator\PhpSource\PhpFunction;
 
 /**
- * Manages the output of php files from the generator
+ * Manages the output of php files from the generator.
  *
- * @package Wsdl2PhpGenerator
  * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
@@ -23,7 +24,6 @@ class OutputManager
      * @var string The directory to save the files
      */
     private $dir = '';
-
 
     /**
      * @var ConfigInterface A reference to the config
@@ -39,10 +39,7 @@ class OutputManager
     }
 
     /**
-     * Saves the service and types php code to file
-     *
-     * @param PhpClass $service
-     * @param array $types
+     * Saves the service and types php code to file.
      */
     public function save(PhpClass $service, array $types)
     {
@@ -53,13 +50,13 @@ class OutputManager
             $this->saveClassToFile($type);
         }
 
-        $classes = array_merge(array($service), $types);
+        $classes = array_merge([$service], $types);
         $this->saveAutoloader($service->getIdentifier(), $classes);
     }
 
     /**
      * Sets the output directory, creates it if needed
-     * This must be called before saving a file
+     * This must be called before saving a file.
      *
      * @throws Exception If the dir can't be created and dont already exists
      */
@@ -79,9 +76,7 @@ class OutputManager
 
     /**
      * Append a class to a file and save it
-     * If no file is created the name of the class is the filename
-     *
-     * @param PhpClass $class
+     * If no file is created the name of the class is the filename.
      */
     private function saveClassToFile(PhpClass $class)
     {
@@ -100,43 +95,43 @@ class OutputManager
 
     /**
      * Checks if the class is approved
-     * Removes the prefix and suffix for namechecking
+     * Removes the prefix and suffix for namechecking.
      *
-     * @param PhpClass $class
      * @return bool Returns true if the class is ok to add to file
      */
     private function isValidClass(PhpClass $class)
     {
         $classNames = $this->config->get('classNames');
-        return (empty($classNames) || in_array(
+
+        return empty($classNames) || in_array(
             $class->getIdentifier(),
             $classNames
-        ));
+        );
     }
 
     /**
      * Save a file containing an autoloader for the generated files. Developers can include this when using the
      * generated classes.
      *
-     * @param string $name The name of the autoloader. Should be unique for the service to avoid name clashes.
-     * @param PhpClass[] $classes The classes to include in the autoloader.
+     * @param string     $name    The name of the autoloader. Should be unique for the service to avoid name clashes.
+     * @param PhpClass[] $classes the classes to include in the autoloader
      */
     private function saveAutoloader($name, array $classes)
     {
-        $autoloaderName = 'autoload_' . md5($name . $this->config->get('namespaceName'));
+        $autoloaderName = 'autoload_'.md5($name.$this->config->get('namespaceName'));
 
         // The autoloader function we build contain two parts:
         // 1. An array of generated classes and their paths.
         // 2. A check to see if the autoloader contains the argument and if so include it.
         //
         // First we generate a string containing the known classes and the paths they map to. One line for each string.
-        $autoloadedClasses = array();
+        $autoloadedClasses = [];
         foreach ($classes as $class) {
-            $className = $this->config->get('namespaceName') . '\\' . $class->getIdentifier();
-            $className = ltrim($className, '\\');
-            $autoloadedClasses[] = "'" . $className . "' => __DIR__ .'/" . $class->getIdentifier() . ".php'";
+            $className           = $this->config->get('namespaceName').'\\'.$class->getIdentifier();
+            $className           = ltrim($className, '\\');
+            $autoloadedClasses[] = "'".$className."' => __DIR__ .'/".$class->getIdentifier().".php'";
         }
-        $autoloadedClasses = implode(',' . PHP_EOL . str_repeat(' ', 8), $autoloadedClasses);
+        $autoloadedClasses = implode(','.PHP_EOL.str_repeat(' ', 8), $autoloadedClasses);
 
         // Assemble the source of the autoloader function containing the classes and the check to include.
         // Our custom code generation library does not support generating code outside of functions and we need to
@@ -158,7 +153,7 @@ spl_autoload_register('$autoloaderName');
 EOF;
 
         $autoloader = new PhpFunction(null, $autoloaderName, '$class', $autoloaderSource);
-        $file = new PhpFile('autoload');
+        $file       = new PhpFile('autoload');
         $file->addFunction($autoloader);
         $file->save($this->dir);
     }
