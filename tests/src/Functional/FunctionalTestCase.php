@@ -49,7 +49,7 @@ abstract class FunctionalTestCase extends CodeGenerationTestCase
     {
     }
 
-    protected function setup()
+    protected function setUp(): void
     {
         $class = new ReflectionClass($this);
         $this->outputDir = 'tests/generated/' . $class->getShortName();

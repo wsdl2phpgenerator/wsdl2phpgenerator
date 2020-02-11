@@ -66,6 +66,7 @@ class Validator
         'eval',
         'exit',
         'extends',
+        'float',
         'final',
         'finally',
         'for',
@@ -77,6 +78,7 @@ class Validator
         'implements',
         'include',
         'include_once',
+        'int',
         'instanceof',
         'insteadof',
         'interface',
@@ -85,6 +87,7 @@ class Validator
         'namespace',
         'new',
         'or',
+        'parent',
         'print',
         'private',
         'protected',
@@ -93,6 +96,7 @@ class Validator
         'require_once',
         'return',
         'static',
+        'string',
         'switch',
         'throw',
         'trait',
@@ -185,7 +189,7 @@ class Validator
     public static function validateType($typeName)
     {
         if (substr($typeName, -2) == "[]") {
-            return $typeName;
+            return self::validateNamingConvention(substr($typeName, 0, -2)) . "[]";
         }
 
         switch (strtolower($typeName)) {
@@ -289,6 +293,8 @@ class Validator
      */
     private static function validateNamingConvention($name)
     {
+        $name = iconv("UTF-8", "ASCII//TRANSLIT", $name);
+
         // Prepend the string a to names that begin with anything but a-z This is to make a valid name
         if (preg_match('/^[A-Za-z_]/', $name) == false) {
             $name = self::NAME_PREFIX . ucfirst($name);

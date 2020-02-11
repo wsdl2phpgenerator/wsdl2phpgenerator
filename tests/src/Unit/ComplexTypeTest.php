@@ -192,6 +192,30 @@ class ComplexTypeTest extends CodeGenerationTestCase
     }
 
     /**
+     * Test setters for nullable typed members.
+     */
+    public function testNullableTypedMembers()
+    {
+        $config = new Config(array(
+            'inputFile' => null,
+            'outputDir' => null,
+        ));
+
+        $type = new ComplexType($config, 'NullableDateTime');
+        // Add a member which has a type (datetime) and is nullable.
+        $type->addMember('datetime', 'aDateTime', true);
+
+        $this->generateClass($type);
+
+        $object = new \NullableDateTime();
+        // If the member is nullable then we should also be able to pass null to the setter without causing an error.
+        $object->setADateTime(null);
+        // Obviously the returned member value should be null as well.
+        $this->assertNull($object->getADateTime());
+    }
+
+
+    /**
      * Sets object property value using reflection.
      *
      * @param mixed $object The object to set the value on.

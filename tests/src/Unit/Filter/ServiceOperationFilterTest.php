@@ -1,6 +1,7 @@
 <?php
 namespace Wsdl2PhpGenerator\Tests\Unit\Filter;
 
+use PHPUnit\Framework\TestCase;
 use Wsdl2PhpGenerator\ComplexType;
 use Wsdl2PhpGenerator\Config;
 use Wsdl2PhpGenerator\ConfigInterface;
@@ -12,7 +13,7 @@ use Wsdl2PhpGenerator\Service;
 /**
  * Use test for the ServiceOperationFilter class.
  */
-class ServiceOperationFilterTest extends \PHPUnit_Framework_TestCase
+class ServiceOperationFilterTest extends TestCase
 {
     /**
      * @var ConfigInterface
@@ -24,12 +25,12 @@ class ServiceOperationFilterTest extends \PHPUnit_Framework_TestCase
      */
     private $sut;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->config = new Config(array(
             'inputFile' => 'tst.wsdl',
             'outputDir' => 'test',
-            'operationNames' => 'GetBook'
+            'operationNames' => 'GetBook,SetVersion'
 
         ));
         $this->sut = new ServiceOperationFilter($this->config);
@@ -59,7 +60,9 @@ class ServiceOperationFilterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($sourceService->getType('Get_Book_Type_Response'), $actualService->getType('Get_Book_Type_Response'));
         $this->assertEquals($sourceService->getType('Method_Get_Book_Request_BOOK'), $actualService->getType('Method_Get_Book_Request_BOOK'));
         $this->assertEquals($sourceService->getType('Get_Book_Type_Request'), $actualService->getType('Get_Book_Type_Request'));
-
+        // Check that setVersion and types exists
+        $this->assertEquals($sourceService->getOperation('SetVersion'), $actualService->getOperation('SetVersion'));
+        $this->assertEquals($sourceService->getType('Method_Set_Version_Request'), $actualService->getType('Method_Set_Version_Request'));
     }
 
     /**
@@ -100,6 +103,10 @@ class ServiceOperationFilterTest extends \PHPUnit_Framework_TestCase
         $requestGetAuthor->addMember('Method_Get_Book_Request_BOOK', 'book_request', false);
         // Operation GetAuthors
         $getAuthorsOperator = new Operation('GetAuthor', 'Method_Get_Authors_Request $request', 'Get Authors', 'Method_Get_Authors_Response');
+        // Request SetVersion
+        $requestSetVersion = new ComplexType($this->config, 'Method_Set_Version_Request');
+        // Operation SetVersion
+        $setVersionOperator = new Operation('SetVersion', 'Method_Set_Version_Request $request', 'Set version', null);
         // Service creation
         $types = array(
             $responseBookName,
@@ -110,11 +117,13 @@ class ServiceOperationFilterTest extends \PHPUnit_Framework_TestCase
             $responseAuthor,
             $returnGetAuthors,
             $requestGetAuthor,
-            $bookType
+            $bookType,
+            $requestSetVersion
         );
         $service = new Service($this->config, 'Book_Shell', $types, 'Book shells');
         $service->addOperation($getBookOperation);
         $service->addOperation($getAuthorsOperator);
+        $service->addOperation($setVersionOperator);
         return $service;
     }
 }

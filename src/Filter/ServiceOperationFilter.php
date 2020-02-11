@@ -39,34 +39,40 @@ class ServiceOperationFilter implements FilterInterface
      */
     public function filter(Service $service)
     {
-        $types = array();
         $operations = array();
+        $types  = array();
         foreach ($this->methods as $method) {
+            $methodTypes = array();
             $operation = $service->getOperation($method);
             if (!$operation) {
                 continue;
             }
+
             // Discover types used in params
             foreach ($operation->getParams() as $param => $hint) {
                 $arr = $operation->getPhpDocParams($param, $service->getTypes());
                 $type = $service->getType($arr['type']);
                 if (!empty($type)) {
-                    $types[] = $type;
+                    $methodTypes[] = $type;
                 }
             }
             // Discover types used in returns
             $returns = $operation->getReturns();
-            $types[] = $service->getType($returns);
 
-            foreach ($types as $type) {
-                $types = array_merge($types, $this->findUsedTypes($service, $type)) ;
+            $type = $service->getType($returns);
+            if ($type !== null) {
+                $methodTypes[] = $type;
             }
-            // Remove duplicated using standard equality checks. Default string
-            // comparison does not work here.
-            $types = array_unique($types, SORT_REGULAR);
 
+            foreach ($methodTypes as $type) {
+                $methodTypes = array_merge($methodTypes, $this->findUsedTypes($service, $type)) ;
+            }
             $operations[] = $operation;
+            $types = array_merge($types, $methodTypes);
         }
+        // Remove duplicated using standard equality checks. Default string
+        // comparison does not work here.
+        $types = array_unique($types, SORT_REGULAR);
         $filteredService = new Service($this->config, $service->getIdentifier(), $types, $service->getDescription());
         // Pull created service with operations
         foreach ($operations as $operation) {

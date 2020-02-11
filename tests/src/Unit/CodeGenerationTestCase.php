@@ -2,20 +2,19 @@
 
 namespace Wsdl2PhpGenerator\Tests\Unit;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
 use ReflectionProperty;
 use Wsdl2PhpGenerator\ClassGenerator;
-use Wsdl2PhpGenerator\Type;
 
 /**
  * Base class for testing code generation.
  *
  * Contains various assertions for examining code.
  */
-class CodeGenerationTestCase extends PHPUnit_Framework_TestCase
+class CodeGenerationTestCase extends TestCase
 {
 
     /**
@@ -146,6 +145,32 @@ class CodeGenerationTestCase extends PHPUnit_Framework_TestCase
         }
 
         return $docBlockType;
+    }
+
+    /**
+     * Assert that a class implements a specific interface
+     *
+     * @param ReflectionClass|string $class The class or the name of it.
+     * @param ReflectionClass|string $interface The interface or the name of it.
+     * @param string $message The message to show if the assertion fails.
+     */
+    protected function assertClassImplementsInterface($class, $interface, $message = '')
+    {
+        $class = (!$class instanceof ReflectionClass) ? new ReflectionClass($class) : $class;
+        $interface = (!$interface instanceof ReflectionClass) ? new ReflectionClass($interface) : $interface;
+
+        $this->assertTrue($interface->isInterface(), sprintf(
+            '"%s" is not an interface',
+            $interface->getName()
+        ));
+
+        $message = (empty($message))
+            ? sprintf(
+                'Class "%s" does not implement interface "%s"',
+                $class->getName(),
+                $interface->getName())
+            : $message;
+        $this->assertTrue($class->implementsInterface($interface->getName()), $message);
     }
 
     /**

@@ -9,6 +9,8 @@ Simple WSDL to PHP classes converter. Takes a WSDL file and outputs class files 
 
 Uses the [MIT license](http://www.opensource.org/licenses/mit-license.php).
 
+> **Announcement**: We are looking to add one or two co-maintainers with commit access to help bring this project forward, review pull requests and respond to issues. If you have contributed to this project or are otherwise actively involved in open source and have a GitHub profile for review, ping [@kasperg](https://github.com/kasperg) to express your interest.
+
 ## New major version: 3.0
 
 A new major version of wsdl2phpgenerator has recently been released: 3.0.
@@ -18,7 +20,7 @@ This introduces changes to both configuration and generated code. The changes ma
 2.x users are encourage to read [a walkthrough of what is new in 3.0](docs/whats-new-in-3.0.md).
 
 ## Contributors
-Originally developed by [@walle](https://github.com/walle) and includes bug fixes and improvements from [@vakopian](https://github.com/vakopian), [@statikbe](https://github.com/statikbe/), [@ecolinet](https://github.com/ecolinet), [@nuth](https://github.com/nuth/), [@chriskl](https://github.com/chriskl/), [@RSully](https://github.com/RSully/), [@jrbasso](https://github.com/jrbasso/), [@dypa](https://github.com/dypa/), [@Lafriks](https://github.com/Lafriks/), [@SamMousa](https://github.com/SamMousa/), [@xstefanox](https://github.com/xstefanox/), [@garex](https://github.com/garex/), [@honzap](https://github.com/honzap/), [@jk](https://github.com/jk/), [@sheeep](https://github.com/sheeep/), [@colinodell](https://github.com/colinodell/), [@red-led](https://github.com/red-led/), [@ivol84](https://github.com/ivol84/), [@wasinger](https://github.com/wasinger/), [@devlead](https://github.com/devlead/), [@NoUseFreak](https://github.com/nousefreak/), [@HighOnMikey](https://github.com/highonmikey/)
+Originally developed by [@walle](https://github.com/walle) and includes bug fixes and improvements from [@vakopian](https://github.com/vakopian), [@statikbe](https://github.com/statikbe/), [@ecolinet](https://github.com/ecolinet), [@nuth](https://github.com/nuth/), [@chriskl](https://github.com/chriskl/), [@RSully](https://github.com/RSully/), [@jrbasso](https://github.com/jrbasso/), [@dypa](https://github.com/dypa/), [@Lafriks](https://github.com/Lafriks/), [@SamMousa](https://github.com/SamMousa/), [@xstefanox](https://github.com/xstefanox/), [@garex](https://github.com/garex/), [@honzap](https://github.com/honzap/), [@jk](https://github.com/jk/), [@sheeep](https://github.com/sheeep/), [@colinodell](https://github.com/colinodell/), [@red-led](https://github.com/red-led/), [@ivol84](https://github.com/ivol84/), [@wasinger](https://github.com/wasinger/), [@devlead](https://github.com/devlead/), [@NoUseFreak](https://github.com/nousefreak/), [@HighOnMikey](https://github.com/highonmikey/), [@theHarvester](https://github.com/theHarvester), [@fduch](https://github.com/fduch), [@methodin](https://github.com/methodin), [@nkm](https://github.com/nkm/), [@jongotlin](https://github.com/jongotlin/), [@yethee](https://github.com/yethee/), [@rindeal](https://github.com/rindeal/), [@vtsao](https://github.com/vtsao/), [@xoeoro](https://github.com/xoeoro/), [@lunetics](https://github.com/lunetics/), [@peter-vanpoucke](https://github.com/peter-vanpoucke/), [@jabiinfante](https://github.com/jabiinfante/), [@renatomefi](https://github.com/renatomefi/)
 and [@kasperg](https://github.com/kasperg/).
 
 Pull requests are very welcome. Please read [our guidelines for contributing](https://github.com/wsdl2phpgenerator/wsdl2phpgenerator/blob/master/CONTRIBUTING.md).
@@ -195,7 +197,7 @@ Examples of third party SOAP client implementations which can be used:
 * [soap-plus](https://github.com/dcarbone/soap-plus)
 * [SoapClientEx](https://gist.github.com/RobThree/4117914)
 
-Note that is is the responsibility of the surrounding code to ensure that the base class is available during code generation and when calling web services.
+Note that it is the responsibility of the surrounding code to ensure that the base class is available during code generation and when calling web services.
 
 ##### Example usage
 
