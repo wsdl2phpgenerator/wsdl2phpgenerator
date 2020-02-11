@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "962299e18f5ae73f5877a56888a2b965",
+    "content-hash": "ad933dc62603cc40240b84cfdce2524e",
     "packages": [
         {
             "name": "symfony/options-resolver",
