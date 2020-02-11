@@ -7,8 +7,6 @@ namespace Wsdl2PhpGenerator\Xml;
 use DOMDocument;
 use DOMElement;
 use Exception;
-use Wsdl2PhpGenerator\ConfigInterface;
-use Wsdl2PhpGenerator\StreamContextFactory;
 
 /**
  * A SchemaDocument represents an XML element which contains type elements.
@@ -31,25 +29,15 @@ class SchemaDocument extends XmlNode
      *
      * @var SchemaDocument[]
      */
-    protected $referereces;
+    protected $references;
 
-    /**
-     * The urls of schemas which have already been loaded.
-     *
-     * We keep a record of these to avoid cyclic imports.
-     *
-     * @var string[]
-     */
-    protected static $loadedUrls;
-
-    public function __construct(ConfigInterface $config, $xsdUrl)
+    public function __construct(SchemaContext $context, $xsdUrl)
     {
         $this->url = $xsdUrl;
 
         // Generate a stream context used by libxml to access external resources.
         // This will allow DOMDocument to load XSDs through a proxy.
-        $streamContextFactory = new StreamContextFactory();
-        libxml_set_streams_context($streamContextFactory->create($config));
+        libxml_set_streams_context($context->getStreamContext());
 
         $document = new DOMDocument();
         $loaded = $document->load($xsdUrl);
@@ -58,14 +46,14 @@ class SchemaDocument extends XmlNode
         }
 
         parent::__construct($document, $document->documentElement);
-        // Register the schema to avoid cyclic imports.
-        self::$loadedUrls[] = $xsdUrl;
+
+        $context->loaded($xsdUrl);
 
         // Locate and instantiate schemas which are referenced by the current schema.
         // A reference in this context can either be
         // - an import from another namespace: http://www.w3.org/TR/xmlschema-1/#composition-schemaImport
         // - an include within the same namespace: http://www.w3.org/TR/xmlschema-1/#compound-schema
-        $this->referereces = array();
+        $this->references = array();
         foreach ($this->xpath(  '//wsdl:import/@location|' .
                                 '//s:import/@schemaLocation|' .
                                 '//s:include/@schemaLocation') as $reference) {
@@ -74,8 +62,8 @@ class SchemaDocument extends XmlNode
                 $referenceUrl = dirname($xsdUrl) . '/' . $referenceUrl;
             }
 
-            if (!in_array($referenceUrl, self::$loadedUrls)) {
-                $this->referereces[] = new SchemaDocument($config, $referenceUrl);
+            if ($context->needToLoad($referenceUrl)) {
+                $this->references[] = new SchemaDocument($context, $referenceUrl);
             }
         }
     }
@@ -96,7 +84,7 @@ class SchemaDocument extends XmlNode
         }
 
         if (empty($type)) {
-            foreach ($this->referereces as $import) {
+            foreach ($this->references as $import) {
                 $type = $import->findTypeElement($name);
                 if (!empty($type)) {
                     break;
