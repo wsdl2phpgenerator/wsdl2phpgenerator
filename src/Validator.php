@@ -114,23 +114,25 @@ class Validator
      *
      * @param string $name the name of the class to test
      * @param string $namespace the name of the namespace
+     * @package bool $addPostfixIfClassExists sets whether to check if classes or interfaces already exists in the namespace
      * @return string The validated version of the submitted class name
      */
-    public static function validateClass($name, $namespace = null)
+    public static function validateClass($name, $namespace = null, $addPostfixIfClassExists = true)
     {
         $name = self::validateNamingConvention($name);
 
         $prefix = !empty($namespace) ? $namespace . '\\' : '';
 
-        $name = self::validateUnique($name, function ($name) use ($prefix) {
+        $name = self::validateUnique($name, function ($name) use ($prefix, $addPostfixIfClassExists) {
                 // Use reflection to get access to private isKeyword method.
                 // @todo Remove this when we stop supporting PHP 5.3.
                 $isKeywordMethod = new \ReflectionMethod(__CLASS__, 'isKeyword');
                 $isKeywordMethod->setAccessible(true);
                 $isKeyword = $isKeywordMethod->invoke(null, $name);
-             return !$isKeyword &&
-                !interface_exists($prefix . $name) &&
-                !class_exists($prefix . $name);
+            $checkResult = $addPostfixIfClassExists
+                ? !interface_exists($prefix . $name) && !class_exists($prefix . $name)
+                : true;
+            return !$isKeyword && $checkResult;
         }, self::NAME_SUFFIX);
 
         return $name;
