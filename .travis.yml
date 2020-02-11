@@ -12,8 +12,6 @@ env:
   - PREFER_LOWEST="--prefer-lowest"
   - PREFER_LOWEST=""
 
-sudo: false
-
 before_script:
   - composer update --no-interaction $PREFER_LOWEST
 
