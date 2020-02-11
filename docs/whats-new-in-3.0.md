@@ -57,7 +57,7 @@ For discussion and pull request see issues [#106](https://github.com/wsdl2phpgen
 
 Some configuration options provided in wsdl2phpgenerator 2.x were related to configuration of the PHP SoapClient. Not all SoapClient options were supported and this was the cause of many pull requests.
 
-In 3.0 there is now one generic configuration option `soapClientOptions` which accepts an array and passes it along to [the `SoapClient` constructor](http://php.net/manual/en/soapclient.soapclient.php). Thus wsdl2phpgenerator now supports all configuration options supported by the SOAP client class.
+In 3.0 there is now one generic configuration option `soapClientOptions` which accepts an array and passes it along to [the `SoapClient` constructor](http://php.net/manual/en/soapclient.soapclient.php). Thus wsdl2phpgenerator now supports all configuration options supported by the SOAP client class. One exception to this is the `stream_context` option, which should be configured using the `streamContextOptions` configuration. If you do specify the `stream_context` option, you will get an exception explaining this.
 
 Consequently the following configuration options have been removed.
 
@@ -66,6 +66,24 @@ Consequently the following configuration options have been removed.
 * `compression`
 
 For discussion and pull request see issues [#105](https://github.com/wsdl2phpgenerator/wsdl2phpgenerator/issues/105) and [#154](https://github.com/wsdl2phpgenerator/wsdl2phpgenerator/issues/154).
+
+### Configuring the stream context ###
+
+You can specify the stream context options using the `streamContextOptions` configuration parameter. This is especially useful for SSL configurations, such as ciphers, or local certificate validation, etc:
+ 
+```php
+new Wsdl2PhpGenerator\Config([
+    /* ... */
+    'streamContextOptions' => [
+        'ssl' => [
+            /* SSL specific context options here */
+        ]
+    ]
+    /* ... */
+])
+```
+
+Note that if you also specify the `stream_context` option as part of the `soapClientOptions`, you will get an exception. 
 
 ## Generated code
 

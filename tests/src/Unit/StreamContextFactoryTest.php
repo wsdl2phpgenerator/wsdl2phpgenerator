@@ -115,4 +115,93 @@ class StreamContextFactoryTest extends TestCase
         $header = 'Proxy-Authorization: Basic ' . base64_encode($proxy['login'] . ':' . $proxy['password']);
         $this->assertContains($header, $options['http']['header']);
     }
+
+
+    /**
+     * Test that the stream context options cannot be specified for the soap client class.
+     *
+     * @expectedException \UnexpectedValueException
+     */
+    public function testSpecifyingBothSoapStreamContextAndStreamContextOptionsWillResultInError()
+    {
+        $config = new Config(array(
+            'inputFile' => null,
+            'outputDir' => null,
+            'streamContextOptions' => array(
+                'ssl' => array(
+                    'ciphers' => 'ABC'
+                )
+            ),
+            'soapClientOptions' => array(
+                'stream_context' => stream_context_create()
+            )
+        ));
+
+        $factory = new StreamContextFactory();
+        $resource = $factory->create($config);
+        $options = stream_context_get_options($resource);
+
+        $this->assertArrayHasKey('ssl', $options);
+    }
+
+
+    /**
+     * Test that the stream context options are propagated to the factory's context creation
+     */
+    public function testStreamContextOptions()
+    {
+        $config = new Config(array(
+            'inputFile' => null,
+            'outputDir' => null,
+            'streamContextOptions' => array(
+                'ssl' => array(
+                    'ciphers' => 'ABC'
+                )
+            )
+        ));
+
+        $factory = new StreamContextFactory();
+        $resource = $factory->create($config);
+        $options = stream_context_get_options($resource);
+
+        $this->assertArrayHasKey('ssl', $options);
+    }
+
+    /**
+     * Test that the stream context options are merged if a proxy configuration is applicable
+     */
+    public function testStreamContextOptionsAreMerged()
+    {
+        $soapOptions = array(
+            'login' => 'user',
+            'password' => 'secret'
+        );
+        $proxy = array(
+            'host' => '192.168.0.1',
+            'port' => 8080,
+            'login' => 'proxy-user',
+            'password' => 'proxy-secret',
+        );
+        $config = new Config(array(
+            'inputFile' => null,
+            'outputDir' => null,
+            'soapClientOptions' => $soapOptions,
+            'proxy' => $proxy,
+            'streamContextOptions' => array(
+                'ssl' => array(
+                    'ciphers' => 'foo'
+                )
+            )
+        ));
+
+        $factory = new StreamContextFactory();
+        $resource = $factory->create($config);
+
+        $options = stream_context_get_options($resource);
+
+        $this->assertArrayHasKey('http', $options);
+        $this->assertArrayHasKey('proxy', $options['http']);
+        $this->assertArrayHasKey('ssl', $options);
+        $this->assertArrayHasKey('ciphers', $options['ssl']);
+    }
 }

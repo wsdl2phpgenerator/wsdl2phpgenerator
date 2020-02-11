@@ -18,14 +18,22 @@ class StreamContextFactory
      */
     public function create(ConfigInterface $config)
     {
-        $options = array();
+        $streamContextOptions = $config->get('streamContextOptions');
+        $soapOptions = $config->get('soapClientOptions');
+
+        if (isset($soapOptions['stream_context'])) {
+            throw new \UnexpectedValueException("Please use the 'streamContextOptions' setting to configure the soap client stream context.");
+        }
         $headers = array();
 
         $proxy = $config->get('proxy');
         if (is_array($proxy)) {
-            $options = array(
-                'http' => array(
-                    'proxy' => $proxy['proxy_host'] . ':' . $proxy['proxy_port']
+            $streamContextOptions = array_merge_recursive(
+                $streamContextOptions,
+                array(
+                    'http' => array(
+                        'proxy' => $proxy['proxy_host'] . ':' . $proxy['proxy_port']
+                    )
                 )
             );
             if (isset($proxy['proxy_login']) && isset($proxy['proxy_password'])) {
@@ -36,7 +44,6 @@ class StreamContextFactory
             }
         }
 
-        $soapOptions = $config->get('soapClientOptions');
 
         if ((!isset($soapOptions['authentication']) || $soapOptions['authentication'] === SOAP_AUTHENTICATION_BASIC) &&
             isset($soapOptions['login']) &&
@@ -47,9 +54,9 @@ class StreamContextFactory
         }
 
         if (count($headers) > 0) {
-            $options['http']['header'] = $headers;
+            $streamContextOptions['http']['header'] = $headers;
         }
 
-        return stream_context_create($options);
+        return stream_context_create($streamContextOptions);
     }
 }

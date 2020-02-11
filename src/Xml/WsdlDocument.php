@@ -40,6 +40,11 @@ class WsdlDocument extends SchemaDocument
         // Otherwise we risk generating code for a WSDL that is no longer valid.
         $options = array_merge($this->config->get('soapClientOptions'), array('cache_wsdl' => WSDL_CACHE_NONE));
 
+        $streamContextOptions = $this->config->get('streamContextOptions');
+        if (!empty($streamContextOptions)) {
+            $options['stream_context'] = stream_context_create($streamContextOptions);
+        }
+
         try {
             $soapClientClass = new \ReflectionClass($this->config->get('soapClientClass'));
             $this->soapClient = $soapClientClass->newInstance($wsdlUrl, $options);

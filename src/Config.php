@@ -74,6 +74,7 @@ class Config implements ConfigInterface
             'constructorParamsDefaultToNull' => false,
             'soapClientClass'               => '\SoapClient',
             'soapClientOptions'             => array(),
+            'streamContextOptions'          => array(),
             'proxy'                         => false
         ));
 
