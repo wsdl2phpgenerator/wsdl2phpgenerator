@@ -1,6 +1,7 @@
 <?php
 namespace Wsdl2PhpGenerator\Tests\Unit\Filter;
 
+use PHPUnit\Framework\TestCase;
 use Wsdl2PhpGenerator\ComplexType;
 use Wsdl2PhpGenerator\Config;
 use Wsdl2PhpGenerator\ConfigInterface;
@@ -12,7 +13,7 @@ use Wsdl2PhpGenerator\Service;
 /**
  * Use test for the ServiceOperationFilter class.
  */
-class ServiceOperationFilterTest extends \PHPUnit_Framework_TestCase
+class ServiceOperationFilterTest extends TestCase
 {
     /**
      * @var ConfigInterface

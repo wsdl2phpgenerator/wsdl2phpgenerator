@@ -2,20 +2,19 @@
 
 namespace Wsdl2PhpGenerator\Tests\Unit;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
 use ReflectionProperty;
 use Wsdl2PhpGenerator\ClassGenerator;
-use Wsdl2PhpGenerator\Type;
 
 /**
  * Base class for testing code generation.
  *
  * Contains various assertions for examining code.
  */
-class CodeGenerationTestCase extends PHPUnit_Framework_TestCase
+class CodeGenerationTestCase extends TestCase
 {
 
     /**
