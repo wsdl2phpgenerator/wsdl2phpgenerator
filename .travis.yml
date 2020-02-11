@@ -3,6 +3,14 @@ language: php
 php:
   - 7.2
   - 7.3
+  - 7.4
+
+jobs:
+  allow_failures:
+    - php: 7.4
+      env: PREFER_LOWEST=""
+    - php: 7.4
+      env: PREFER_LOWEST="--prefer-lowest"
 
 env:
   - PREFER_LOWEST="--prefer-lowest"
