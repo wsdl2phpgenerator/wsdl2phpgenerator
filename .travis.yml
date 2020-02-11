@@ -29,8 +29,8 @@ env:
   - PREFER_LOWEST="" SYMFONY_VERSION=^5.0
 
 before_script:
-  - composer update --no-interaction $PREFER_LOWEST
   - composer require symfony/options-resolver:${SYMFONY_VERSION}
+  - composer update --no-interaction $PREFER_LOWEST
 
 script:
   - mkdir -p build/logs
