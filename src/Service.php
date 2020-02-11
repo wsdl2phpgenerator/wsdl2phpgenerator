@@ -75,7 +75,7 @@ class Service implements ClassGenerator
     public function getClass()
     {
         if ($this->class == null) {
-            $this->generateClass();
+            $this->class = $this->generateClass();
         }
 
         return $this->class;
@@ -124,6 +124,7 @@ class Service implements ClassGenerator
     {
         return isset($this->types[$identifier])? $this->types[$identifier]: null;
     }
+
     /**
      * Returns all types defined by the service.
      *
@@ -139,78 +140,18 @@ class Service implements ClassGenerator
      */
     public function generateClass()
     {
-        $name = $this->identifier;
+        $class = $this->createPhpClass();
+        $class->addVariable($this->createClassmapVariable());
+        $class->addFunction($this->createConstructor());
 
-        // Generate a valid classname
-        $name = Validator::validateClass($name, $this->config->get('namespaceName'));
-
-        // uppercase the name
-        $name = ucfirst($name);
-
-        // Create the class object
-        $comment = new PhpDocComment($this->description);
-        $this->class = new PhpClass($name, false, $this->config->get('soapClientClass'), $comment);
-
-        // Create the constructor
-        $comment = new PhpDocComment();
-        $comment->addParam(PhpDocElementFactory::getParam('string', 'wsdl', 'The wsdl file to use'));
-        $comment->addParam(PhpDocElementFactory::getParam('array', 'options', 'A array of config values'));
-
-        $source = '
-  foreach (self::$classmap as $key => $value) {
-    if (!isset($options[\'classmap\'][$key])) {
-      $options[\'classmap\'][$key] = $value;
-    }
-  }' . PHP_EOL;
-        $source .= '  $options = array_merge(' . var_export($this->config->get('soapClientOptions'), true) . ', $options);' . PHP_EOL;
-        $source .= '  if (!$wsdl) {' . PHP_EOL;
-        $source .= '    $wsdl = \'' . $this->config->get('inputFile') . '\';' . PHP_EOL;
-        $source .= '  }' . PHP_EOL;
-        $source .= '  parent::__construct($wsdl, $options);' . PHP_EOL;
-
-        $function = new PhpFunction('public', '__construct', 'array $options = array(), $wsdl = null', $source, $comment);
-
-        // Add the constructor
-        $this->class->addFunction($function);
-
-        // Generate the classmap
-        $name = 'classmap';
-        $comment = new PhpDocComment();
-        $comment->setVar(PhpDocElementFactory::getVar('array', $name, 'The defined classes'));
-
-        $init = array();
-        foreach ($this->types as $type) {
-            if ($type instanceof ComplexType) {
-                $init[$type->getIdentifier()] = $this->config->get('namespaceName') . "\\" . $type->getPhpIdentifier();
+        foreach ($this->getOperations() as $operation) {
+            $func = $this->createOperationMethod($operation);
+            if (!$class->functionExists($func->getIdentifier())) {
+                $class->addFunction($func);
             }
         }
-        $var = new PhpVariable('private static', $name, var_export($init, true), $comment);
 
-        // Add the classmap variable
-        $this->class->addVariable($var);
-
-        // Add all methods
-        foreach ($this->operations as $operation) {
-            $name = Validator::validateOperation($operation->getName());
-
-            $comment = new PhpDocComment($operation->getDescription());
-            $comment->setReturn(PhpDocElementFactory::getReturn($operation->getReturns(), ''));
-
-            foreach ($operation->getParams() as $param => $hint) {
-                $arr = $operation->getPhpDocParams($param, $this->types);
-                $comment->addParam(PhpDocElementFactory::getParam($arr['type'], $arr['name'], $arr['desc']));
-            }
-
-            $source = '  return $this->__soapCall(\'' . $operation->getName() . '\', array(' . $operation->getParamStringNoTypeHints() . '));' . PHP_EOL;
-
-            $paramStr = $operation->getParamString($this->types);
-
-            $function = new PhpFunction('public', $name, $paramStr, $source, $comment);
-
-            if ($this->class->functionExists($function->getIdentifier()) == false) {
-                $this->class->addFunction($function);
-            }
-        }
+        return $class;
     }
 
     /**
@@ -221,5 +162,146 @@ class Service implements ClassGenerator
     public function addOperation(Operation $operation)
     {
         $this->operations[$operation->getName()] = $operation;
+    }
+
+    /**
+     * Get all the operations registered with the service.
+     *
+     * @return Operation[]
+     */
+    public function getOperations()
+    {
+        return $this->operations;
+    }
+
+    /**
+     * get a value out of the configuration.
+     *
+     * @param string $key The configuration key to look up
+     * @return mixed
+     */
+    protected function getConfigValue($key)
+    {
+        return $this->config->get($key);
+    }
+
+    /**
+     * Create a `PhpClass` object representing the service. This is used as part
+     * of the code generation.
+     *
+     * @return PhpClass
+     */
+    protected function createPhpClass()
+    {
+        // Generate a valid classname
+        $name = Validator::validateClass($this->getIdentifier(), $this->getConfigValue('namespaceName'));
+
+        // uppercase the name
+        $name = ucfirst($name);
+
+        // Create the class object
+        return  new PhpClass(
+            $name,
+            false,
+            $this->getServiceParentClass(),
+            new PhpDocComment($this->getDescription())
+        );
+    }
+
+    /**
+     * Get the parent class for the generated service.
+     *
+     * @return string
+     */
+    protected function getServiceParentClass()
+    {
+        return $this->getConfigValue('soapClientClass');
+    }
+
+    /**
+     * Create the classmap static variable for the generated serivce class.
+     *
+     * @return PhpVariable
+     */
+    protected function createClassmapVariable()
+    {
+        $name = 'classmap';
+        $comment = new PhpDocComment();
+        $comment->setVar(PhpDocElementFactory::getVar('array', $name, 'The defined classes'));
+
+        return new PhpVariable(
+            'private static',
+            $name,
+            var_export($this->typesToClassmap(), true),
+            $comment
+        );
+    }
+
+    /**
+     * Transform the `types` property into something suitable for a classmap.
+     *
+     * @return array
+     */
+    protected function typesToClassmap()
+    {
+        $init = array();
+        foreach ($this->getTypes() as $type) {
+            if ($type instanceof ComplexType) {
+                $init[$type->getIdentifier()] = $this->getConfigValue('namespaceName') . "\\" . $type->getPhpIdentifier();
+            }
+        }
+
+        return $init;
+    }
+
+    /**
+     * Create the constructor for the generated service class.
+     *
+     * @return PhpFunction
+     */
+    protected function createConstructor()
+    {
+        $comment = new PhpDocComment();
+        $comment->addParam(PhpDocElementFactory::getParam('string', 'wsdl', 'The wsdl file to use'));
+        $comment->addParam(PhpDocElementFactory::getParam('array', 'options', 'A array of config values'));
+
+        $source = '
+  foreach (self::$classmap as $key => $value) {
+    if (!isset($options[\'classmap\'][$key])) {
+      $options[\'classmap\'][$key] = $value;
+    }
+  }' . PHP_EOL;
+        $source .= '  $options = array_merge(' . var_export($this->getConfigValue('soapClientOptions'), true) . ', $options);' . PHP_EOL;
+        $source .= '  if (!$wsdl) {' . PHP_EOL;
+        $source .= '    $wsdl = \'' . $this->getConfigValue('inputFile') . '\';' . PHP_EOL;
+        $source .= '  }' . PHP_EOL;
+        $source .= '  parent::__construct($wsdl, $options);' . PHP_EOL;
+
+        return new PhpFunction('public', '__construct', 'array $options = array(), $wsdl = null', $source, $comment);
+    }
+
+    /**
+     * Create a PhpFunction object for the given operation.
+     *
+     * @param $operation The operation for which the method will be created
+     * @return PhpFunction
+     */
+    protected function createOperationMethod(Operation $operation)
+    {
+        $name = Validator::validateOperation($operation->getName());
+
+        $comment = new PhpDocComment($operation->getDescription());
+        $comment->setReturn(PhpDocElementFactory::getReturn($operation->getReturns(), ''));
+
+        foreach ($operation->getParams() as $param => $hint) {
+            $arr = $operation->getPhpDocParams($param, $this->types);
+            $comment->addParam(PhpDocElementFactory::getParam($arr['type'], $arr['name'], $arr['desc']));
+        }
+
+        $source = '  return $this->__soapCall(\'' . $operation->getName() . '\', array(' . $operation->getParamStringNoTypeHints() . '));' . PHP_EOL;
+
+        $paramStr = $operation->getParamString($this->types);
+
+        return  new PhpFunction('public', $name, $paramStr, $source, $comment);
     }
 }
