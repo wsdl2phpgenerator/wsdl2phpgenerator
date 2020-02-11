@@ -171,6 +171,10 @@ The following formats are supported:
 
 The proxy information is used by is used when accessing the WSDL to generate the code and for subsequent requests to the SOAP service.
 
+#### `serviceSuffix`
+
+Append this suffix to service class name. This might help if some types have the same name as the service.
+
 ##### Example usage
 
 The following configuration will use a proxy to access the [Google DoubleClick Ad Exchange Buyer SOAP API](https://developers.google.com/ad-exchange/buyer-soap/):
