@@ -4,13 +4,14 @@
 namespace Wsdl2PhpGenerator\Tests\Unit;
 
 
+use PHPUnit\Framework\TestCase;
 use Wsdl2PhpGenerator\Config;
 use Wsdl2PhpGenerator\StreamContextFactory;
 
 /**
  * Unit test for the stream context factory.
  */
-class StreamContextFactoryTest extends \PHPUnit_Framework_TestCase
+class StreamContextFactoryTest extends TestCase
 {
 
     /**

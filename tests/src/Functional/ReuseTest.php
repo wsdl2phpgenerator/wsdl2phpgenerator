@@ -21,7 +21,7 @@ class ReuseTest extends FunctionalTestCase
         return $this->fixtureDir . '/currencyconvertor/CurrencyConvertor.wsdl';
     }
 
-    protected function assertPreConditions()
+    protected function assertPreConditions(): void
     {
         $this->assertInstanceOf('Wsdl2PhpGenerator\Generator', $this->generator);
 
