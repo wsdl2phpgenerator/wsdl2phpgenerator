@@ -4,7 +4,7 @@
  */
 namespace Wsdl2PhpGenerator\Tests\Unit;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Wsdl2PhpGenerator\Validator;
 
 /**
@@ -13,7 +13,7 @@ use Wsdl2PhpGenerator\Validator;
  *
  * @package wsdl2phpTest
  */
-class ValidatorTest extends PHPUnit_Framework_TestCase
+class ValidatorTest extends TestCase
 {
 
     /**
