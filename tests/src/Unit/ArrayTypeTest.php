@@ -29,7 +29,7 @@ class ArrayTypeTest extends CodeGenerationTestCase
     private $class;
 
 
-    protected function setUp()
+    protected function setUp(): void
     {
         // Add a mostly dummy configuration. We are not going to read or write any files here.
         // The important part is the accessors part.

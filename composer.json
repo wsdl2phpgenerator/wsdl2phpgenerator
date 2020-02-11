@@ -25,9 +25,9 @@
         "kasperg/phing-github": "0.2.*",
         "phing/phing": "^2.16.3",
         "php-vcr/php-vcr": "^1.4.4",
-        "phpunit/phpunit": "^6.0",
+        "phpunit/phpunit": "^8.5",
         "psr/log": "^1.1.2",
         "symfony/yaml": "^2.8.52",
-        "php-vcr/phpunit-testlistener-vcr": "3.0.*"
+        "php-vcr/phpunit-testlistener-vcr": "^3.2.1"
     }
 }
