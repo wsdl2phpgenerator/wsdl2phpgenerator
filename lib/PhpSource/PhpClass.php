@@ -234,13 +234,9 @@ class PhpClass extends PhpElement
      */
     public function addConstant($value, $name = '')
     {
-        if (strlen($value) == 0) {
-            throw new Exception('No value supplied');
-        }
-
         // If no name is supplied use the value as name
-        if (strlen($name) == 0) {
-            if (is_string($value)) {
+        if (strlen($name) === 0) {
+            if (is_string($value) && strlen($value) > 0) {
                 $name = $value;
             } else {
                 throw new Exception('No name supplied');
