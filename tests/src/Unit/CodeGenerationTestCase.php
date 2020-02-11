@@ -449,9 +449,24 @@ class CodeGenerationTestCase extends TestCase
             $source = 'namespace ' . $namespace . ';' . PHP_EOL . $source;
         }
 
-        // Eval the source for the generated class. This is now pretty but currently the only way we can test whether
-        // the generated code is as expected. Our own code generation library does not allow us to retrieve functions
-        // from the representing class.
-        eval($source);
+        // Include the source for the generated class. This is the  way we can test whether the generated code is as expected.
+        // Our own code generation library does not allow us to retrieve functions from the representing class.
+        $this->streamSource($source);
+    }
+
+    private function streamSource($source, $addOpening = true)
+    {
+        $tmp         = tmpfile();
+        $tmpFileName = stream_get_meta_data($tmp);
+        $tmpFileName = $tmpFileName['uri'];
+        if ($addOpening) {
+            $source = '<?php '.PHP_EOL.$source;
+        }
+        $source = trim($source);
+        fwrite($tmp, $source);
+        $result = include $tmpFileName;
+        fclose($tmp);
+
+        return $result;
     }
 }
