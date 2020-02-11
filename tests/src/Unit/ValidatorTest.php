@@ -4,7 +4,7 @@
  */
 namespace Wsdl2PhpGenerator\Tests\Unit;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Wsdl2PhpGenerator\Validator;
 
 /**
@@ -13,7 +13,7 @@ use Wsdl2PhpGenerator\Validator;
  *
  * @package wsdl2phpTest
  */
-class ValidatorTest extends PHPUnit_Framework_TestCase
+class ValidatorTest extends TestCase
 {
 
     /**
@@ -72,6 +72,8 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Foo[]', Validator::validateType('Foo[]'));
 
         $this->assertEquals('andCustom', Validator::validateType('and')); // and is reserved keyword
+
+        $this->assertEquals('validarContrasena[]', Validator::validateType('validarContraseña[]')); //UTF-8 array type
     }
 
 }
