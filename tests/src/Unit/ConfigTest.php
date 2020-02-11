@@ -10,7 +10,7 @@ class ConfigTest extends TestCase
     protected $options;
     protected $config;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->options = array(
             'inputFile'                      => 'inputFile.xml',
