@@ -39,11 +39,14 @@ class MsSequelServerNativeWebServicesTest extends FunctionalTestCase
         // by adding the test method as a namespace.
         $this->assertGeneratedClassExists('DayAsNumber');
 
-        $object = new \DayAsNumber(new \DateTime());
+        $object = new \DayAsNumber();
         $class = new \ReflectionClass($object);
 
-        $this->assertMethodParameterHasType($class->getConstructor(), 'day', 'DateTime');
-        $this->assertMethodParameterDocBlockHasType($class->getConstructor(), 'day', '\DateTime');
+        // The constructor should not take any arguments, because all properties
+        // can be nullable.
+        $this->assertSame(0, $class->getConstructor()->getNumberOfParameters());
+        $this->assertClassHasMethod($class, 'setDay');
+        $this->assertMethodParameterHasType($class->getMethod('setDay'), 'day', 'DateTime');
+        $this->assertMethodParameterDocBlockHasType($class->getMethod('setDay'), 'day', '\DateTime');
     }
-
 }

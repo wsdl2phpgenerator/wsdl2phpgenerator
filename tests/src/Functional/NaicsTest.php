@@ -27,7 +27,8 @@ class NaicsTest extends FunctionalTestCase
     {
         // Perform the request.
         $service = new \GenericNAICS();
-        $request = new \GetNAICSByIndustry('Computer Systems');
+        $request = new \GetNAICSByIndustry();
+        $request->setIndustryName('Computer Systems');
 
         try {
             $response = $service->GetNAICSByIndustry($request);
@@ -84,8 +85,11 @@ class NaicsTest extends FunctionalTestCase
     public function testSingleNaics()
     {
         $service = new \GenericNAICS();
+
+        $request = new \GetNAICSByID();
         // Requesting a specific ID should be a sure way to only return a single result.
-        $request = new \GetNAICSByID('54151');
+        $request->setNAICSCode('54151');
+
         $response = $service->GetNaicsByID($request);
         // Even if there is a single result there should be an ArrayOfNaics object with an array of NAICS attribute.
         // This ensures that the DocBlock is still valid. The is handled as the SOAP_SINGLE_ELEMENT_ARRAYS feature is

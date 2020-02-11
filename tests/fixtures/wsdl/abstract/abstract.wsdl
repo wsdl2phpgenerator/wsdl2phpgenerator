@@ -29,6 +29,24 @@
         </sequence>
       </complexType>
 
+      <element name="GetResponse">
+          <complexType>
+              <complexContent>
+                <extension base="tns:GetResponseGeneral">
+                  <sequence>
+                      <element name="Users" type="tns:UserAuthor" minOccurs="0" maxOccurs="unbounded" />
+                  </sequence>
+                </extension>
+              </complexContent>
+          </complexType>
+      </element>
+
+      <complexType name="GetResponseGeneral">
+          <sequence>
+              <element name="LimitedBy" type="xsd:long" minOccurs="0" maxOccurs="1" />
+          </sequence>
+      </complexType>
+
       <complexType name="UserAuthor">
         <complexContent>
           <extension base="tns:Author">
