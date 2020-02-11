@@ -72,6 +72,8 @@ class Config implements ConfigInterface
             'operationNames'                 => '',
             'sharedTypes'                    => false,
             'constructorParamsDefaultToNull' => false,
+            'excludeMethodParamTypeHints'    => false,
+	   	 	'constructorParamsIncludeNullable'	=> false,
             'soapClientClass'               => '\SoapClient',
             'soapClientOptions'             => array(),
             'proxy'                         => false
