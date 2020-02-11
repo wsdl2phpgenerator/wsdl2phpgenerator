@@ -19,15 +19,15 @@
         "php": "^7.2",
         "ext-soap": "*",
         "symfony/options-resolver": "^3.4.37",
-        "symfony/polyfill-iconv": "^1.2"
+        "symfony/polyfill-iconv": "^1.13.1"
     },
     "require-dev": {
         "kasperg/phing-github": "0.2.*",
-        "phing/phing": "^2.7",
-        "php-vcr/php-vcr": "1.2.6 - 1.2.7|^1.3.1",
-        "php-vcr/phpunit-testlistener-vcr": "^1.1.2",
+        "phing/phing": "^2.16.3",
+        "php-vcr/php-vcr": "^1.4.4",
+        "php-vcr/phpunit-testlistener-vcr": "^1.1.7",
         "phpunit/phpunit": "^4.8.36",
-        "psr/log": "^1.0",
-        "symfony/yaml": "^2.1"
+        "psr/log": "^1.1.2",
+        "symfony/yaml": "^2.8.52"
     }
 }
