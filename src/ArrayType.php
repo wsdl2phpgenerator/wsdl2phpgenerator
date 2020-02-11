@@ -32,6 +32,11 @@ class ArrayType extends ComplexType
     protected $arrayOf;
 
     /**
+     * @var string
+     */
+    protected $memberDefaultValue = 'array()';
+
+    /**
      * Implements the loading of the class object
      *
      * @throws Exception if the class is already generated(not null)
