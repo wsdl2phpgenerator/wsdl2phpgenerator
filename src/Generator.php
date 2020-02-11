@@ -246,4 +246,16 @@ class Generator implements GeneratorInterface
     {
         $this->logger = $logger;
     }
+
+    public function generateAsyncBaseClass($fileName, $namespace = null, $name = 'SoapClientAsync') {
+        $contents = file_get_contents(__DIR__ . '/SoapClientAsync.php');
+
+        if ($namespace) {
+            $contents = str_replace('namespace Wsdl2PhpGenerator;', "namespace $namespace;", $contents);
+        } else {
+            $contents = str_replace('namespace Wsdl2PhpGenerator;', '', $contents);
+        }
+        $contents = str_replace( 'class SoapClientAsync extends \SoapClient {', "class $name extends \SoapClient {", $contents);
+        file_put_contents($fileName, $contents);
+    }
 }
