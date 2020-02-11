@@ -2,15 +2,15 @@
 
 namespace Wsdl2PhpGenerator\Tests\Unit;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Wsdl2PhpGenerator\Config;
 
-class ConfigTest extends PHPUnit_Framework_TestCase
+class ConfigTest extends TestCase
 {
     protected $options;
     protected $config;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->options = array(
             'inputFile'                      => 'inputFile.xml',
