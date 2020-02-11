@@ -93,6 +93,20 @@ class PhpClass extends PhpElement
 
     /**
      *
+     * @var string[] Traits.
+     * @access private
+     */
+    private $traits;
+
+    /**
+     *
+     * @var string[] Trait insteadof and as operations.
+     * @access private
+     */
+    private $trait_details;
+
+    /**
+     *
      * @param string $identifier
      * @param bool $classExists
      * @param string $extends A string of the class that this class extends
@@ -100,7 +114,7 @@ class PhpClass extends PhpElement
      * @param bool $final
      * @param bool $abstract
      */
-    public function __construct($identifier, $classExists = false, $extends = '', PhpDocComment $comment = null, $final = false, $abstract = false)
+    public function __construct($identifier, $classExists = false, $extends = '',$traits = array(),$trait_details=array(), PhpDocComment $comment = null, $final = false, $abstract = false)
     {
         $this->dependencies = array();
         $this->classExists = $classExists;
@@ -114,6 +128,8 @@ class PhpClass extends PhpElement
         $this->functions = array();
         $this->indentionStr = '    '; // Use 4 spaces as indention, as requested by PSR-2
         $this->abstract = $abstract;
+        $this->traits = $traits;
+        $this->trait_details = $trait_details;
     }
 
     /**
@@ -158,6 +174,17 @@ class PhpClass extends PhpElement
         }
 
         $ret .= PHP_EOL . '{' . PHP_EOL;
+
+        if (count($this->traits) > 0) {
+            $ret .= $this->getIndentionStr() . ' use ' . implode(', ', $this->traits);
+
+            if (count($this->trait_details) > 0) {
+                $ret .= ' { ' . PHP_EOL
+                        .$this->getIndentionStr(). implode(';'.PHP_EOL, $this->trait_details).";"
+				. PHP_EOL . ' } ' . PHP_EOL;
+			}else
+                $ret .= ' ; ' . PHP_EOL. PHP_EOL;
+        }
 
         if (isset($this->default)) {
             $ret .= $this->getIndentionStr() . 'const __default = ' . $this->default . ';' . PHP_EOL;
