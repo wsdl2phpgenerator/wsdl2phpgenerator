@@ -188,7 +188,7 @@ class PhpDocComment
     }
 
     /**
-     *
+     *ApplicationException
      * @param PhpDocElement $return Sets the new return
      */
     public function setReturn(PhpDocElement $return)

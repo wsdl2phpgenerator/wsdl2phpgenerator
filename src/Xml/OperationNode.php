@@ -70,6 +70,26 @@ class OperationNode extends DocumentedNode
     }
 
     /**
+     * Retrieves the exception names (if any) that the operation can throw.
+     *
+     * @return string[]
+     */
+    public function getExceptions()
+    {
+        $faults = array();
+        $faultNodes = $this->element->getElementsByTagName('fault');
+        foreach ($faultNodes as $faultNode) {
+            $exceptionNameNode =
+                $faultNode->attributes->getNamedItem('message');
+            if ($exceptionNameNode !== null) {
+                $faults[] =
+                    $this->cleanNamespace($exceptionNameNode->nodeValue);
+            }
+        }
+        return $faults;
+    }
+
+    /**
      * Returns the name of the operation
      *
      * @return string The operation name.

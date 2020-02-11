@@ -417,6 +417,34 @@ class CodeGenerationTestCase extends TestCase
     }
 
     /**
+     * Assert that a method has the expected throwable type in a `throws`
+     * annotation in the DocBlock.
+     *
+     * @param ReflectionMethod $method The method to test.
+     * @param string $type The throwable type.
+     */
+    protected function assertMethodHasThrowable(\ReflectionMethod $method, $type)
+    {
+        // Attempt to do some simple extraction of type declaration from the
+        // DocBlock.
+        $docBlockThrowableType = null;
+        if (preg_match('/@throws (\S+)/', $method->getDocComment(), $matches)) {
+            $docBlockThrowableType = $matches[1];
+        }
+
+        $this->assertEquals(
+            $type,
+            $docBlockThrowableType,
+            sprintf(
+                'Expected throwable of type %s on DocBlock for method %s->%s, none found.',
+                $type,
+                $method->getDeclaringClass()->getName(),
+                $method->getName()
+            )
+        );
+    }
+
+    /**
      * Assert that a class is a subclass of another class.
      *
      * @param ReflectionClass|string $class The subclass of the name of it.

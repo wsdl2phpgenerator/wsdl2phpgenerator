@@ -201,6 +201,13 @@ class Service implements ClassGenerator
                 $comment->addParam(PhpDocElementFactory::getParam($arr['type'], $arr['name'], $arr['desc']));
             }
 
+            foreach ($operation->getThrows() as $throwable) {
+                $comment->addThrows(PhpDocElementFactory::getThrows(
+                    $this->types[$throwable]->getPhpNamespacedIdentifier(),
+                    ''
+                ));
+            }
+
             $source = '  return $this->__soapCall(\'' . $operation->getName() . '\', array(' . $operation->getParamStringNoTypeHints() . '));' . PHP_EOL;
 
             $paramStr = $operation->getParamString($this->types);

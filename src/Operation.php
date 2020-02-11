@@ -35,18 +35,26 @@ class Operation
     private $returns;
 
     /**
+     * @var string[] A list of exceptions this operation can throw
+     */
+    private $throws;
+
+    /**
      *
      * @param string $name
      * @param string $paramStr The parameter string for a operation from the wsdl
      * @param string $description
      * @param string $returns
+     * @param string[] $throws
      */
-    public function __construct($name, $paramStr, $description, $returns)
+    public function __construct($name, $paramStr, $description, $returns,
+        array $throws)
     {
         $this->name = $name;
         $this->params = array();
         $this->description = $description;
         $this->returns = $returns;
+        $this->throws = $throws;
 
         $this->generateParams($paramStr);
     }
@@ -73,6 +81,14 @@ class Operation
     public function getReturns()
     {
         return $this->returns;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getThrows()
+    {
+        return $this->throws;
     }
 
     /**

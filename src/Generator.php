@@ -38,6 +38,13 @@ class Generator implements GeneratorInterface
     protected $types = array();
 
     /**
+     * The names of exceptions that methods in this service can throw
+     *
+     * @var string[]
+     */
+    protected $exceptions = array();
+
+    /**
      * This is the object that holds the current config
      *
      * @var ConfigInterface
@@ -107,6 +114,10 @@ class Generator implements GeneratorInterface
 
         $this->loadTypes();
         $this->loadService();
+
+        if ($this->config->get('soapFaultsCreatePhpExceptions')) {
+            $this->configureExceptions();
+        }
     }
 
     /**
@@ -122,7 +133,21 @@ class Generator implements GeneratorInterface
         foreach ($this->wsdl->getOperations() as $function) {
             $this->log('Loading function ' . $function->getName());
 
-            $this->service->addOperation(new Operation($function->getName(), $function->getParams(), $function->getDocumentation(), $function->getReturns()));
+            $exceptions = array();
+
+            if ($this->config->get('soapFaultsCreatePhpExceptions')) {
+                $exceptions = $function->getExceptions();
+            }
+
+            $this->service->addOperation(new Operation(
+                $function->getName(),
+                $function->getParams(),
+                $function->getDocumentation(),
+                $function->getReturns(),
+                $exceptions
+            ));
+            $this->exceptions = array_unique(array_merge(
+                $this->exceptions, $function->getExceptions()));
         }
 
         $this->log('Done loading service ' . $service->getName());
@@ -194,6 +219,29 @@ class Generator implements GeneratorInterface
         }
 
         $this->log('Done loading types');
+    }
+
+    /**
+     * Ensures all generated exception classes inherit from \Exception so they
+     * can be thrown by users if desired.
+     */
+    protected function configureExceptions()
+    {
+        // For each exception the methods in this service can throw, find their
+        // top-most parent (if any) and set its base type to extend \Exception.
+        foreach ($this->exceptions as $exceptionName) {
+            if (array_key_exists($exceptionName, $this->types)) {
+                $complexType = $this->types[$exceptionName];
+                $baseType = $complexType->getBaseType();
+                while ($baseType !== null && $baseType instanceof ComplexType) {
+                    $complexType = $baseType;
+                    $baseType = $complexType->getBaseType();
+                }
+                $exception = new ComplexType($this->config, '\\Exception');
+                $exception->addMember('string', 'message', false);
+                $complexType->setBaseType($exception);
+            }
+        }
     }
 
     /**

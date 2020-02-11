@@ -100,6 +100,19 @@ class ComplexType extends Type
         foreach ($this->members as $member) {
             $type = Validator::validateType($member->getType());
             $name = Validator::validateAttribute($member->getName());
+
+            // Validate the uniqueness of each member's name against all the
+            // parent members. If the member has the same name as a parent
+            // member, it needs to be suffixed.
+            $name = Validator::validateUnique($name, function($name) use ($parentMembers) {
+                foreach ($parentMembers as $parentMember) {
+                    if ($parentMember->getName() === $name) {
+                        return false;
+                    }
+                }
+                return true;
+            });
+
             $typeHint = Validator::validateTypeHint($type);
 
             $comment = new PhpDocComment();
@@ -205,7 +218,7 @@ class ComplexType extends Type
         // understanding of namespaces. Two types with the same name but in different namespaces will have the same
         // identifier.
         if ($this->baseType !== null && $this->baseType !== $this) {
-            return $this->baseType->getPhpIdentifier();
+            return $this->baseType->getPhpNamespacedIdentifier();
         }
 
         return null;
