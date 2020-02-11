@@ -46,7 +46,7 @@ class ArrayTypeTest extends CodeGenerationTestCase
 
         $this->items = array(
             'zero'  => 3,
-            'one'   => FALSE,
+            'one'   => false,
             'two'   => 'good job',
             'three' => new \stdClass(),
             'four'  => array(),
