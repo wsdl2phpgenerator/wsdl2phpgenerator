@@ -4,10 +4,9 @@ php:
   - 7.2
   - 7.3
   - 7.4
-
-# until PHPUnit upgrade allow PHP 7.4 to fails
-allow_failures:
-  - php: 7.4
+  # until PHPUnit upgrade allow PHP 7.4 to fails
+  allow_failures:
+    - php: 7.4
 
 env:
   - PREFER_LOWEST="--prefer-lowest"
