@@ -94,6 +94,16 @@ class Service implements ClassGenerator
     }
 
     /**
+     * Returns all service operations
+     *
+     * @return array
+     */
+    public function getOperations()
+    {
+        return $this->operations;
+    }
+
+    /**
      * Returns the description of the service.
      *
      * @return string The service description.
@@ -143,6 +153,7 @@ class Service implements ClassGenerator
 
         // Generate a valid classname
         $name = Validator::validateClass($name, $this->config->get('namespaceName'));
+        $indentionStr = $this->config->get('indentionStr');
 
         // uppercase the name
         $name = ucfirst($name);
@@ -156,17 +167,19 @@ class Service implements ClassGenerator
         $comment->addParam(PhpDocElementFactory::getParam('string', 'wsdl', 'The wsdl file to use'));
         $comment->addParam(PhpDocElementFactory::getParam('array', 'options', 'A array of config values'));
 
-        $source = '
-  foreach (self::$classmap as $key => $value) {
-    if (!isset($options[\'classmap\'][$key])) {
-      $options[\'classmap\'][$key] = $value;
-    }
-  }' . PHP_EOL;
-        $source .= '  $options = array_merge(' . var_export($this->config->get('soapClientOptions'), true) . ', $options);' . PHP_EOL;
-        $source .= '  if (!$wsdl) {' . PHP_EOL;
-        $source .= '    $wsdl = \'' . $this->config->get('inputFile') . '\';' . PHP_EOL;
-        $source .= '  }' . PHP_EOL;
-        $source .= '  parent::__construct($wsdl, $options);' . PHP_EOL;
+        $soapClientOptions = explode(PHP_EOL, var_export($this->config->get('soapClientOptions'), true));
+
+        $source = PHP_EOL;
+        $source .= $indentionStr . 'foreach (self::$classmap as $key => $value) {' . PHP_EOL;
+        $source .= str_repeat($indentionStr, 2)  . 'if (!isset($options[\'classmap\'][$key])) {' . PHP_EOL;
+        $source .= str_repeat($indentionStr, 3) . '$options[\'classmap\'][$key] = $value;' . PHP_EOL;
+        $source .= str_repeat($indentionStr, 2)  . '}' . PHP_EOL;
+        $source .= $indentionStr . '}' . PHP_EOL;
+        $source .= $indentionStr . '$options = array_merge(' . implode(PHP_EOL . $indentionStr, $soapClientOptions) . ', $options);' . PHP_EOL;
+        $source .= $indentionStr . 'if (!$wsdl) {' . PHP_EOL;
+        $source .= str_repeat($indentionStr, 2) . '$wsdl = \'' . $this->config->get('inputFile') . '\';' . PHP_EOL;
+        $source .= $indentionStr . '}' . PHP_EOL;
+        $source .= $indentionStr . 'parent::__construct($wsdl, $options);' . PHP_EOL;
 
         $function = new PhpFunction('public', '__construct', 'array $options = array(), $wsdl = null', $source, $comment);
 
@@ -201,7 +214,7 @@ class Service implements ClassGenerator
                 $comment->addParam(PhpDocElementFactory::getParam($arr['type'], $arr['name'], $arr['desc']));
             }
 
-            $source = '  return $this->__soapCall(\'' . $operation->getName() . '\', array(' . $operation->getParamStringNoTypeHints() . '));' . PHP_EOL;
+            $source = $indentionStr . 'return $this->__soapCall(\'' . $operation->getName() . '\', array(' . $operation->getParamStringNoTypeHints() . '));' . PHP_EOL;
 
             $paramStr = $operation->getParamString($this->types);
 

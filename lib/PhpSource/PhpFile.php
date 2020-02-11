@@ -5,6 +5,7 @@
 namespace Wsdl2PhpGenerator\PhpSource;
 
 use Exception;
+use Wsdl2PhpGenerator\PhpSource\PhpDocComment;
 
 /**
  * Class that represents the source code for a php file
@@ -45,6 +46,13 @@ class PhpFile
     private $functions;
 
     /**
+     *
+     * @var array Array of strings, the strings are disclaimers
+     * @access private
+     */
+    private $disclaimers;
+
+    /**
      * Sets the name of the file, and sets all other members to empty
      *
      * @param string $name The name of the file
@@ -64,17 +72,36 @@ class PhpFile
      */
     public function getSource()
     {
-        $ret = '<?php' . PHP_EOL . PHP_EOL;
+        $ret = '<?php';
 
-        if (count($this->namespaces) > 0) {
-            $ret .= 'namespace ' . $this->namespaces[0] . ';' . PHP_EOL . PHP_EOL;
+        if ($this->hasDisclaimer()) {
+            foreach ($this->disclaimers as $disclaimer) {
+                $ret .= $disclaimer->getSource(). PHP_EOL;
+            }
+        } else {
+            $ret .= PHP_EOL . PHP_EOL;
         }
 
+        $namespace = $classNamespace = null;
+        if ($this->hasNamespace()) {
+            $namespace = $this->namespaces[0];
+        }
+
+        $classesSource = '';
         if (count($this->classes) > 0) {
             foreach ($this->classes as $class) {
-                $ret .= $class->getSource();
+                if (!$classNamespace && $class->getClassNamespace()) {
+                    $classNamespace = $class->getClassNamespace();
+                }
+                $classesSource .= $class->getSource();
             }
         }
+
+        $namespace = $classNamespace ?: $namespace;
+        if ($namespace) {
+            $ret .= 'namespace ' . $namespace . ';' . PHP_EOL . PHP_EOL;
+        }
+        $ret .= $classesSource;
 
         if (count($this->functions) > 0) {
             foreach ($this->functions as $function) {
@@ -115,6 +142,32 @@ class PhpFile
     public function hasNamespace()
     {
         return (count($this->namespaces) > 0);
+    }
+
+    /**
+     * Adds a disclaimer
+     *
+     * @param string $disclaimer The disclaimer to add
+     */
+    public function addDisclaimer($disclaimer)
+    {
+        if (!$disclaimer) {
+            return;
+        }
+        $key = md5($disclaimer);
+        if (!isset($this->disclaimers[$key])) {
+            $this->disclaimers[$key] = new PhpDocComment($disclaimer);
+        }
+    }
+
+    /**
+     * Checks if the file has a disclaimer
+     *
+     * @return bool Returns true if a disclaimer is added to the file
+     */
+    public function hasDisclaimer()
+    {
+        return (count($this->disclaimers) > 0);
     }
 
     /**

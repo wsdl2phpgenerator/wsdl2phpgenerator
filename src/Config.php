@@ -74,7 +74,13 @@ class Config implements ConfigInterface
             'constructorParamsDefaultToNull' => false,
             'soapClientClass'               => '\SoapClient',
             'soapClientOptions'             => array(),
-            'proxy'                         => false
+            'proxy'                         => false,
+            'varAccess'                     => 'protected',
+            'generateService'               => true,
+            'generateAutoloader'            => true,
+            'indentionStr'                  => '    ',// Use 4 spaces as indention, as requested by PSR-2
+            'disclaimer'                    => '',
+            'pluginClassList'               => array(),
         ));
 
         // A set of configuration options names and normalizer callables.

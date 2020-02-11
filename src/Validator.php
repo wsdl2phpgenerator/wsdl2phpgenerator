@@ -188,8 +188,9 @@ class Validator
      */
     public static function validateType($typeName)
     {
-        if (substr($typeName, -2) == "[]") {
-            return self::validateNamingConvention(substr($typeName, 0, -2)) . "[]";
+        $arraySuffix = "[]";
+        if (substr($typeName, -2) == $arraySuffix) {
+            return  self::validateNamingConvention(substr($typeName, 0, -2)) . $arraySuffix;
         }
 
         switch (strtolower($typeName)) {
@@ -218,10 +219,8 @@ class Validator
             case "token":
             case "normalizedstring":
             case "hexbinary":
-                return 'string';
-                break;
             case "datetime":
-                return  '\DateTime';
+                return 'string';
                 break;
             default:
                 $typeName = self::validateNamingConvention($typeName);
@@ -245,13 +244,11 @@ class Validator
     {
         $typeHint = null;
 
-        // We currently only support type hints for arrays and DateTimes.
+        // We currently only support type hints for arrays.
         // Going forward we could support it for generated types. The challenge here are enums as they are actually
         // strings and not class instances and we have no way of determining whether the type is an enum at this point.
         if (substr($typeName, -2) == "[]") {
             $typeHint = 'array';
-        } elseif ($typeName == '\DateTime') {
-            $typeHint = $typeName;
         }
 
         return $typeHint;

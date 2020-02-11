@@ -17,10 +17,24 @@ class PhpClass extends PhpElement
 {
     /**
      *
+     * @var string namespace rewrite (optional)
+     * @access private
+     */
+    private $classNamespace = '';
+
+    /**
+     *
      * @var array An array of strings, contains all the filenames to include for the class
      * @access private
      */
     private $dependencies;
+
+    /**
+     *
+     * @var array An array of strings, contains all the classes to import for the class
+     * @access private
+     */
+    private $namespaces;
 
     /**
      *
@@ -49,6 +63,13 @@ class PhpClass extends PhpElement
      * @access private
      */
     private $implements = [];
+
+    /**
+     *
+     * @var string[]
+     * @access private
+     */
+    private $traits;
 
     /**
      *
@@ -103,12 +124,14 @@ class PhpClass extends PhpElement
     public function __construct($identifier, $classExists = false, $extends = '', PhpDocComment $comment = null, $final = false, $abstract = false)
     {
         $this->dependencies = array();
+        $this->namespaces = array();
         $this->classExists = $classExists;
         $this->comment = $comment;
         $this->final = $final;
         $this->identifier = $identifier;
         $this->access = '';
         $this->extends = $extends;
+        $this->traits = array();
         $this->constants = array();
         $this->variables = array();
         $this->functions = array();
@@ -135,6 +158,13 @@ class PhpClass extends PhpElement
             $ret .= PHP_EOL;
         }
 
+        if (count($this->namespaces) > 0) {
+            foreach ($this->namespaces as $namespace) {
+                $ret .= 'use ' . $namespace . ';' . PHP_EOL;
+            }
+            $ret .= PHP_EOL;
+        }
+
         if ($this->comment !== null) {
             $ret .= $this->comment->getSource();
         }
@@ -157,17 +187,31 @@ class PhpClass extends PhpElement
             $ret .= ' implements ' . implode(', ', $this->implements);
         }
 
-        $ret .= PHP_EOL . '{' . PHP_EOL;
+        $ret .= PHP_EOL . '{';
+
+        if (count($this->traits) > 0) {
+            $ret .= PHP_EOL;
+            foreach ($this->traits as $trait) {
+                $ret .= $this->getIndentionStr() . 'use ' . $trait . ';' . PHP_EOL;
+            }
+        }
 
         if (isset($this->default)) {
+            $ret .= PHP_EOL;
             $ret .= $this->getIndentionStr() . 'const __default = ' . $this->default . ';' . PHP_EOL;
         }
 
         if (count($this->constants) > 0) {
-            foreach ($this->constants as $name => $value) {
-                $ret .= $this->getIndentionStr() . 'const ' . $name . ' = \'' . $value . '\';' . PHP_EOL;
-            }
             $ret .= PHP_EOL;
+            foreach ($this->constants as $name => $value) {
+                $ret .= $this->getIndentionStr() . 'const ' . $name . ' = ';
+                if (is_array($value)) {
+                    $options = explode(PHP_EOL, var_export($value, true));
+                    $ret .= implode(PHP_EOL . $this->getIndentionStr(), $options) . ';' . PHP_EOL;
+                } else {
+                    $ret .= '\'' . $value . '\';' . PHP_EOL;
+                }
+            }
         }
 
         if (count($this->variables) > 0) {
@@ -184,13 +228,34 @@ class PhpClass extends PhpElement
             }
         }
 
-        $ret .= PHP_EOL . '}' . PHP_EOL;
+        $ret .= '}' . PHP_EOL;
 
         if ($this->classExists) {
             $ret .= PHP_EOL . '}' . PHP_EOL;
         }
 
         return $ret;
+    }
+
+    /**
+     * Sets class namespace rewrite
+     *
+     * @param string $namespace
+     * @return void
+     */
+    public function setClassNamespace($namespace)
+    {
+        $this->classNamespace = $namespace;
+    }
+
+    /**
+     * Retrieve class namespace rewrite
+     *
+     * @return string
+     */
+    public function getClassNamespace()
+    {
+        return $this->classNamespace;
     }
 
     /**
@@ -207,12 +272,39 @@ class PhpClass extends PhpElement
     }
 
     /**
+     * Adds a class name to be imported for the class to use
+     *
+     * @param string $className
+     */
+    public function addNamespace($className)
+    {
+        if (in_array($className, $this->namespaces) == false) {
+            $this->namespaces[] = $className;
+        }
+    }
+
+    /**
      * @param string|\string[] $classes  $filename
      */
     public function addImplementation($classes)
     {
         $classes = (array)$classes;
         $this->implements = array_merge((array)$this->implements, $classes);
+    }
+
+    /**
+     * Adds a trait import to the class
+     *
+     * @param string $value
+     * @throws Exception
+     */
+    public function addTrait($value)
+    {
+        if (in_array($value, $this->traits)) {
+            throw new Exception('A trait of the name (' . $value . ') does already exist.');
+        }
+
+        $this->traits[] = $value;
     }
 
     /**
@@ -229,12 +321,12 @@ class PhpClass extends PhpElement
      * Adds a constant to the class. If no name is supplied and the value is a string the value is used as name otherwise exception is raised
      *
      * @param mixed $value
-     * @param string $name
+     * @param string|array $name
      * @throws Exception
      */
     public function addConstant($value, $name = '')
     {
-        if (strlen($value) == 0) {
+        if ((is_string($value) && strlen($value) == 0) || is_array($value) && !$value) {
             throw new Exception('No value supplied');
         }
 

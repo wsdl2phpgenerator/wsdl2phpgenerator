@@ -66,6 +66,8 @@ class ComplexType extends Type
         }
 
         $classBaseType = $this->getBaseTypeClass();
+        $indentionStr = $this->config->get('indentionStr');
+        $variableAccess = $this->config->get('varAccess');
 
         $this->class = new PhpClass(
             $this->phpIdentifier,
@@ -78,7 +80,9 @@ class ComplexType extends Type
 
         $constructorComment = new PhpDocComment();
         $constructorSource = '';
+        $constructorParentCall = '';
         $constructorParameters = array();
+        $constructorParametersParent = array();
         $accessors = array();
 
         // Add base type members to constructor parameter list first and call base class constructor
@@ -93,7 +97,9 @@ class ComplexType extends Type
                     $constructorParameters[$name] = Validator::validateTypeHint($type);
                 }
             }
-            $constructorSource .= '  parent::__construct(' . $this->buildParametersString($constructorParameters, false) . ');' . PHP_EOL;
+            $constructorParametersParent = $constructorParameters;
+            $constructorParentCall = $indentionStr . 'parent::__construct(' . $this->buildParametersString($constructorParameters, false) . ');' . PHP_EOL;
+            $constructorSource .= $constructorParentCall;
         }
 
         // Add member variables
@@ -101,21 +107,18 @@ class ComplexType extends Type
             $type = Validator::validateType($member->getType());
             $name = Validator::validateAttribute($member->getName());
             $typeHint = Validator::validateTypeHint($type);
+            $isDateTime = strtolower($member->getType()) === 'datetime';
 
             $comment = new PhpDocComment();
             $comment->setVar(PhpDocElementFactory::getVar($type, $name, ''));
-            $var = new PhpVariable('protected', $name, 'null', $comment);
+            $var = new PhpVariable($variableAccess, $name, 'null', $comment);
             $this->class->addVariable($var);
 
             if (!$member->getNullable()) {
-                if ($type == '\DateTime') {
-                    if ($this->config->get('constructorParamsDefaultToNull')) {
-                        $constructorSource .= '  $this->' . $name . ' = $' . $name . ' ? $' . $name . '->format(\DateTime::ATOM) : null;' . PHP_EOL;
-                    } else {
-                        $constructorSource .= '  $this->' . $name . ' = $' . $name . '->format(\DateTime::ATOM);' . PHP_EOL;
-                    }
+                if ($isDateTime) {
+                    $constructorSource .= $indentionStr . '$this->set' . ucfirst($name) . '($' . $name . ');' . PHP_EOL;
                 } else {
-                    $constructorSource .= '  $this->' . $name . ' = $' . $name . ';' . PHP_EOL;
+                    $constructorSource .= $indentionStr . '$this->' . $name . ' = $' . $name . ';' . PHP_EOL;
                 }
                 $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
                 $constructorParameters[$name] = $typeHint;
@@ -123,39 +126,24 @@ class ComplexType extends Type
 
             $getterComment = new PhpDocComment();
             $getterComment->setReturn(PhpDocElementFactory::getReturn($type, ''));
-            if ($type == '\DateTime') {
-                $getterCode = '  if ($this->' . $name . ' == null) {' . PHP_EOL
-                    . '    return null;' . PHP_EOL
-                    . '  } else {' . PHP_EOL
-                    . '    try {' . PHP_EOL
-                    . '      return new \DateTime($this->' . $name . ');' . PHP_EOL
-                    . '    } catch (\Exception $e) {' . PHP_EOL
-                    . '      return false;' . PHP_EOL
-                    . '    }' . PHP_EOL
-                    . '  }' . PHP_EOL;
-            } else {
-                $getterCode = '  return $this->' . $name . ';' . PHP_EOL;
-            }
+            $getterCode = $indentionStr . 'return $this->' . $name . ';' . PHP_EOL;
             $getter = new PhpFunction('public', 'get' . ucfirst($name), '', $getterCode, $getterComment);
             $accessors[] = $getter;
 
+            $additionalType = $isDateTime ? '|\DateTime' : '';
             $setterComment = new PhpDocComment();
-            $setterComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
+            $setterComment->addParam(PhpDocElementFactory::getParam($type . $additionalType, $name, ''));
             $setterComment->setReturn(PhpDocElementFactory::getReturn($this->phpNamespacedIdentifier, ''));
-            if ($type == '\DateTime') {
-                if ($member->getNullable()) {
-                    $setterCode = '  if ($' . $name . ' == null) {' . PHP_EOL
-                        . '   $this->' . $name . ' = null;' . PHP_EOL
-                        . '  } else {' . PHP_EOL
-                        . '    $this->' . $name . ' = $' . $name . '->format(\DateTime::ATOM);' . PHP_EOL
-                        . '  }' . PHP_EOL;
-                } else {
-                    $setterCode = '  $this->' . $name . ' = $' . $name . '->format(\DateTime::ATOM);' . PHP_EOL;
-                }
+            if ($isDateTime) {
+                $setterCode = $indentionStr . 'if ($' . $name . ' instanceof \DateTime) {' . PHP_EOL
+                    . str_repeat($indentionStr, 2) . '$this->' . $name . ' = $' . $name . '->format(\DateTime::ATOM);' . PHP_EOL
+                    . $indentionStr . '} else {' . PHP_EOL
+                    . str_repeat($indentionStr, 2) . '$this->' . $name . ' = $' . $name . ';' . PHP_EOL
+                    . $indentionStr . '}' . PHP_EOL;
             } else {
-                $setterCode = '  $this->' . $name . ' = $' . $name . ';' . PHP_EOL;
+                $setterCode = $indentionStr . '$this->' . $name . ' = $' . $name . ';' . PHP_EOL;
             }
-            $setterCode .= '  return $this;' . PHP_EOL;
+            $setterCode .= $indentionStr . 'return $this;' . PHP_EOL;
             $setter = new PhpFunction(
                 'public',
                 'set' . ucfirst($name),
@@ -173,18 +161,22 @@ class ComplexType extends Type
             $accessors[] = $setter;
         }
 
-        $constructor = new PhpFunction(
-            'public',
-            '__construct',
-            $this->buildParametersString(
-                $constructorParameters,
-                true,
-                $this->config->get('constructorParamsDefaultToNull')
-            ),
-            $constructorSource,
-            $constructorComment
-        );
-        $this->class->addFunction($constructor);
+        if (($constructorParameters && $constructorParameters !== $constructorParametersParent)
+            || ($constructorSource && $constructorSource !== $constructorParentCall)
+        ) {
+            $constructor = new PhpFunction(
+                'public',
+                '__construct',
+                $this->buildParametersString(
+                    $constructorParameters,
+                    true,
+                    $this->config->get('constructorParamsDefaultToNull')
+                ),
+                $constructorSource,
+                $constructorComment
+            );
+            $this->class->addFunction($constructor);
+        }
 
         foreach ($accessors as $accessor) {
             $this->class->addFunction($accessor);
