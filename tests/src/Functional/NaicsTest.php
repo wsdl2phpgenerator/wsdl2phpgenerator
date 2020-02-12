@@ -1,4 +1,10 @@
 <?php
+
+/*
+ * This file is part of the WSDL2PHPGenerator package.
+ * (c) WSDL2PHPGenerator.
+ */
+
 namespace Wsdl2PhpGenerator\Tests\Functional;
 
 use SoapFault;
@@ -13,11 +19,10 @@ use SoapFault;
  */
 class NaicsTest extends FunctionalTestCase
 {
-
     protected function getWsdlPath()
     {
         // Source: http://www.webservicex.net/GenericNAICS.asmx?WSDL.
-        return $this->fixtureDir . '/naics/GenericNAICS.wsdl';
+        return $this->fixtureDir.'/naics/GenericNAICS.wsdl';
     }
 
     /**
@@ -43,7 +48,7 @@ class NaicsTest extends FunctionalTestCase
             $this->assertAttributeTypeConsistency('object', 'NAICSData', $response->getNAICSData());
             $this->assertAttributeTypeConsistency('array', 'NAICS', $response->getNAICSData()->getNAICSData());
             $arrayOfNaics = $response->getNAICSData()->getNAICSData();
-            $naicsArray = $response->getNAICSData()->getNAICSData()->getNAICS();
+            $naicsArray   = $response->getNAICSData()->getNAICSData()->getNAICS();
             $this->checkArray($arrayOfNaics, $naicsArray);
             foreach ($naicsArray as $naics) {
                 $this->assertAttributeTypeConsistency('string', 'NAICSCode', $naics);
@@ -53,13 +58,13 @@ class NaicsTest extends FunctionalTestCase
         } catch (SoapFault $e) {
             // If an exception is thrown it should be due to a timeout. We cannot
             // guard against this when calling an external service.
+            var_dump($e->getFile());
             $this->assertContains('timeout', $e->getMessage());
         }
-
     }
 
     /**
-     * Check ArrayAccess, Iterator and Countable implementations
+     * Check ArrayAccess, Iterator and Countable implementations.
      */
     protected function checkArray($arrayClass, $array)
     {
@@ -85,7 +90,7 @@ class NaicsTest extends FunctionalTestCase
     {
         $service = new \GenericNAICS();
         // Requesting a specific ID should be a sure way to only return a single result.
-        $request = new \GetNAICSByID('54151');
+        $request  = new \GetNAICSByID('54151');
         $response = $service->GetNaicsByID($request);
         // Even if there is a single result there should be an ArrayOfNaics object with an array of NAICS attribute.
         // This ensures that the DocBlock is still valid. The is handled as the SOAP_SINGLE_ELEMENT_ARRAYS feature is

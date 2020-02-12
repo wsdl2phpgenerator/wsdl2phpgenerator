@@ -1,22 +1,26 @@
 <?php
 
+/*
+ * This file is part of the WSDL2PHPGenerator package.
+ * (c) WSDL2PHPGenerator.
+ */
+
 namespace Wsdl2PhpGenerator;
 
 /**
  * The config interface which implemented represents
  * a configuration that is used across this project.
- *
- * @package Wsdl2PhpGenerator
  */
-
 interface ConfigInterface
 {
     /**
      * Get a value from the configuration by key.
      *
      * @param $key
-     * @return mixed
+     *
      * @throws \InvalidArgumentException
+     *
+     * @return mixed
      */
     public function get($key);
 
@@ -25,6 +29,7 @@ interface ConfigInterface
      *
      * @param $key
      * @param $value
+     *
      * @return ConfigInterface
      */
     public function set($key, $value);

@@ -1,5 +1,10 @@
 <?php
 
+/*
+ * This file is part of the WSDL2PHPGenerator package.
+ * (c) WSDL2PHPGenerator.
+ */
+
 namespace Wsdl2PhpGenerator\Tests\Functional;
 
 /**
@@ -7,10 +12,9 @@ namespace Wsdl2PhpGenerator\Tests\Functional;
  */
 class Utf8Test extends FunctionalTestCase
 {
-
     protected function getWsdlPath()
     {
-        return $this->fixtureDir . '/utf8/utf8.wsdl';
+        return $this->fixtureDir.'/utf8/utf8.wsdl';
     }
 
     public function testUtf8()
@@ -43,14 +47,13 @@ class Utf8Test extends FunctionalTestCase
 
         $arrayableComplexTypeClass = new \ReflectionClass('ArrayOfMsgContrasena');
 
-        $arrayableComplexTypeSetterDocComment = $arrayableComplexTypeClass->getMethod("setItem")->getDocComment();
+        $arrayableComplexTypeSetterDocComment = $arrayableComplexTypeClass->getMethod('setItem')->getDocComment();
 
         // Validate UTF8 names in DocComment types
-        $this->assertContains('@param MsgContrasena[]', $arrayableComplexTypeSetterDocComment, 
+        $this->assertContains('@param MsgContrasena[]', $arrayableComplexTypeSetterDocComment,
                 'Array setter method should contain param with valid UTF8 arrayable type, transliterated');
 
-        $this->assertContains('@return ArrayOfMsgContrasena', $arrayableComplexTypeSetterDocComment, 
+        $this->assertContains('@return ArrayOfMsgContrasena', $arrayableComplexTypeSetterDocComment,
                 'Array setter method should contain valid UTF8 return type, transliterated');
     }
-
 }

@@ -1,0 +1,1427 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\ArrayType\\:\\:generateClass\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: src/ArrayType.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\ArrayType\\:\\:implementArrayAccess\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: src/ArrayType.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\ArrayType\\:\\:implementIterator\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: src/ArrayType.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\ArrayType\\:\\:implementCountable\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: src/ArrayType.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\ArrayType\\:\\:implementArrayInterfaces\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: src/ArrayType.php
+
+		-
+			message: "#^PHPDoc tag @var has invalid value \\(\\)\\: Unexpected token \"\\\\n     \", expected type at offset 15$#"
+			count: 1
+			path: src/ComplexType.php
+
+		-
+			message: "#^Property Wsdl2PhpGenerator\\\\ComplexType\\:\\:\\$abstract has no typehint specified\\.$#"
+			count: 1
+			path: src/ComplexType.php
+
+		-
+			message: "#^Parameter \\#3 \\$datatype of method Wsdl2PhpGenerator\\\\Type\\:\\:__construct\\(\\) expects string, null given\\.$#"
+			count: 1
+			path: src/ComplexType.php
+
+		-
+			message: "#^Property Wsdl2PhpGenerator\\\\ComplexType\\:\\:\\$baseType \\(Wsdl2PhpGenerator\\\\ComplexType\\) does not accept null\\.$#"
+			count: 1
+			path: src/ComplexType.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\ComplexType\\:\\:generateClass\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: src/ComplexType.php
+
+		-
+			message: "#^Class Wsdl2PhpGenerator\\\\ComplexType referenced with incorrect case\\: Wsdl2PhpGenerator\\\\complexType\\.$#"
+			count: 1
+			path: src/ComplexType.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\ComplexType\\:\\:setBaseType\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: src/ComplexType.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\ComplexType\\:\\:setAbstract\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: src/ComplexType.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\ComplexType\\:\\:addMember\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: src/ComplexType.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\ComplexType\\:\\:buildParametersString\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/ComplexType.php
+
+		-
+			message: "#^Property Wsdl2PhpGenerator\\\\Config\\:\\:\\$options type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Config.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Config\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Config.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Config\\:\\:get\\(\\) has parameter \\$key with no typehint specified\\.$#"
+			count: 1
+			path: src/Config.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$key\\)\\: Unexpected token \"\\$key\", expected type at offset 75$#"
+			count: 1
+			path: src/Config.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Config\\:\\:set\\(\\) has parameter \\$key with no typehint specified\\.$#"
+			count: 1
+			path: src/Config.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Config\\:\\:set\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: src/Config.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$key\\)\\: Unexpected token \"\\$key\", expected type at offset 89$#"
+			count: 1
+			path: src/Config.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$value\\)\\: Unexpected token \"\\$value\", expected type at offset 108$#"
+			count: 1
+			path: src/Config.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Config\\:\\:configureOptions\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: src/Config.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Config\\:\\:normalizeArray\\(\\) has parameter \\$value with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Config.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Config\\:\\:normalizeArray\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Config.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function strlen expects string, array\\|string given\\.$#"
+			count: 1
+			path: src/Config.php
+
+		-
+			message: "#^Parameter \\#2 \\$str of function explode expects string, array\\|string given\\.$#"
+			count: 1
+			path: src/Config.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Config\\:\\:normalizeSoapClientOptions\\(\\) has parameter \\$value with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Config.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Config\\:\\:normalizeSoapClientOptions\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Config.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Config\\:\\:normalizeProxy\\(\\) has parameter \\$value with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Config.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Config\\:\\:normalizeProxy\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Config.php
+
+		-
+			message: "#^Offset 'host' does not exist on array\\(\\)\\|array\\('scheme' \\=\\> string, 'host' \\=\\> string, 'port' \\=\\> int, 'user' \\=\\> string, 'pass' \\=\\> string, 'path' \\=\\> string, 'query' \\=\\> string, 'fragment' \\=\\> string\\)\\.$#"
+			count: 1
+			path: src/Config.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\ConfigInterface\\:\\:get\\(\\) has parameter \\$key with no typehint specified\\.$#"
+			count: 1
+			path: src/ConfigInterface.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$key\\)\\: Unexpected token \"\\$key\", expected type at offset 75$#"
+			count: 1
+			path: src/ConfigInterface.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\ConfigInterface\\:\\:set\\(\\) has parameter \\$key with no typehint specified\\.$#"
+			count: 1
+			path: src/ConfigInterface.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\ConfigInterface\\:\\:set\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: src/ConfigInterface.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$key\\)\\: Unexpected token \"\\$key\", expected type at offset 89$#"
+			count: 1
+			path: src/ConfigInterface.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$value\\)\\: Unexpected token \"\\$value\", expected type at offset 108$#"
+			count: 1
+			path: src/ConfigInterface.php
+
+		-
+			message: "#^Property Wsdl2PhpGenerator\\\\Enum\\:\\:\\$values type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Enum.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Enum\\:\\:generateClass\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: src/Enum.php
+
+		-
+			message: "#^PHPDoc tag @throws with type Wsdl2PhpGenerator\\\\Exception is not subtype of Throwable$#"
+			count: 1
+			path: src/Enum.php
+
+		-
+			message: "#^Instantiated class Wsdl2PhpGenerator\\\\Exception not found\\.$#"
+			count: 1
+			path: src/Enum.php
+
+		-
+			message: "#^Throwing object of an unknown class Wsdl2PhpGenerator\\\\Exception\\.$#"
+			count: 1
+			path: src/Enum.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Enum\\:\\:addValue\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: src/Enum.php
+
+		-
+			message: "#^Property Wsdl2PhpGenerator\\\\Filter\\\\ServiceOperationFilter\\:\\:\\$methods type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Filter/ServiceOperationFilter.php
+
+		-
+			message: "#^Property Wsdl2PhpGenerator\\\\Generator\\:\\:\\$service \\(Wsdl2PhpGenerator\\\\Service\\) does not accept null\\.$#"
+			count: 1
+			path: src/Generator.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Generator\\:\\:generate\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: src/Generator.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Generator\\:\\:load\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: src/Generator.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Generator\\:\\:load\\(\\) has parameter \\$wsdl with no typehint specified\\.$#"
+			count: 1
+			path: src/Generator.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Generator\\:\\:loadService\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: src/Generator.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Generator\\:\\:loadTypes\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: src/Generator.php
+
+		-
+			message: "#^Call to an undefined method Wsdl2PhpGenerator\\\\Type\\:\\:setBaseType\\(\\)\\.$#"
+			count: 1
+			path: src/Generator.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Generator\\:\\:savePhp\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: src/Generator.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Generator\\:\\:log\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: src/Generator.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Generator\\:\\:setLogger\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: src/Generator.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\GeneratorInterface\\:\\:generate\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: src/GeneratorInterface.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\GeneratorInterface\\:\\:setLogger\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: src/GeneratorInterface.php
+
+		-
+			message: "#^Property Wsdl2PhpGenerator\\\\Operation\\:\\:\\$params type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Operation.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Operation\\:\\:getPhpDocParams\\(\\) has parameter \\$validTypes with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Operation.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Operation\\:\\:getPhpDocParams\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Operation.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(array An array of Type objects with valid types for typehinting\\)\\: Unexpected token \"An\", expected variable at offset 68$#"
+			count: 1
+			path: src/Operation.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Operation\\:\\:getParams\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Operation.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Operation\\:\\:generateParams\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: src/Operation.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\OutputManager\\:\\:save\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: src/OutputManager.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\OutputManager\\:\\:save\\(\\) has parameter \\$types with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/OutputManager.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\OutputManager\\:\\:setOutputDirectory\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: src/OutputManager.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\OutputManager\\:\\:saveClassToFile\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: src/OutputManager.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\OutputManager\\:\\:saveAutoloader\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: src/OutputManager.php
+
+		-
+			message: "#^Parameter \\#1 \\$access of class Wsdl2PhpGenerator\\\\PhpSource\\\\PhpFunction constructor expects string, null given\\.$#"
+			count: 1
+			path: src/OutputManager.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Pattern\\:\\:setValue\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: src/Pattern.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Service\\:\\:__construct\\(\\) has parameter \\$types with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Service.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Service\\:\\:generateClass\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: src/Service.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Service\\:\\:addOperation\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: src/Service.php
+
+		-
+			message: "#^Property Wsdl2PhpGenerator\\\\Type\\:\\:\\$class \\(Wsdl2PhpGenerator\\\\PhpSource\\\\PhpClass\\) does not accept null\\.$#"
+			count: 1
+			path: src/Type.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Type\\:\\:generateClass\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: src/Type.php
+
+		-
+			message: "#^Property Wsdl2PhpGenerator\\\\Validator\\:\\:\\$keywords type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Validator.php
+
+		-
+			message: "#^Unreachable statement \\- code above always terminates\\.$#"
+			count: 4
+			path: src/Validator.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Validator\\:\\:validateUnique\\(\\) has parameter \\$name with no typehint specified\\.$#"
+			count: 1
+			path: src/Validator.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$name the name to test\\)\\: Unexpected token \"\\$name\", expected type at offset 138$#"
+			count: 1
+			path: src/Validator.php
+
+		-
+			message: "#^Parameter \\#2 \\$subject of function preg_match expects string, string\\|false given\\.$#"
+			count: 1
+			path: src/Validator.php
+
+		-
+			message: "#^Parameter \\#1 \\$str of function ucfirst expects string, string\\|false given\\.$#"
+			count: 1
+			path: src/Validator.php
+
+		-
+			message: "#^Parameter \\#3 \\$subject of function preg_replace expects array\\|string, string\\|false given\\.$#"
+			count: 1
+			path: src/Validator.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Xml\\\\OperationNode\\:\\:__construct\\(\\) has parameter \\$wsdlFunction with no typehint specified\\.$#"
+			count: 1
+			path: src/Xml/OperationNode.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Xml\\\\SchemaDocument\\:\\:__construct\\(\\) has parameter \\$xsdUrl with no typehint specified\\.$#"
+			count: 1
+			path: src/Xml/SchemaDocument.php
+
+		-
+			message: "#^Parameter \\#1 \\$document of method Wsdl2PhpGenerator\\\\Xml\\\\XmlNode\\:\\:__construct\\(\\) expects null, DOMDocument given\\.$#"
+			count: 1
+			path: src/Xml/SchemaDocument.php
+
+		-
+			message: "#^Parameter \\#2 \\$element of method Wsdl2PhpGenerator\\\\Xml\\\\XmlNode\\:\\:__construct\\(\\) expects null, DOMElement\\|null given\\.$#"
+			count: 1
+			path: src/Xml/SchemaDocument.php
+
+		-
+			message: "#^Access to an undefined property DOMNode\\:\\:\\$value\\.$#"
+			count: 1
+			path: src/Xml/SchemaDocument.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Xml\\\\SchemaDocument\\:\\:findTypeElement\\(\\) should return DOMElement\\|null but returns DOMNode\\|null\\.$#"
+			count: 1
+			path: src/Xml/SchemaDocument.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Xml\\\\TypeNode\\:\\:isElementArray\\(\\) has parameter \\$name with no typehint specified\\.$#"
+			count: 1
+			path: src/Xml/TypeNode.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$name string The name of the sub element\\)\\: Unexpected token \"\\$name\", expected type at offset 99$#"
+			count: 1
+			path: src/Xml/TypeNode.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Xml\\\\TypeNode\\:\\:getElementMinOccurs\\(\\) has parameter \\$name with no typehint specified\\.$#"
+			count: 1
+			path: src/Xml/TypeNode.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$name string The name of the sub element\\)\\: Unexpected token \"\\$name\", expected type at offset 76$#"
+			count: 1
+			path: src/Xml/TypeNode.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Xml\\\\TypeNode\\:\\:getElementMinOccurs\\(\\) should return int but returns null\\.$#"
+			count: 2
+			path: src/Xml/TypeNode.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Xml\\\\TypeNode\\:\\:getParts\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Xml/TypeNode.php
+
+		-
+			message: "#^If condition is always true\\.$#"
+			count: 1
+			path: src/Xml/TypeNode.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Xml\\\\WsdlDocument\\:\\:__construct\\(\\) has parameter \\$wsdlUrl with no typehint specified\\.$#"
+			count: 1
+			path: src/Xml/WsdlDocument.php
+
+		-
+			message: "#^Property Wsdl2PhpGenerator\\\\Xml\\\\WsdlDocument\\:\\:\\$soapClient \\(SoapClient\\) does not accept object\\.$#"
+			count: 1
+			path: src/Xml/WsdlDocument.php
+
+		-
+			message: "#^Parameter \\#1 \\$document of class Wsdl2PhpGenerator\\\\Xml\\\\ServiceNode constructor expects null, DOMDocument given\\.$#"
+			count: 1
+			path: src/Xml/WsdlDocument.php
+
+		-
+			message: "#^Parameter \\#2 \\$element of class Wsdl2PhpGenerator\\\\Xml\\\\ServiceNode constructor expects null, DOMElement\\|null given\\.$#"
+			count: 1
+			path: src/Xml/WsdlDocument.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Xml\\\\WsdlDocument\\:\\:getService\\(\\) should return Wsdl2PhpGenerator\\\\Xml\\\\ServiceNode but returns null\\.$#"
+			count: 1
+			path: src/Xml/WsdlDocument.php
+
+		-
+			message: "#^Parameter \\#2 \\$element of method Wsdl2PhpGenerator\\\\Xml\\\\XmlNode\\:\\:setElement\\(\\) expects DOMElement\\|null, DOMNode\\|null given\\.$#"
+			count: 1
+			path: src/Xml/WsdlDocument.php
+
+		-
+			message: "#^Parameter \\#1 \\$document of method Wsdl2PhpGenerator\\\\Xml\\\\XmlNode\\:\\:setElement\\(\\) expects DOMDocument, null given\\.$#"
+			count: 1
+			path: src/Xml/XmlNode.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Xml\\\\XmlNode\\:\\:setElement\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: src/Xml/XmlNode.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Xml\\\\XmlNode\\:\\:xpath\\(\\) return type with generic class DOMNodeList does not specify its types\\: TNode$#"
+			count: 1
+			path: src/Xml/XmlNode.php
+
+		-
+			message: "#^Parameter \\#2 \\$parameters of function call_user_func_array expects array\\<int, mixed\\>, array\\<int\\|string, mixed\\> given\\.$#"
+			count: 1
+			path: src/Xml/XmlNode.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Xml\\\\XmlNode\\:\\:xpath\\(\\) should return DOMNodeList but returns DOMNodeList\\|false\\.$#"
+			count: 1
+			path: src/Xml/XmlNode.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Xml\\\\XmlNode\\:\\:cleanNamespace\\(\\) should return string but returns string\\|false\\.$#"
+			count: 1
+			path: src/Xml/XmlNode.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\AbstractTest\\:\\:testAbstract\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/AbstractTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\AbstractTest\\:\\:testAbstractClass\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/AbstractTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\AmazonEc2Test\\:\\:testNonStandardNamespace\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/AmazonEc2Test.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\CommentsGenerationTest\\:\\:testMainClassExists\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/CommentsGenerationTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\CommentsGenerationTest\\:\\:testEmptyCommentWillNotBeGenerated\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/CommentsGenerationTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\CommentsGenerationTest\\:\\:testNewLinesRemovedFromBordersOfDescription\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/CommentsGenerationTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\CommentsGenerationTest\\:\\:testNewLinesRemovedFromBordersOfDescription\\(\\) has parameter \\$mainClass with generic class ReflectionClass but does not specify its types\\: T$#"
+			count: 1
+			path: tests/src/Functional/CommentsGenerationTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\CommentsGenerationTest\\:\\:testThereIsNoNewLineAfterDescriptionByDefault\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/CommentsGenerationTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\CommentsGenerationTest\\:\\:testThereIsNoNewLineAfterDescriptionByDefault\\(\\) has parameter \\$mainClass with generic class ReflectionClass but does not specify its types\\: T$#"
+			count: 1
+			path: tests/src/Functional/CommentsGenerationTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\CommentsGenerationTest\\:\\:testThereIsNoNewLineAboveTagsSection\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/CommentsGenerationTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\CommentsGenerationTest\\:\\:testThereIsNoNewLineAboveTagsSection\\(\\) has parameter \\$mainClass with generic class ReflectionClass but does not specify its types\\: T$#"
+			count: 1
+			path: tests/src/Functional/CommentsGenerationTest.php
+
+		-
+			message: "#^Property Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\ConstructorParamsDefaultToNullTest\\:\\:\\$namespace has no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/ConstructorParamsDefaultToNullTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\ConstructorParamsDefaultToNullTest\\:\\:configureOptions\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/ConstructorParamsDefaultToNullTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\ConstructorParamsDefaultToNullTest\\:\\:testConstructorParamsDefaultToNull\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/ConstructorParamsDefaultToNullTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\CurrencyConverterTest\\:\\:configureOptions\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/CurrencyConverterTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\CurrencyConverterTest\\:\\:testCurrencyConvertor\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/CurrencyConverterTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$FromCurrency of class CC\\\\ConversionRate constructor expects CC\\\\Currency, string given\\.$#"
+			count: 1
+			path: tests/src/Functional/CurrencyConverterTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$ToCurrency of class CC\\\\ConversionRate constructor expects CC\\\\Currency, string given\\.$#"
+			count: 1
+			path: tests/src/Functional/CurrencyConverterTest.php
+
+		-
+			message: "#^Property Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\FunctionalTestCase\\:\\:\\$fixtureDir has no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/FunctionalTestCase.php
+
+		-
+			message: "#^Property Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\FunctionalTestCase\\:\\:\\$generatedTestCases type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/src/Functional/FunctionalTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\FunctionalTestCase\\:\\:configureOptions\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/FunctionalTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\FunctionalTestCase\\:\\:deleteDir\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/FunctionalTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\FunctionalTestCase\\:\\:assertGeneratedFileExists\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/FunctionalTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\FunctionalTestCase\\:\\:assertFileNotGenerated\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/FunctionalTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\FunctionalTestCase\\:\\:assertGeneratedClassExists\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/FunctionalTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\MsSequelServerNativeWebServicesTest\\:\\:testGeneratedCode\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/MsSequelServerNativeWebServicesTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\NaicsTest\\:\\:testNaics\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/NaicsTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\NaicsTest\\:\\:checkArray\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/NaicsTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\NaicsTest\\:\\:checkArray\\(\\) has parameter \\$array with no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/NaicsTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\NaicsTest\\:\\:checkArray\\(\\) has parameter \\$arrayClass with no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/NaicsTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\NaicsTest\\:\\:testSingleNaics\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/NaicsTest.php
+
+		-
+			message: "#^Property Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\NullableTest\\:\\:\\$namespace has no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/NullableTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\NullableTest\\:\\:configureOptions\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/NullableTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\NullableTest\\:\\:testMinOccurs0Nullable\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/NullableTest.php
+
+		-
+			message: "#^Property Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\OperationNameFilterTest\\:\\:\\$namespace has no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/OperationNameFilterTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\OperationNameFilterTest\\:\\:testFilterByOperationName\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/OperationNameFilterTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\OperationNameFilterTest\\:\\:configureOptions\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/OperationNameFilterTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\PayPalSvcTest\\:\\:testRelativeImportPaths\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/PayPalSvcTest.php
+
+		-
+			message: "#^Property Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\ReferencesTest\\:\\:\\$namespace has no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/ReferencesTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\ReferencesTest\\:\\:configureOptions\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/ReferencesTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\ReferencesTest\\:\\:testReferences\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/ReferencesTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$argument of class ReflectionClass constructor expects class\\-string\\<T of object\\>\\|T of object, string given\\.$#"
+			count: 2
+			path: tests/src/Functional/ReferencesTest.php
+
+		-
+			message: "#^Property Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\ReuseTest\\:\\:\\$CurrencyConvertorClassesList has no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/ReuseTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\ReuseTest\\:\\:testReuse\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/ReuseTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\ReuseTest\\:\\:assertGeneratedFileNotExists\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/ReuseTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\ReuseTest\\:\\:assertGeneratedFileNotExists\\(\\) has parameter \\$filename with no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/ReuseTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\ReuseTest\\:\\:assertGeneratedFileNotExists\\(\\) has parameter \\$message with no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/ReuseTest.php
+
+		-
+			message: "#^Property Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\SimpleTypeInheritanceTest\\:\\:\\$namespace has no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/SimpleTypeInheritanceTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\SimpleTypeInheritanceTest\\:\\:configureOptions\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/SimpleTypeInheritanceTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\SimpleTypeInheritanceTest\\:\\:testStringInheritance\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/SimpleTypeInheritanceTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\SimpleTypeInheritanceTest\\:\\:testEnumInheritance\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/SimpleTypeInheritanceTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\SimpleTypeInheritanceTest\\:\\:testPatternInheritance\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/SimpleTypeInheritanceTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Functional\\\\Utf8Test\\:\\:testUtf8\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Functional/Utf8Test.php
+
+		-
+			message: "#^Parameter \\#1 \\$argument of class ReflectionClass constructor expects ArrayOfMsgContrasena\\|class\\-string\\<ArrayOfMsgContrasena\\>, string given\\.$#"
+			count: 1
+			path: tests/src/Functional/Utf8Test.php
+
+		-
+			message: "#^Property Wsdl2PhpGenerator\\\\Tests\\\\Mock\\\\SoapClient\\:\\:\\$options type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/src/Mock/SoapClient.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Mock\\\\SoapClient\\:\\:__construct\\(\\) has parameter \\$options with no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Mock/SoapClient.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Mock\\\\SoapClient\\:\\:__construct\\(\\) has parameter \\$wsdl with no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Mock/SoapClient.php
+
+		-
+			message: "#^Property Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ArrayTypeTest\\:\\:\\$items type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/src/Unit/ArrayTypeTest.php
+
+		-
+			message: "#^Instantiated class ArrayTypeTestClass not found\\.$#"
+			count: 1
+			path: tests/src/Unit/ArrayTypeTest.php
+
+		-
+			message: "#^Property Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ArrayTypeTest\\:\\:\\$class \\(Wsdl2PhpGenerator\\\\ArrayType\\) does not accept ArrayTypeTestClass\\.$#"
+			count: 1
+			path: tests/src/Unit/ArrayTypeTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ArrayTypeTest\\:\\:testClassExists\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ArrayTypeTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ArrayTypeTest\\:\\:testArrayAccessImplementation\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ArrayTypeTest.php
+
+		-
+			message: "#^Cannot access offset \\(int\\|string\\) on Wsdl2PhpGenerator\\\\ArrayType\\.$#"
+			count: 2
+			path: tests/src/Unit/ArrayTypeTest.php
+
+		-
+			message: "#^Cannot access offset 'doesntExists' on Wsdl2PhpGenerator\\\\ArrayType\\.$#"
+			count: 1
+			path: tests/src/Unit/ArrayTypeTest.php
+
+		-
+			message: "#^Cannot access offset 'newItem' on Wsdl2PhpGenerator\\\\ArrayType\\.$#"
+			count: 3
+			path: tests/src/Unit/ArrayTypeTest.php
+
+		-
+			message: "#^Cannot access an offset on Wsdl2PhpGenerator\\\\ArrayType\\.$#"
+			count: 2
+			path: tests/src/Unit/ArrayTypeTest.php
+
+		-
+			message: "#^Cannot unset offset 'newItem' on Wsdl2PhpGenerator\\\\ArrayType\\.$#"
+			count: 1
+			path: tests/src/Unit/ArrayTypeTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ArrayTypeTest\\:\\:testIteratorImplementation\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ArrayTypeTest.php
+
+		-
+			message: "#^Argument of an invalid type Wsdl2PhpGenerator\\\\ArrayType supplied for foreach, only iterables are supported\\.$#"
+			count: 1
+			path: tests/src/Unit/ArrayTypeTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ArrayTypeTest\\:\\:testCountableImplementation\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ArrayTypeTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$haystack of method PHPUnit\\\\Framework\\\\Assert\\:\\:assertCount\\(\\) expects Countable\\|iterable, Wsdl2PhpGenerator\\\\ArrayType given\\.$#"
+			count: 1
+			path: tests/src/Unit/ArrayTypeTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:assertClassExists\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:assertAttributeTypeConsistency\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:assertAttributeTypeConsistency\\(\\) has parameter \\$attributeName with no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:assertAttributeTypeConsistency\\(\\) has parameter \\$object with no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:assertAttributeTypeConsistency\\(\\) has parameter \\$type with no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$attributeName the name of the attribute\\)\\: Unexpected token \"\\$attributeName\", expected type at offset 224$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$object the object\\)\\: Unexpected token \"\\$object\", expected type at offset 279$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$type the expected internal type of the attribute value\\)\\: Unexpected token \"\\$type\", expected type at offset 154$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:assertAttributeTypeMatchesDocBlock\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:assertAttributeTypeMatchesDocBlock\\(\\) has parameter \\$attributeName with no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:assertAttributeTypeMatchesDocBlock\\(\\) has parameter \\$object with no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$attributeName the name of the attribute\\)\\: Unexpected token \"\\$attributeName\", expected type at offset 161$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$object the object\\)\\: Unexpected token \"\\$object\", expected type at offset 216$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Parameter \\#3 \\$isNativeType of method PHPUnit\\\\Framework\\\\Assert\\:\\:assertContainsOnly\\(\\) expects bool\\|null, string given\\.$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:assertAttributeDocBlockInternalType\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:assertAttributeDocBlockInternalType\\(\\) has parameter \\$attributeName with no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:assertAttributeDocBlockInternalType\\(\\) has parameter \\$message with no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:assertAttributeDocBlockInternalType\\(\\) has parameter \\$object with no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:assertAttributeDocBlockInternalType\\(\\) has parameter \\$type with no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$attributeName the name of the attribute\\)\\: Unexpected token \"\\$attributeName\", expected type at offset 157$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$object the object\\)\\: Unexpected token \"\\$object\", expected type at offset 212$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$type the expected type\\)\\: Unexpected token \"\\$type\", expected type at offset 119$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:getAttributeDocBlockType\\(\\) has parameter \\$attributeName with no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:getAttributeDocBlockType\\(\\) has parameter \\$object with no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$attributeName the name of the attribute\\)\\: Unexpected token \"\\$attributeName\", expected type at offset 91$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$object the object\\)\\: Unexpected token \"\\$object\", expected type at offset 146$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Parameter \\#2 \\$subject of function preg_match expects string, string\\|false given\\.$#"
+			count: 3
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:assertClassImplementsInterface\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:assertClassImplementsInterface\\(\\) has parameter \\$class with generic class ReflectionClass but does not specify its types\\: T$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:assertClassImplementsInterface\\(\\) has parameter \\$interface with generic class ReflectionClass but does not specify its types\\: T$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Parameter \\#1 \\$argument of class ReflectionClass constructor expects class\\-string\\<T of object\\>\\|T of object, string given\\.$#"
+			count: 8
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:assertClassHasConst\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:assertClassHasProperty\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:assertClassHasProperty\\(\\) has parameter \\$class with generic class ReflectionClass but does not specify its types\\: T$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:assertClassHasMethod\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:assertClassHasMethod\\(\\) has parameter \\$class with generic class ReflectionClass but does not specify its types\\: T$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:assertClassNotHasMethod\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:assertClassNotHasMethod\\(\\) has parameter \\$class with generic class ReflectionClass but does not specify its types\\: T$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:assertMethodHasParameter\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:assertMethodHasParameter\\(\\) has parameter \\$type with no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:assertMethodParameterHasType\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Instanceof between string and ReflectionClass will always evaluate to false\\.$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:assertMethodParameterDocBlockHasType\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:assertMethodHasReturnType\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:assertClassSubclassOf\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:assertClassSubclassOf\\(\\) has parameter \\$baseClass with generic class ReflectionClass but does not specify its types\\: T$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:assertClassSubclassOf\\(\\) has parameter \\$class with generic class ReflectionClass but does not specify its types\\: T$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:generateClass\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:streamSource\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:streamSource\\(\\) has parameter \\$addOpening with no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\CodeGenerationTestCase\\:\\:streamSource\\(\\) has parameter \\$source with no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Parameter \\#1 \\$fp of function stream_get_meta_data expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Parameter \\#1 \\$fp of function fwrite expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Parameter \\#1 \\$fp of function fclose expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: tests/src/Unit/CodeGenerationTestCase.php
+
+		-
+			message: "#^Property Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ComplexTypeTest\\:\\:\\$namespace has no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ComplexTypeTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ComplexTypeTest\\:\\:testDateTime\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ComplexTypeTest.php
+
+		-
+			message: "#^Instantiated class ComplexTypeTestClass not found\\.$#"
+			count: 1
+			path: tests/src/Unit/ComplexTypeTest.php
+
+		-
+			message: "#^Call to method getDateTimeAttribute\\(\\) on an unknown class ComplexTypeTestClass\\.$#"
+			count: 2
+			path: tests/src/Unit/ComplexTypeTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ComplexTypeTest\\:\\:testDateTimeNullConstructorParams\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ComplexTypeTest.php
+
+		-
+			message: "#^Instantiated class ComplexTypeDateTimeNullTestClass not found\\.$#"
+			count: 1
+			path: tests/src/Unit/ComplexTypeTest.php
+
+		-
+			message: "#^Call to method getDateTimeAttribute\\(\\) on an unknown class ComplexTypeDateTimeNullTestClass\\.$#"
+			count: 1
+			path: tests/src/Unit/ComplexTypeTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ComplexTypeTest\\:\\:testKeywordNoNamespaceNameGeneration\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ComplexTypeTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ComplexTypeTest\\:\\:testKeywordNamespaceNameGeneration\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ComplexTypeTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ComplexTypeTest\\:\\:testFluentSetters\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ComplexTypeTest.php
+
+		-
+			message: "#^Instantiated class Fluent not found\\.$#"
+			count: 1
+			path: tests/src/Unit/ComplexTypeTest.php
+
+		-
+			message: "#^Call to method setAttribute\\(\\) on an unknown class Fluent\\.$#"
+			count: 1
+			path: tests/src/Unit/ComplexTypeTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ComplexTypeTest\\:\\:testExtendingOwnClass\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ComplexTypeTest.php
+
+		-
+			message: "#^Instantiated class ExtendOwn not found\\.$#"
+			count: 1
+			path: tests/src/Unit/ComplexTypeTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ComplexTypeTest\\:\\:testNullableTypedMembers\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ComplexTypeTest.php
+
+		-
+			message: "#^Instantiated class NullableDateTime not found\\.$#"
+			count: 1
+			path: tests/src/Unit/ComplexTypeTest.php
+
+		-
+			message: "#^Call to method setADateTime\\(\\) on an unknown class NullableDateTime\\.$#"
+			count: 1
+			path: tests/src/Unit/ComplexTypeTest.php
+
+		-
+			message: "#^Call to method getADateTime\\(\\) on an unknown class NullableDateTime\\.$#"
+			count: 1
+			path: tests/src/Unit/ComplexTypeTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ComplexTypeTest\\:\\:setObjectProperty\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ComplexTypeTest.php
+
+		-
+			message: "#^Property Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ConfigTest\\:\\:\\$options has no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ConfigTest.php
+
+		-
+			message: "#^Property Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ConfigTest\\:\\:\\$config has no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ConfigTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ConfigTest\\:\\:testGetSimpleValues\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ConfigTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ConfigTest\\:\\:testNormalizedValues\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ConfigTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ConfigTest\\:\\:testClassNamesNormalizer\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ConfigTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ConfigTest\\:\\:testOperationNamesNormalizer\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ConfigTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ConfigTest\\:\\:assertNormalizerForParameter\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ConfigTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ConfigTest\\:\\:testSoapClientOptionsNormalizer\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ConfigTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ConfigTest\\:\\:testProxyNormalizer\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ConfigTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ConfigTest\\:\\:testSoapProxyConfiguration\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ConfigTest.php
+
+		-
+			message: "#^Property Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\EnumTest\\:\\:\\$namespace has no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/EnumTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\EnumTest\\:\\:testSimilarNames\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/EnumTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\Filter\\\\ServiceOperationFilterTest\\:\\:testFilterReturnsFilteredServiceWithUsedTypesOnly\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/Filter/ServiceOperationFilterTest.php
+
+		-
+			message: "#^Parameter \\#4 \\$returns of class Wsdl2PhpGenerator\\\\Operation constructor expects string, null given\\.$#"
+			count: 1
+			path: tests/src/Unit/Filter/ServiceOperationFilterTest.php
+
+		-
+			message: "#^Property Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ServiceTest\\:\\:\\$namespace has no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ServiceTest.php
+
+		-
+			message: "#^Property Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ServiceTest\\:\\:\\$soapclientClass has no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ServiceTest.php
+
+		-
+			message: "#^Property Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ServiceTest\\:\\:\\$wsdl has no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ServiceTest.php
+
+		-
+			message: "#^Property Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ServiceTest\\:\\:\\$soapclientOptions has no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ServiceTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ServiceTest\\:\\:testSoapConfig\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ServiceTest.php
+
+		-
+			message: "#^Instantiated class SoapClientTest\\\\TestService not found\\.$#"
+			count: 1
+			path: tests/src/Unit/ServiceTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ServiceTest\\:\\:testSoapClientClass\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ServiceTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ServiceTest\\:\\:testSoapClientClass\\(\\) has parameter \\$service with no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ServiceTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ServiceTest\\:\\:testSoapClientWsdl\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ServiceTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ServiceTest\\:\\:testSoapClientWsdl\\(\\) has parameter \\$service with no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ServiceTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ServiceTest\\:\\:testSoapClientOptions\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ServiceTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ServiceTest\\:\\:testSoapClientOptions\\(\\) has parameter \\$service with no typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ServiceTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\StreamContextFactoryTest\\:\\:testProxyStreamContext\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/StreamContextFactoryTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\StreamContextFactoryTest\\:\\:testAuthorizationHeaderShouldBeDefined\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/StreamContextFactoryTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\StreamContextFactoryTest\\:\\:testAuthorizationHeaderAndProxyShouldBeDefined\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/StreamContextFactoryTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ValidatorTest\\:\\:testValidateClass\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ValidatorTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ValidatorTest\\:\\:testValidateClassReservedKeyword\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ValidatorTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ValidatorTest\\:\\:testValidateClassExists\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ValidatorTest.php
+
+		-
+			message: "#^Method Wsdl2PhpGenerator\\\\Tests\\\\Unit\\\\ValidatorTest\\:\\:testValidateType\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/src/Unit/ValidatorTest.php
+

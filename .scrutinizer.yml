@@ -4,6 +4,9 @@ filter:
         - 'tests/generated/*'
 
 build:
+    environment:
+        php:
+            version: '7.2'
     dependencies:
         override:
             -

@@ -1,4 +1,10 @@
 <?php
+
+/*
+ * This file is part of the WSDL2PHPGenerator package.
+ * (c) WSDL2PHPGenerator.
+ */
+
 namespace Wsdl2PhpGenerator\Tests\Functional;
 
 /**
@@ -28,12 +34,12 @@ class OperationNameFilterTest extends FunctionalTestCase
 
     protected function configureOptions()
     {
-        $this->config->set('operationNames', array('echoLiteral'));
+        $this->config->set('operationNames', ['echoLiteral']);
         $this->config->set('namespaceName', $this->namespace);
     }
-    
+
     protected function getWsdlPath()
     {
-        return $this->fixtureDir . '/abstract/abstract.wsdl';
+        return $this->fixtureDir.'/abstract/abstract.wsdl';
     }
 }

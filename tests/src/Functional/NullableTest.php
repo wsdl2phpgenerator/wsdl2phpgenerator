@@ -1,5 +1,10 @@
 <?php
 
+/*
+ * This file is part of the WSDL2PHPGenerator package.
+ * (c) WSDL2PHPGenerator.
+ */
+
 namespace Wsdl2PhpGenerator\Tests\Functional;
 
 /**
@@ -11,7 +16,7 @@ class NullableTest extends FunctionalTestCase
 
     protected function getWsdlPath()
     {
-        return $this->fixtureDir . '/abstract/abstract.wsdl';
+        return $this->fixtureDir.'/abstract/abstract.wsdl';
     }
 
     protected function configureOptions()
@@ -37,5 +42,4 @@ class NullableTest extends FunctionalTestCase
             }
         }
     }
-
 }

@@ -1,8 +1,11 @@
 <?php
 
+/*
+ * This file is part of the WSDL2PHPGenerator package.
+ * (c) WSDL2PHPGenerator.
+ */
 
 namespace Wsdl2PhpGenerator\Xml;
-
 
 use DOMDocument;
 use DOMElement;
@@ -14,16 +17,15 @@ use DOMXPath;
  */
 abstract class XmlNode
 {
-
     /**
-     * WSDL namespace
+     * WSDL namespace.
      *
      * @var string
      */
     const WSDL_NS = 'http://schemas.xmlsoap.org/wsdl/';
 
     /**
-     * XML Schema namespace
+     * XML Schema namespace.
      *
      * @see http://www.w3.org/TR/soap12-part1/#notation
      *
@@ -46,8 +48,8 @@ abstract class XmlNode
     protected $element;
 
     /**
-     * @param null $document The document which the element has been extracted from.
-     * @param null $element The element.
+     * @param null $document the document which the element has been extracted from
+     * @param null $element  the element
      */
     public function __construct($document = null, $element = null)
     {
@@ -58,7 +60,7 @@ abstract class XmlNode
      * Sets the document and element for the node.
      *
      * @param DOMDocument $document
-     * @param DOMElement $element
+     * @param DOMElement  $element
      */
     public function setElement($document, $element = null)
     {
@@ -83,8 +85,9 @@ abstract class XmlNode
      * - http://www.w3.org/2001/XMLSchema: s
      *
      * @param string $query The XPath query. The query should contain placeholders for arguments sprintf-style.
-     * @param mixed $args A variable number of arguments used in the query
-     * @return DOMNodeList The result of the query.
+     * @param mixed  $args  A variable number of arguments used in the query
+     *
+     * @return DOMNodeList the result of the query
      */
     protected function xpath($query, $args = null)
     {
@@ -108,7 +111,7 @@ abstract class XmlNode
         }
 
         // Generate XPath query with esacped arguments.
-        $query = call_user_func_array('sprintf', array_merge(array($query), $args));
+        $query = call_user_func_array('sprintf', array_merge([$query], $args));
 
         return $xpath->query($query, $this->element);
     }
@@ -116,13 +119,15 @@ abstract class XmlNode
     /**
      * Takes a string and removes the XML namespace if any.
      *
-     * @param string $string A tag name.
+     * @param string $string a tag name
+     *
      * @return string The tag name without namespace
      */
     protected function cleanNamespace($string)
     {
         // The part after the namespace will be the last part.
         $parts = explode(':', $string, 2);
+
         return end($parts);
     }
 }

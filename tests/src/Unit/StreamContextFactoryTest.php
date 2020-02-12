@@ -1,8 +1,11 @@
 <?php
 
+/*
+ * This file is part of the WSDL2PHPGenerator package.
+ * (c) WSDL2PHPGenerator.
+ */
 
 namespace Wsdl2PhpGenerator\Tests\Unit;
-
 
 use PHPUnit\Framework\TestCase;
 use Wsdl2PhpGenerator\Config;
@@ -13,27 +16,26 @@ use Wsdl2PhpGenerator\StreamContextFactory;
  */
 class StreamContextFactoryTest extends TestCase
 {
-
     /**
      * Test that proxy configuration is reflected in stream context.
      */
     public function testProxyStreamContext()
     {
-        $proxy = array(
-            'host' => '192.168.0.1',
-            'port' => 8080,
-            'login' => 'user',
+        $proxy = [
+            'host'     => '192.168.0.1',
+            'port'     => 8080,
+            'login'    => 'user',
             'password' => 'secret',
-        );
+        ];
 
-        $config = new Config(array(
+        $config = new Config([
             'inputFile' => null,
             'outputDir' => null,
-            'proxy' => $proxy,
-        ));
+            'proxy'     => $proxy,
+        ]);
 
         $streamContextFactory = new StreamContextFactory();
-        $resource = $streamContextFactory->create($config);
+        $resource             = $streamContextFactory->create($config);
 
         $options = stream_context_get_options($resource);
 
@@ -41,11 +43,11 @@ class StreamContextFactoryTest extends TestCase
 
         // The proxy configuration should be reflected in the HTTP proxy option.
         $this->assertArrayHasKey('proxy', $options['http']);
-        $this->assertEquals($proxy['host'] . ':' . $proxy['port'], $options['http']['proxy']);
+        $this->assertEquals($proxy['host'].':'.$proxy['port'], $options['http']['proxy']);
 
         // Proxy authentication information should be reflected in a HTTP header.
         $this->assertArrayHasKey('header', $options['http']);
-        $proxyAuthHeader = 'Proxy-Authorization: Basic ' . base64_encode($proxy['login'] . ':' . $proxy['password']);
+        $proxyAuthHeader = 'Proxy-Authorization: Basic '.base64_encode($proxy['login'].':'.$proxy['password']);
         $this->assertContains($proxyAuthHeader, $options['http']['header']);
     }
 
@@ -54,18 +56,18 @@ class StreamContextFactoryTest extends TestCase
      */
     public function testAuthorizationHeaderShouldBeDefined()
     {
-        $soapOptions = array(
+        $soapOptions = [
             'authentication' => SOAP_AUTHENTICATION_BASIC,
-            'login' => 'user',
-            'password' => 'secret'
-        );
-        $config = new Config(array(
-            'inputFile' => null,
-            'outputDir' => null,
-            'soapClientOptions' => $soapOptions
-        ));
+            'login'          => 'user',
+            'password'       => 'secret',
+        ];
+        $config = new Config([
+            'inputFile'         => null,
+            'outputDir'         => null,
+            'soapClientOptions' => $soapOptions,
+        ]);
 
-        $factory = new StreamContextFactory();
+        $factory  = new StreamContextFactory();
         $resource = $factory->create($config);
 
         $options = stream_context_get_options($resource);
@@ -74,7 +76,7 @@ class StreamContextFactoryTest extends TestCase
 
         // Authentication information should be reflected in a HTTP header.
         $this->assertArrayHasKey('header', $options['http']);
-        $authHeader = 'Authorization: Basic ' . base64_encode($soapOptions['login'] . ':' . $soapOptions['password']);
+        $authHeader = 'Authorization: Basic '.base64_encode($soapOptions['login'].':'.$soapOptions['password']);
         $this->assertContains($authHeader, $options['http']['header']);
     }
 
@@ -83,24 +85,24 @@ class StreamContextFactoryTest extends TestCase
      */
     public function testAuthorizationHeaderAndProxyShouldBeDefined()
     {
-        $soapOptions = array(
-            'login' => 'user',
-            'password' => 'secret'
-        );
-        $proxy = array(
-            'host' => '192.168.0.1',
-            'port' => 8080,
-            'login' => 'proxy-user',
+        $soapOptions = [
+            'login'    => 'user',
+            'password' => 'secret',
+        ];
+        $proxy = [
+            'host'     => '192.168.0.1',
+            'port'     => 8080,
+            'login'    => 'proxy-user',
             'password' => 'proxy-secret',
-        );
-        $config = new Config(array(
-            'inputFile' => null,
-            'outputDir' => null,
+        ];
+        $config = new Config([
+            'inputFile'         => null,
+            'outputDir'         => null,
             'soapClientOptions' => $soapOptions,
-            'proxy' => $proxy
-        ));
+            'proxy'             => $proxy,
+        ]);
 
-        $factory = new StreamContextFactory();
+        $factory  = new StreamContextFactory();
         $resource = $factory->create($config);
 
         $options = stream_context_get_options($resource);
@@ -109,10 +111,10 @@ class StreamContextFactoryTest extends TestCase
         $this->assertArrayHasKey('proxy', $options['http']);
         $this->assertArrayHasKey('header', $options['http']);
 
-        $header = 'Authorization: Basic ' . base64_encode($soapOptions['login'] . ':' . $soapOptions['password']);
+        $header = 'Authorization: Basic '.base64_encode($soapOptions['login'].':'.$soapOptions['password']);
         $this->assertContains($header, $options['http']['header']);
 
-        $header = 'Proxy-Authorization: Basic ' . base64_encode($proxy['login'] . ':' . $proxy['password']);
+        $header = 'Proxy-Authorization: Basic '.base64_encode($proxy['login'].':'.$proxy['password']);
         $this->assertContains($header, $options['http']['header']);
     }
 }

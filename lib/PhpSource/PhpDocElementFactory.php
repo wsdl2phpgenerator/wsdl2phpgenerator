@@ -1,25 +1,27 @@
 <?php
-/**
- * @package phpSource
+
+/*
+ * This file is part of the WSDL2PHPGenerator package.
+ * (c) WSDL2PHPGenerator.
  */
+
 namespace Wsdl2PhpGenerator\PhpSource;
 
 use Exception;
 
 /**
- * Class that contains static methods to create preset doc elements
+ * Class that contains static methods to create preset doc elements.
  *
- * @package phpSource
  * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 class PhpDocElementFactory
 {
     /**
-     * Creates a param element
+     * Creates a param element.
      *
-     * @param string $dataType The name of the datatype of the variable
-     * @param string $name The name of the variable
+     * @param string $dataType    The name of the datatype of the variable
+     * @param string $name        The name of the variable
      * @param string $description
      *
      * @throws Exception Throws exception if no name is supplied
@@ -45,10 +47,11 @@ class PhpDocElementFactory
     }
 
     /**
-     * Creates a throws element
+     * Creates a throws element.
      *
      * @param string $exception
      * @param string $description
+     *
      * @return PhpDocElement The created element
      */
     public static function getThrows($exception, $description)
@@ -57,11 +60,12 @@ class PhpDocElementFactory
     }
 
     /**
-     * Creates a throws element
+     * Creates a throws element.
      *
-     * @param string $dataType The name of the datatype
-     * @param string $name The name of the variable
+     * @param string $dataType    The name of the datatype
+     * @param string $name        The name of the variable
      * @param string $description Description of the variable
+     *
      * @return PhpDocElement The created element
      */
     public static function getVar($dataType, $name, $description)
@@ -70,9 +74,10 @@ class PhpDocElementFactory
     }
 
     /**
-     * Creates a access element
+     * Creates a access element.
      *
      * @param string $dataType The name of the datatype
+     *
      * @return PhpDocElement The created element
      */
     public static function getAccess($dataType)
@@ -81,7 +86,7 @@ class PhpDocElementFactory
     }
 
     /**
-     * Creates a access element with the access public
+     * Creates a access element with the access public.
      *
      * @return PhpDocElement The created element
      */
@@ -91,7 +96,7 @@ class PhpDocElementFactory
     }
 
     /**
-     * Creates a access element with the access private
+     * Creates a access element with the access private.
      *
      * @return PhpDocElement The created element
      */
@@ -101,7 +106,7 @@ class PhpDocElementFactory
     }
 
     /**
-     * Creates a access element with the access protected
+     * Creates a access element with the access protected.
      *
      * @return PhpDocElement The created element
      */
@@ -111,9 +116,10 @@ class PhpDocElementFactory
     }
 
     /**
-     * Creates a package element
+     * Creates a package element.
      *
      * @param string $package The name of the package
+     *
      * @return PhpDocElement The created element
      */
     public static function getPackage($package)
@@ -122,9 +128,10 @@ class PhpDocElementFactory
     }
 
     /**
-     * Creates a author element
+     * Creates a author element.
      *
      * @param string $author The name of the author
+     *
      * @return PhpDocElement The created element
      */
     public static function getAuthor($author)
@@ -133,10 +140,11 @@ class PhpDocElementFactory
     }
 
     /**
-     * Creates a return element
+     * Creates a return element.
      *
-     * @param string $dataType The name of the datatype
+     * @param string $dataType    The name of the datatype
      * @param string $description The description of the return value
+     *
      * @return PhpDocElement The created element
      */
     public static function getReturn($dataType, $description)
@@ -145,7 +153,7 @@ class PhpDocElementFactory
     }
 
     /**
-     * Creates a abstract element
+     * Creates a abstract element.
      *
      * @return PhpDocElement The created element
      */
@@ -155,7 +163,7 @@ class PhpDocElementFactory
     }
 
     /**
-     * Creates a final element
+     * Creates a final element.
      *
      * @return PhpDocElement The created element
      */
@@ -165,9 +173,10 @@ class PhpDocElementFactory
     }
 
     /**
-     * Creates a depricated element
+     * Creates a depricated element.
      *
-     * @param string $information The description of why the element is depticated etc.
+     * @param string $information the description of why the element is depticated etc
+     *
      * @return PhpDocElement The created element
      */
     public static function getDepricated($information = '')
@@ -176,9 +185,10 @@ class PhpDocElementFactory
     }
 
     /**
-     * Creates a licence element
+     * Creates a licence element.
      *
      * @param string $information Information about the licence
+     *
      * @return PhpDocElement The created element
      */
     public static function getLicence($information)

@@ -1,21 +1,26 @@
 <?php
 
+/*
+ * This file is part of the WSDL2PHPGenerator package.
+ * (c) WSDL2PHPGenerator.
+ */
+
 namespace Wsdl2PhpGenerator\Tests\Functional;
 
 /**
- * Test handling of comments generation
+ * Test handling of comments generation.
  */
 class CommentsGenerationTest extends FunctionalTestCase
 {
-
     protected function getWsdlPath()
     {
-        return $this->fixtureDir . '/commentsgeneration/commentsgeneration.wsdl';
+        return $this->fixtureDir.'/commentsgeneration/commentsgeneration.wsdl';
     }
 
     public function testMainClassExists()
     {
         $this->assertGeneratedClassExists('CommentsGeneration');
+
         return new \ReflectionClass(new \CommentsGeneration());
     }
 
