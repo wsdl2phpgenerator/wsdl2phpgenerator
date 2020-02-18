@@ -32,8 +32,7 @@
         "php-vcr/phpunit-testlistener-vcr": "^3.2.1",
         "phpstan/phpstan": "^0.12.9",
         "phpunit/phpunit": "^8.5",
-        "psr/log": "^1.1.2",
-        "symfony/yaml": "^2.8.52"
+        "psr/log": "^1.1.2"
     },
     "scripts": {
         "test": [
