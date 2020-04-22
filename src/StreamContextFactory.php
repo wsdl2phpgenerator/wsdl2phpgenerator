@@ -49,6 +49,10 @@ class StreamContextFactory
                 base64_encode($soapOptions['login'].':'.$soapOptions['password']);
         }
 
+        if (isset($soapOptions['ssl'])) {
+            $options['ssl'] = $soapOptions['ssl'];
+        }
+
         if (count($headers) > 0) {
             $options['http']['header'] = $headers;
         }
