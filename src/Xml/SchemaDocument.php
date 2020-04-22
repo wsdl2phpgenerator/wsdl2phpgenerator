@@ -55,7 +55,7 @@ class SchemaDocument extends XmlNode
         $document = new DOMDocument();
         $loaded   = $document->load($xsdUrl);
         if (!$loaded) {
-            throw new Exception('Unable to load XML from '.$xsdUrl);
+            throw new Exception(libxml_get_last_error()->message);
         }
 
         parent::__construct($document, $document->documentElement);
