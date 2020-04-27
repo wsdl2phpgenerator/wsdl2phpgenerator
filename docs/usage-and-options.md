@@ -122,14 +122,14 @@ If enabled this sets the default value of all parameters in all constructors to 
 
 #### `proxy`
 
-Specify a proxy to use when accessing the WSDL and other external ressources. This option should be used instead of [the proxy options support by the PHP `SoapClient`] (http://php.net/manual/en/soapclient.soapclient.php) as wsdl2phpgenerator uses more than the SOAP client to extract information.
+Specify a proxy to use when accessing the WSDL and other external ressources. This option should be used instead of [the proxy options support by the PHP `SoapClient`](http://php.net/manual/en/soapclient.soapclient.php) as wsdl2phpgenerator uses more than the SOAP client to extract information.
 
 The following formats are supported:
 
-* An array with the following keys `host`, `port`, `login` and `password` matching [the proxy options support by the PHP `SoapClient`] (http://php.net/manual/en/soapclient.soapclient.php)
+* An array with the following keys `host`, `port`, `login` and `password` matching [the proxy options support by the PHP `SoapClient`](http://php.net/manual/en/soapclient.soapclient.php)
 * A string in an URL-like format
 
-The proxy information is used by is used when accessing the WSDL to generate the code and for subsequent requests to the SOAP service.
+The proxy information is used when accessing the WSDL to generate the code and for subsequent requests to the SOAP service.
 
 ##### Example usage
 
