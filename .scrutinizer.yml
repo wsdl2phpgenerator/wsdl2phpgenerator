@@ -1,3 +1,8 @@
+checks:
+    php:
+        code_rating: true
+        duplication: true
+
 filter:
     excluded_paths:
         - 'vendor/*'
@@ -20,33 +25,3 @@ build:
                 coverage:
                     file: 'build/logs/clover.xml'
                     format: 'php-clover'
-
-
-tools:
-    php_mess_detector:
-        config:
-            code_size_rules: { cyclomatic_complexity: false, npath_complexity: false }
-        filter:
-            excluded_paths: ['vendor/*']
-    php_code_sniffer:
-        config:
-            standard: PSR2
-        filter:
-            excluded_paths: ['vendor/*']
-    php_code_coverage:
-        test_command: vendor/bin/phpunit
-        filter:
-            excluded_paths: ['vendor/*']
-    php_cpd:
-        excluded_dirs:
-            - tests/generated
-        filter:
-            excluded_paths: ['vendor/*']
-    php_pdepend:
-        excluded_dirs:
-            1: vendor
-            2: tests/generated
-    php_loc:
-        excluded_dirs:
-            - vendor
-            - tests/generated
