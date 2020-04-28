@@ -122,6 +122,9 @@ class ServiceOperationFilter implements FilterInterface
             if (!$memberType) {
                 continue;
             }
+            if (in_array($memberType, $foundTypes)) {
+                continue;
+            }
 
             $foundTypes = array_merge($foundTypes, $this->findUsedTypes($service, $memberType));
         }
