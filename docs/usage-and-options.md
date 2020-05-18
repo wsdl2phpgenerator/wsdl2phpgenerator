@@ -200,3 +200,7 @@ $generator->generate(
     ))
 ));
 ````
+
+#### `generateAutoload`
+
+You can use this to disable the generation of the `autoload.php` file to avoid autoload errors. (Default: true)

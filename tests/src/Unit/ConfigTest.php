@@ -32,6 +32,33 @@ class ConfigTest extends TestCase
     }
 
     /**
+     * Test default values.
+     */
+    public function testDefaultValues()
+    {
+        $expectedValues = [
+            'verbose'                        => false,
+            'namespaceName'                  => '',
+            'classNames'                     => '',
+            'operationNames'                 => '',
+            'sharedTypes'                    => false,
+            'constructorParamsDefaultToNull' => false,
+            'soapClientClass'                => '\SoapClient',
+            'soapClientOptions'              => [],
+            'proxy'                          => false,
+            'generateAutoload'               => true,
+        ];
+        $config = new Config([
+            'inputFile'                      => 'inputFile.xml',
+            'outputDir'                      => '/tmp/output',
+        ]);
+
+        foreach ($expectedValues as $key => $expectedValue) {
+            $this->assertEquals($config->get($key), $expectedValue);
+        }
+    }
+
+    /**
      * Test non-normalized configuration fields against pre defined
      * expected values.
      *
