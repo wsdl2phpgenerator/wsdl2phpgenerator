@@ -51,7 +51,9 @@ class OutputManager
         }
 
         $classes = array_merge([$service], $types);
-        $this->saveAutoloader($service->getIdentifier(), $classes);
+        if ($this->config->get('generateAutoload')) {
+            $this->saveAutoloader($service->getIdentifier(), $classes);
+        }
     }
 
     /**
