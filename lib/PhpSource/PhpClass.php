@@ -142,21 +142,21 @@ class PhpClass extends PhpElement
             $ret .= $this->getIndentionStr().'const __default = '.$this->default.';'.PHP_EOL;
         }
 
-        if (count($this->constants) > 0) {
+        if ($this->constants && count($this->constants) > 0) {
             foreach ($this->constants as $name => $value) {
                 $ret .= $this->getIndentionStr().'const '.$name.' = \''.$value.'\';'.PHP_EOL;
             }
             $ret .= PHP_EOL;
         }
 
-        if (count($this->variables) > 0) {
+        if ($this->variables && count($this->variables) > 0) {
             foreach ($this->variables as $variable) {
                 $variable->setIndentionStr($this->getIndentionStr());
                 $ret .= $variable->getSource();
             }
         }
 
-        if (count($this->functions) > 0) {
+        if ($this->functions && count($this->functions) > 0) {
             foreach ($this->functions as $function) {
                 $function->setIndentionStr($this->getIndentionStr());
                 $ret .= $function->getSource();
