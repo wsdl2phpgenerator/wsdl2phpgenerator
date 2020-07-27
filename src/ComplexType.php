@@ -129,7 +129,12 @@ class ComplexType extends Type
                     .'    return null;'.PHP_EOL
                     .'  } else {'.PHP_EOL
                     .'    try {'.PHP_EOL
-                    .'      return new \DateTime($this->'.$name.');'.PHP_EOL
+                    .'      $date = \DateTime::createFromFormat(\DateTime::ATOM, $this->'.$name.');'.PHP_EOL
+                    .'      if ($date !== false) {'.PHP_EOL
+                    .'        return $date;'.PHP_EOL
+                    .'      }'.PHP_EOL
+                    .'      '.PHP_EOL
+                    .'      return new \DateTime($this->'.$name.'); // BC fallback'.PHP_EOL
                     .'    } catch (\Exception $e) {'.PHP_EOL
                     .'      return false;'.PHP_EOL
                     .'    }'.PHP_EOL
