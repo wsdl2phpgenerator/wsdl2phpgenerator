@@ -1,5 +1,9 @@
 <?php
 
+/*
+ * This file is part of the WSDL2PHPGenerator package.
+ * (c) WSDL2PHPGenerator.
+ */
 
 namespace Wsdl2PhpGenerator\Tests\Functional;
 
@@ -10,16 +14,16 @@ namespace Wsdl2PhpGenerator\Tests\Functional;
  */
 class ReferencesTest extends FunctionalTestCase
 {
-
     protected $namespace = 'ReferencesTest';
 
     protected function getWsdlPath()
     {
         // Source: https://www.paypalobjects.com/wsdl/PayPalSvc.wsdl.
-        return $this->fixtureDir . '/references/references.wsdl';
+        return $this->fixtureDir.'/references/references.wsdl';
     }
 
-    protected function configureOptions() {
+    protected function configureOptions()
+    {
         // Use a namespace to avoid name clashes.
         $this->config->set('namespaceName', $this->namespace);
     }
@@ -30,14 +34,14 @@ class ReferencesTest extends FunctionalTestCase
         // Class availability it retrieved from the PHP SoapClient so these should work if the base WSDL and referenced
         // schemas are correct.
         // This also loads the classes.
-        $expectedClasses = array(
+        $expectedClasses = [
             'ReferencesServiceService',
             'Author',
             'UserAuthor',
             'Book',
             'BaseClass',
             'DerivedClass',
-        );
+        ];
         foreach ($expectedClasses as $class) {
             $this->assertGeneratedClassExists($class, $this->namespace);
         }
@@ -45,15 +49,15 @@ class ReferencesTest extends FunctionalTestCase
         // Test that subclasses are handled correctly.
         // Extensions/base attributes for types are extracted from schemas by Wsdl2PhpGenerator custom code. This
         // should work if references are handled correctly.
-        $subclasses = array(
-            'UserAuthor' => 'Author',
+        $subclasses = [
+            'UserAuthor'   => 'Author',
             'DerivedClass' => 'BaseClass',
-        );
+        ];
         foreach ($subclasses as $subclass => $baseclass) {
             $this->assertClassSubclassOf(
-                new \ReflectionClass($this->namespace . '\\' . $subclass),
-                new \ReflectionClass($this->namespace . '\\' . $baseclass)
+                new \ReflectionClass($this->namespace.'\\'.$subclass),
+                new \ReflectionClass($this->namespace.'\\'.$baseclass)
             );
         }
     }
-} 
+}

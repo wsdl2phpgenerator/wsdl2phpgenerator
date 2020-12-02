@@ -1,5 +1,10 @@
 <?php
 
+/*
+ * This file is part of the WSDL2PHPGenerator package.
+ * (c) WSDL2PHPGenerator.
+ */
+
 namespace Wsdl2PhpGenerator\Tests\Functional;
 
 use Wsdl2PhpGenerator\Config;
@@ -9,19 +14,19 @@ use Wsdl2PhpGenerator\Config;
  */
 class ReuseTest extends FunctionalTestCase
 {
-    protected $CurrencyConvertorClassesList = array(
+    protected $CurrencyConvertorClassesList = [
         'ConversionRate',
         'ConversionRateResponse',
         'Currency',
-    );
+    ];
 
     protected function getWsdlPath()
     {
         // Source: http://www.webservicex.net/CurrencyConvertor.asmx?WSDL.
-        return $this->fixtureDir . '/currencyconvertor/CurrencyConvertor.wsdl';
+        return $this->fixtureDir.'/currencyconvertor/CurrencyConvertor.wsdl';
     }
 
-    protected function assertPreConditions()
+    protected function assertPreConditions(): void
     {
         $this->assertInstanceOf('Wsdl2PhpGenerator\Generator', $this->generator);
 
@@ -32,27 +37,27 @@ class ReuseTest extends FunctionalTestCase
 
     public function testReuse()
     {
-        $outputDir = $this->outputDir . DIRECTORY_SEPARATOR . 'SecondRun';
-        $inputFile = $this->fixtureDir . '/abstract/abstract.wsdl';
+        $outputDir = $this->outputDir.DIRECTORY_SEPARATOR.'SecondRun';
+        $inputFile = $this->fixtureDir.'/abstract/abstract.wsdl';
 
-        $config = new Config(array(
+        $config = new Config([
             'inputFile' => $inputFile,
             'outputDir' => $outputDir,
-        ));
+        ]);
 
         // Generate the code for second WSDL.
         $this->generator->generate($config);
 
         // Register the autoloader.
-        require_once $outputDir . DIRECTORY_SEPARATOR . 'autoload.php';
+        require_once $outputDir.DIRECTORY_SEPARATOR.'autoload.php';
 
         foreach ($this->CurrencyConvertorClassesList as $class) {
-            $this->assertGeneratedFileNotExists('SecondRun' . DIRECTORY_SEPARATOR . $class . '.php');
+            $this->assertGeneratedFileNotExists('SecondRun'.DIRECTORY_SEPARATOR.$class.'.php');
         }
     }
 
     protected function assertGeneratedFileNotExists($filename, $message = '')
     {
-        $this->assertFileNotExists($this->outputDir . DIRECTORY_SEPARATOR .  $filename, $message);
+        $this->assertFileNotExists($this->outputDir.DIRECTORY_SEPARATOR.$filename, $message);
     }
 }

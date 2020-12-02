@@ -1,8 +1,11 @@
 <?php
 
+/*
+ * This file is part of the WSDL2PHPGenerator package.
+ * (c) WSDL2PHPGenerator.
+ */
 
 namespace Wsdl2PhpGenerator\Tests\Unit;
-
 
 use Wsdl2PhpGenerator\Config;
 use Wsdl2PhpGenerator\Enum;
@@ -12,7 +15,6 @@ use Wsdl2PhpGenerator\Enum;
  */
 class EnumTest extends CodeGenerationTestCase
 {
-
     protected $namespace = 'EnumTest';
 
     /**
@@ -21,22 +23,22 @@ class EnumTest extends CodeGenerationTestCase
     public function testSimilarNames()
     {
         $config = new Config(
-            array(
-                'inputFile' => '',
-                'outputDir' => '',
+            [
+                'inputFile'     => '',
+                'outputDir'     => '',
                 'namespaceName' => $this->namespace,
-            )
+            ]
         );
         $enum = new Enum($config, 'Enum', 'string');
 
         // Some of these names contain characters which cannot appear in class constant names.
         // They will be stripped resulting in name clashes. Test to see that the valid names
         // have appended numbering avoiding these clashes.
-        $valueNames = array(
-            'foo' => 'foo',
-            'foo!' => 'foo2',
+        $valueNames = [
+            'foo'   => 'foo',
+            'foo!'  => 'foo2',
             'foo!!' => 'foo3',
-        );
+        ];
 
         foreach (array_keys($valueNames) as $value) {
             $enum->addValue($value);

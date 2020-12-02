@@ -1,11 +1,13 @@
 <?php
 
-/**
- * @package Generator
+/*
+ * This file is part of the WSDL2PHPGenerator package.
+ * (c) WSDL2PHPGenerator.
  */
+
 namespace Wsdl2PhpGenerator;
 
-use \Exception;
+use Exception;
 use Wsdl2PhpGenerator\PhpSource\PhpClass;
 use Wsdl2PhpGenerator\PhpSource\PhpDocComment;
 use Wsdl2PhpGenerator\PhpSource\PhpDocElementFactory;
@@ -13,23 +15,22 @@ use Wsdl2PhpGenerator\PhpSource\PhpFunction;
 use Wsdl2PhpGenerator\PhpSource\PhpVariable;
 
 /**
- * ComplexType
+ * ComplexType.
  *
- * @package Wsdl2PhpGenerator
  * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 class ComplexType extends Type
 {
     /**
-     * Base type that the type extends
+     * Base type that the type extends.
      *
      * @var ComplexType
      */
     protected $baseType;
 
     /**
-     * The members in the type
+     * The members in the type.
      *
      * @var Variable[]
      */
@@ -41,28 +42,28 @@ class ComplexType extends Type
     protected $abstract;
 
     /**
-     * Construct the object
+     * Construct the object.
      *
      * @param ConfigInterface $config The configuration
-     * @param string $name The identifier for the class
+     * @param string          $name   The identifier for the class
      */
     public function __construct(ConfigInterface $config, $name)
     {
         parent::__construct($config, $name, null);
-        $this->members = array();
+        $this->members  = [];
         $this->baseType = null;
         $this->abstract = false;
     }
 
     /**
-     * Implements the loading of the class object
+     * Implements the loading of the class object.
      *
      * @throws Exception if the class is already generated(not null)
      */
     protected function generateClass()
     {
         if ($this->class != null) {
-            throw new Exception("The class has already been generated");
+            throw new Exception('The class has already been generated');
         }
 
         $classBaseType = $this->getBaseTypeClass();
@@ -76,10 +77,10 @@ class ComplexType extends Type
             $this->abstract
         );
 
-        $constructorComment = new PhpDocComment();
-        $constructorSource = '';
-        $constructorParameters = array();
-        $accessors = array();
+        $constructorComment    = new PhpDocComment();
+        $constructorSource     = '';
+        $constructorParameters = [];
+        $accessors             = [];
 
         // Add base type members to constructor parameter list first and call base class constructor
         $parentMembers = $this->getBaseTypeMembers($this);
@@ -93,13 +94,13 @@ class ComplexType extends Type
                     $constructorParameters[$name] = Validator::validateTypeHint($type);
                 }
             }
-            $constructorSource .= '  parent::__construct(' . $this->buildParametersString($constructorParameters, false) . ');' . PHP_EOL;
+            $constructorSource .= '  parent::__construct('.$this->buildParametersString($constructorParameters, false).');'.PHP_EOL;
         }
 
         // Add member variables
         foreach ($this->members as $member) {
-            $type = Validator::validateType($member->getType());
-            $name = Validator::validateAttribute($member->getName());
+            $type     = Validator::validateType($member->getType());
+            $name     = Validator::validateAttribute($member->getName());
             $typeHint = Validator::validateTypeHint($type);
 
             $comment = new PhpDocComment();
@@ -110,12 +111,12 @@ class ComplexType extends Type
             if (!$member->getNullable()) {
                 if ($type == '\DateTime') {
                     if ($this->config->get('constructorParamsDefaultToNull')) {
-                        $constructorSource .= '  $this->' . $name . ' = $' . $name . ' ? $' . $name . '->format(\DateTime::ATOM) : null;' . PHP_EOL;
+                        $constructorSource .= '  $this->'.$name.' = $'.$name.' ? $'.$name.'->format(\DateTime::ATOM) : null;'.PHP_EOL;
                     } else {
-                        $constructorSource .= '  $this->' . $name . ' = $' . $name . '->format(\DateTime::ATOM);' . PHP_EOL;
+                        $constructorSource .= '  $this->'.$name.' = $'.$name.'->format(\DateTime::ATOM);'.PHP_EOL;
                     }
                 } else {
-                    $constructorSource .= '  $this->' . $name . ' = $' . $name . ';' . PHP_EOL;
+                    $constructorSource .= '  $this->'.$name.' = $'.$name.';'.PHP_EOL;
                 }
                 $constructorComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
                 $constructorParameters[$name] = $typeHint;
@@ -124,19 +125,19 @@ class ComplexType extends Type
             $getterComment = new PhpDocComment();
             $getterComment->setReturn(PhpDocElementFactory::getReturn($type, ''));
             if ($type == '\DateTime') {
-                $getterCode = '  if ($this->' . $name . ' == null) {' . PHP_EOL
-                    . '    return null;' . PHP_EOL
-                    . '  } else {' . PHP_EOL
-                    . '    try {' . PHP_EOL
-                    . '      return new \DateTime($this->' . $name . ');' . PHP_EOL
-                    . '    } catch (\Exception $e) {' . PHP_EOL
-                    . '      return false;' . PHP_EOL
-                    . '    }' . PHP_EOL
-                    . '  }' . PHP_EOL;
+                $getterCode = '  if ($this->'.$name.' == null) {'.PHP_EOL
+                    .'    return null;'.PHP_EOL
+                    .'  } else {'.PHP_EOL
+                    .'    try {'.PHP_EOL
+                    .'      return new \DateTime($this->'.$name.');'.PHP_EOL
+                    .'    } catch (\Exception $e) {'.PHP_EOL
+                    .'      return false;'.PHP_EOL
+                    .'    }'.PHP_EOL
+                    .'  }'.PHP_EOL;
             } else {
-                $getterCode = '  return $this->' . $name . ';' . PHP_EOL;
+                $getterCode = '  return $this->'.$name.';'.PHP_EOL;
             }
-            $getter = new PhpFunction('public', 'get' . ucfirst($name), '', $getterCode, $getterComment);
+            $getter      = new PhpFunction('public', 'get'.ucfirst($name), '', $getterCode, $getterComment);
             $accessors[] = $getter;
 
             $setterComment = new PhpDocComment();
@@ -144,23 +145,23 @@ class ComplexType extends Type
             $setterComment->setReturn(PhpDocElementFactory::getReturn($this->phpNamespacedIdentifier, ''));
             if ($type == '\DateTime') {
                 if ($member->getNullable()) {
-                    $setterCode = '  if ($' . $name . ' == null) {' . PHP_EOL
-                        . '   $this->' . $name . ' = null;' . PHP_EOL
-                        . '  } else {' . PHP_EOL
-                        . '    $this->' . $name . ' = $' . $name . '->format(\DateTime::ATOM);' . PHP_EOL
-                        . '  }' . PHP_EOL;
+                    $setterCode = '  if ($'.$name.' == null) {'.PHP_EOL
+                        .'   $this->'.$name.' = null;'.PHP_EOL
+                        .'  } else {'.PHP_EOL
+                        .'    $this->'.$name.' = $'.$name.'->format(\DateTime::ATOM);'.PHP_EOL
+                        .'  }'.PHP_EOL;
                 } else {
-                    $setterCode = '  $this->' . $name . ' = $' . $name . '->format(\DateTime::ATOM);' . PHP_EOL;
+                    $setterCode = '  $this->'.$name.' = $'.$name.'->format(\DateTime::ATOM);'.PHP_EOL;
                 }
             } else {
-                $setterCode = '  $this->' . $name . ' = $' . $name . ';' . PHP_EOL;
+                $setterCode = '  $this->'.$name.' = $'.$name.';'.PHP_EOL;
             }
-            $setterCode .= '  return $this;' . PHP_EOL;
+            $setterCode .= '  return $this;'.PHP_EOL;
             $setter = new PhpFunction(
                 'public',
-                'set' . ucfirst($name),
+                'set'.ucfirst($name),
                 $this->buildParametersString(
-                    array($name => $typeHint),
+                    [$name => $typeHint],
                     true,
                     // If the type of a member is nullable we should allow passing null to the setter. If the type
                     // of the member is a class and not a primitive this is only possible if setter parameter has
@@ -192,11 +193,11 @@ class ComplexType extends Type
     }
 
     /**
-     * Determine parent class
+     * Determine parent class.
      *
      * @return string|null
-     *   Returns a string containing the PHP identifier for the parent class
-     *   or null if there is no applicable parent class.
+     *                     Returns a string containing the PHP identifier for the parent class
+     *                     or null if there is no applicable parent class
      */
     public function getBaseTypeClass()
     {
@@ -214,8 +215,8 @@ class ComplexType extends Type
     /**
      * Returns the base type for the type if any.
      *
-     * @return ComplexType|null
-     *   The base type or null if the type has no base type.
+     * @return complexType|null
+     *                          The base type or null if the type has no base type
      */
     public function getBaseType()
     {
@@ -223,9 +224,7 @@ class ComplexType extends Type
     }
 
     /**
-     * Set the base type
-     *
-     * @param ComplexType $type
+     * Set the base type.
      */
     public function setBaseType(ComplexType $type)
     {
@@ -249,11 +248,11 @@ class ComplexType extends Type
     }
 
     /**
-     * Adds the member. Owerwrites members with same name
+     * Adds the member. Owerwrites members with same name.
      *
      * @param string $type
      * @param string $name
-     * @param bool $nullable
+     * @param bool   $nullable
      */
     public function addMember($type, $name, $nullable)
     {
@@ -261,7 +260,7 @@ class ComplexType extends Type
     }
 
     /**
-     * Get type member list
+     * Get type member list.
      *
      * @return Variable[]
      */
@@ -271,21 +270,22 @@ class ComplexType extends Type
     }
 
     /**
-     * Generate a string representing the parameters for a function e.g. "type1 $param1, type2 $param2, $param3"
+     * Generate a string representing the parameters for a function e.g. "type1 $param1, type2 $param2, $param3".
      *
-     * @param array $parameters A map of parameters. Keys are parameter names and values are parameter types.
-     *                          Parameter types may be empty. In that case they are not used.
-     * @param bool $includeType Whether to include the parameters types in the string
-     * @param bool $defaultNull Whether to set the default value of parameters to null.
-     * @return string The parameter string.
+     * @param array $parameters  A map of parameters. Keys are parameter names and values are parameter types.
+     *                           Parameter types may be empty. In that case they are not used.
+     * @param bool  $includeType Whether to include the parameters types in the string
+     * @param bool  $defaultNull whether to set the default value of parameters to null
+     *
+     * @return string the parameter string
      */
     protected function buildParametersString(array $parameters, $includeType = true, $defaultNull = false)
     {
-        $parameterStrings = array();
+        $parameterStrings = [];
         foreach ($parameters as $name => $type) {
-            $parameterString = '$' . $name;
+            $parameterString = '$'.$name;
             if (!empty($type) && $includeType) {
-                $parameterString = $type . ' ' . $parameterString;
+                $parameterString = $type.' '.$parameterString;
             }
             if ($defaultNull) {
                 $parameterString .= ' = null';
@@ -299,19 +299,20 @@ class ComplexType extends Type
     /**
      * Get members from base types all the way through the type hierarchy.
      *
-     * @param ComplexType $type The type to retrieve base type members from.
-     * @return Variable[] Member variables from all base types.
+     * @param ComplexType $type the type to retrieve base type members from
+     *
+     * @return Variable[] member variables from all base types
      */
     protected function getBaseTypeMembers(ComplexType $type)
     {
         if (empty($type->baseType)) {
-            return array();
+            return [];
         }
 
         // Only get members from the base type if it differs from the current class. It is possible that they will be
         // the same due to poor handling of namespaces in PHP SoapClients.
         if ($type === $type->baseType) {
-            return array();
+            return [];
         }
 
         return array_merge($this->getBaseTypeMembers($type->baseType), $type->baseType->getMembers());

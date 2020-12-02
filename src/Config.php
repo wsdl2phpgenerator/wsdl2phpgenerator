@@ -1,23 +1,24 @@
 <?php
 
+/*
+ * This file is part of the WSDL2PHPGenerator package.
+ * (c) WSDL2PHPGenerator.
+ */
+
 namespace Wsdl2PhpGenerator;
 
 use InvalidArgumentException;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Wsdl2PhpGenerator\ConfigInterface;
 
 /**
  * This class contains configurable key/value pairs.
- *
- * @package Wsdl2PhpGenerator
  */
 class Config implements ConfigInterface
 {
     /**
-     * @var array The actual key/value pairs.
+     * @var array the actual key/value pairs
      */
     protected $options;
 
@@ -33,8 +34,10 @@ class Config implements ConfigInterface
      * Get a value from the configuration by key.
      *
      * @param $key
-     * @return mixed
+     *
      * @throws \InvalidArgumentException
+     *
+     * @return mixed
      */
     public function get($key)
     {
@@ -50,42 +53,45 @@ class Config implements ConfigInterface
      *
      * @param $key
      * @param $value
+     *
      * @return $this|ConfigInterface
      */
     public function set($key, $value)
     {
         $this->options[$key] = $value;
+
         return $this;
     }
 
     protected function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(array(
+        $resolver->setRequired([
             'inputFile',
-            'outputDir'
-        ));
+            'outputDir',
+        ]);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'verbose'                        => false,
             'namespaceName'                  => '',
             'classNames'                     => '',
             'operationNames'                 => '',
             'sharedTypes'                    => false,
             'constructorParamsDefaultToNull' => false,
-            'soapClientClass'               => '\SoapClient',
-            'soapClientOptions'             => array(),
-            'proxy'                         => false,
-            'libxmlStreamContext' => null,
-        ));
+            'soapClientClass'                => '\SoapClient',
+            'soapClientOptions'              => [],
+            'proxy'                          => false,
+            'libxmlStreamContext'            => null,
+        ]);
 
         // A set of configuration options names and normalizer callables.
-        $normalizers = array(
-            'classNames' => array($this, 'normalizeArray'),
-            'operationNames' => array($this, 'normalizeArray'),
-            'soapClientOptions' => array($this, 'normalizeSoapClientOptions'),
-            'proxy' => array($this, 'normalizeProxy'),
-            'libxmlStreamContext' => array($this, 'normalizeLibxmlStreamContext')
-        );
+        $normalizers = [
+            'classNames'          => [$this, 'normalizeArray'],
+            'operationNames'      => [$this, 'normalizeArray'],
+            'soapClientOptions'   => [$this, 'normalizeSoapClientOptions'],
+            'proxy'               => [$this, 'normalizeProxy'],
+            'libxmlStreamContext' => [$this, 'normalizeLibxmlStreamContext'],
+        ];
+
         // Convert each callable to a closure as that is required by OptionsResolver->setNormalizer().
         $normalizers = array_map(function ($callable) {
             return function (Options $options, $value) use ($callable) {
@@ -94,6 +100,7 @@ class Config implements ConfigInterface
                 list($object, $method) = $callable;
                 $normalizer = new \ReflectionMethod(get_class($object), $method);
                 $normalizer->setAccessible(true);
+
                 return $normalizer->invokeArgs($object, func_get_args());
             };
         }, $normalizers);
@@ -108,15 +115,14 @@ class Config implements ConfigInterface
      *
      * Each value is cleaned up, removing excessive spacing before and after values.
      *
-     * @param Options $options
-     * @param array|string $value The value to be normalized.
+     * @param array|string $value the value to be normalized
      *
-     * @return array An array of normalized values.
+     * @return array an array of normalized values
      */
     protected function normalizeArray(Options $options, $value)
     {
         if (strlen($value) === 0) {
-            return array();
+            return [];
         }
 
         return array_map('trim', explode(',', $value));
@@ -127,10 +133,9 @@ class Config implements ConfigInterface
      *
      * @see http://php.net/manual/en/soapclient.soapclient.php.
      *
-     * @param Options $options
-     * @param array $value The value to be normalized.
+     * @param array $value the value to be normalized
      *
-     * @return array An array of normalized values.
+     * @return array an array of normalized values
      */
     protected function normalizeSoapClientOptions(Options $options, array $value)
     {
@@ -160,10 +165,9 @@ class Config implements ConfigInterface
      * - proxy_login (optional)
      * - proxy_password (optional)
      *
-     * @param Options $options
      * @param string|array $value The value to be normalized
      *
-     * @return array|bool The normalized value.
+     * @return array|bool the normalized value
      */
     protected function normalizeProxy(Options $options, $value)
     {
@@ -177,9 +181,9 @@ class Config implements ConfigInterface
                 throw new InvalidOptionsException('"proxy" configuration setting contains a malformed url.');
             }
 
-            $proxy_array = array(
-                'proxy_host' => $url_parts['host']
-            );
+            $proxy_array = [
+                'proxy_host' => $url_parts['host'],
+            ];
             if (isset($url_parts['port'])) {
                 $proxy_array['proxy_port'] = $url_parts['port'];
             }
@@ -193,20 +197,15 @@ class Config implements ConfigInterface
         } elseif (is_array($value)) {
             foreach ($value as $k => $v) {
                 // Prepend proxy_ to each key to match the expended proxy option names of the PHP SoapClient.
-                $value['proxy_' . $k] = $v;
+                $value['proxy_'.$k] = $v;
                 unset($value[$k]);
             }
 
             if (empty($value['proxy_host']) || empty($value['proxy_port'])) {
-                throw new InvalidOptionsException(
-                    '"proxy" configuration setting must contain at least keys "host" and "port'
-                );
+                throw new InvalidOptionsException('"proxy" configuration setting must contain at least keys "host" and "port');
             }
         } else {
-            throw new InvalidOptionsException(
-                '"proxy" configuration setting must be either a string containing the proxy url '
-                . 'or an array containing at least a key "host" and "port"'
-            );
+            throw new InvalidOptionsException('"proxy" configuration setting must be either a string containing the proxy url '.'or an array containing at least a key "host" and "port"');
         }
 
         // Make sure port is an integer

@@ -1,15 +1,18 @@
 <?php
-namespace Wsdl2PhpGenerator\Tests\Functional;
 
-use SoapFault;
+/*
+ * This file is part of the WSDL2PHPGenerator package.
+ * (c) WSDL2PHPGenerator.
+ */
+
+namespace Wsdl2PhpGenerator\Tests\Functional;
 
 class PayPalSvcTest extends FunctionalTestCase
 {
-
     protected function getWsdlPath()
     {
         // Source: https://www.paypalobjects.com/wsdl/PayPalSvc.wsdl.
-        return $this->fixtureDir . '/paypal/PayPalSvc.wsdl';
+        return $this->fixtureDir.'/paypal/PayPalSvc.wsdl';
     }
 
     /**

@@ -1,5 +1,10 @@
 <?php
 
+/*
+ * This file is part of the WSDL2PHPGenerator package.
+ * (c) WSDL2PHPGenerator.
+ */
+
 namespace Wsdl2PhpGenerator\Tests\Functional;
 
 /**
@@ -7,10 +12,9 @@ namespace Wsdl2PhpGenerator\Tests\Functional;
  */
 class AbstractTest extends FunctionalTestCase
 {
-
     protected function getWsdlPath()
     {
-        return $this->fixtureDir . '/abstract/abstract.wsdl';
+        return $this->fixtureDir.'/abstract/abstract.wsdl';
     }
 
     public function testAbstract()
@@ -21,7 +25,7 @@ class AbstractTest extends FunctionalTestCase
         // AbstractServiceService contains an operation called echo. This is a PHP keyword and should thus have been
         // renamed in the generation process to avoid conflicts.
         $serviceClass = new \ReflectionClass('AbstractServiceService');
-        $methods = array_map(function (\ReflectionMethod $method) {
+        $methods      = array_map(function (\ReflectionMethod $method) {
             return $method->getName();
         }, $serviceClass->getMethods());
         $this->assertNotContains('echo', $methods, 'Class should not contain a method called echo. It is a reserved keyword');
@@ -38,14 +42,14 @@ class AbstractTest extends FunctionalTestCase
 
         // The constructor for subclasses should at least have the same parameters as the constructor of the class they
         // extend. They should also appear in the same order.
-        $baseClass = new \ReflectionClass('Author');
-        $baseConstructor = $baseClass->getConstructor();
-        $subClass = new \ReflectionClass('UserAuthor');
+        $baseClass           = new \ReflectionClass('Author');
+        $baseConstructor     = $baseClass->getConstructor();
+        $subClass            = new \ReflectionClass('UserAuthor');
         $subClassConstructor = $subClass->getConstructor();
         foreach ($baseConstructor->getParameters() as $parameter) {
             $this->assertMethodHasParameter($subClassConstructor, $parameter, $parameter->getPosition());
         }
-        $subSubClass = new \ReflectionClass('NicknameUserAuthor');
+        $subSubClass            = new \ReflectionClass('NicknameUserAuthor');
         $subSubClassConstructor = $subSubClass->getConstructor();
         foreach ($baseConstructor->getParameters() as $parameter) {
             $this->assertMethodHasParameter($subSubClassConstructor, $parameter, $parameter->getPosition());
@@ -53,7 +57,6 @@ class AbstractTest extends FunctionalTestCase
         foreach ($subClassConstructor->getParameters() as $parameter) {
             $this->assertMethodHasParameter($subSubClassConstructor, $parameter, $parameter->getPosition());
         }
-
     }
 
     public function testAbstractClass()

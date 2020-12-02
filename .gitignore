@@ -1,6 +1,6 @@
-build
-wsdl2phpgenerator*.phar
-vendor
-tests/generated
+/build/
+/wsdl2phpgenerator*.phar
+/vendor/
 TAG_MESSAGE
-composer.lock
+/.phpunit.result.cache
+/.php_cs.cache

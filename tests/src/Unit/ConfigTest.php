@@ -1,18 +1,23 @@
 <?php
 
+/*
+ * This file is part of the WSDL2PHPGenerator package.
+ * (c) WSDL2PHPGenerator.
+ */
+
 namespace Wsdl2PhpGenerator\Tests\Unit;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Wsdl2PhpGenerator\Config;
 
-class ConfigTest extends PHPUnit_Framework_TestCase
+class ConfigTest extends TestCase
 {
     protected $options;
     protected $config;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->options = array(
+        $this->options = [
             'inputFile'                      => 'inputFile.xml',
             'outputDir'                      => '/tmp/output',
             'verbose'                        => false,
@@ -20,8 +25,8 @@ class ConfigTest extends PHPUnit_Framework_TestCase
             'classNames'                     => 'test,test2, test3',
             'sharedTypes'                    => false,
             'constructorParamsDefaultToNull' => false,
-            'soapClientOptions'              => array('soap_version' => SOAP_1_1, 'trace' => true),
-        );
+            'soapClientOptions'              => ['soap_version' => SOAP_1_1, 'trace' => true],
+        ];
 
         $this->config = new Config($this->options);
     }
@@ -34,14 +39,14 @@ class ConfigTest extends PHPUnit_Framework_TestCase
      */
     public function testGetSimpleValues()
     {
-        $expectedValues = array(
+        $expectedValues = [
             'inputFile'                      => 'inputFile.xml',
             'outputDir'                      => '/tmp/output',
             'verbose'                        => false,
             'namespaceName'                  => 'myNamespace',
             'sharedTypes'                    => false,
             'constructorParamsDefaultToNull' => false,
-        );
+        ];
 
         foreach ($expectedValues as $key => $expectedValue) {
             $this->assertEquals($this->config->get($key), $expectedValue);
@@ -56,14 +61,14 @@ class ConfigTest extends PHPUnit_Framework_TestCase
      */
     public function testNormalizedValues()
     {
-        $expectedValues = array(
-            'classNames' => array('test', 'test2', 'test3'),
-            'soapClientOptions' => array(
+        $expectedValues = [
+            'classNames'        => ['test', 'test2', 'test3'],
+            'soapClientOptions' => [
                 'soap_version' => SOAP_1_1,
-                'trace' => true,
-                'features' => SOAP_SINGLE_ELEMENT_ARRAYS
-            ),
-        );
+                'trace'        => true,
+                'features'     => SOAP_SINGLE_ELEMENT_ARRAYS,
+            ],
+        ];
 
         foreach ($expectedValues as $key => $expectedValue) {
             $this->assertEquals($this->config->get($key), $expectedValue);
@@ -90,23 +95,23 @@ class ConfigTest extends PHPUnit_Framework_TestCase
      * Assert that a parameter in either string or array form is normalized to
      * array form.
      *
-     * @param string $parameterName The parameter name.
+     * @param string $parameterName the parameter name
      */
     private function assertNormalizerForParameter($parameterName)
     {
-        $toTest = array(
-            ''                   => array(),
-            'test1'              => array('test1'),
-            'test1,test2'        => array('test1', 'test2'),
-            'test1,test2, test3' => array('test1', 'test2', 'test3')
-        );
+        $toTest = [
+            ''                   => [],
+            'test1'              => ['test1'],
+            'test1,test2'        => ['test1', 'test2'],
+            'test1,test2, test3' => ['test1', 'test2', 'test3'],
+        ];
 
         foreach ($toTest as $value => $expected) {
-            $config = new Config(array(
-                'inputFile'  => null,
-                'outputDir'  => null,
-                $parameterName => $value
-            ));
+            $config = new Config([
+                'inputFile'    => null,
+                'outputDir'    => null,
+                $parameterName => $value,
+            ]);
 
             $this->assertEquals($config->get($parameterName), $expected);
         }
@@ -117,12 +122,12 @@ class ConfigTest extends PHPUnit_Framework_TestCase
      */
     public function testSoapClientOptionsNormalizer()
     {
-        $defaults = array(
+        $defaults = [
             'inputFile' => null,
             'outputDir' => null,
-        );
+        ];
 
-        $config = new Config($defaults);
+        $config  = new Config($defaults);
         $options = $config->get('soapClientOptions');
         $this->assertEquals(
             SOAP_SINGLE_ELEMENT_ARRAYS,
@@ -130,7 +135,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
             'SOAP_SINGLE_ELEMENT_ARRAYS should be enabled by default.'
         );
 
-        $config = new Config(array_merge($defaults, array('soapClientOptions' => array('trace' => true))));
+        $config  = new Config(array_merge($defaults, ['soapClientOptions' => ['trace' => true]]));
         $options = $config->get('soapClientOptions');
         $this->assertEquals(
             SOAP_SINGLE_ELEMENT_ARRAYS,
@@ -139,7 +144,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
         );
 
         $config = new Config(
-            array_merge($defaults, array('soapClientOptions' => array('features' => SOAP_SINGLE_ELEMENT_ARRAYS)))
+            array_merge($defaults, ['soapClientOptions' => ['features' => SOAP_SINGLE_ELEMENT_ARRAYS]])
         );
         $options = $config->get('soapClientOptions');
         $this->assertEquals(
@@ -149,7 +154,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
         );
 
         $config = new Config(
-            array_merge($defaults, array('soapClientOptions' => array('features' => SOAP_USE_XSI_ARRAY_TYPE)))
+            array_merge($defaults, ['soapClientOptions' => ['features' => SOAP_USE_XSI_ARRAY_TYPE]])
         );
         $options = $config->get('soapClientOptions');
         $this->assertNotEquals(
@@ -160,66 +165,66 @@ class ConfigTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test the proxy normalizer
+     * Test the proxy normalizer.
      */
     public function testProxyNormalizer()
     {
-        $toTest = array(
-            array(
-                'in' => '192.168.0.1:8080',
-                'out' => array(
-                    'proxy_host' => '192.168.0.1',
-                    'proxy_port' => 8080
-                )
-            ),
-            array(
-                'in' => 'tcp://192.168.0.1:8080',
-                'out' => array(
-                    'proxy_host' => '192.168.0.1',
-                    'proxy_port' => 8080
-                )
-            ),
-            array(
-                'in' => 'tcp://user:secret@192.168.0.1:8080',
-                'out' => array(
+        $toTest = [
+            [
+                'in'  => '192.168.0.1:8080',
+                'out' => [
                     'proxy_host' => '192.168.0.1',
                     'proxy_port' => 8080,
-                    'proxy_login' => 'user',
-                    'proxy_password' => 'secret'
-                )
-            ),
-            array(
-                'in' => array(
-                    'host' => '192.168.0.1',
-                    'port' => 8080
-                ),
-                'out' => array(
+                ],
+            ],
+            [
+                'in'  => 'tcp://192.168.0.1:8080',
+                'out' => [
                     'proxy_host' => '192.168.0.1',
-                    'proxy_port' => 8080
-                )
-            ),
-            array(
-                'in' => array(
+                    'proxy_port' => 8080,
+                ],
+            ],
+            [
+                'in'  => 'tcp://user:secret@192.168.0.1:8080',
+                'out' => [
+                    'proxy_host'     => '192.168.0.1',
+                    'proxy_port'     => 8080,
+                    'proxy_login'    => 'user',
+                    'proxy_password' => 'secret',
+                ],
+            ],
+            [
+                'in' => [
                     'host' => '192.168.0.1',
                     'port' => 8080,
-                    'login' => 'user',
-                    'password' => 'secret'
-                ),
-                'out' => array(
+                ],
+                'out' => [
                     'proxy_host' => '192.168.0.1',
                     'proxy_port' => 8080,
-                    'proxy_login' => 'user',
-                    'proxy_password' => 'secret'
-                )
-            ),
-        );
+                ],
+            ],
+            [
+                'in' => [
+                    'host'     => '192.168.0.1',
+                    'port'     => 8080,
+                    'login'    => 'user',
+                    'password' => 'secret',
+                ],
+                'out' => [
+                    'proxy_host'     => '192.168.0.1',
+                    'proxy_port'     => 8080,
+                    'proxy_login'    => 'user',
+                    'proxy_password' => 'secret',
+                ],
+            ],
+        ];
 
         foreach ($toTest as $testcase) {
-            $config = new Config(array(
+            $config = new Config([
                 'inputFile'  => null,
                 'outputDir'  => null,
-                'proxy' => $testcase['in']
-            ));
+                'proxy'      => $testcase['in'],
+            ]);
 
             $this->assertEquals($config->get('proxy'), $testcase['out']);
         }
@@ -231,18 +236,18 @@ class ConfigTest extends PHPUnit_Framework_TestCase
     public function testSoapProxyConfiguration()
     {
         $proxyString = 'tcp://user:secret@192.168.0.1:8080';
-        $proxyConfig = array(
-            'proxy_host' => '192.168.0.1',
-            'proxy_port' => 8080,
-            'proxy_login' => 'user',
+        $proxyConfig = [
+            'proxy_host'     => '192.168.0.1',
+            'proxy_port'     => 8080,
+            'proxy_login'    => 'user',
             'proxy_password' => 'secret',
-        );
+        ];
 
-        $config = array(
+        $config = [
             'inputFile' => null,
             'outputDir' => null,
-            'proxy' => $proxyString,
-        );
+            'proxy'     => $proxyString,
+        ];
         $config = new Config($config);
 
         $this->assertEquals($proxyConfig, $config->get('proxy'));

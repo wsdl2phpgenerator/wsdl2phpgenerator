@@ -1,6 +1,11 @@
 <?php
-namespace Wsdl2PhpGenerator\Filter;
 
+/*
+ * This file is part of the WSDL2PHPGenerator package.
+ * (c) WSDL2PHPGenerator.
+ */
+
+namespace Wsdl2PhpGenerator\Filter;
 
 use Wsdl2PhpGenerator\Service;
 
@@ -12,7 +17,7 @@ use Wsdl2PhpGenerator\Service;
 class DefaultFilter implements FilterInterface
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function filter(Service $service)
     {

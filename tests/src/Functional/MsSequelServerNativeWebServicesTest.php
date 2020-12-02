@@ -1,13 +1,18 @@
 <?php
+
+/*
+ * This file is part of the WSDL2PHPGenerator package.
+ * (c) WSDL2PHPGenerator.
+ */
+
 namespace Wsdl2PhpGenerator\Tests\Functional;
 
 class MsSequelServerNativeWebServicesTest extends FunctionalTestCase
 {
-
     protected function getWsdlPath()
     {
         // Source: http://msdn.microsoft.com/en-us/library/ee320274(v=sql.105).aspx.
-        return $this->fixtureDir . '/mssqlns/MsSequelServerNativeWebServices.wsdl';
+        return $this->fixtureDir.'/mssqlns/MsSequelServerNativeWebServices.wsdl';
     }
 
     public function testGeneratedCode()
@@ -40,10 +45,9 @@ class MsSequelServerNativeWebServicesTest extends FunctionalTestCase
         $this->assertGeneratedClassExists('DayAsNumber');
 
         $object = new \DayAsNumber(new \DateTime());
-        $class = new \ReflectionClass($object);
+        $class  = new \ReflectionClass($object);
 
         $this->assertMethodParameterHasType($class->getConstructor(), 'day', 'DateTime');
         $this->assertMethodParameterDocBlockHasType($class->getConstructor(), 'day', '\DateTime');
     }
-
 }

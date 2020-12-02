@@ -1,4 +1,10 @@
 <?php
+
+/*
+ * This file is part of the WSDL2PHPGenerator package.
+ * (c) WSDL2PHPGenerator.
+ */
+
 namespace Wsdl2PhpGenerator\Tests\Functional;
 
 use RecursiveDirectoryIterator;
@@ -13,51 +19,51 @@ use Wsdl2PhpGenerator\Tests\Unit\CodeGenerationTestCase;
  */
 abstract class FunctionalTestCase extends CodeGenerationTestCase
 {
-
     /**
-     * @var string Path to the directory which will contain the generated code.
+     * @var string path to the directory which will contain the generated code
      */
     protected $outputDir;
 
     /**
-     * @var Generator The generator which will execute the code generation.
+     * @var Generator the generator which will execute the code generation
      */
     protected $generator;
 
     /**
-     * @var Config The configuration for the code generation.
+     * @var Config the configuration for the code generation
      */
     protected $config;
 
     protected $fixtureDir = 'tests/fixtures/wsdl';
 
     /**
-     * Storage of already generated classes from WSDL to avoid double declaring and fatals
+     * Storage of already generated classes from WSDL to avoid double declaring and fatals.
+     *
      * @var array
      */
-    private static $generatedTestCases = array();
+    private static $generatedTestCases = [];
 
     /**
-     * @return string The path to the WSDL to generate code from.
+     * @return string the path to the WSDL to generate code from
      */
     abstract protected function getWsdlPath();
 
     /**
-     * Subclasses can override this function to set options on $this->config
+     * Subclasses can override this function to set options on $this->config.
      */
     protected function configureOptions()
     {
     }
 
-    protected function setup()
+    protected function setUp(): void
     {
-        $class = new ReflectionClass($this);
-        $this->outputDir = 'tests/generated/' . $class->getShortName();
+        $class           = new ReflectionClass($this);
+        $this->outputDir = 'tests/generated/'.$class->getShortName();
         $this->generator = new Generator();
-        $this->config = new Config(array(
+        $this->config    = new Config([
             'inputFile' => $this->getWsdlPath(),
-            'outputDir' => $this->outputDir
-        ));
+            'outputDir' => $this->outputDir,
+        ]);
         $this->configureOptions();
 
         // We do not execute the code generation here to allow individual test cases
@@ -79,13 +85,13 @@ abstract class FunctionalTestCase extends CodeGenerationTestCase
         self::$generatedTestCases[$class->getShortName()] = true;
 
         // Register the autoloader.
-        require_once $this->outputDir . DIRECTORY_SEPARATOR . 'autoload.php';
+        require_once $this->outputDir.DIRECTORY_SEPARATOR.'autoload.php';
     }
 
     /**
      * Recursively delete a directory and all contents.
      *
-     * @param string $dir The directory to delete.
+     * @param string $dir the directory to delete
      */
     protected function deleteDir($dir)
     {
@@ -106,36 +112,35 @@ abstract class FunctionalTestCase extends CodeGenerationTestCase
     /**
      * Assert that a generated file exists.
      *
-     * @param string $filename The name of the file.
-     * @param string $message The message to show if the assertion fails.
+     * @param string $filename the name of the file
+     * @param string $message  the message to show if the assertion fails
      */
     protected function assertGeneratedFileExists($filename, $message = '')
     {
-        $this->assertFileExists($this->outputDir . '/' . $filename, $message);
+        $this->assertFileExists($this->outputDir.'/'.$filename, $message);
     }
 
     /**
      * Assert that a file was not generated.
      *
-     * @param string $filename The name of the file to test for.
-     * @param string $message The message to show if the assertion fails.
+     * @param string $filename the name of the file to test for
+     * @param string $message  the message to show if the assertion fails
      */
     protected function assertFileNotGenerated($filename, $message = '')
     {
-        $this->assertFileNotExists($this->outputDir . '/' . $filename, $message);
+        $this->assertFileNotExists($this->outputDir.'/'.$filename, $message);
     }
-
 
     /**
      * Assertion that tests that a class with a specific name has been
      * generated.
      *
-     * @param string $className The name of the class to test for.
+     * @param string $className     the name of the class to test for
      * @param string $namespaceName Optional name of the namespace
      */
     protected function assertGeneratedClassExists($className, $namespaceName = null)
     {
-        $file = $this->outputDir . DIRECTORY_SEPARATOR . $className . '.php';
+        $file = $this->outputDir.DIRECTORY_SEPARATOR.$className.'.php';
         $this->assertFileExists($file);
         require_once $file;
         $this->assertClassExists($className, $namespaceName);

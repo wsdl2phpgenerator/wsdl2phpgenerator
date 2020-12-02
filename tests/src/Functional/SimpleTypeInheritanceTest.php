@@ -1,21 +1,22 @@
 <?php
 
-namespace src\Functional;
+/*
+ * This file is part of the WSDL2PHPGenerator package.
+ * (c) WSDL2PHPGenerator.
+ */
 
-
-use Wsdl2PhpGenerator\Tests\Functional\FunctionalTestCase;
+namespace Wsdl2PhpGenerator\Tests\Functional;
 
 /**
  * Test case to ensure that we support inheritance for simple types.
  */
 class SimpleTypeInheritanceTest extends FunctionalTestCase
 {
-
     protected $namespace = 'SimpleTypeInheritance';
 
     protected function getWsdlPath()
     {
-        return $this->fixtureDir . '/simpletypeinheritance/simple_type_inheritance.wsdl';
+        return $this->fixtureDir.'/simpletypeinheritance/simple_type_inheritance.wsdl';
     }
 
     protected function configureOptions()
@@ -48,5 +49,4 @@ class SimpleTypeInheritanceTest extends FunctionalTestCase
         $this->assertAttributeDocBlockInternalType('MailAdress', '_', $object);
         $this->assertAttributeDocBlockInternalType('string', 'contactPersonName', $object);
     }
-
 }

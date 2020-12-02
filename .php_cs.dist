@@ -1,0 +1,32 @@
+<?php
+
+return PhpCsFixer\Config::create()
+    ->setRules([
+        '@Symfony'               => true,
+        'ordered_imports'        => true,
+        'psr0'                   => false,
+        'yoda_style'             => false,
+        'phpdoc_order'           => true,
+        'array_syntax'           => [
+            'syntax' => 'short',
+        ],
+        'binary_operator_spaces' => [
+            'align_equals'       => true,
+            'align_double_arrow' => true,
+        ],
+        'header_comment'         => [
+            'header' => <<<EOH
+This file is part of the WSDL2PHPGenerator package.
+(c) WSDL2PHPGenerator.
+EOH
+                ,
+            ]
+    ])
+    ->setFinder(
+        PhpCsFixer\Finder::create()
+            ->in([
+                __DIR__.'/lib',
+                __DIR__.'/src',
+                __DIR__.'/tests/src/',
+            ])
+    );

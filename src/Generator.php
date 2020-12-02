@@ -1,25 +1,25 @@
 <?php
-/**
- * @package Wsdl2PhpGenerator
+
+/*
+ * This file is part of the WSDL2PHPGenerator package.
+ * (c) WSDL2PHPGenerator.
  */
 
 namespace Wsdl2PhpGenerator;
 
-use \Exception;
+use Exception;
 use Psr\Log\LoggerInterface;
 use Wsdl2PhpGenerator\Filter\FilterFactory;
 use Wsdl2PhpGenerator\Xml\WsdlDocument;
 
 /**
- * Class that contains functionality for generating classes from a wsdl file
+ * Class that contains functionality for generating classes from a wsdl file.
  *
- * @package Wsdl2PhpGenerator
  * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 class Generator implements GeneratorInterface
 {
-
     /**
      * @var WsdlDocument
      */
@@ -31,14 +31,14 @@ class Generator implements GeneratorInterface
     protected $service;
 
     /**
-     * An array of Type objects that represents the types in the service
+     * An array of Type objects that represents the types in the service.
      *
      * @var Type[]
      */
-    protected $types = array();
+    protected $types = [];
 
     /**
-     * This is the object that holds the current config
+     * This is the object that holds the current config.
      *
      * @var ConfigInterface
      */
@@ -50,16 +50,16 @@ class Generator implements GeneratorInterface
     protected $logger;
 
     /**
-     * Construct the generator
+     * Construct the generator.
      */
     public function __construct()
     {
         $this->service = null;
-        $this->types = array();
+        $this->types   = [];
     }
 
     /**
-     * Generates php source code from a wsdl file
+     * Generates php source code from a wsdl file.
      *
      * @param ConfigInterface $config The config to use for generation
      */
@@ -74,9 +74,9 @@ class Generator implements GeneratorInterface
         $options = $this->config->get('soapClientOptions');
         if (empty($options['features']) ||
             (($options['features'] & SOAP_SINGLE_ELEMENT_ARRAYS) != SOAP_SINGLE_ELEMENT_ARRAYS)) {
-            $message = array('SoapClient option feature SOAP_SINGLE_ELEMENT_ARRAYS is not set.',
+            $message = ['SoapClient option feature SOAP_SINGLE_ELEMENT_ARRAYS is not set.',
                              'This is not recommended as data types in DocBlocks for array properties will not be ',
-                             'valid if the array only contains a single value.');
+                             'valid if the array only contains a single value.', ];
             $this->log(implode(PHP_EOL, $message), 'warning');
         }
 
@@ -95,7 +95,7 @@ class Generator implements GeneratorInterface
     }
 
     /**
-     * Load the wsdl file into php
+     * Load the wsdl file into php.
      */
     protected function load($wsdl)
     {
@@ -103,33 +103,33 @@ class Generator implements GeneratorInterface
 
         $this->wsdl = new WsdlDocument($this->config, $wsdl);
 
-        $this->types = array();
+        $this->types = [];
 
         $this->loadTypes();
         $this->loadService();
     }
 
     /**
-     * Loads the service class
+     * Loads the service class.
      */
     protected function loadService()
     {
         $service = $this->wsdl->getService();
-        $this->log('Starting to load service ' . $service->getName());
+        $this->log('Starting to load service '.$service->getName());
 
         $this->service = new Service($this->config, $service->getName(), $this->types, $service->getDocumentation());
 
         foreach ($this->wsdl->getOperations() as $function) {
-            $this->log('Loading function ' . $function->getName());
+            $this->log('Loading function '.$function->getName());
 
             $this->service->addOperation(new Operation($function->getName(), $function->getParams(), $function->getDocumentation(), $function->getReturns()));
         }
 
-        $this->log('Done loading service ' . $service->getName());
+        $this->log('Done loading service '.$service->getName());
     }
 
     /**
-     * Loads all type classes
+     * Loads all type classes.
      */
     protected function loadTypes()
     {
@@ -147,7 +147,7 @@ class Generator implements GeneratorInterface
                     $type = new ComplexType($this->config, $typeNode->getName());
                 }
 
-                $this->log('Loading type ' . $type->getPhpIdentifier());
+                $this->log('Loading type '.$type->getPhpIdentifier());
 
                 $type->setAbstract($typeNode->isAbstract());
 
@@ -161,7 +161,7 @@ class Generator implements GeneratorInterface
             } elseif ($enumValues = $typeNode->getEnumerations()) {
                 $type = new Enum($this->config, $typeNode->getName(), $typeNode->getRestriction());
                 array_walk($enumValues, function ($value) use ($type) {
-                      $type->addValue($value);
+                    $type->addValue($value);
                 });
             } elseif ($pattern = $typeNode->getPattern()) {
                 $type = new Pattern($this->config, $typeNode->getName(), $typeNode->getRestriction());
@@ -197,17 +197,17 @@ class Generator implements GeneratorInterface
     }
 
     /**
-     * Save all the loaded classes to the configured output dir
+     * Save all the loaded classes to the configured output dir.
      *
      * @throws Exception If no service is loaded
      */
     protected function savePhp()
     {
-        $factory = new FilterFactory();
-        $filter = $factory->create($this->config);
+        $factory         = new FilterFactory();
+        $filter          = $factory->create($this->config);
         $filteredService = $filter->filter($this->service);
-        $service = $filteredService->getClass();
-        $filteredTypes = $filteredService->getTypes();
+        $service         = $filteredService->getClass();
+        $filteredTypes   = $filteredService->getTypes();
         if ($service == null) {
             throw new Exception('No service loaded');
         }
@@ -215,7 +215,7 @@ class Generator implements GeneratorInterface
         $output = new OutputManager($this->config);
 
         // Generate all type classes
-        $types = array();
+        $types = [];
         foreach ($filteredTypes as $type) {
             $class = $type->getClass();
             if ($class != null) {

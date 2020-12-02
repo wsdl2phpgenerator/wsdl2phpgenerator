@@ -1,4 +1,10 @@
 <?php
+
+/*
+ * This file is part of the WSDL2PHPGenerator package.
+ * (c) WSDL2PHPGenerator.
+ */
+
 namespace Wsdl2PhpGenerator\Tests\Functional;
 
 use SoapFault;
@@ -15,11 +21,10 @@ use SoapFault;
  */
 class CurrencyConverterTest extends FunctionalTestCase
 {
-
     protected function getWsdlPath()
     {
         // Source: http://www.webservicex.net/CurrencyConvertor.asmx?WSDL.
-        return $this->fixtureDir . '/currencyconvertor/CurrencyConvertor.wsdl';
+        return $this->fixtureDir.'/currencyconvertor/CurrencyConvertor.wsdl';
     }
 
     protected function configureOptions()
@@ -35,12 +40,12 @@ class CurrencyConverterTest extends FunctionalTestCase
     public function testCurrencyConvertor()
     {
         // Test that we have the expected files and classes.
-        $expected_classes = array(
+        $expected_classes = [
             'CurrencyConvertor',
             'ConversionRate',
             'Currency',
             'ConversionRateResponse',
-        );
+        ];
         foreach ($expected_classes as $class) {
             $this->assertGeneratedClassExists($class, $this->config->get('namespaceName'));
         }
@@ -69,7 +74,5 @@ class CurrencyConverterTest extends FunctionalTestCase
             // guard against this when calling an external service.
             $this->assertContains('timeout', $e->getMessage());
         }
-
     }
-
 }

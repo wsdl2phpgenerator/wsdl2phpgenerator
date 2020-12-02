@@ -1,5 +1,10 @@
 <?php
 
+/*
+ * This file is part of the WSDL2PHPGenerator package.
+ * (c) WSDL2PHPGenerator.
+ */
+
 namespace Wsdl2PhpGenerator\Tests\Unit;
 
 use Wsdl2PhpGenerator\ArrayType;
@@ -11,46 +16,48 @@ use Wsdl2PhpGenerator\Config;
 class ArrayTypeTest extends CodeGenerationTestCase
 {
     /**
-     * The name of the class that we are generating
+     * The name of the class that we are generating.
+     *
      * @var string
      */
     protected $testClassName = 'ArrayTypeTestClass';
 
     /**
-     * The items that the generated class will contain
+     * The items that the generated class will contain.
+     *
      * @var array
      */
     private $items;
 
     /**
-     * The generated class
+     * The generated class.
+     *
      * @var ArrayType
      */
     private $class;
 
-
-    protected function setUp()
+    protected function setUp(): void
     {
         // Add a mostly dummy configuration. We are not going to read or write any files here.
         // The important part is the accessors part.
-        $config = new Config(array(
-            'inputFile' => null,
-            'outputDir' => null,
+        $config = new Config([
+            'inputFile'                      => null,
+            'outputDir'                      => null,
             'constructorParamsDefaultToNull' => true,
-        ));
+        ]);
         $arrayType = new ArrayType($config, $this->testClassName);
         $arrayType->addMember('Dummy[]', 'Dummy', false);
 
         // Generate the class and load it into memory
         $this->generateClass($arrayType);
 
-        $this->items = array(
+        $this->items = [
             'zero'  => 3,
-            'one'   => FALSE,
+            'one'   => false,
             'two'   => 'good job',
             'three' => new \stdClass(),
-            'four'  => array(),
-        );
+            'four'  => [],
+        ];
         $this->class = new \ArrayTypeTestClass($this->items);
     }
 
@@ -118,7 +125,7 @@ class ArrayTypeTest extends CodeGenerationTestCase
             reset($this->items);
             foreach ($this->class as $key => $val) {
                 if ($i >= $itemCount) {
-                    $this->fail("Iterator overflow!");
+                    $this->fail('Iterator overflow!');
                 }
                 $this->assertSame(key($this->items), $key);
                 $this->assertSame(current($this->items), $val);

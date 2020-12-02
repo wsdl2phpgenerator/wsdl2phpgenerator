@@ -1,13 +1,18 @@
 <?php
+
+/*
+ * This file is part of the WSDL2PHPGenerator package.
+ * (c) WSDL2PHPGenerator.
+ */
+
 namespace Wsdl2PhpGenerator\Tests\Functional;
 
 class AmazonEc2Test extends FunctionalTestCase
 {
-
     protected function getWsdlPath()
     {
         // Source: https://s3.amazonaws.com/ec2-downloads/2013-10-01.ec2.wsdl.
-        return $this->fixtureDir . '/amazon/AmazonEc2.wsdl';
+        return $this->fixtureDir.'/amazon/AmazonEc2.wsdl';
     }
 
     public function testNonStandardNamespace()
