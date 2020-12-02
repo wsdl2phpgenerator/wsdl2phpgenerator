@@ -21,6 +21,12 @@ class StreamContextFactory
      */
     public function create(ConfigInterface $config)
     {
+        $libxmlStreamContext = $config->get('libxmlStreamContext');
+        
+        if ($libxmlStreamContext) {
+            return $libxmlStreamContext;
+        }
+        
         $options = [];
         $headers = [];
 

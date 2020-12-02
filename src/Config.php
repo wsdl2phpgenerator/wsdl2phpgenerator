@@ -80,15 +80,18 @@ class Config implements ConfigInterface
             'soapClientClass'                => '\SoapClient',
             'soapClientOptions'              => [],
             'proxy'                          => false,
+            'libxmlStreamContext'            => null,
         ]);
 
         // A set of configuration options names and normalizer callables.
         $normalizers = [
-            'classNames'        => [$this, 'normalizeArray'],
-            'operationNames'    => [$this, 'normalizeArray'],
-            'soapClientOptions' => [$this, 'normalizeSoapClientOptions'],
-            'proxy'             => [$this, 'normalizeProxy'],
+            'classNames'          => [$this, 'normalizeArray'],
+            'operationNames'      => [$this, 'normalizeArray'],
+            'soapClientOptions'   => [$this, 'normalizeSoapClientOptions'],
+            'proxy'               => [$this, 'normalizeProxy'],
+            'libxmlStreamContext' => [$this, 'normalizeLibxmlStreamContext'],
         ];
+
         // Convert each callable to a closure as that is required by OptionsResolver->setNormalizer().
         $normalizers = array_map(function ($callable) {
             return function (Options $options, $value) use ($callable) {
@@ -209,5 +212,22 @@ class Config implements ConfigInterface
         $value['proxy_port'] = intval($value['proxy_port']);
 
         return $value;
+    }
+    
+    protected function normalizeLibxmlStreamContext(Options $options, $value)
+    {
+        if (empty($value)) {
+            return null;
+        }
+        
+        if (is_resource($value)) {
+            return $value;
+        }
+        
+        if (is_array($value)) {
+            return stream_context_create($value);
+        }
+        
+        throw new InvalidArgumentException('libxmlStreamContext option should be an array of a resource from stream_context_create');
     }
 }
