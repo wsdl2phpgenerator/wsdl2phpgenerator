@@ -158,13 +158,13 @@ class Service implements ClassGenerator
         $comment->addParam(PhpDocElementFactory::getParam('array', 'options', 'A array of config values'));
 
         $source = '
-  foreach (self::$classmap as $key => $value) {
-    if (!isset($options[\'classmap\'][$key])) {
-      $options[\'classmap\'][$key] = $value;
-    }
-  }'.PHP_EOL;
-        $source .= '  $options = array_merge('.var_export($this->config->get('soapClientOptions'), true).', $options);'.PHP_EOL;
-        $source .= '  parent::__construct($wsdl, $options);'.PHP_EOL;
+    foreach (self::$classmap as $key => $value) {
+        if (!isset($options[\'classmap\'][$key])) {
+            $options[\'classmap\'][$key] = $value;
+        }
+    }'.PHP_EOL;
+        $source .= '    $options = array_merge('.var_export($this->config->get('soapClientOptions'), true).', $options);'.PHP_EOL;
+        $source .= '    parent::__construct($wsdl, $options);'.PHP_EOL;
 
         $function = new PhpFunction('public', '__construct', '$wsdl, array $options = array()', $source, $comment);
 
@@ -199,7 +199,7 @@ class Service implements ClassGenerator
                 $comment->addParam(PhpDocElementFactory::getParam($arr['type'], $arr['name'], $arr['desc']));
             }
 
-            $source = '  return $this->__soapCall(\''.$operation->getName().'\', array('.$operation->getParamStringNoTypeHints().'));'.PHP_EOL;
+            $source = '    return $this->__soapCall(\''.$operation->getName().'\', array('.$operation->getParamStringNoTypeHints().'));'.PHP_EOL;
 
             $paramStr = $operation->getParamString($this->types);
 
