@@ -122,6 +122,7 @@ class Validator
     public static function validateClass($name, $namespace = null)
     {
         $name = self::validateNamingConvention($name);
+        $name = ucfirst($name);
 
         $prefix = !empty($namespace) ? $namespace.'\\' : '';
 
@@ -273,9 +274,9 @@ class Validator
      *
      * If a name is not unique then append a suffix and numbering.
      *
-     * @param $name the name to test
+     * @param string $name the name to test
      * @param callable $function A callback which should return true if the element is unique. Otherwise false.
-     * @param string   $suffix   a suffix to append between the name and numbering
+     * @param string|null   $suffix   a suffix to append between the name and numbering
      *
      * @return string a unique name
      */
