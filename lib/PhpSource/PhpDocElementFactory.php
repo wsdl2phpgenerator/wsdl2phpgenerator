@@ -41,6 +41,10 @@ class PhpDocElementFactory
             $dataType = 'int';
         } elseif ($dataType == 'double') {
             $dataType = 'float';
+        } elseif (in_array($dataType, array('date', 'time', 'dateTime')) {
+            $dataType = '\DateTime';
+        } elseif (in_array($dataType, array('duration')) {
+            $dataType = '\DateInterval';
         }
 
         return new PhpDocElement('param', $dataType, $name, $description);
