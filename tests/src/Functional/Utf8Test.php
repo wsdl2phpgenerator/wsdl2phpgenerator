@@ -29,7 +29,7 @@ class Utf8Test extends FunctionalTestCase
         }, $serviceClass->getMethods());
 
         // Validate UTF8 names on opeartions
-        $this->assertContains('validarContrasena', $methods, 'Class should contain a method from an UTF8 operation name, transliterated');
+        $this->assertContainsEquals('validarContrasena', $methods, 'Class should contain a method from an UTF8 operation name, transliterated');
 
         // Valid file name for UTF8 named type
         $this->assertGeneratedFileExists('MsgContrasena.php');
@@ -50,10 +50,10 @@ class Utf8Test extends FunctionalTestCase
         $arrayableComplexTypeSetterDocComment = $arrayableComplexTypeClass->getMethod('setItem')->getDocComment();
 
         // Validate UTF8 names in DocComment types
-        $this->assertContains('@param MsgContrasena[]', $arrayableComplexTypeSetterDocComment,
-                'Array setter method should contain param with valid UTF8 arrayable type, transliterated');
+        $this->assertStringContainsString('@param MsgContrasena[]', $arrayableComplexTypeSetterDocComment,
+            'Array setter method should contain param with valid UTF8 arrayable type, transliterated');
 
-        $this->assertContains('@return ArrayOfMsgContrasena', $arrayableComplexTypeSetterDocComment,
-                'Array setter method should contain valid UTF8 return type, transliterated');
+        $this->assertStringContainsString('@return ArrayOfMsgContrasena', $arrayableComplexTypeSetterDocComment,
+            'Array setter method should contain valid UTF8 return type, transliterated');
     }
 }

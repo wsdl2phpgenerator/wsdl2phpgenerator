@@ -38,7 +38,7 @@ class CommentsGenerationTest extends FunctionalTestCase
     {
         /* @var $method \ReflectionMethod */
         $method = $mainClass->getMethod('ToBe');
-        $this->assertContains('/**
+        $this->assertStringContainsString('/**
      * To die, to sleep
      *
      * @param ToBe $parameters', $method->getDocComment());
@@ -50,7 +50,7 @@ class CommentsGenerationTest extends FunctionalTestCase
     public function testThereIsNoNewLineAfterDescriptionByDefault(\ReflectionClass $mainClass)
     {
         $this->markTestIncomplete('Enable after generated classes will have docs');
-        $this->assertContains('
+        $this->assertStringContainsString('
      * And by opposing end them?
      */', $mainClass->getDocComment());
     }
@@ -61,7 +61,7 @@ class CommentsGenerationTest extends FunctionalTestCase
     public function testThereIsNoNewLineAboveTagsSection(\ReflectionClass $mainClass)
     {
         $property = $mainClass->getProperty('classmap');
-        $this->assertContains('/**
+        $this->assertStringContainsString('/**
      * @var array', $property->getDocComment());
     }
 }

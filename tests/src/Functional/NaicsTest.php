@@ -41,10 +41,10 @@ class NaicsTest extends FunctionalTestCase
             // and generated code comments.
             $this->assertTrue(get_class($response) == 'GetNAICSByIndustryResponse');
             $this->assertAttributeTypeConsistency('bool', 'GetNAICSByIndustryResult', $response);
-            $this->assertAttributeInternalType('object', 'NAICSData', $response);
+            $this->assertAttributeType('object', 'NAICSData', $response);
             $this->assertAttributeTypeConsistency('object', 'NAICSData', $response);
             $this->assertAttributeTypeConsistency('int', 'Records', $response->getNAICSData());
-            $this->assertAttributeInternalType('object', 'NAICSData', $response->getNAICSData());
+            $this->assertAttributeType('object', 'NAICSData', $response->getNAICSData());
             $this->assertAttributeTypeConsistency('object', 'NAICSData', $response->getNAICSData());
             $this->assertAttributeTypeConsistency('array', 'NAICS', $response->getNAICSData()->getNAICSData());
             $arrayOfNaics = $response->getNAICSData()->getNAICSData();
