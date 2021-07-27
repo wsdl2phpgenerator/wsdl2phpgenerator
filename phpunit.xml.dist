@@ -25,10 +25,6 @@
         </testsuite>
     </testsuites>
 
-    <listeners>
-        <listener class="VCR\PHPUnit\TestListener\VCRTestListener" file="vendor/php-vcr/phpunit-testlistener-vcr/src/VCRTestListener.php" />
-    </listeners>
-
     <logging>
         <log type="coverage-clover" target="build/logs/clover.xml"/>
     </logging>

@@ -10,6 +10,7 @@ namespace Wsdl2PhpGenerator\Tests\Functional;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ReflectionClass;
+use VCR\VCR;
 use Wsdl2PhpGenerator\Config;
 use Wsdl2PhpGenerator\Generator;
 use Wsdl2PhpGenerator\Tests\Unit\CodeGenerationTestCase;
@@ -107,6 +108,25 @@ abstract class FunctionalTestCase extends CodeGenerationTestCase
 
         // Finally remove the top directory.
         rmdir($dir);
+    }
+
+    /**
+     * Intercept all requests and record requests and responses in VCR cassette file.
+     *
+     * @param string $cassetteName fixture cassette name
+     */
+    protected function initVCR(string $cassetteName)
+    {
+        VCR::turnOn();
+        VCR::insertCassette($cassetteName);
+    }
+
+    /**
+     * Stop intercepting requests.
+     */
+    protected function turnOffVCR()
+    {
+        VCR::turnOff();
     }
 
     /**

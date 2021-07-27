@@ -231,7 +231,7 @@ class Validator
                 return 'string';
                 break;
             case 'datetime':
-                return  '\DateTime';
+                return '\DateTime';
                 break;
             default:
                 $typeName = self::validateNamingConvention($typeName);

@@ -34,11 +34,11 @@ class CurrencyConverterTest extends FunctionalTestCase
 
     /**
      * Perform a basic code generation/request/response scenario.
-     *
-     * @vcr CurrencyConverterTest_testCurrencyConvertor
      */
     public function testCurrencyConvertor()
     {
+        $this->initVCR('CurrencyConverterTest_testCurrencyConvertor');
+
         // Test that we have the expected files and classes.
         $expected_classes = [
             'CurrencyConvertor',
@@ -66,13 +66,13 @@ class CurrencyConverterTest extends FunctionalTestCase
             // Test that the response is as expected.
             $this->assertTrue(get_class($response) == 'CC\\ConversionRateResponse');
             // In the end the conversion rate between USD and EUR should be a numeric.
-            // It is actually a double but this type does not seem to be supported by
-            // assertAttributeInternalType().
-            $this->assertAttributeInternalType('numeric', 'ConversionRateResult', $response);
+            $this->assertAttributeType('float', 'ConversionRateResult', $response);
         } catch (SoapFault $e) {
             // If an exception is thrown it should be due to a timeout. We cannot
             // guard against this when calling an external service.
             $this->assertContains('timeout', $e->getMessage());
+        } finally {
+            $this->turnOffVCR();
         }
     }
 }

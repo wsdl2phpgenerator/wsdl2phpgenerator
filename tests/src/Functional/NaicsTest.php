@@ -25,11 +25,10 @@ class NaicsTest extends FunctionalTestCase
         return $this->fixtureDir.'/naics/GenericNAICS.wsdl';
     }
 
-    /**
-     * @vcr NaicsTest_testNaics
-     */
     public function testNaics()
     {
+        $this->initVCR('NaicsTest_testNaics');
+
         // Perform the request.
         $service = new \GenericNAICS();
         $request = new \GetNAICSByIndustry('Computer Systems');
@@ -41,10 +40,10 @@ class NaicsTest extends FunctionalTestCase
             // and generated code comments.
             $this->assertTrue(get_class($response) == 'GetNAICSByIndustryResponse');
             $this->assertAttributeTypeConsistency('bool', 'GetNAICSByIndustryResult', $response);
-            $this->assertAttributeInternalType('object', 'NAICSData', $response);
+            $this->assertAttributeType('object', 'NAICSData', $response);
             $this->assertAttributeTypeConsistency('object', 'NAICSData', $response);
             $this->assertAttributeTypeConsistency('int', 'Records', $response->getNAICSData());
-            $this->assertAttributeInternalType('object', 'NAICSData', $response->getNAICSData());
+            $this->assertAttributeType('object', 'NAICSData', $response->getNAICSData());
             $this->assertAttributeTypeConsistency('object', 'NAICSData', $response->getNAICSData());
             $this->assertAttributeTypeConsistency('array', 'NAICS', $response->getNAICSData()->getNAICSData());
             $arrayOfNaics = $response->getNAICSData()->getNAICSData();
@@ -60,6 +59,8 @@ class NaicsTest extends FunctionalTestCase
             // guard against this when calling an external service.
             var_dump($e->getFile());
             $this->assertContains('timeout', $e->getMessage());
+        } finally {
+            $this->turnOffVCR();
         }
     }
 
@@ -83,11 +84,10 @@ class NaicsTest extends FunctionalTestCase
         }
     }
 
-    /**
-     * @vcr NaicsTest_testSingleNaics
-     */
     public function testSingleNaics()
     {
+        $this->initVCR('NaicsTest_testSingleNaics');
+
         $service = new \GenericNAICS();
         // Requesting a specific ID should be a sure way to only return a single result.
         $request  = new \GetNAICSByID('54151');
@@ -96,5 +96,7 @@ class NaicsTest extends FunctionalTestCase
         // This ensures that the DocBlock is still valid. The is handled as the SOAP_SINGLE_ELEMENT_ARRAYS feature is
         // enabled by default.
         $this->assertAttributeTypeConsistency('array', 'NAICS', $response->getNAICSData()->getNAICSData());
+
+        $this->turnOffVCR();
     }
 }

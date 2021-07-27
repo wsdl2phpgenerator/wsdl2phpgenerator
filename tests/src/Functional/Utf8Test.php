@@ -50,10 +50,10 @@ class Utf8Test extends FunctionalTestCase
         $arrayableComplexTypeSetterDocComment = $arrayableComplexTypeClass->getMethod('setItem')->getDocComment();
 
         // Validate UTF8 names in DocComment types
-        $this->assertContains('@param MsgContrasena[]', $arrayableComplexTypeSetterDocComment,
-                'Array setter method should contain param with valid UTF8 arrayable type, transliterated');
+        $this->assertStringContainsString('@param MsgContrasena[]', $arrayableComplexTypeSetterDocComment,
+            'Array setter method should contain param with valid UTF8 arrayable type, transliterated');
 
-        $this->assertContains('@return ArrayOfMsgContrasena', $arrayableComplexTypeSetterDocComment,
-                'Array setter method should contain valid UTF8 return type, transliterated');
+        $this->assertStringContainsString('@return ArrayOfMsgContrasena', $arrayableComplexTypeSetterDocComment,
+            'Array setter method should contain valid UTF8 return type, transliterated');
     }
 }
