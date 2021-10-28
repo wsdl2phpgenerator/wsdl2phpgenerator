@@ -2,6 +2,7 @@
 /**
  * @package phpSource
  */
+
 namespace Wsdl2PhpGenerator\PhpSource;
 
 /**
@@ -9,7 +10,7 @@ namespace Wsdl2PhpGenerator\PhpSource;
  *
  * @package phpSource
  * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
- * @license http://www.opensource.org/licenses/mit-license.php MIT License
+ * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 class PhpDocComment
 {

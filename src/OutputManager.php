@@ -3,9 +3,10 @@
 /**
  * @package Wsdl2PhpGenerator
  */
+
 namespace Wsdl2PhpGenerator;
 
-use \Exception;
+use Exception;
 use Wsdl2PhpGenerator\PhpSource\PhpClass;
 use Wsdl2PhpGenerator\PhpSource\PhpFile;
 use Wsdl2PhpGenerator\PhpSource\PhpFunction;
@@ -42,18 +43,21 @@ class OutputManager
      * Saves the service and types php code to file
      *
      * @param PhpClass $service
+     * @param PhpClass $serverService
      * @param array $types
+     * @throws Exception
      */
-    public function save(PhpClass $service, array $types)
+    public function save(PhpClass $service, PhpClass $serverService, array $types)
     {
         $this->setOutputDirectory();
 
         $this->saveClassToFile($service);
+        $this->saveClassToFile($serverService);
         foreach ($types as $type) {
             $this->saveClassToFile($type);
         }
 
-        $classes = array_merge(array($service), $types);
+        $classes = array_merge(array($service, $serverService), $types);
         $this->saveAutoloader($service->getIdentifier(), $classes);
     }
 
@@ -67,7 +71,7 @@ class OutputManager
     {
         $outputDirectory = $this->config->get('outputDir');
 
-        //Try to create output dir if non existing
+        // Try to create output dir if non existing
         if (is_dir($outputDirectory) == false) {
             if (mkdir($outputDirectory, 0777, true) == false) {
                 throw new Exception('Could not create output directory and it does not exist!');
@@ -82,6 +86,7 @@ class OutputManager
      * If no file is created the name of the class is the filename
      *
      * @param PhpClass $class
+     * @throws Exception
      */
     private function saveClassToFile(PhpClass $class)
     {
@@ -109,9 +114,9 @@ class OutputManager
     {
         $classNames = $this->config->get('classNames');
         return (empty($classNames) || in_array(
-            $class->getIdentifier(),
-            $classNames
-        ));
+                $class->getIdentifier(),
+                $classNames
+            ));
     }
 
     /**
@@ -120,6 +125,7 @@ class OutputManager
      *
      * @param string $name The name of the autoloader. Should be unique for the service to avoid name clashes.
      * @param PhpClass[] $classes The classes to include in the autoloader.
+     * @throws Exception
      */
     private function saveAutoloader($name, array $classes)
     {
@@ -134,21 +140,21 @@ class OutputManager
         foreach ($classes as $class) {
             $className = $this->config->get('namespaceName') . '\\' . $class->getIdentifier();
             $className = ltrim($className, '\\');
-            $autoloadedClasses[] = "'" . $className . "' => __DIR__ .'/" . $class->getIdentifier() . ".php'";
+            $autoloadedClasses[] = "'" . $className . "' => __DIR__ . '/" . $class->getIdentifier() . ".php'";
         }
-        $autoloadedClasses = implode(',' . PHP_EOL . str_repeat(' ', 8), $autoloadedClasses);
+        $autoloadedClasses = implode(',' . PHP_EOL . str_repeat(' ', 4), $autoloadedClasses);
 
         // Assemble the source of the autoloader function containing the classes and the check to include.
         // Our custom code generation library does not support generating code outside of functions and we need to
         // register the autoloader in the global scope. Consequently we manually insert a } to end the autoloader
         // function, register it and finish with a {. This means our generated code ends with a no-op {} statement.
         $autoloaderSource = <<<EOF
-    \$classes = array(
-        $autoloadedClasses
-    );
-    if (!empty(\$classes[\$class])) {
-        include \$classes[\$class];
-    };
+  \$classes = array(
+    $autoloadedClasses
+  );
+  if (!empty(\$classes[\$class])) {
+    include \$classes[\$class];
+  };
 }
 
 spl_autoload_register('$autoloaderName');

@@ -13,14 +13,14 @@ use Wsdl2PhpGenerator\PhpSource\PhpFunction;
 use Wsdl2PhpGenerator\PhpSource\PhpVariable;
 
 /**
- * Service represents the service in the wsdl, from the client side
+ * Service represents the service in the wsdl, from the server side
  *
  * @package Wsdl2PhpGenerator
- * @author Fredrik Wallgren <fredrik.wallgren@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
-class Service implements ServiceInterface
+class ServerService implements ServiceInterface
 {
+    const SERVER_SERVICE_PREFIX = 'AbstractServer';
 
     /**
      * @var ConfigInterface
@@ -61,12 +61,15 @@ class Service implements ServiceInterface
     public function __construct(ConfigInterface $config, $identifier, array $types, $description)
     {
         $this->config = $config;
-        $this->identifier = $identifier;
         $this->description = $description;
         $this->operations = array();
         $this->types = array();
         foreach ($types as $type) {
             $this->types[$type->getIdentifier()] = $type;
+        }
+        $this->identifier = $config->get('serverClassName');
+        if (empty($this->identifier)) {
+            $this->identifier = self::SERVER_SERVICE_PREFIX . $identifier;
         }
     }
 
@@ -151,7 +154,7 @@ class Service implements ServiceInterface
 
         // Create the class object
         $comment = new PhpDocComment($this->description);
-        $this->class = new PhpClass($name, false, $this->config->get('soapClientClass'), $comment);
+        $this->class = new PhpClass($name, false, $this->config->get('soapServerClass'), $comment, false, true);
 
         // Create the constructor
         $comment = new PhpDocComment();
@@ -164,16 +167,14 @@ class Service implements ServiceInterface
       $options[\'classmap\'][$key] = $value;
     }
   }' . PHP_EOL;
-        $source .= '  $options = array_merge(' . trim(preg_replace("/^/m", "  ", var_export($this->config->get('soapClientOptions'), true), 4)) . ', $options);' . PHP_EOL;
+        $source .= '  $options = array_merge(' . trim(preg_replace("/^/m", "  ", var_export($this->config->get('soapServerOptions'), true), 4)) . ', $options);' . PHP_EOL;
         $source .= '  if (!$wsdl) {' . PHP_EOL;
         $source .= '    $wsdl = \'' . $this->config->get('inputFile') . '\';' . PHP_EOL;
         $source .= '  }' . PHP_EOL;
         $source .= '  parent::__construct($wsdl, $options);' . PHP_EOL;
+        $source .= '  $this->setObject($this);' . PHP_EOL;
 
-        //replace array () to array()
-        $source = str_replace('array (', 'array(', $source);
         $function = new PhpFunction('public', '__construct', 'array $options = array(), $wsdl = null', $source, $comment);
-
 
         // Add the constructor
         $this->class->addFunction($function);
@@ -189,7 +190,6 @@ class Service implements ServiceInterface
                 $init[$type->getIdentifier()] = $this->config->get('namespaceName') . "\\" . $type->getPhpIdentifier();
             }
         }
-
         $var = new PhpVariable('private static', $name, var_export($init, true), $comment);
 
         // Add the classmap variable
@@ -207,12 +207,9 @@ class Service implements ServiceInterface
                 $comment->addParam(PhpDocElementFactory::getParam($arr['type'], $arr['name'], $arr['desc']));
             }
 
-            $source = '  return $this->__soapCall(\'' . $operation->getName() . '\', array(' . $operation->getParamStringNoTypeHints() . '));' . PHP_EOL;
-
-
             $paramStr = $operation->getParamString($this->types);
 
-            $function = new PhpFunction('public', $name, $paramStr, $source, $comment);
+            $function = new PhpFunction('abstract public', $name, $paramStr, null, $comment);
 
             if ($this->class->functionExists($function->getIdentifier()) == false) {
                 $this->class->addFunction($function);

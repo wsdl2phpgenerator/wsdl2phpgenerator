@@ -30,7 +30,7 @@ class ServiceOperationFilterTest extends TestCase
         $this->config = new Config(array(
             'inputFile' => 'tst.wsdl',
             'outputDir' => 'test',
-            'operationNames' => 'GetBook,SetVersion'
+            'operationNames' => 'GetBook'
 
         ));
         $this->sut = new ServiceOperationFilter($this->config);
@@ -60,9 +60,7 @@ class ServiceOperationFilterTest extends TestCase
         $this->assertEquals($sourceService->getType('Get_Book_Type_Response'), $actualService->getType('Get_Book_Type_Response'));
         $this->assertEquals($sourceService->getType('Method_Get_Book_Request_BOOK'), $actualService->getType('Method_Get_Book_Request_BOOK'));
         $this->assertEquals($sourceService->getType('Get_Book_Type_Request'), $actualService->getType('Get_Book_Type_Request'));
-        // Check that setVersion and types exists
-        $this->assertEquals($sourceService->getOperation('SetVersion'), $actualService->getOperation('SetVersion'));
-        $this->assertEquals($sourceService->getType('Method_Set_Version_Request'), $actualService->getType('Method_Set_Version_Request'));
+
     }
 
     /**
@@ -103,10 +101,6 @@ class ServiceOperationFilterTest extends TestCase
         $requestGetAuthor->addMember('Method_Get_Book_Request_BOOK', 'book_request', false);
         // Operation GetAuthors
         $getAuthorsOperator = new Operation('GetAuthor', 'Method_Get_Authors_Request $request', 'Get Authors', 'Method_Get_Authors_Response');
-        // Request SetVersion
-        $requestSetVersion = new ComplexType($this->config, 'Method_Set_Version_Request');
-        // Operation SetVersion
-        $setVersionOperator = new Operation('SetVersion', 'Method_Set_Version_Request $request', 'Set version', null);
         // Service creation
         $types = array(
             $responseBookName,
@@ -117,13 +111,11 @@ class ServiceOperationFilterTest extends TestCase
             $responseAuthor,
             $returnGetAuthors,
             $requestGetAuthor,
-            $bookType,
-            $requestSetVersion
+            $bookType
         );
         $service = new Service($this->config, 'Book_Shell', $types, 'Book shells');
         $service->addOperation($getBookOperation);
         $service->addOperation($getAuthorsOperator);
-        $service->addOperation($setVersionOperator);
         return $service;
     }
 }

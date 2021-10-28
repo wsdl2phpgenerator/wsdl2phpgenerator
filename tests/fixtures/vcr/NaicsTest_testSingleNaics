@@ -5,8 +5,7 @@
         url: 'http://www.webservicex.net/GenericNAICS.asmx'
         headers:
             Host: www.webservicex.net
-            Content-Type: 'text/xml; charset=utf-8;'
-            SOAPAction: 'http://www.webservicex.net/GetNAICSByID'
+            Content-Type: 'text/xml; charset=utf-8; action="http://www.webservicex.net/GetNAICSByID"'
         body: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ns1=\"http://www.webservicex.net/\"><SOAP-ENV:Body><ns1:GetNAICSByID><ns1:NAICSCode>54151</ns1:NAICSCode></ns1:GetNAICSByID></SOAP-ENV:Body></SOAP-ENV:Envelope>\n"
     response:
         status:

@@ -5,6 +5,7 @@ namespace Wsdl2PhpGenerator\Filter;
 use Wsdl2PhpGenerator\ComplexType;
 use Wsdl2PhpGenerator\ConfigInterface;
 use Wsdl2PhpGenerator\Enum;
+use Wsdl2PhpGenerator\ServiceInterface;
 use Wsdl2PhpGenerator\Service;
 use Wsdl2PhpGenerator\Type;
 use Wsdl2PhpGenerator\Variable;
@@ -37,7 +38,7 @@ class ServiceOperationFilter implements FilterInterface
     /**
      * @inheritdoc
      */
-    public function filter(Service $service)
+    public function filter(ServiceInterface $service)
     {
         $operations = array();
         $types  = array();
@@ -47,7 +48,6 @@ class ServiceOperationFilter implements FilterInterface
             if (!$operation) {
                 continue;
             }
-
             // Discover types used in params
             foreach ($operation->getParams() as $param => $hint) {
                 $arr = $operation->getPhpDocParams($param, $service->getTypes());
@@ -58,11 +58,7 @@ class ServiceOperationFilter implements FilterInterface
             }
             // Discover types used in returns
             $returns = $operation->getReturns();
-
-            $type = $service->getType($returns);
-            if ($type !== null) {
-                $methodTypes[] = $type;
-            }
+            $methodTypes[] = $service->getType($returns);
 
             foreach ($methodTypes as $type) {
                 $methodTypes = array_merge($methodTypes, $this->findUsedTypes($service, $type)) ;
