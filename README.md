@@ -9,7 +9,13 @@ Simple WSDL to PHP classes converter. Takes a WSDL file and outputs class files 
 
 Uses the [MIT license](http://www.opensource.org/licenses/mit-license.php).
 
-> **Announcement**: We are looking to add one or two co-maintainers with commit access to help bring this project forward, review pull requests and respond to issues. If you have contributed to this project or are otherwise actively involved in open source and have a GitHub profile for review, ping [@kasperg](https://github.com/kasperg) to express your interest.
+## Maintenance status
+
+This is no longer actively maintained.
+
+If you are looking for a PHP library to work with SOAP, you might want to try [`phpro/soap-client`](https://github.com/phpro/soap-client).
+
+If you are currently using `wsdl2phpgenerator` and want to continue using it, consider forking the project and maintain it yourself.
 
 ## New major version: 3
 
