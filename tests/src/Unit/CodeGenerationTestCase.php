@@ -7,11 +7,13 @@
 
 namespace Wsdl2PhpGenerator\Tests\Unit;
 
+use PHPUnit\Framework\Constraint\IsType;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
 use ReflectionProperty;
+use ReflectionType;
 use Wsdl2PhpGenerator\ClassGenerator;
 
 /**
@@ -44,9 +46,29 @@ class CodeGenerationTestCase extends TestCase
      */
     protected function assertAttributeTypeConsistency($type, $attributeName, $object, $message = '')
     {
-        $this->assertAttributeInternalType($type, $attributeName, $object, $message);
+        $this->assertAttributeType($type, $attributeName, $object, $message);
         $this->assertAttributeDocBlockInternalType($type, $attributeName, $object, $message);
         $this->assertAttributeTypeMatchesDocBlock($attributeName, $object, $message);
+    }
+
+    /**
+     * Asserts that an attribute is of a given type.
+     *
+     * @param string $type          the expected internal type of the attribute value
+     * @param string $attributeName the name of the attribute
+     * @param object|string$object the object
+     * @param string $message the Message to show if the assertion fails
+     */
+    protected function assertAttributeType(string $type, string $attributeName, $object, string $message = ''): void
+    {
+        $reflectionProperty = new ReflectionProperty($object, $attributeName);
+        $reflectionProperty->setAccessible(true);
+
+        $this->assertThat(
+            $reflectionProperty->getValue($object),
+            new isType($type),
+            $message
+        );
     }
 
     /**
@@ -64,7 +86,7 @@ class CodeGenerationTestCase extends TestCase
             // If the DocBlock declares that the value should be an array then check
             // that the return value of the attribute getter is array and it's content matches.
             $docBlockType = substr($docBlockType, 0, -2);
-            $this->assertAttributeInternalType('array', $attributeName, $object, $message);
+            $this->assertAttributeType('array', $attributeName, $object, $message);
             if (empty($message)) {
                 $message = sprintf(
                     'DocBlock %s is array of %s. It should contain only %s.',
@@ -99,7 +121,7 @@ class CodeGenerationTestCase extends TestCase
                 $this->assertTrue(is_a($attributeValue, $docBlockType), $message);
             } else {
                 // Else we have a primitive type so just check for that.
-                $this->assertAttributeInternalType($docBlockType, $attributeName, $object, $message);
+                $this->assertAttributeType($docBlockType, $attributeName, $object, $message);
             }
         }
     }
@@ -276,7 +298,7 @@ class CodeGenerationTestCase extends TestCase
      * @param ReflectionParameter|string $parameter The parameter or the name of it
      * @param int                        $position  the expected position (from 0) of the parameter in the list of parameters for the method
      */
-    protected function assertMethodHasParameter(\ReflectionMethod $method, $parameter, $position = null, $type = null)
+    protected function assertMethodHasParameter(ReflectionMethod $method, $parameter, $position = null, $type = null)
     {
         $parameterName = ($parameter instanceof ReflectionParameter) ? $parameter->getName() : $parameter;
 
@@ -318,8 +340,8 @@ class CodeGenerationTestCase extends TestCase
                 );
             }
             $this->assertEquals(
-                $actualParameter->getClass(),
-                $parameter->getClass(),
+                $actualParameter->getType(),
+                $parameter->getType(),
                 'Type hinted class for parameters should match'
             );
         }
@@ -332,7 +354,7 @@ class CodeGenerationTestCase extends TestCase
      * @param string           $parameterName the name of the parameter
      * @param string           $type          the name of the expected type
      */
-    protected function assertMethodParameterHasType(\ReflectionMethod $method, $parameterName, $type)
+    protected function assertMethodParameterHasType(ReflectionMethod $method, $parameterName, $type)
     {
         $this->assertMethodHasParameter($method, $parameterName);
 
@@ -346,7 +368,7 @@ class CodeGenerationTestCase extends TestCase
             }
         }
 
-        $parameterClass = ($parameter->getClass() instanceof ReflectionClass) ? $parameter->getClass()->getName() : '';
+        $parameterClass = ($parameter->getType() instanceof ReflectionType) ? $parameter->getType()->getName() : '';
         $this->assertEquals(
             $type,
             $parameterClass,
@@ -368,7 +390,7 @@ class CodeGenerationTestCase extends TestCase
      * @param string           $parameterName the name of the parameter
      * @param string           $type          the name of the expected type
      */
-    protected function assertMethodParameterDocBlockHasType(\ReflectionMethod $method, $parameterName, $type)
+    protected function assertMethodParameterDocBlockHasType(ReflectionMethod $method, $parameterName, $type)
     {
         // Attempt to do some simple extraction of type declaration from the
         // DocBlock.
@@ -397,7 +419,7 @@ class CodeGenerationTestCase extends TestCase
      * @param ReflectionMethod $method the method to test
      * @param string           $type   the expected return type
      */
-    protected function assertMethodHasReturnType(\ReflectionMethod $method, $type)
+    protected function assertMethodHasReturnType(ReflectionMethod $method, $type)
     {
         // Attempt to do some simple extraction of type declaration from the
         // DocBlock.

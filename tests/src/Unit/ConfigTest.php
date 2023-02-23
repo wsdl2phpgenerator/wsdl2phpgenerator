@@ -221,9 +221,9 @@ class ConfigTest extends TestCase
 
         foreach ($toTest as $testcase) {
             $config = new Config([
-                'inputFile'  => null,
-                'outputDir'  => null,
-                'proxy'      => $testcase['in'],
+                'inputFile' => null,
+                'outputDir' => null,
+                'proxy'     => $testcase['in'],
             ]);
 
             $this->assertEquals($config->get('proxy'), $testcase['out']);
@@ -251,6 +251,13 @@ class ConfigTest extends TestCase
         $config = new Config($config);
 
         $this->assertEquals($proxyConfig, $config->get('proxy'));
-        $this->assertArraySubset($proxyConfig, $config->get('soapClientOptions'));
+
+        $actualConfig = $config->get('soapClientOptions');
+        array_walk($proxyConfig,
+            function ($expectedValue, $expectedParamName) use ($actualConfig) {
+                $this->assertArrayHasKey($expectedParamName, $actualConfig);
+                $this->assertSame($expectedValue, $actualConfig[$expectedParamName]);
+            }
+        );
     }
 }
