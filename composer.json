@@ -16,9 +16,9 @@
         }
     },
     "require": {
-        "php": "^7.2",
+        "php": "^7.2|^8.0",
         "ext-soap": "*",
-        "symfony/options-resolver": "^3.4.37",
+        "symfony/options-resolver": "^3.4.37|^4.4|^5.0",
         "symfony/polyfill-iconv": "^1.13.1"
     },
     "require-dev": {
