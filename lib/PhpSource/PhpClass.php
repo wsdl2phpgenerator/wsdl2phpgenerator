@@ -92,6 +92,7 @@ class PhpClass extends PhpElement
         $this->constants    = [];
         $this->variables    = [];
         $this->functions    = [];
+        $this->implements   = [];
         $this->indentionStr = '    '; // Use 4 spaces as indention, as requested by PSR-2
         $this->abstract     = $abstract;
     }
